@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+    <title>Home</title>
+</head>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md  p-2.5 fixed">
+        <nav class="md:flex md:items-center">   
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+            </div>
+            <div class="">
+                <ul class="md:flex md:space-x-9 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
+                    <li class="my-6 md:my-0">
+                        <a href="Home.html" class="hover:text-outline duration-300">
+                            HOME
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="" class="hover:text-outline duration-300">
+                            SHOP
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="" class="hover:text-outline duration-300">
+                            CUSTOMIZATION
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="" class="hover:text-outline duration-300">
+                            ABOUT
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="" class="hover:text-outline duration-300">
+                            CONTACT
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="bg-Likha min-h-screen">
+        <div id="container ">    
+            <div id="slider-wrapper" class="w-[85-rem]"  >
+                <div id="slider" class="flex aspect-auto overflow-x-auto snap-x-mandatory scroll-smooth">
+                    <img src="img/Slider1.jpg" class="flex flex-1 snap-align-start" id="Slider1" alt="">
+                    <img src="img/Slider2.jpg" class="flex flex-1 snap-align-start" id="Slider2"alt="">
+                    <img src="img/Slider3.jpg" class="flex flex-1 snap-align-start" id="Slider3" alt="">
+                </div>
+                <div id="slider-nav">
+                    <a href="#Slider1"></a>
+                    <a href="#Slider2"></a>
+                    <a href="#Slider3"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex fixed p-3 top-1 right-1 md:right-16">
+        <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
+        <img src="img/PROFILE.png" class="h-[3rem]" alt="">
+        <img src="img/CART.png" class="h-[3rem]" alt="">
+    </div>
+</body>
+</html>

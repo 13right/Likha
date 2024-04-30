@@ -661,8 +661,8 @@ video {
   margin-left: 2rem;
 }
 
-.ml-\[5rem\]{
-  margin-left: 5rem;
+.ml-\[4\.5rem\]{
+  margin-left: 4.5rem;
 }
 
 .mr-2{
@@ -673,12 +673,12 @@ video {
   margin-right: 5rem;
 }
 
-.ml-\[4\.5rem\]{
-  margin-left: 4.5rem;
-}
-
 .flex{
   display: flex;
+}
+
+.aspect-auto{
+  aspect-ratio: auto;
 }
 
 .h-10{
@@ -701,8 +701,8 @@ video {
   height: 10rem;
 }
 
-.h-\[23rem\]{
-  height: 23rem;
+.h-\[25rem\]{
+  height: 25rem;
 }
 
 .h-\[2rem\]{
@@ -725,10 +725,6 @@ video {
   height: auto;
 }
 
-.h-\[25rem\]{
-  height: 25rem;
-}
-
 .min-h-screen{
   min-height: 100vh;
 }
@@ -747,6 +743,10 @@ video {
 
 .w-full{
   width: 100%;
+}
+
+.w-\[85-rem\]{
+  width: 85-rem;
 }
 
 .flex-1{
@@ -793,6 +793,14 @@ video {
 
 .overflow-auto{
   overflow: auto;
+}
+
+.overflow-x-auto{
+  overflow-x: auto;
+}
+
+.scroll-smooth{
+  scroll-behavior: smooth;
 }
 
 .rounded-3xl{
@@ -901,14 +909,6 @@ video {
 
 .pt-\[0\.5rem\]{
   padding-top: 0.5rem;
-}
-
-.pt-\[3rem\]{
-  padding-top: 3rem;
-}
-
-.pt-\[5rem\]{
-  padding-top: 5rem;
 }
 
 .pt-\[6rem\]{
@@ -1079,10 +1079,6 @@ video {
 
   .md\:h-\[28rem\]{
     height: 28rem;
-  }
-
-  .md\:h-\[29rem\]{
-    height: 29rem;
   }
 
   .md\:h-\[32rem\]{
