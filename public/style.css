@@ -899,6 +899,18 @@ video {
   padding-top: 0.5rem;
 }
 
+.pt-\[3rem\]{
+  padding-top: 3rem;
+}
+
+.pt-\[5rem\]{
+  padding-top: 5rem;
+}
+
+.pt-\[6rem\]{
+  padding-top: 6rem;
+}
+
 .font-libre{
   font-family: Libre Baskerville;
 }
