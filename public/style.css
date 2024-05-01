@@ -697,6 +697,22 @@ video {
   margin-right: 5rem;
 }
 
+.mb-\[3rem\]{
+  margin-bottom: 3rem;
+}
+
+.mb-\[90rem\]{
+  margin-bottom: 90rem;
+}
+
+.mt-\[4rem\]{
+  margin-top: 4rem;
+}
+
+.mt-\[8rem\]{
+  margin-top: 8rem;
+}
+
 .flex{
   display: flex;
 }
@@ -823,6 +839,10 @@ video {
 
 .h-\[23rem\]{
   height: 23rem;
+}
+
+.h-\[28rem\]{
+  height: 28rem;
 }
 
 .min-h-screen{
