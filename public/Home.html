@@ -7,7 +7,7 @@
     <title>Home</title>
 </head>
 <body>
-    <div class="bg-Likha h-[5rem] w-full shadow-md  p-2.5 fixed">
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
             <div >
                 <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
@@ -41,34 +41,41 @@
                     </li>
                 </ul>
             </div>
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
+                <img src="img/PROFILE.png" class="h-[3rem]" alt="">
+                <img src="img/CART.png" class="h-[3rem]" alt="">
+            </div>
         </nav>
     </div>
     <div class="bg-Likha min-h-screen pt-[5rem]">
-        <div id="container">    
-            <div id="slider-wrapper" class="relative max-w-[85-rem]"  >
-                <div id="slider" class="flex aspect-[19/7] snap-x-mandatory scroll-smooth overflow-x-hidden">
-                    <img src="img/Slider1.jpg" class="flex flex-1 snap-align-start" id="Slider1" alt="">
-                    <img src="img/Slider2.jpg" class="flex flex-1 snap-align-start" id="Slider2"alt="">
-                    <img src="img/Slider3.jpg" class="flex flex-1 snap-align-start" id="Slider3" alt="">
+        <div id="main-container">
+            <div id="slide-container">    
+                <div id="slider-wrapper" class="relative max-w-[65-rem]"  >
+                    <div id="slider" class="flex aspect-[25/9] snap-x-mandatory scroll-smooth overflow-x-hidden">
+                        <img src="img/Slider1.jpg" class="flex flex-1 snap-align-start" id="Slider1" alt="">
+                        <img src="img/Slider2.jpg" class="flex flex-1 snap-align-start" id="Slider2"alt="">
+                        <img src="img/Slider3.jpg" class="flex flex-1 snap-align-start" id="Slider3" alt="">
+                    </div>
+                    <div id="slider-nav" class="flex grid-cols-2 gap-x-4 absolute bottom-[1.25rem] left-[50%] translate-x-[-50%]">
+                        <a href="#Slider1" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
+                        <a href="#Slider2" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
+                        <a href="#Slider3" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
+                    </div>
                 </div>
-                <div id="slider-nav" class="flex grid-cols-2 gap-x-4 absolute bottom-[1.25rem] left-[50%] translate-x-[-50%]">
-                    <a href="#Slider1" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
-                    <a href="#Slider2" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
-                    <a href="#Slider3" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
-                </div>
+            </div>
+            <div id="category" class="bg-[#B0BCA480] w-auto md:h-[23rem]">
+                <h5>Categories</h5>
             </div>
         </div>
     </div>
-    <div class="flex fixed p-3 top-1 right-1 md:right-16">
-        <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
-        <img src="img/PROFILE.png" class="h-[3rem]" alt="">
-        <img src="img/CART.png" class="h-[3rem]" alt="">
-    </div>
+    
 </body>
 
 <script>
     const slider = document.getElementById('slider');
     const sliderWrapper = document.getElementById('slider-wrapper');
+    const sliderNav = document.getElementById('slider-nav')
     let currentIndex = 0;
     const slides = slider.querySelectorAll('img');
     const totalSlides = slides.length;
@@ -78,10 +85,10 @@
         currentIndex = (currentIndex + 1) % totalSlides;
         slider.scrollLeft = sliderWrapper.offsetWidth * currentIndex;
     }
-    
+
     interval = setInterval(nextSlide, 3000);
-    sliderWrapper.addEventListener('mouseenter', () => clearInterval(interval));
-    sliderWrapper.addEventListener('mouseleave', () => {
+    sliderNav.addEventListener('mouseenter', () => clearInterval(interval));
+    sliderNav.addEventListener('mouseleave', () => {
         interval = setInterval(nextSlide, 3000);
     });
 </script>

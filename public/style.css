@@ -592,6 +592,10 @@ video {
   }
 }
 
+.static{
+  position: static;
+}
+
 .fixed{
   position: fixed;
 }
@@ -602,6 +606,10 @@ video {
 
 .relative{
   position: relative;
+}
+
+.sticky{
+  position: sticky;
 }
 
 .bottom-\[1\.25rem\]{
@@ -630,6 +638,10 @@ video {
 
 .top-\[80px\]{
   top: 80px;
+}
+
+.z-50{
+  z-index: 50;
 }
 
 .m-3{
@@ -693,6 +705,62 @@ video {
   aspect-ratio: 19/7;
 }
 
+.aspect-\[17\/7\]{
+  aspect-ratio: 17/7;
+}
+
+.aspect-\[20\/7\]{
+  aspect-ratio: 20/7;
+}
+
+.aspect-\[21\/7\]{
+  aspect-ratio: 21/7;
+}
+
+.aspect-\[21\/8\]{
+  aspect-ratio: 21/8;
+}
+
+.aspect-\[23\/10\]{
+  aspect-ratio: 23/10;
+}
+
+.aspect-\[23\/6\]{
+  aspect-ratio: 23/6;
+}
+
+.aspect-\[23\/7\]{
+  aspect-ratio: 23/7;
+}
+
+.aspect-\[23\/8\]{
+  aspect-ratio: 23/8;
+}
+
+.aspect-\[24\/8\]{
+  aspect-ratio: 24/8;
+}
+
+.aspect-\[25\/8\]{
+  aspect-ratio: 25/8;
+}
+
+.aspect-\[27\/8\]{
+  aspect-ratio: 27/8;
+}
+
+.aspect-\[26\/8\]{
+  aspect-ratio: 26/8;
+}
+
+.aspect-\[25\/6\]{
+  aspect-ratio: 25/6;
+}
+
+.aspect-\[25\/9\]{
+  aspect-ratio: 25/9;
+}
+
 .h-10{
   height: 2.5rem;
 }
@@ -715,6 +783,10 @@ video {
 
 .h-\[10rem\]{
   height: 10rem;
+}
+
+.h-\[12rem\]{
+  height: 12rem;
 }
 
 .h-\[25rem\]{
@@ -741,6 +813,18 @@ video {
   height: auto;
 }
 
+.h-\[8rem\]{
+  height: 8rem;
+}
+
+.h-\[19rem\]{
+  height: 19rem;
+}
+
+.h-\[23rem\]{
+  height: 23rem;
+}
+
 .min-h-screen{
   min-height: 100vh;
 }
@@ -761,16 +845,40 @@ video {
   width: 18rem;
 }
 
-.w-\[85-rem\]{
-  width: 85-rem;
+.w-\[23rem\]{
+  width: 23rem;
 }
 
 .w-full{
   width: 100%;
 }
 
+.w-\[45rem\]{
+  width: 45rem;
+}
+
+.w-auto{
+  width: auto;
+}
+
 .max-w-\[85-rem\]{
   max-width: 85-rem;
+}
+
+.max-w-\[75-rem\]{
+  max-width: 75-rem;
+}
+
+.max-w-\[60-rem\]{
+  max-width: 60-rem;
+}
+
+.max-w-\[6-rem\]{
+  max-width: 6-rem;
+}
+
+.max-w-\[65-rem\]{
+  max-width: 65-rem;
 }
 
 .flex-1{
@@ -833,14 +941,6 @@ video {
   overflow: auto;
 }
 
-.overflow-hidden{
-  overflow: hidden;
-}
-
-.overflow-x-auto{
-  overflow-x: auto;
-}
-
 .overflow-x-hidden{
   overflow-x: hidden;
 }
@@ -881,6 +981,10 @@ video {
 .bg-Likha{
   --tw-bg-opacity: 1;
   background-color: rgb(247 248 234 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#B0BCA480\]{
+  background-color: #B0BCA480;
 }
 
 .bg-\[\#c4ccbc\]{
@@ -1156,6 +1260,10 @@ video {
 
   .md\:h-\[32rem\]{
     height: 32rem;
+  }
+
+  .md\:h-\[23rem\]{
+    height: 23rem;
   }
 
   .md\:w-\[18rem\]{
