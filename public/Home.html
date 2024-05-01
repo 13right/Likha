@@ -44,9 +44,9 @@
         </nav>
     </div>
     <div class="bg-Likha min-h-screen pt-[5rem]">
-        <div id="container ">    
-            <div id="slider-wrapper" class="relative w-[85-rem]"  >
-                <div id="slider" class="flex aspect-[19/7] overflow-x-auto snap-x-mandatory scroll-smooth">
+        <div id="container">    
+            <div id="slider-wrapper" class="relative max-w-[85-rem]"  >
+                <div id="slider" class="flex aspect-[19/7] snap-x-mandatory scroll-smooth overflow-x-hidden">
                     <img src="img/Slider1.jpg" class="flex flex-1 snap-align-start" id="Slider1" alt="">
                     <img src="img/Slider2.jpg" class="flex flex-1 snap-align-start" id="Slider2"alt="">
                     <img src="img/Slider3.jpg" class="flex flex-1 snap-align-start" id="Slider3" alt="">
@@ -65,4 +65,24 @@
         <img src="img/CART.png" class="h-[3rem]" alt="">
     </div>
 </body>
+
+<script>
+    const slider = document.getElementById('slider');
+    const sliderWrapper = document.getElementById('slider-wrapper');
+    let currentIndex = 0;
+    const slides = slider.querySelectorAll('img');
+    const totalSlides = slides.length;
+    let interval;
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        slider.scrollLeft = sliderWrapper.offsetWidth * currentIndex;
+    }
+    
+    interval = setInterval(nextSlide, 3000);
+    sliderWrapper.addEventListener('mouseenter', () => clearInterval(interval));
+    sliderWrapper.addEventListener('mouseleave', () => {
+        interval = setInterval(nextSlide, 3000);
+    });
+</script>
 </html>
