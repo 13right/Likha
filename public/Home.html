@@ -13,7 +13,7 @@
                 <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
             </div>
             <div class="">
-                <ul class="md:flex md:space-x-9 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
+                <ul class="md:flex md:space-x-16 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
                     <li class="my-6 md:my-0">
                         <a href="Home.html" class="hover:text-outline duration-300">
                             HOME
@@ -26,19 +26,8 @@
                     </li>
                     <li class="my-6 md:my-0">
                         <a href="" class="hover:text-outline duration-300">
-                            CUSTOMIZATION
+                            CREATE
                         </a>
-                    </li>
-                    <li class="my-6 md:my-0">
-                        <a href="" class="hover:text-outline duration-300">
-                            ABOUT
-                        </a>
-                    </li>
-                    <li class="my-6 md:my-0">
-                        <a href="" class="hover:text-outline duration-300">
-                            CONTACT
-                        </a>
-                    </li>
                 </ul>
             </div>
             <div class="flex fixed p-3 top-1 right-1 md:right-16">
@@ -58,9 +47,9 @@
                         <img src="img/Slider3.jpg" class="flex flex-1 snap-align-start" id="Slider3" alt="">
                     </div>
                     <div id="slider-nav" class="flex grid-cols-2 gap-x-4 absolute bottom-[1.25rem] left-[50%] translate-x-[-50%]">
-                        <a href="#Slider1" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
-                        <a href="#Slider2" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
-                        <a href="#Slider3" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] opacity-[0.75] transition-opacity ease duration-200"></a>
+                        <a id="Nav1" href="#Slider1" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-[1]"></a>
+                        <a  id="Nav2" href="#Slider2" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
+                        <a id="Nav3" href="#Slider3" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
                     </div>
                 </div>
             </div>
@@ -217,24 +206,5 @@
     </div>
 </body>
 
-<script>
-    const slider = document.getElementById('slider');
-    const sliderWrapper = document.getElementById('slider-wrapper');
-    const sliderNav = document.getElementById('slider-nav')
-    let currentIndex = 0;
-    const slides = slider.querySelectorAll('img');
-    const totalSlides = slides.length;
-    let interval;
-
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % totalSlides;
-        slider.scrollLeft = sliderWrapper.offsetWidth * currentIndex;
-    }
-
-    interval = setInterval(nextSlide, 3000);
-    sliderNav.addEventListener('mouseenter', () => clearInterval(interval));
-    sliderNav.addEventListener('mouseleave', () => {
-        interval = setInterval(nextSlide, 3000);
-    });
-</script>
+<script src="SliderScript.js"></script>
 </html>
