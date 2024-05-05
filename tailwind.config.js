@@ -9,7 +9,8 @@ module.exports = {
       outline: '#f17d55'
     },
     fontFamily:{
-      libre: ['Libre Baskerville']
+      libre: ['Libre Baskerville'],
+      Montagu: ['Montagu Slab']
     }
   },
   plugins: [],
