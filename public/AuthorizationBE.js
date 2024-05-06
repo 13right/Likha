@@ -46,7 +46,8 @@ function LogIn() {
                 window.location.href = "Home.html";
             } else if (xhr.status === 401) {
                 alert("Invalid username or password");
-            } else {
+            }
+            else {
                 alert("Error: " + xhr.status);
             }
         }
