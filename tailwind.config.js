@@ -10,7 +10,8 @@ module.exports = {
     },
     fontFamily:{
       libre: ['Libre Baskerville'],
-      Montagu: ['Montagu Slab']
+      Montagu: ['Montagu Slab'],
+      Inter:['Inter']
     }
   },
   plugins: [],

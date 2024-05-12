@@ -46,6 +46,9 @@ function LogIn() {
                 window.location.href = "Home.html";
             } else if (xhr.status === 401) {
                 alert("Invalid username or password");
+            }  else if (xhr.status === 250) {
+                alert("Admin");
+                window.location.href = "AdminHome.html"
             }
             else {
                 alert("Error: " + xhr.status);
