@@ -11,7 +11,8 @@ module.exports = {
     fontFamily:{
       libre: ['Libre Baskerville'],
       Montagu: ['Montagu Slab'],
-      Inter:['Inter']
+      Inter:['Inter'],
+      Montserrat: ['Montserrat']
     }
   },
   plugins: [],

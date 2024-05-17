@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+    <title>Profile</title>
+</head>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
+        <nav class="md:flex md:items-center">   
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+            </div>
+            <div class="">
+                <ul class="md:flex md:space-x-16 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
+                    <li class="my-6 md:my-0">
+                        <a href="Home.html" class="hover:text-outline duration-300">
+                            HOME
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="" class="hover:text-outline duration-300">
+                            SHOP
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="" class="hover:text-outline duration-300">
+                            CREATE
+                        </a>
+                </ul>
+            </div>
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
+                <a href=""><img src="img/PROFILE.png" class="h-[3rem]" alt=""></a>
+                <img src="img/CART.png" class="h-[3rem] cursor-pointer" alt="" id="CartIcon">
+            </div>
+        </nav>
+    </div>
+    <div class="bg-Likha min-h-screen">
+        <div id="main-container" class=" relative w-[1200px] h-[40rem] left-[12rem] top-[8rem] space-y-7">
+            <div class="flex items-center space-x-[5rem]">
+                <div class="w-[415px] h-[205px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] ml-[4rem]">
+
+                </div>
+                <div class="w-[464px] h-[117px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] items-center flex space-x-5">
+                    <a href="Orders.html"><button class="justify-center bg-outline ml-[2rem] w-[190px] h-[53px] flex items-center rounded-xl space-x-2"><img class="w-[2rem] h-[2rem] float-left" src="img/Orders.png" alt=""><span class="text-[#FFF]">Orders</span></button></a>
+                    <button class="justify-center w-[190px] h-[53px] bg-outline flex items-center rounded-lg space-x-2"><img src="img/History.png" class="w-[2rem] h-[2rem] float-left" alt=""><span class="text-[#FFF]">History</span></button>
+                </div>
+            </div>
+            <div class="w-[1100px] h-[400px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px]">
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>

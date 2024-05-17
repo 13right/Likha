@@ -55,8 +55,19 @@ function LogIn() {
             }
         }
     };
-
+    
     xhr.open("POST", "/LogIn");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(Data));
 }
+async function fetchCurrentUser() {
+    const response = await fetch('/api/current_user');
+    if (response.ok) {
+        const user = await response.json();
+        document.getElementById('userInfo').innerText = `Logged in as: ${user.UserID}`;
+    } else {
+        document.getElementById('userInfo').innerText = 'Not logged in';
+        window.location.href = "SignIn.html";
+    }
+    }
+fetchCurrentUser();

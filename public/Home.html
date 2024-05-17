@@ -6,6 +6,48 @@
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
     <title>Home</title>
 </head>
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    /* Custom styles for the checkbox */
+    input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      display: inline-block;
+      width: 39.36px;
+      height: 31.33px;
+      background-color: #F7F8EA;
+      border-radius: 0.375rem; /* rounded-md */
+      position: relative;
+    }
+
+    /* Styles for the check mark */
+    input[type="checkbox"]:checked::after {
+      content: "";
+      display: block;
+      width: 0.5em;
+      height: 1em;
+      border: solid #000;
+      border-width: 0 0.25em 0.25em 0;
+      transform: rotate(45deg);
+      position: absolute;
+      top: 5px; /* Adjust the position of the check mark */
+      left: 16px; /* Adjust the position of the check mark */
+    }
+    .Product-Cartt::-webkit-scrollbar {
+    display: none;
+    }
+    .Product-Cart::-webkit-scrollbar{
+        display: none;
+    }
+    .Cart-Container::-webkit-scrollbar{
+        display: none;
+    }
+  </style>
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
@@ -32,8 +74,9 @@
             </div>
             <div class="flex fixed p-3 top-1 right-1 md:right-16">
                 <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
-                <img src="img/PROFILE.png" class="h-[3rem]" alt="">
-                <img src="img/CART.png" class="h-[3rem]" alt="">
+                <a href="Profile.html"><img src="img/PROFILE.png" class="h-[3rem]" alt=""></a>
+                <img src="img/CART.png" class="h-[3rem] cursor-pointer" alt="" id="CartIcon">
+
             </div>
         </nav>
     </div>
@@ -42,7 +85,7 @@
             <div id="slide-container">    
                 <div id="slider-wrapper" class="relative max-w-[65-rem] pt-[5rem]"  >
                     <div id="slider" class="flex aspect-[25/9] scroll-smooth overflow-x-hidden ">
-                        <img src="img/Slider1.jpg" class="flex flex-1 snap-align-start" id="Slider1" alt="">
+                        <img src="img/Slider1.jpg" class="flex flex-1  snap-align-start" id="Slider1" alt="">
                         <img src="img/Slider2.jpg" class="flex flex-1 snap-align-start" id="Slider2"alt="">
                         <img src="img/Slider3.jpg" class="flex flex-1 snap-align-start" id="Slider3" alt="">
                     </div>
@@ -89,14 +132,72 @@
                 <div>
                     <H6 class="text-6xl font-libre font-extrabold">Shop</H6>
                 </div>
-                <div class="flex-col space-y-[16rem]">
+                <div class="flex-col space-y-[16rem] ">
                     <div id="product-list" class="flex space-x-9 flex-wrap justify-center"></div>
+                    <div id="product-view"></div>
                 </div>
             </div>
+            <div class="flex space-x-[4rem] w-[70rem] h-[35rem] bg-sign  outline outline-outline outline-2 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden" id="Cartel">
+                <div id="Carts">
+                    <div id="Cart-Container" class="font-Montagu text-3xl font-semibold pt-4 pl-8 mb-6">Cart Product</div>
+                    <div id="Product-Cart" class="ml-[3.5rem] pb-1 w-[32rem] h-[29rem] flex flex-col items-center overflow-y-auto">
+                        <div id="Product-Cartt"></div>
+                    </div>
+                </div>
+                <div class="bg-outline absolute right-0 rounded-xl h-[35rem] w-[45%] z-10 p-3">
+                    <h1 class="text-[#F8ECDC] font-Montagu text-4xl ml-2 font-bold">Order Summary</h1>
+                    <h1 class="font-Montserrat text-[#F8ECDC] font-extrabold ml-6 mt-9">Item(s)  Total:</h1>
+                    <hr class="w-[465px] text-[#F8ECDC] mx-2 mt-16">
+                    <label for="Promo" class="font-Montserrat text-[#F8ECDC] font-extrabold ml-6 mt-9">Promo Code:</label>
+                    <input type="text" class="bg-[#F8ECDC] p-2 ml-20 mt-9">
+                    <hr class="w-[465px] text-[#F8ECDC] mx-2 mt-11">
+                    <h1 class="font-Montserrat text-[#F8ECDC] font-extrabold ml-9 mt-9">Total: </h1>
+                    <button id="PlaceOrder" class="bg-[#F8ECDC] font-Montserrat font-semibold w-[310.42px] h-[61.84px] rounded-xl ml-28 mt-[2rem]">Place Order</button>
+                </div>
+                
+                <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] outline outline-outline outline-1 cursor-pointer absolute right-3 top-3 z-10 flex items-center" id="CloseCart">
+                    <img src="img/x.png" class="w-auto mx-auto">
+                </div>
+            </div>
+            
+        </div>
+        <div id="CartPopup" class="fixed top-[25rem] right-[40%] bg-hehe text-white p-4 rounded shadow-lg opacity-0 transform translate-y-4 transition-all duration-300">
+            Successfully added to cart!<br><br>
+            <button id="ok" onclick="Ok()" class="ml-[30%] bg-Likha rounded-md w-20">OK</button>
         </div>
     </div>
+    <div id="userInfo"></div>
 </body>
 <script>
+
+        function Ok(){
+            document.getElementById('CartPopup').classList.add('opacity-0');
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+        const cartToggle = document.getElementById('CartIcon');
+        const productCart = document.getElementById('Cartel');
+
+        cartToggle.addEventListener('click', () => {
+
+            if (!productCart.classList.contains('hidden')) {
+                productCart.classList.add('hidden');
+            } else {
+                productCart.classList.remove('hidden');
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const cartToggle = document.getElementById('CloseCart');
+        const productCart = document.getElementById('Cartel');
+
+        cartToggle.addEventListener('click', () => {
+            // event.preventDefault();
+             productCart.classList.add('hidden');
+        });
+    });
+
     // Fetch data from Node.js server
     fetch('/products')
         .then(response => response.json())
@@ -107,27 +208,244 @@
                 // Create HTML elements to display product information
                 const productElement = document.createElement('div');
                 productElement.innerHTML = `
-                <div class="bg-[#D8BC8C80] w-[318px] h-[500px] group outline outline-outline outline-1 rounded-xl pt-5 pr-5 relative mb-[2rem]" id = "product-container">
-                        <div class="flex flex-col items-center">
-                                    <img src="data:image/jpeg;base64,${product.productImage}" alt="${product.productName}" class = "w-[12rem] mt-[5rem] group-hover:opacity-75 transition delay-300">
-                                <div class = "bottom-1 absolute inset-x-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-300 h-[5rem] w-auto">
-                                    <div class = "flex-cols items-center ml-[30%]">
-                                        <h2 >${product.productName}</h2>
-                                        <p>Price: ${product.productPrice}</p>
+                    <div id="main-container"> 
+                        <div class="bg-[#D8BC8C80] w-[318px] h-[500px] group outline outline-outline outline-1 rounded-xl pt-5 pr-5 relative mb-[2rem]" id="product-container">
+                            <div class="flex flex-col items-center">
+                                <img src="data:image/jpeg;base64,${product.productImage}" alt="${product.productName}" class="w-[80%] my-[4rem] group-hover:opacity-75 transition delay-300">
+                                <div class="bottom-3 mx-4 px-2 absolute inset-x-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-300 w-[291px] h-[113px] bg-[#FFFFFF80] rounded-[5px]">
+                                    <div class="flex-cols h-[95px] w-[200px]">
+                                        <h2 class="font-Montagu font-extrabold text-3xl">${product.productName}</h2>
+                                        <p class="font-Montagu font-extrabold text-xl">Price: ${product.productPrice}</p>
                                     </div>
                                 </div>
-                        </div>
-                        <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] outline outline-outline outline-1 absolute right-3 top-3 z-10 flex items-center">
+                            </div>
+                            <div class="bg-[#FFFFFF] cursor-pointer w-[50px] h-[50px] rounded-[100%] outline outline-outline outline-1 absolute right-3 top-3 z-10 flex items-center ">
                                 <img src="img/+.png" class="w-auto mx-auto">
+                            </div>
                         </div>
-                </div>
-
+                        
+                    </div> 
                 `;
                 productList.appendChild(productElement);
 
+                
+
+                // Event listener for showing the ProductView
+                 productElement.querySelector('#product-container').addEventListener('click', function() {
+                    // Get the product container
+                    const productContainer = productElement.querySelector('#product-container');
+                    // Get the product name, price, and image
+                    const productName = productContainer.querySelector('h2').innerText;
+                    const productPrice = productContainer.querySelector('p').innerText.replace('Price: ', '');
+                    const productImage = productContainer.querySelector('img').src;
+
+                    const productView = document.getElementById('product-view');
+                // Create HTML elements to display product information
+                    const productviewelement = document.createElement('div');
+                    productviewelement.innerHTML = `<div class="flex space-x-[4rem] w-[60rem] h-[30rem] bg-sign pl-[9rem] outline outline-outline outline-1 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 items-center  hidden" id="ProductView">
+                                <div class="flex items-center justify-center bg-[#D8BC8C80] w-[23rem] h-[25rem] rounded-xl">
+                                    <img src="" id="editedProductImage" alt="" class="w-[50%] my-[4rem]">
+                                </div>
+                                <div class="flex-col space-y-3">
+                                    <h2 class="font-Montagu font-extrabold text-3xl" id="editedProductName"></h2>
+                                    <p class="font-Montagu font-extrabold text-xl" id="editedProductPrice"></p>
+                                    <p class="font-Montagu font-extrabold text-xl" id="productDes">${product.productDes}</p>
+                                    <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg">
+                                        <button id="mo" class="font-bold" onclick="changeValue(-1)">-</button>
+                                        <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" type="number" value="1" min="1" max="100">
+                                        <button id="ao" class="font-bold" onclick="changeValue(1)">+</button>
+                                    </div>
+                                    <button class="bg-[#F07C54] rounded-lg px-4 py-2 bg-green-500 text-white rounded" id="AddToCart">Add to cart</button>
+                                </div>
+                                
+                                <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] outline outline-outline outline-1 cursor-pointer absolute right-3 top-3 z-10 flex items-center" id="CloseEdit">
+                                    <img src="img/x.png" class="w-auto mx-auto">
+                                </div>
+                            </div>`;
+
+                            productView.appendChild(productviewelement);
+
+                            
+                        // Set the values in the ProductView
+                        const editedProductNameInput = productviewelement.querySelector('#editedProductName');
+                        const editedProductPriceInput = productviewelement.querySelector('#editedProductPrice');
+                        const editedProductImage = productviewelement.querySelector('#editedProductImage');
+
+                        editedProductImage.src = productImage;
+                        editedProductNameInput.innerText = productName;
+                        editedProductPriceInput.innerText = "Price: " + productPrice;
+
+                        // Show the ProductView
+                        const ProductView = productviewelement.querySelector("#ProductView");
+                        ProductView.classList.remove('hidden');
+                    
+                        // Event listener for closing the ProductView
+                            productviewelement.querySelector('#CloseEdit').addEventListener('click', function() {
+                            // Hide the ProductView
+                            const productView = productviewelement.querySelector('#ProductView');
+                            productView.classList.add('hidden');
+                        });
+
+                        // Event listener for Quantity Increment
+                        // productviewelement.querySelector('#ao').addEventListener('click',function(){
+                        //     const Quantity = productviewelement.querySelector('#number')
+                        //     const currentValue = parseInt(Quantity.value);
+                        //     const newValue = currentValue + 1;
+                        //     newValue = Quantity.value;
+
+                        // })
+                        document.addEventListener('click',function(event){
+                            const Increment = event.target.closest('#ao');
+                            if(Increment){
+                                const Quantity = productviewelement.querySelector('#number');
+                                const currentValue = parseInt(Quantity.value);
+                                const newValue = currentValue + 1;
+                                Quantity.value = newValue;
+                            }
+                        });
+                        document.addEventListener('click',function(event){
+                            const Decrement = event.target.closest('#mo');
+                            if(Decrement){
+                                const Quantity = productviewelement.querySelector('#number');
+                                const currentValue = parseInt(Quantity.value);
+                                if(currentValue > 1){
+                                const newValue = currentValue - 1;
+                                Quantity.value = newValue;
+                                }
+                            }
+                        });
+                          //Add To Cart
+                            const Add = productviewelement.querySelector('#AddToCart');
+                            Add.addEventListener('click',function(){
+                            const ProductN = editedProductNameInput.textContent;
+                            const ProductQ = productviewelement.querySelector('#number').value;
+                            const Num = parseInt(ProductQ);
+                            const Data ={
+                                    ProductName: ProductN,
+                                    Quantity: Num
+                            };
+                            fetch('/AddToCart', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(Data)
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Success:', data);
+                                    productviewelement.querySelector('#ProductView').classList.add('hidden');
+                                    document.getElementById('CartPopup').classList.remove('opacity-0');
+                                    // You can add more code here to handle the response
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                        
+                    });   
             });
+
         })
         .catch(error => console.error('Error fetching products:', error));
+
+        
+
+        document.getElementById('CartIcon').addEventListener('click', async function() {
+        const CartList = document.getElementById('Product-Cart');
+    
+        // Clear current cart items
+        CartList.innerHTML = '';
+
+            try {
+                const response = await fetch('/Cart');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const productsCart = await response.json();
+
+                productsCart.forEach(productCart => {
+                    // Create HTML elements to display product information
+                    const CartElement = document.createElement('div');
+                    CartElement.innerHTML = `
+                        <div class="flex items-center space-x-10">
+                            <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md"></input>
+                            <div>
+                                <img src="data:image/jpeg;base64,${productCart.productImage}" alt="Product Image" class="w-28">
+                            </div>
+                            <div>
+                                <h1>${productCart.productName}</h1>
+                                <h2>${productCart.productPrice}</h2>
+                                <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg">
+                                    <button class="font-bold" onclick="changeValue(this, -1)">-</button>
+                                    <input style="background-color: transparent;" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" value=${productCart.productQuantity} min="1" max="100">
+                                    <button class="font-bold" onclick="changeValue(this, 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    CartList.appendChild(CartElement);
+                    //console.log(productCart.productQuantity);
+                });
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+            document.getElementById('PlaceOrder').addEventListener('click', function() {
+                const checkboxes = document.querySelectorAll('#Product-Cart input[type="checkbox"]');
+                const checkedValues = [];
+
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        // Find the associated product details
+                        const productElement = checkbox.closest('.flex');
+                        const productName = productElement.querySelector('h1').innerText;
+                        const productQuantity = productElement.querySelector('input[type="number"]').value;
+                        
+                        // Add the product details to the checked values array
+                        checkedValues.push({
+                            OrderProductName: productName,
+                            OrderQuantity: productQuantity
+                        });
+
+                        console.log(checkedValues);
+                    }
+                });
+
+                // Check if there are any checked values before making the fetch request
+                if (checkedValues.length > 0) {
+                    fetch('/PlaceOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ orders: checkedValues })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            // If the response is not OK, throw an error
+                            return response.text().then(text => {
+                                throw new Error(text);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        // You can add more code here to handle the response
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error.message);
+                    });
+                } else {
+                    console.log('No products selected.');
+                }
+            });
+
+
+        });
+
 </script>   
+
 <script src="SliderScript.js"></script>
+<script src="AuthorizationBE.js"></script>
 </html>

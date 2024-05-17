@@ -116,7 +116,7 @@ fetch('/products')
             // Create HTML elements to display product information
             const productElement = document.createElement('div');
             productElement.innerHTML = `
-                <div class=" flex bg-[#D8BC8C80] w-[318px] h-[500px] group outline outline-outline outline-1 rounded-xl justify-center relative mb-[2rem]" id="product-container">
+                <div class="flex bg-[#D8BC8C80] w-[318px] h-[500px] group outline outline-outline outline-1 rounded-xl justify-center relative mb-[2rem]" id="product-container">
                     <div class="flex flex-col z-1">
                         <img src="data:image/jpeg;base64,${product.productImage}" alt="${product.productName}" class="w-[12rem] mt-[6rem] group-hover:opacity-75 transition delay-300">
                         <div class="bottom-1 absolute text-center flex-cols inset-x-0 p-4 items-center h-[5rem] w-auto">
@@ -125,155 +125,155 @@ fetch('/products')
                         </div>
                     </div>
 
-                    
-                    <div class="absolute flex inset-x-0 p-4 opacity-0 w-[318px] h-[500px] flex-col pt-[10rem] rounded-xl  space-y-9 group-hover:opacity-100 transition-opacity duration-300 delay-300 bg-[#00000033] z-19">
-                                
-                            <button class="font-Inter text-[#fff] flex item-center justify-center" id="Add"><img src="img/Add.png" class="h-7 mr-2">Add</button>
-                            <button class="font-Inter text-[#fff] flex item-center justify-center" id="Edit"><img src="img/Edit.png" class="h-6 mr-2">Edit</button>
-                            <button class="font-Inter text-[#fff] flex item-center justify-center" id = "Delete"><img src="img/Delete.png" class="h-6 mr-2">Delete</button>
+                    <div class="absolute flex inset-x-0 p-4 opacity-0 w-[318px] h-[500px] flex-col pt-[10rem] rounded-xl space-y-9 group-hover:opacity-100 transition-opacity duration-300 delay-300 bg-[#00000033] z-19">
+                        <button class="font-Inter text-[#fff] flex item-center justify-center" id="Add"><img src="img/Add.png" class="h-7 mr-2">Add</button>
+                        <button class="font-Inter text-[#fff] flex item-center justify-center" id="Edit"><img src="img/Edit.png" class="h-6 mr-2">Edit</button>
+                        <button class="font-Inter text-[#fff] flex item-center justify-center" id="Delete"><img src="img/Delete.png" class="h-6 mr-2">Delete</button>
                     </div>
 
-                    <div class="w-[60rem] h-[30rem] bg-sign outline outline-outline outline-1 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 inset-0 items-center justify-center hidden" id="additionalDiv" >
+                    <div class="w-[60rem] h-[30rem] bg-sign outline outline-outline outline-1 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 inset-0 items-center justify-center hidden" id="additionalDiv">
                         <form id="uploadForm" enctype="multipart/form-data" class="flex items-center mx-28 mt-24 space-x-32">
-                                <div class="">
-                                    <label for="file-upload" class="flex items-center p-3 cursor-pointer bg-[#D8BC8C80] w-[20rem] h-[17rem] rounded-xl" >
-                                        <img id="previewImage" src="img/+.png" alt="" class = "mx-auto">
-                                    </label>
-                                    <input id="file-upload" type="file" class="hidden" name="image" onchange="previewFile()">
-                                </div>
+                            <div>
+                                <label for="file-upload" class="flex items-center p-3 cursor-pointer bg-[#D8BC8C80] w-[20rem] h-[17rem] rounded-xl">
+                                    <img id="previewImage" src="img/+.png" alt="" class="mx-auto">
+                                </label>
+                                <input id="file-upload" type="file" class="hidden" name="image" onchange="previewFile()">
+                            </div>
                             
-                                <div class="flex-col space-y-3">
-                                        <input type="text" name="productName" id="productName" class="outline outline-1 outline-outline w-[282px] h-[45px] p-3 rounded-lg" placeholder="Product Name">
-                                        <input type="number" name="productPrice" id="productPrice" placeholder="Product Price" class="outline outline-1 outline-outline w-[200px] h-[40px] p-3 rounded-lg">
-                                        <button class="bg-outline font-Montagu w-[156px] h-[25px ] rounded-lg">Add</button>
-                                </div>
-                         </form>
-                         <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] cursor-pointer outline outline-outline  outline-1 absolute right-3 top-3 z-10 flex items-center " onclick="CloseAdd()">
-                         <img src="img/x.png" class="w-auto mx-auto id ="CloseAdd">
-                         </div>
+                            <div class="flex-col space-y-3">
+                                <input type="text" name="productName" id="productName" class="outline outline-1 outline-outline w-[282px] h-[45px] p-3 rounded-lg" placeholder="Product Name">
+                                <input type="number" name="productPrice" id="productPrice" placeholder="Product Price" class="outline outline-1 outline-outline w-[200px] h-[40px] p-3 rounded-lg">
+                                <br>
+                                <label class="font-Montagu" for="Cat">Category:</label>
+                                <select class="rounded-lg font-Montagu outline outline-1 p-1 ml-[1rem] outline-outline" name="Cat" id="Cat">
+                                    <option value="1">Bag</option>
+                                    <option value="2">Dress</option>
+                                    <option value="3">Jewelry</option>
+                                </select>
+                                <input type="text" name="productDes" id="productDes" class="outline outline-1 outline-outline w-[300px] h-[55px] p-3 rounded-lg" placeholder="Product Description">
+                                <label class="font-Montagu" for="Stock">Stock/s:</label> 
+                                <input style="box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);" type="number" name="Stock" id="Stock"class="outline outline-3 outline-outline w-[87px] h-[40px] p-3 rounded-lg ml-[1rem] drop-shadow-xl">
+                                <button class="bg-outline font-Montagu w-[156px] h-[25px] rounded-lg font-semibold text-[#fff]">ADD</button>
+                            </div>
+                        </form>
+                        <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] cursor-pointer outline outline-outline outline-1 absolute right-3 top-3 z-10 flex items-center" onclick="CloseAdd()">
+                            <img src="img/x.png" class="w-auto mx-auto" id="CloseAdd">
+                        </div>
                     </div>
                     <div class="w-[60rem] h-[30rem] bg-sign outline outline-outline outline-1 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 items-center justify-center hidden" id="editForm">
                         <form id="uploadForm" enctype="multipart/form-data" class="flex items-center mx-28 mt-24 space-x-32">
-                                <div class="flex items-center bg-[#D8BC8C80] pl-9 w-[30rem] h-[17rem] rounded-xl">
-                                        <img src="" id="editedProductImage" class = "w-auto h-full" alt="">
-                                </div>
+                            <div class="flex items-center bg-[#D8BC8C80] pl-9 w-[30rem] h-[17rem] rounded-xl">
+                                <img src="" id="editedProductImage" class="w-auto h-full" alt="">
+                            </div>
                             
-                                <div class="flex-col space-y-3">
-                                    <input type="text" name="editedProductName" id="editedProductName" class="outline outline-1 outline-outline w-[282px] h-[45px] p-3 rounded-lg" placeholder="Edited Product Name">
-                                    <input type="number" name="editedProductPrice" id="editedProductPrice" placeholder="Edited Product Price" class="outline outline-1 outline-outline w-[200px] h-[40px] p-3 rounded-lg">
-                                    <button onclick="saveEdit()" class="px-4 py-2 bg-green-500 text-white rounded" id="saveEdit">Save</button>
-                                </div>
-                                
-                         </form>
-                         <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] outline outline-outline outline-1 cursor-pointer absolute right-3 top-3 z-10 flex items-center" id = "CloseEdit">
-                         <img src="img/x.png" class="w-auto mx-auto">
-                         </div>
+                            <div class="flex-col space-y-3">
+                                <input type="text" name="editedProductName" id="editedProductName" class="outline outline-1 outline-outline w-[282px] h-[45px] p-3 rounded-lg" placeholder="Edited Product Name">
+                                <input type="number" name="editedProductPrice" id="editedProductPrice" placeholder="Edited Product Price" class="outline outline-1 outline-outline w-[200px] h-[40px] p-3 rounded-lg">
+                                <button onclick="saveEdit()" class="px-4 py-2 bg-green-500 text-white rounded" id="saveEdit">Save</button>
+                            </div>
+                        </form>
+                        <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] outline outline-outline outline-1 cursor-pointer absolute right-3 top-3 z-10 flex items-center" id="CloseEdit">
+                            <img src="img/x.png" class="w-auto mx-auto">
+                        </div>
                     </div>
                 </div>
-
             `;
             productList.appendChild(productElement);
             
-            // const CloseButton = productElement.querySelector('#CloseEdit');
-            // CloseButton.addEventListener('click', function() {
-            //     document.getElementById('editForm').classList.add('hidden');
-            // });
+            // Event listener for closing the edit form
+            const CloseEditButton = productElement.querySelector('#CloseEdit');
+            CloseEditButton.addEventListener('click', function() {
+                // Hide the edit form
+                const editForm = productElement.querySelector('#editForm');
+                editForm.classList.add('hidden');
+            });
 
             document.addEventListener('click', function(event) {
-            const CloseButton = document.getElementById("CloseEdit");
-            const CloseEditForm = document.getElementById("editForm");
+                const editButton = event.target.closest('#Edit');
+                if (editButton) {
+                    // Get the product container
+                    const productContainer = editButton.closest('#product-container');
+                    // Get the product name, price, and image
+                    const productName = productContainer.querySelector('h2').innerText;
+                    const productPrice = productContainer.querySelector('p').innerText.replace('Price: ', '');
+                    const productImage = productContainer.querySelector('img').src;
 
-            // Check if the clicked element is the edit button
-            if (CloseButton) {
-                CloseEditForm.classList.add('hidden');
-            }});
+                    // Set the values in the edit form inputs
+                    const editedProductNameInput = productContainer.querySelector('#editedProductName');
+                    const editedProductPriceInput = productContainer.querySelector('#editedProductPrice');
+                    const editedProductImage = productContainer.querySelector('#editedProductImage');
+                    editedProductNameInput.value = productName;
+                    editedProductPriceInput.value = productPrice;
+                    editedProductImage.src = productImage;
 
-            document.addEventListener('click', function(event) {
-            const editButton = event.target.closest('#Edit');
-            if (editButton) {
-                // Get the product container
-                const productContainer = editButton.closest('#product-container');
-                // Get the product name, price, and image
-                const productName = productContainer.querySelector('h2').innerText;
-                const productPrice = productContainer.querySelector('p').innerText.replace('Price: ', '');
-                const productImage = productContainer.querySelector('img').src;
+                    // Add event listener for Save button
+                    const saveButton = productContainer.querySelector('#saveEdit');
+                    saveButton.addEventListener('click', function() {
+                        // Get updated name and price
+                        const updatedName = editedProductNameInput.value;
+                        const updatedPrice = editedProductPriceInput.value;
 
-                // Set the values in the edit form inputs
-                const editedProductNameInput = productContainer.querySelector('#editedProductName');
-                const editedProductPriceInput = productContainer.querySelector('#editedProductPrice');
-                const editedProductImage = productContainer.querySelector('#editedProductImage');
-                editedProductNameInput.value = productName;
-                editedProductPriceInput.value = productPrice;
-                editedProductImage.src = productImage;
-
-                // Add event listener for Save button
-                const saveButton = productContainer.querySelector('#saveEdit');
-                saveButton.addEventListener('click', function() {
-                    // Get updated name and price
-                    const updatedName = editedProductNameInput.value;
-                    const updatedPrice = editedProductPriceInput.value;
-
-                    // Make a fetch request to update the product
-                    fetch(`/updateProduct/${encodeURIComponent(productName)}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            updatedName: updatedName,
-                            updatedPrice: updatedPrice
+                        // Make a fetch request to update the product
+                        fetch(`/updateProduct/${encodeURIComponent(productName)}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                updatedName: updatedName,
+                                updatedPrice: updatedPrice
+                            })
                         })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            console.log('Product updated successfully');
-                        } else {
-                            console.error('Failed to update product');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error updating product:', error);
+                            .then(response => {
+                                if (response.ok) {
+                                    console.log('Product updated successfully');
+                                } else {
+                                    console.error('Failed to update product');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error updating product:', error);
+                            });
                     });
-                });
 
-                // Show the edit form
-                const editForm = productContainer.querySelector('#editForm');
-                editForm.classList.remove('hidden');
-            }
-        });
+                    // Show the edit form
+                    const editForm = productContainer.querySelector('#editForm');
+                    editForm.classList.remove('hidden');
+                }
+            });
 
-        //Delete
+            // Delete
 
-        document.addEventListener('click', function(event) {
-        const DeleteButton = event.target.closest('#Delete');
-        if (DeleteButton) {
-            // Get the product container
-            const productContainer = DeleteButton.closest('#product-container');
-            // Get the product name
-            const productName = productContainer.querySelector('h2').innerText;
-            // Add event listener for Delete button
-                // Ask for confirmation
-                // const confirmed = window.confirm(`Are you sure you want to delete ${productName}?`);
-                // if (confirmed) {
+            document.addEventListener('click', function(event) {
+                const DeleteButton = event.target.closest('#Delete');
+                if (DeleteButton) {
+                    // Get the product container
+                    const productContainer = DeleteButton.closest('#product-container');
+                    // Get the product name
+                    const productName = productContainer.querySelector('h2').innerText;
+                    // Add event listener for Delete button
+                    // Ask for confirmation
+                    // const confirmed = window.confirm(`Are you sure you want to delete ${productName}?`);
+                    // if (confirmed) {
                     // Make a fetch request to delete the product
                     fetch(`/DeleteProduct/${encodeURIComponent(productName)}`, {
                         method: 'DELETE'
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            console.log('Product deleted successfully');
-                            window.location.href = "AdminHome.html"
-                        } else {
-                            console.error('Failed to delete product');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error deleting product:', error);
-                    });
-               // }
-            }
-        });
-           
+                        .then(response => {
+                            if (response.ok) {
+                                console.log('Product deleted successfully');
+                                window.location.href = "AdminHome.html"
+                            } else {
+                                console.error('Failed to delete product');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error deleting product:', error);
+                        });
+                    // }
+                }
+            });
+
             // Now, add the event listener to the newly created button
             const addButton = productElement.querySelector('#Add');
             addButton.addEventListener('click', function() {
@@ -281,47 +281,42 @@ fetch('/products')
             });
             const Form = productElement.querySelector('#uploadForm')
             Form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(this);
-            const response = await fetch('/upload', {
-                method: 'POST',
-                body: formData
-            });
+                event.preventDefault();
 
-            const messageElement = document.getElementById('message');
-            if (response.ok) {
-                console.log("Image uploaded successfully");
-                window.open("AdminHome.html");
-            } else {
-                console.log("Error uploading image");
-            }
-        });
-        });
-        document.addEventListener('DOMContentLoaded', function(){
-        const CloseButton = productElement.querySelector('#CloseAdd');
-            CloseButton.addEventListener('click', function() {
-                document.getElementById('additionalDiv').classList.add('hidden');
+                const formData = new FormData(this);
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const messageElement = document.getElementById('message');
+                if (response.ok) {
+                    window.open("AdminHome.html");
+                } else {
+                    console.log("Error uploading");
+                }
             });
         });
-        
     })
     .catch(error => console.error('Error fetching products:', error));
-    function previewFile() {
-        var preview = document.getElementById('previewImage');
-        var file = document.querySelector('input[type=file]').files[0];
-        var reader = new FileReader();
 
-        reader.onloadend = function() {
-            preview.src = reader.result;
-        }
+function previewFile() {
+    var preview = document.getElementById('previewImage');
+    var file = document.querySelector('input[type=file]').files[0];
+    var reader = new FileReader();
 
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = "img/+.png"; // If no file is selected, display default image
-        }
-    }       
+    reader.onloadend = function() {
+        preview.src = reader.result;
+    }
+
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "img/+.png"; // If no file is selected, display default image
+    }
+}
+
     </script>   
 <script src="SliderScript.js"></script>
+
 </html>
