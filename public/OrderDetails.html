@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+</head>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
+        <nav class="md:flex md:items-center">   
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+            </div>
+            
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <img id="Profile" class="cursor-pointer h-[3rem] w-[3rem]" src="img/PROFILE.png"  alt="">
+            </div>
+        </nav>
+    </div>
+    <div class="bg-Likha min-h-screen p-[5rem] pt-[9rem] space-y-12">
+        <div class="flex space-x-12">
+            <div class="w-[882px] relative h-[566px] outline outline-1 outline-outline bg-sign rounded-2xl">
+                <div class="w-[844px] pt-6 pl-[3.5rem] relative mx-auto mt-7 h-[101px] bg-outline rounded-2xl">
+                    <p class="font-Inter font-extrabold text-[20px] text-[#FFFFFF]">04NDFSMCF264I</p>
+                    <p class="font-Montserrat font-semibold text-[14px] text-[#FFFFFF]">July 13, 2024</p>
+                </div>
+                <div class="flex space-x-[28.5rem] ml-[2.5rem] mt-4">
+                    <div><h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Item(s)</h1></div>
+                    <div class="flex space-x-[6rem]">
+                        <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Quality</h1>
+                        <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Amount</h1>
+                    </div>
+                    
+                </div>
+                <hr class="w-[800px] border-outline mx-auto">
+
+                <!-- Product dito then hr ulit -->
+
+            </div>
+            <div class="space-y-4">
+                <div class="w-[396px] h-[339px] outline outline-1 pl-10 pt-5 outline-outline bg-sign rounded-2xl ">
+                    <p class="font-Montserrat font-semibold text-[24px] text-[#00000080]">Order Status</p>
+                    <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                            </div>
+                            <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
+                        </div>
+                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                            </div>
+                            <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
+                        </div>
+                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center"></div>
+                            <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="outline outline-1 outline-outline bg-sign rounded-2xl w-[396px] h-[212px]">
+
+                </div>
+            </div>
+        </div>
+        <div class="w-[1334px] h-[213px] outline outline-1 outline-outline bg-sign rounded-2xl">
+
+        </div>
+    </div>
+</body>
+</html>

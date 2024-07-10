@@ -6,6 +6,7 @@
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
     <title>Home</title>
 </head>
+<!-- <script src="AdminPage.js"></script> -->
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
@@ -32,12 +33,12 @@
             </div>
             <div class="flex fixed p-3 top-1 right-1 md:right-16">
                 <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
-                <img src="img/PROFILE.png" class="h-[3rem]" alt="">
+                <img id="Profile" class="cursor-pointer h-[3rem] w-[3rem]" src="img/PROFILE.png"  alt="" >
                 <img src="img/CART.png" class="h-[3rem]" alt="">
             </div>
         </nav>
     </div>
-    <div class="bg-Likha min-h-screen ">
+    <div class="bg-Likha min-h-screen">
         <div id="main-container">
             <div id="slide-container">    
                 <div id="slider-wrapper" class="relative max-w-[65-rem] pt-[5rem]"  >
@@ -94,10 +95,65 @@
                 </div>
             </div>
         </div>
+        <!-- <div id = "userInfo"></div> -->
+        <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
+            <a href="OrderList.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Order</p>
+            </a>
+            
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Landing</p>
+            </a>
+            <a href="AdminHome.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Home Page</p>
+            </a>
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">3D Customization</p>
+            </a>
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center" onclick="LogOut()">
+                <p class="font-Montserrat font-semibold">Log Out</p>
+            </a>
+        </div>
     </div>
+    
 </body>
 <script>
     
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const Profile = document.getElementById('Profile');
+        const Menu = document.getElementById('AdminMenu');
+
+        Profile.addEventListener('click', () => {
+
+            if (!Menu.classList.contains('hidden')) {
+                Menu.classList.add('hidden');
+            } else {
+                Menu.classList.remove('hidden');
+            }
+        });
+    });
+//     document.getElementById('LogOut').addEventListener('click', () => {
+//     fetch('/LogOut', {
+//         method: 'POST',
+//         credentials: 'include', // Ensure cookies are included in the request
+//         headers: {
+//             'Content-Type': 'application/json'
+//         }
+//     })
+//     .then(response => {
+//         if (response.ok) {
+//             alert('Logout successful');
+//             // Redirect to login page or home page
+//             window.location.href = '/SignIn.html';
+//         } else {
+//             alert('Error logging out');
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//         alert('Error logging out');
+//     });
+// });
         
 // function closeEdit(){
 //     var editForm = document.getElementById("editForm");
@@ -318,5 +374,5 @@ function previewFile() {
 
     </script>   
 <script src="SliderScript.js"></script>
-
+<script src="AuthorizationBE.js"></script>
 </html>

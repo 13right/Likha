@@ -1,4 +1,5 @@
 <html lang="en">
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,6 +7,7 @@
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
     <title>Home</title>
 </head>
+<!-- <script src="UserPage.js"></script> -->
 <style>
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
@@ -48,6 +50,7 @@
         display: none;
     }
   </style>
+ 
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
@@ -57,17 +60,17 @@
             <div class="">
                 <ul class="md:flex md:space-x-16 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
                     <li class="my-6 md:my-0">
-                        <a href="Home.html" class="hover:text-outline duration-300">
+                        <a href="#main-container" class="hover:text-outline duration-300">
                             HOME
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="" class="hover:text-outline duration-300">
+                        <a href="#Shop" class="hover:text-outline duration-300">
                             SHOP
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="" class="hover:text-outline duration-300">
+                        <a href="/3D" class="hover:text-outline duration-300">
                             CREATE
                         </a>
                 </ul>
@@ -80,8 +83,8 @@
             </div>
         </nav>
     </div>
-    <div class="bg-Likha min-h-screen ">
-        <div id="main-container">
+    <div class="bg-Likha min-h-screen  ">
+        <div id="main-container" class="">
             <div id="slide-container">    
                 <div id="slider-wrapper" class="relative max-w-[65-rem] pt-[5rem]"  >
                     <div id="slider" class="flex aspect-[25/9] scroll-smooth overflow-x-hidden ">
@@ -99,42 +102,42 @@
             <div id="category" class="bg-[#B0BCA480] w-auto h-[21rem] flex flex-col items-center pt-[3.5rem] space-y-16">
                 <h5 class="font-libre font-semibold text-6xl">Categories</h5>
                 <div id="container"class ="flex items-center space-x-9">
-                    <a href="">
-                        <div id="all" class="w-[325px] h-[75px] bg-[#96A378CC] rounded-lg flex items-center flex-col pt-6">
+                   
+                        <div id="all" class="w-[325px] cursor-pointer h-[75px] bg-[#96A378CC] rounded-lg flex items-center flex-col pt-6">
                             <p class="text-[#fff] font-bold text-xl">All</p>
                         </div>
-                    </a>
+                    
 
-                    <a href="">
-                        <div id="Jewelry" class="w-[325px] h-[75px] bg-[#96A378CC] rounded-lg flex items-center space-x-5 pl-[5.5rem]">
+                        <div id="Jewelry" class="w-[325px] cursor-pointer h-[75px] bg-[#96A378CC] rounded-lg flex items-center space-x-5 pl-[5.5rem]">
                             <img src="img/Jewelry.png" alt="" class="w-[3rem]">
                             <p class="text-[#fff] font-bold text-xl flex-1">Jewelry</p>
                         </div>
-                    </a>
                     
-                    <a href="">
-                        <div id="Bags" class="w-[325px] h-[75px] bg-[#96A378CC] rounded-lg flex items-center space-x-5 pl-[6rem]">
+                    
+                    
+                        <div id="Bags" class="w-[325px] h-[75px] cursor-pointer bg-[#96A378CC] rounded-lg flex items-center space-x-5 pl-[6rem]">
                             <img src="img/BAG.png" alt="" class="w-[3rem]">
                             <p class="text-[#fff] font-bold text-xl flex-1">Bag</p>
                         </div>
-                    </a>
+                   
                     
-                    <a href="">
+                    
                         <div id="Dress" class="w-[325px] h-[75px] bg-[#96A378CC] rounded-lg flex items-center space-x-5 pl-[6.5rem]">
                             <img src="img/DRESS.png" alt="" class="w-[2rem]">
                             <p class="text-[#fff] font-bold text-xl flex-1">Dress</p>
                         </div>
-                    </a>
+                    
                     
                 </div>
             </div>
-            <div class="bg-Likha max-w-auto h-auto flex flex-col items-center pt-[6rem] space-y-32">
+            <div class="bg-Likha max-w-auto h-auto flex flex-col items-center pt-[6rem] space-y-32" id="Shop">
                 <div>
                     <H6 class="text-6xl font-libre font-extrabold">Shop</H6>
                 </div>
                 <div class="flex-col space-y-[16rem] ">
                     <div id="product-list" class="flex space-x-9 flex-wrap justify-center"></div>
-                    <div id="product-view"></div>
+                    <div id="product-view" class=""></div>
+                    
                 </div>
             </div>
             <div class="flex space-x-[4rem] w-[70rem] h-[35rem] bg-sign  outline outline-outline outline-2 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden" id="Cartel">
@@ -146,7 +149,11 @@
                 </div>
                 <div class="bg-outline absolute right-0 rounded-xl h-[35rem] w-[45%] z-10 p-3">
                     <h1 class="text-[#F8ECDC] font-Montagu text-4xl ml-2 font-bold">Order Summary</h1>
-                    <h1 class="font-Montserrat text-[#F8ECDC] font-extrabold ml-6 mt-9">Item(s)  Total:</h1>
+                    <div class="flex">
+                        <h1 class="font-Montserrat text-[#F8ECDC] font-extrabold ml-6 mt-9">Item(s)  Total:</h1>
+                        <h1 class=" mt-9 ml-[10rem] font-Montserrat text-[#F8ECDC] font-extrabold" id="totalPriceDisplay">$800</h1>
+                    </div>
+                    
                     <hr class="w-[465px] text-[#F8ECDC] mx-2 mt-16">
                     <label for="Promo" class="font-Montserrat text-[#F8ECDC] font-extrabold ml-6 mt-9">Promo Code:</label>
                     <input type="text" class="bg-[#F8ECDC] p-2 ml-20 mt-9">
@@ -161,17 +168,36 @@
             </div>
             
         </div>
-        <div id="CartPopup" class="fixed top-[25rem] right-[40%] bg-hehe text-white p-4 rounded shadow-lg opacity-0 transform translate-y-4 transition-all duration-300">
-            Successfully added to cart!<br><br>
-            <button id="ok" onclick="Ok()" class="ml-[30%] bg-Likha rounded-md w-20">OK</button>
+        <div id="CartPopup" class="fixed top-[20rem] z-30 items-center right-[37%] bg-[#F8ECDC] outline outline-4 outline-outline w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform translate-y-4 transition-all duration-300">
+            <div class="">
+                <img src="img/Carts.png" class="w-[100px] ml-[34%]" alt="">
+                <div class="flex flex-col space-y-1 items-center">
+                    <span>Added to Cart</span>
+                    <span>Sucessfully!</span>
+                </div>
+            </div>
+            
+            
+            <button id="ok" onclick="CartOk()" class="ml-[38%] mt-3 bg-outline text-[#FFF] rounded-3xl w-20">OK</button>
+        </div>
+        <div id="OrderPopup" class="fixed top-[20rem] z-30 items-center right-[37%] bg-[#F8ECDC] outline outline-4 outline-outline w-[400.25px] h-[200px] text-white hidden rounded shadow-lg  transform translate-y-4 transition-all duration-300">
+            <img src="img/Checked.png" alt=" " class="w-[100px] ml-[35%]">
+            <div class="text-center">
+                 <p>Your Order Has Been Accepted</p>
+                 <p>Transaction: </p>
+            </div>
+            
+            <button id="ok" onclick="OrderOk()" class="ml-[38%] mt-3 bg-outline text-[#FFF] rounded-3xl w-20">OK</button>
         </div>
     </div>
     <div id="userInfo"></div>
 </body>
 <script>
-
-        function Ok(){
-            document.getElementById('CartPopup').classList.add('opacity-0');
+        function OrderOk(){
+            document.getElementById('OrderPopup').classList.add('hidden');
+        }
+        function CartOk(){
+            document.getElementById('CartPopup').classList.add('hidden');
         }
 
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -198,8 +224,29 @@
         });
     });
 
+    function setCategory(category) {
+            const currentUrl = new URL(window.location);
+            currentUrl.searchParams.set('category', category);
+            window.location.href = currentUrl.toString();
+            
+        }
+
+        document.getElementById('all').addEventListener('click', () => {
+            setCategory(''); // Remove the category filter
+        });
+
+        document.getElementById('Jewelry').addEventListener('click', () => {
+            setCategory('Jewelry'); // Set the category filter to jewelry
+        });
+        document.getElementById('Bags').addEventListener('click', () => {
+            setCategory('Bag'); // Set the category filter to jewelry
+        });
+        document.getElementById('Dress').addEventListener('click', () => {
+            setCategory('Dress'); // Set the category filter to jewelry
+        });
+    function fetchProducts(category = '') {
     // Fetch data from Node.js server
-    fetch('/products')
+    fetch(`/products?category=${category}`)
         .then(response => response.json())
         .then(products => {
             
@@ -251,9 +298,9 @@
                                     <p class="font-Montagu font-extrabold text-xl" id="editedProductPrice"></p>
                                     <p class="font-Montagu font-extrabold text-xl" id="productDes">${product.productDes}</p>
                                     <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg">
-                                        <button id="mo" class="font-bold" onclick="changeValue(-1)">-</button>
+                                        <button id="mo" class="font-bold">-</button>
                                         <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" type="number" value="1" min="1" max="100">
-                                        <button id="ao" class="font-bold" onclick="changeValue(1)">+</button>
+                                        <button id="ao" class="font-bold">+</button>
                                     </div>
                                     <button class="bg-[#F07C54] rounded-lg px-4 py-2 bg-green-500 text-white rounded" id="AddToCart">Add to cart</button>
                                 </div>
@@ -335,7 +382,7 @@
                                 .then(data => {
                                     console.log('Success:', data);
                                     productviewelement.querySelector('#ProductView').classList.add('hidden');
-                                    document.getElementById('CartPopup').classList.remove('opacity-0');
+                                    document.getElementById('CartPopup').classList.remove('hidden');
                                     // You can add more code here to handle the response
                                 })
                                 .catch((error) => {
@@ -348,101 +395,216 @@
 
         })
         .catch(error => console.error('Error fetching products:', error));
+    }   
 
-        
-
-        document.getElementById('CartIcon').addEventListener('click', async function() {
-        const CartList = document.getElementById('Product-Cart');
-    
-        // Clear current cart items
-        CartList.innerHTML = '';
-
-            try {
-                const response = await fetch('/Cart');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const productsCart = await response.json();
-
-                productsCart.forEach(productCart => {
-                    // Create HTML elements to display product information
-                    const CartElement = document.createElement('div');
-                    CartElement.innerHTML = `
-                        <div class="flex items-center space-x-10">
-                            <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md"></input>
-                            <div>
-                                <img src="data:image/jpeg;base64,${productCart.productImage}" alt="Product Image" class="w-28">
-                            </div>
-                            <div>
-                                <h1>${productCart.productName}</h1>
-                                <h2>${productCart.productPrice}</h2>
-                                <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg">
-                                    <button class="font-bold" onclick="changeValue(this, -1)">-</button>
-                                    <input style="background-color: transparent;" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" value=${productCart.productQuantity} min="1" max="100">
-                                    <button class="font-bold" onclick="changeValue(this, 1)">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    CartList.appendChild(CartElement);
-                    //console.log(productCart.productQuantity);
-                });
-            } catch (error) {
-                console.error('Error fetching products:', error);
+    function scrollToShop() {
+            const shopElement = document.getElementById('Shop');
+            if (shopElement) {
+                shopElement.scrollIntoView({ behavior: 'smooth' });
             }
-            document.getElementById('PlaceOrder').addEventListener('click', function() {
-                const checkboxes = document.querySelectorAll('#Product-Cart input[type="checkbox"]');
-                const checkedValues = [];
+            
+        }
 
-                checkboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        // Find the associated product details
-                        const productElement = checkbox.closest('.flex');
-                        const productName = productElement.querySelector('h1').innerText;
-                        const productQuantity = productElement.querySelector('input[type="number"]').value;
-                        
-                        // Add the product details to the checked values array
-                        checkedValues.push({
-                            OrderProductName: productName,
-                            OrderQuantity: productQuantity
-                        });
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category') || ''; // Default to an empty string if no category is provided
+        fetchProducts(category);
+        scrollToShop();
+    });
 
-                        console.log(checkedValues);
-                    }
-                });
+    async function fetchCart() {
+    const CartList = document.getElementById('Product-Cart');
+    CartList.innerHTML = '';
 
-                // Check if there are any checked values before making the fetch request
-                if (checkedValues.length > 0) {
-                    fetch('/PlaceOrder', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ orders: checkedValues })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            // If the response is not OK, throw an error
-                            return response.text().then(text => {
-                                throw new Error(text);
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Success:', data);
-                        // You can add more code here to handle the response
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error.message);
-                    });
-                } else {
-                    console.log('No products selected.');
-                }
-            });
+    try {
+        const response = await fetch('/Cart');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const productsCart = await response.json();
 
-
+        productsCart.forEach((productCart, index) => {
+            const CartElement = document.createElement('div');
+            CartElement.dataset.index = index;  // Add a data attribute for identifying CartElement
+            CartElement.innerHTML = `
+                <div class="flex items-center space-x-10">
+                    <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value="${productCart.productPrice}"></input>
+                    <div>
+                        <img src="data:image/jpeg;base64,${productCart.productImage}" alt="Product Image" class="w-28">
+                    </div>
+                    <div>
+                        <h1>${productCart.productName}</h1>
+                        <h2>${productCart.productPrice}</h2>
+                        <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg">
+                            <button class="MOcart">-</button>
+                            <input style="background-color: transparent;" id="Quantity" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" value=${productCart.productQuantity} min="1" max="100">
+                            <button class="AOcart">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            CartList.appendChild(CartElement);
         });
+
+        // Attach event listeners to checkboxes to update sum
+        const checkboxes = CartList.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSum);
+        });
+
+        // Initialize sum on page load
+        updateSum();
+
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    }
+}
+
+document.getElementById('CartIcon').addEventListener('click', fetchCart);
+
+    document.addEventListener('click', function(event) {
+        const Increment = event.target.closest('.AOcart');
+        if (Increment) {
+            const CartElement = Increment.closest('div[data-index]');
+            const Quantity = CartElement.querySelector('#Quantity');
+            const currentValue = parseInt(Quantity.value);
+            const newValue = currentValue + 1;
+            Quantity.value = newValue;
+            console.log(newValue);
+
+            const productName = CartElement.querySelector('h1').innerText;
+            console.log(productName);
+
+            const Data = {
+                ProductN: productName,
+                Quantity:  newValue
+            }
+
+            fetch('/UpdateCart', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Success update:', data);
+                fetchCart();
+                })
+                .catch((error) => {
+                     console.error('Error:', error);
+                });
+            
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        const Decrement = event.target.closest('.MOcart');
+        if (Decrement) {
+            const CartElement = Decrement.closest('div[data-index]');
+            const Quantity = CartElement.querySelector('#Quantity');
+            const currentValue = parseInt(Quantity.value);
+            if (currentValue > 1) {
+                const newValue = currentValue - 1;
+                Quantity.value = newValue;
+                console.log(newValue);
+                const productName = CartElement.querySelector('h1').innerText;
+            console.log(productName + " ");
+
+            const Data = {
+                ProductN: productName,
+                Quantity:  newValue
+            }
+
+            fetch('/UpdateCart', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Success update:', data);
+                fetchCart();
+                })
+                .catch((error) => {
+                     console.error('Error:', error);
+                });
+            }
+            
+
+        }
+    });
+
+
+    function updateSum() {
+        const checkboxes = document.querySelectorAll('#Product-Cart input[type="checkbox"]');
+        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+        let sum = 0;
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                sum += parseFloat(checkbox.value);
+            }
+        });
+        totalPriceDisplay.textContent = `₱${sum.toLocaleString('en-PH')}`;
+    }
+
+    document.getElementById('PlaceOrder').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('#Product-Cart input[type="checkbox"]');
+        console.log(checkboxes);
+        const checkedValues = [];
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                // Find the associated product details
+                const productElement = checkbox.closest('.flex');
+                const productName = productElement.querySelector('h1').innerText;
+                const productQuantity = productElement.querySelector('input[type="number"]').value;
+                //const productPrice = parseFloat(productElement.querySelector('h2').innerText);
+
+                // Add the product details to the checked values array
+                checkedValues.push({
+                    OrderProductName: productName,
+                    OrderQuantity: productQuantity,
+                    //OrderPrice: productPrice
+                });
+            }
+        });
+
+        // Check if there are any checked values before making the fetch request
+        if (checkedValues.length > 0) {
+            fetch('/PlaceOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orders: checkedValues })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                document.getElementById('Cartel').classList.add('hidden');
+                document.getElementById('OrderPopup').classList.remove('hidden');
+            })
+            .catch((error) => {
+                console.error('Error:', error.message);
+            });
+        } else {
+            alert('Please select a product');
+        }
+    });
+
+
 
 </script>   
 

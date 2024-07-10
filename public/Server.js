@@ -16,8 +16,20 @@ const port = 8000;
 
 const upload = multer({ dest: 'uploads/' });
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/3D', (req, res) => {
+    res.sendFile(path.join(__dirname, '3D.html'));
+});
 
 app.use(express.static(path.join(__dirname)));
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+  });
 
 app.use(session({
     secret: 'Hatdog', // Replace with a strong, secure key
@@ -109,9 +121,6 @@ app.post('/AddToCart', async (req, res) => {
     const { ProductName,Quantity} = req.body;
     const user = req.session.user;
     const ID = parseInt(user.UserID);
-    if (!user) {
-        return res.status(401).json({ error: 'User not authenticated' });
-    }
     try {   
         // Connect to the database
         const pool = await sql.connect(config);
@@ -128,7 +137,7 @@ app.post('/AddToCart', async (req, res) => {
         SET @Total = @Price * ${Quantity};
         SELECT @ProdID = ProductID FROM tbl_Product WHERE ProductName = ${ProductName};
         BEGIN
-        IF EXISTS (SELECT 1 FROM tbl_Cart WHERE ProductID = @ProdID)
+        IF EXISTS (SELECT 1 FROM tbl_Cart WHERE ProductID = @ProdID AND UserID = ${ID})
         UPDATE tbl_Cart
         SET Quantity = Quantity + ${Quantity}, Price = Price * (Quantity + ${Quantity})
         WHERE ProductID = @ProdID
@@ -145,8 +154,38 @@ app.post('/AddToCart', async (req, res) => {
         console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
     }
+});
 
+app.put('/UpdateCart', async (req, res) => {
+    const { ProductN , Quantity} = req.body;
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    try {   
+        // Connect to the database
+        const pool = await sql.connect(config);
 
+        // Use parameterized queries to prevent SQL injection
+        const request = pool.request();
+
+        // Insert data into the database
+        const query = await sql.query`
+        BEGIN
+            DECLARE @Quantity int = ${Quantity};
+            DECLARE @Price int = (SELECT Price FROM tbl_Product WHERE ProductName LIKE ${ProductN});
+            DECLARE @TotalPrice int = @Quantity * @Price
+            UPDATE tbl_Cart 
+            SET Quantity = @Quantity , Price = @TotalPrice
+            WHERE UserID = ${ID} AND ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName LIKE ${ProductN});
+        END
+        `;
+
+        const result = await request.query(query);
+
+        res.status(200).json({ message: 'Product Updated successfully', result });
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
 });
 
 
@@ -234,6 +273,23 @@ app.post('/LogIn', async (req, res) => {
     }
 });
 
+//LogOut
+app.post('/LogOut', (req, res) => {
+    if (req.session.user) {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error logging out');
+            } else {
+                res.status(200).send('Logout successful');
+            }
+        });
+    } else {
+        res.status(401).send('Not authenticated');
+    }
+});
+
+
 app.get('/api/current_user', (req, res) => {
     if (req.session.user) {
       res.json(req.session.user);
@@ -288,8 +344,20 @@ app.get('/products', async (req, res) => {
     try {
         // Connect to the database
         await sql.connect(config);
-        // Query to select productName, productPrice, and productImage columns
-        const result = await sql.query('SELECT ProductName,Price,Description,ProductImage FROM tbl_Product');
+        
+        // Get the category from the query parameter
+        const category = req.query.category || '';
+
+        // Create the base query
+        let query = 'SELECT ProductName, Price, Description, ProductImage FROM tbl_Product INNER JOIN tbl_Category ON tbl_Product.CategoryID = tbl_Category.CategoryID';
+
+        // Modify the query if a category is provided
+        if (category) {
+            query += ` WHERE CategoryName LIKE '${category}'`;
+        }
+        console.log(category);
+        // Execute the query
+        const result = await sql.query(query);  
         
         // Convert VARBINARY images to Base64 encoded strings
         const products = result.recordset.map(product => {
@@ -312,6 +380,78 @@ app.get('/products', async (req, res) => {
     }
 });
 
+app.get('/Order', async (req, res) => {
+    const user = req.session.user;
+            const ID = parseInt(user.UserID);
+    try {
+        // Connect to the database
+        await sql.connect(config);
+        const request = pool.request();
+        request.input('UserID', sql.Int, ID);
+        // Query to select productName, productPrice, and productImage columns
+        const query = `SELECT OrderID, convert(varchar, Date, 0) AS Date FROM tbl_Order WHERE UserID = @UserID`;
+        const result = await request.query(query);
+        // Convert VARBINARY images to Base64 encoded strings
+        const products = result.recordset.map(product => {
+            //const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
+            return {
+                OrderedDate: product.Date,
+                productOrder: product.OrderID
+
+                // productName: product.ProductName,
+                // productPrice: product.Price,
+                // productDes: product.Description,
+                // productImage: base64Image
+                
+            };
+        });
+        
+        // Send the modified result as JSON
+        res.json(products);
+    } catch (err) {
+        // Error handling
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+app.get('/OrderItem/:productOrder', async (req, res) => {
+    const productOrder = req.params.productOrder;
+    try {
+        // Connect to the database
+        await sql.connect(config);
+        const request = pool.request();
+        request.input('OrderID', sql.Int, productOrder);
+        // Query to select order items based on OrderID
+        
+        const query = `
+            SELECT P.ProductImage, P.ProductName, OI.Quantity, OI.Price
+            FROM tbl_OrderItem OI
+            INNER JOIN tbl_Product P ON OI.ProductID = P.ProductID
+            WHERE OI.OrderID = @OrderID
+        `;
+        const result = await request.query(query);
+       
+        // Convert result to the desired format
+        const orderItems = result.recordset.map(item => {
+            const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
+            return {
+                productName: item.ProductName,
+                Quantity: item.Quantity,
+                Price: item.Price,
+                productImage: base64Image
+            };
+        });
+
+        // Send the modified result as JSON
+        res.json(orderItems);
+    } catch (err) {
+        // Error handling
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
 app.get('/Cart', async (req, res) => {
     try {
         const user = req.session.user;
@@ -322,6 +462,7 @@ app.get('/Cart', async (req, res) => {
         const pool = await sql.connect(config);
         const request = pool.request();
 
+        request.input('UserID', sql.Int, ID);
         // Use parameterized queries to prevent SQL injection
         const query = `
             SELECT 
@@ -342,7 +483,7 @@ app.get('/Cart', async (req, res) => {
             WHERE 
                 tbl_User.UserID = @UserID`;
 
-        request.input('UserID', sql.Int, ID);
+        
 
         const result = await request.query(query);
 
@@ -389,7 +530,7 @@ app.post('/PlaceOrder', async (req, res) => {
             const ID = parseInt(user.UserID);
             const order =  pool.request()
                 .input('ID',sql.Int,ID)
-                .query('INSERT INTO tbl_Order ([Date], UserID) VALUES (GETDATE(), @ID)');
+                .query('INSERT INTO tbl_Order ([Date], UserID) VALUES (convert(varchar, getdate(), 0), @ID)');
 
         // Execute the query for each order
         for (const order of orders) {
@@ -412,6 +553,8 @@ app.post('/PlaceOrder', async (req, res) => {
 
                         INSERT INTO tbl_OrderItem (Quantity, Price, ProductID, OrderID)
                         VALUES (@quantity, @Total, @ProdID, @NewOrderID);
+
+                        DELETE tbl_cart FROM tbl_Cart INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_Cart.ProductID WHERE ProductName LIKE @productName AND Quantity = @quantity;
                     END
                 `);
 
@@ -426,6 +569,7 @@ app.post('/PlaceOrder', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while placing the order' });
     }
 });
+
 
 
 //Server itu guys

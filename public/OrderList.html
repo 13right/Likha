@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+    <title>Orders</title>
+</head>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
+        <nav class="md:flex md:items-center">   
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+            </div>
+            
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <img id="Profile" class="cursor-pointer h-[3rem] w-[3rem]" src="img/PROFILE.png"  alt="">
+            </div>
+        </nav>
+    </div>
+    <div class="bg-Likha min-h-screen pt-[5rem]">
+        <!-- Contents -->
+
+        <div class="text-center mt-3">
+            <H1 class="font-Montagu text-4xl font-bold">Orders</H1>
+        </div>
+        <div class="mt-9 flex mx-[10rem] justify-around">
+            <div class="cursor-pointer w-[272.45px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">All Orders</p>
+                <img src="img/All Orders.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+            </div>
+            <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Confirmed Orders</p>
+                <img src="img/Confirmed Order.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+            </div>
+            <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Pending Orders</p>
+                <img src="img/Pending.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+            </div> 
+            <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Ready to Pick Up</p>
+                <img src="img/Ready to Pick Up.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+            </div>
+        </div>
+
+        <div class="mt-[3rem] ml-[14rem] flex items-center space-x-8">
+            <div class="items-center relative w-[853px] pt-[1.35rem] px-[1rem] h-[90px] bg-sign outline outline-2 outline-outline rounded-lg">
+                <input type="text" id="SearchBar" class="p-2 w-[822px] h-[50px] rounded-lg bg-Likha focus:outline-none focus:ring-1 focus:ring-outline">
+                <img src="img/SEARCH BAR.png" class="w-[50px] absolute right-4 top-[1.35rem] " alt="">
+            </div>
+            <div class="cursor-pointer relative flex px-6 space-x-9 items-center w-[174.4px] h-[60px] bg-sign outline outline-2 outline-outline rounded-lg">
+                <div class="space-y-2 relative ">
+                    <hr class="w-[38.23px] border-[3px] border-[#00000080] relative">
+                    <hr class="w-[27.31px] border-[3px] border-[#00000080] relative left-[5px]">
+                    <hr class="w-[10.92px] border-[3px] border-[#00000080] relative left-[13px]">
+                </div>
+                <div>
+                    <p class="font-Montserrat font-semibold text-[#00000080]">Filter</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mx-[6rem] mt-[3rem] relative w-auto h-auto rounded-lg bg-sign outline outline-[3px] outline-outline p-7">
+            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-evenly space-x-6">
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Order ID</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Date</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Customer Name</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Total</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Status</h1>
+            </div>
+            <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg space-x-[7rem]">
+                <h2 class="ml-[7rem] text-[#6B707B] font-Inter font-extrabold text-[14px]">04NDFSMCF264I</h2>
+                <h2 class="font-Montserrat font-semibold text-[14px]">July 13, 2024</h2>
+                <h2 class="relative left-[2rem] font-Montserrat font-semibold text-[14px]">JENNIE KIM</h2>
+                <h2 class="relative left-[6rem] font-Montserrat font-semibold text-[14px]">₱ 5,500.00</h2>
+                <div class="relative left-16 w-[90px] h-[25px] rounded-2xl bg-[#037E2680]">
+                    <p class="font-Montserrat font-semibold text-[#037E26] text-sm text-center">Confirmed</p>
+                </div>
+                <a href="OrderDetails.html"><div class="relative right-10 w-[100px] h-[25px] rounded-2xl bg-[#032D7E80] outline outline-[3px] outline-[#032D7E]">
+                    <p class="font-Montserrat text-[#032D7E] font-semibold text-center text-sm">View Details</p>
+                </div></a>
+                
+            </div>
+        </div>
+
+
+        <!-- Menu for Admin -->
+        <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
+            <a href="OrderList.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Order</p>
+            </a>
+            
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Landing</p>
+            </a>
+            <a href="AdminHome.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Home Page</p>
+            </a>
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">3D Customization</p>
+            </a>
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Log Out</p>
+            </a>
+        </div>
+    </div>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const Profile = document.getElementById('Profile');
+        const Menu = document.getElementById('AdminMenu');
+
+        Profile.addEventListener('click', () => {
+
+            if (!Menu.classList.contains('hidden')) {
+                Menu.classList.add('hidden');
+            } else {
+                Menu.classList.remove('hidden');
+            }
+        });
+    });
+</script>
+</html>

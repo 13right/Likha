@@ -41,18 +41,61 @@
     <div class="bg-Likha min-h-screen">
         <div id="main-container" class=" relative w-[1200px] h-[40rem] left-[12rem] top-[8rem] space-y-7">
             <div class="flex items-center space-x-[5rem]">
-                <div class="w-[415px] h-[205px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] ml-[4rem]">
-
+                <div class="w-[415px] h-[205px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] ml-[4rem] flex">
+                   <div class="flex-1 ml-[10rem] mt-[1rem]">
+                    <div class="h-[82px] w-[82px] outline outline-2 outline-outline rounded-full mt-[2rem] ">
+                        <div>
+                            <img src="img/profilepic.jpeg" alt="" class="h-[82px] w-[82px] rounded-full">
+                        </div>
+                    </div>
+                    <div>
+                        <h1 id="Name" class="font-Inter font-medium text-xl ml-3">Lyster</h1>
+                    </div>
+                    </div>
+                    
+                    <div class="absolute top-[-1] ml-[23rem] cursor-pointer">
+                        <img src="/img/LogOut.png" class="w-[50px] h-[50px]" alt="" id="LogOut">
+                       
+                    </div>
                 </div>
                 <div class="w-[464px] h-[117px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] items-center flex space-x-5">
                     <a href="Orders.html"><button class="justify-center bg-outline ml-[2rem] w-[190px] h-[53px] flex items-center rounded-xl space-x-2"><img class="w-[2rem] h-[2rem] float-left" src="img/Orders.png" alt=""><span class="text-[#FFF]">Orders</span></button></a>
                     <button class="justify-center w-[190px] h-[53px] bg-outline flex items-center rounded-lg space-x-2"><img src="img/History.png" class="w-[2rem] h-[2rem] float-left" alt=""><span class="text-[#FFF]">History</span></button>
                 </div>
             </div>
-            <div class="w-[1100px] h-[400px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px]">
-                
+            <div class="w-[1100px] h-[400px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] pt-5">
+                <div class="font-Montagu font-bold text-2xl text-center">Profile Info</div>
+                <div class="">
+                    
+                </div>
             </div>
         </div>
     </div>
 </body>
+<script src="AuthorizationBE.js"></script>
+<script>
+    document.getElementById('LogOut').addEventListener('click', () => {
+    fetch('/LogOut', {
+        method: 'POST',
+        credentials: 'include', // Ensure cookies are included in the request
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Logout successful');
+            // Redirect to login page or home page
+            window.location.href = '/SignIn.html';
+        } else {
+            alert('Error logging out');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error logging out');
+    });
+});
+
+</script>
 </html>
