@@ -335,7 +335,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 });
 // Serve the HTML form for uploading images
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/AdminHome.html');
+    res.sendFile(__dirname + '/Index.html');
 });
 
 
