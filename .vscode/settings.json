@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "dpg-cq6v4kdds78s738n0190-a.onrender.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Likha",
+            "database": "postgre_likha",
+            "username": "postgre_likha_user",
+            "password": "5GBcXlgob9QApjwea1iL98KScI8KbIVn"
+        }
+    ]
+}

@@ -80,8 +80,8 @@ const config = {
 //     }
 //   };
 
-const pool = new sql.ConnectionPool(config);
-pool.connect();
+// const pool = new sql.ConnectionPool(config);
+// pool.connect();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
