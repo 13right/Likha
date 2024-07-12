@@ -347,7 +347,7 @@ fetch('/products')
 
                 const messageElement = document.getElementById('message');
                 if (response.ok) {
-                    window.open("AdminHome.html");
+                    window.location.reload();
                 } else {
                     console.log("Error uploading");
                 }
