@@ -60,10 +60,21 @@ app.use(session({
 //     }
 // };
 
+//Local Machine sa baba
+// const config = {
+//     user: 'Jennie',
+//     password: '2harmaine!',
+//     server: 'LAPTOP-GV6HVKVU',
+//     database: 'Capstone',
+//     options: {
+//         encrypt: false
+//     }
+// };
+
 const config = {
-    user: 'Jennie',
-    password: '2harmaine!',
-    server: 'LAPTOP-GV6HVKVU',
+    user: 'sqlserver',
+    password: '$Lu=o+G<1_>);Aq8',
+    server: '34.44.250.42',
     database: 'Capstone',
     options: {
         encrypt: false
@@ -80,8 +91,8 @@ const config = {
 //     }
 //   };
 
-// const pool = new sql.ConnectionPool(config);
-// pool.connect();
+const pool = new sql.ConnectionPool(config);
+pool.connect();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -256,9 +267,9 @@ app.post('/LogIn', async (req, res) => {
         const user = result.recordset[0]; // Retrieve the first user from the recordset
 
         if (user && user.Password === password) { 
-            console.log(req.session);
+            //console.log(req.session);
             req.session.user = user; // Store user in session
-            console.log(req.session.user);
+            //console.log(req.session.user);
             if (user.Type === "Admin") {
                 res.status(250).send('Admin');
             } else {
@@ -294,7 +305,8 @@ app.get('/api/current_user', (req, res) => {
     if (req.session.user) {
       res.json(req.session.user);
     } else {
-      res.status(401).send('Not authenticated');
+        res.redirect('/SignIn.html');    
+        //res.status(401).send('Not authenticated');
     }
   });
 // Route for uploading an image
