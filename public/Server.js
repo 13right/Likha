@@ -61,25 +61,25 @@ app.use(session({
 // };
 
 //Local Machine sa baba
-// const config = {
-//     user: 'Jennie',
-//     password: '2harmaine!',
-//     server: 'LAPTOP-GV6HVKVU',
-//     database: 'Capstone',
-//     options: {
-//         encrypt: false
-//     }
-// };
-
 const config = {
-    user: 'sqlserver',
-    password: '$Lu=o+G<1_>);Aq8',
-    server: '34.44.250.42',
+    user: 'Jennie',
+    password: '2harmaine!',
+    server: 'LAPTOP-GV6HVKVU',
     database: 'Capstone',
     options: {
         encrypt: false
     }
 };
+//Cloud Server
+// const config = {
+//     user: 'sqlserver',
+//     password: '$Lu=o+G<1_>);Aq8',
+//     server: '34.44.250.42',
+//     database: 'Capstone',
+//     options: {
+//         encrypt: false
+//     }
+// };
 
 // const config = {
 //     user: 'Jennie',
@@ -387,6 +387,29 @@ app.get('/products', async (req, res) => {
         res.json(products);
     } catch (err) {
         // Error handling
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+app.get('/User', async (req, res) => {
+
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    try{
+        await sql.connect(config);
+        const request = pool.request();
+        request.input('UserID', sql.Int, ID);
+        const query = 'SELECT Name FROM tbl_User WHERE UserID = @UserID';
+        const result = await request.query(query);
+        const Name = result.recordset.map(name => {
+            return{
+                UserName: name.Name
+            };
+        });
+        res.json(Name);
+    }catch(err){
         console.error(err);
         res.status(500).send('Server Error');
     }

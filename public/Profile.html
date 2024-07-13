@@ -42,14 +42,14 @@
         <div id="main-container" class=" relative w-[1200px] h-[40rem] left-[12rem] top-[8rem] space-y-7">
             <div class="flex items-center space-x-[5rem]">
                 <div class="w-[415px] h-[205px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] ml-[4rem] flex">
-                   <div class="flex-1 ml-[10rem] mt-[1rem]">
-                    <div class="h-[82px] w-[82px] outline outline-2 outline-outline rounded-full mt-[2rem] ">
+                   <div class="flex-1 text-center mt-[1rem] relative">
+                    <div class="h-[82px] w-[82px] outline outline-2 outline-outline relative left-[10.5rem] rounded-full mt-[2rem] ">
                         <div>
                             <img src="img/profilepic.jpeg" alt="" class="h-[82px] w-[82px] rounded-full">
                         </div>
                     </div>
                     <div>
-                        <h1 id="Name" class="font-Inter font-medium text-xl ml-3">Lyster</h1>
+                        <h1 id="Name" class="font-Inter font-medium text-xl"></h1>
                     </div>
                     </div>
                     
@@ -97,5 +97,18 @@
     });
 });
 
+async function fetchUserName(){
+    try{
+        const reseult = await fetch('/User');
+        if(reseult.ok){
+            const name = await reseult.json();
+            document.getElementById('Name').innerText = name[0].UserName
+        }
+
+    }catch (error){
+        console.error('Error fetching user name:', error);
+    }
+}
+fetchUserName();
 </script>
 </html>
