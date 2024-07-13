@@ -367,7 +367,7 @@ app.get('/products', async (req, res) => {
         if (category) {
             query += ` WHERE CategoryName LIKE '${category}'`;
         }
-        console.log(category);
+        //console.log(category);
         // Execute the query
         const result = await sql.query(query);  
         

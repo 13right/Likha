@@ -470,10 +470,10 @@ document.getElementById('CartIcon').addEventListener('click', fetchCart);
             const currentValue = parseInt(Quantity.value);
             const newValue = currentValue + 1;
             Quantity.value = newValue;
-            console.log(newValue);
+            //console.log(newValue);
 
             const productName = CartElement.querySelector('h1').innerText;
-            console.log(productName);
+            //console.log(productName);
 
             const Data = {
                 ProductN: productName,
@@ -510,7 +510,7 @@ document.getElementById('CartIcon').addEventListener('click', fetchCart);
                 Quantity.value = newValue;
                 console.log(newValue);
                 const productName = CartElement.querySelector('h1').innerText;
-            console.log(productName + " ");
+                //console.log(productName + " ");
 
             const Data = {
                 ProductN: productName,
