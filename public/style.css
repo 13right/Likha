@@ -2416,6 +2416,10 @@ video {
   font-weight: 600;
 }
 
+.font-black{
+  font-weight: 900;
+}
+
 .text-Likha{
   --tw-text-opacity: 1;
   color: rgb(247 248 234 / var(--tw-text-opacity));

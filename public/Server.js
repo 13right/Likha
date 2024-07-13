@@ -61,25 +61,25 @@ app.use(session({
 // };
 
 //Local Machine sa baba
-// const config = {
-//     user: 'Jennie',
-//     password: '2harmaine!',
-//     server: 'LAPTOP-GV6HVKVU',
-//     database: 'Capstone',
-//     options: {
-//         encrypt: false
-//     }
-// };
-//Cloud Server
 const config = {
-    user: 'sqlserver',
-    password: '$Lu=o+G<1_>);Aq8',
-    server: '34.44.250.42',
+    user: 'Jennie',
+    password: '2harmaine!',
+    server: 'LAPTOP-GV6HVKVU',
     database: 'Capstone',
     options: {
         encrypt: false
     }
 };
+//Cloud Server
+// const config = {
+//     user: 'sqlserver',
+//     password: '$Lu=o+G<1_>);Aq8',
+//     server: '34.44.250.42',
+//     database: 'Capstone',
+//     options: {
+//         encrypt: false
+//     }
+// };
 
 // const config = {
 //     user: 'Jennie',
