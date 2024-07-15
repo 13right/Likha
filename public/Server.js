@@ -61,25 +61,25 @@ app.use(session({
 // };
 
 //Local Machine sa baba
-// const config = {
-//     user: 'Jennie',
-//     password: '2harmaine!',
-//     server: 'LAPTOP-GV6HVKVU',
-//     database: 'Capstone',
-//     options: {
-//         encrypt: false
-//     }
-// };
-//Cloud Server
 const config = {
-    user: 'sqlserver',
-    password: '$Lu=o+G<1_>);Aq8',
-    server: '34.44.250.42',
+    user: 'Jennie',
+    password: '2harmaine!',
+    server: 'LAPTOP-GV6HVKVU',
     database: 'Capstone',
     options: {
         encrypt: false
     }
 };
+//Cloud Server
+// const config = {
+//     user: 'sqlserver',
+//     password: '$Lu=o+G<1_>);Aq8',
+//     server: '34.44.250.42',
+//     database: 'Capstone',
+//     options: {
+//         encrypt: false
+//     }
+// };
 
 // const config = {
 //     user: 'Jennie',
@@ -223,14 +223,6 @@ app.delete('/DeleteProduct/:productName', async (req, res) => {
     catch(err){
         console.log(err);
     }
-    // if (index !== -1) {
-    //     // If product found, remove it from the array
-    //     products.splice(index, 1);
-    //     res.status(200).json({ message: 'Product deleted successfully' });
-    // } else {
-    //     // If product not found, return 404 Not Found
-    //     res.status(404).json({ message: 'Product not found' });
-    // }
 });
 
 //SignUp
@@ -449,6 +441,75 @@ app.get('/Order', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+//OrderList AdminView
+app.get('/Orders', async (req, res) => {
+           
+    try {
+        // Connect to the database
+        await sql.connect(config);
+        const request = pool.request();
+        // Query to select productName, productPrice, and productImage columns
+        const query = `SELECT TransactionID, convert(varchar, Date, 0) AS Date, Name, TotalPrice
+                       FROM tbl_Order INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID;`;
+        const result = await request.query(query);
+        // Convert VARBINARY images to Base64 encoded strings
+        const products = result.recordset.map(product => {
+            //const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
+            return {
+                OrderedDate: product.Date,
+                productOrder: product.TransactionID,
+                ProductName: product.Name,
+                ProductTotal: product.TotalPrice
+
+            };
+        });
+        
+        // Send the modified result as JSON
+        res.json(products);
+    } catch (err) {
+        // Error handling
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+app.get('/OrderDetails', async (req, res) => {
+    const transactionId = req.query.transac;
+    try {
+        // Connect to the database
+        await sql.connect(config);
+        const request = pool.request();
+        request.input('Transac', sql.VarChar, transactionId);
+        console.log(transactionId);
+        // Query to select productName, productPrice, and productImage columns
+        const query = `SELECT TransactionID,Email,MobileNum, convert(varchar, Date, 0) AS Date, Status, TotalPrice, Name
+                       FROM tbl_Order
+                       INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID
+                       WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), tbl_Order.OrderID), 4) = @Transac;`;
+        const result = await request.query(query);
+        // Convert VARBINARY images to Base64 encoded strings
+        const products = result.recordset.map(product => {
+            //const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
+            return {
+                OrderedDate: product.Date,
+                productOrder: product.TransactionID,
+                CustomerName: product.Name,
+                ProductTotal: product.TotalPrice,
+                CustomerEmail: product.Email,
+                CustomerNum: product.MobileNum,
+                Status: product.Status
+            };
+        });
+        console.log(products);
+        // Send the modified result as JSON
+        res.json(products);
+    } catch (err) {
+        // Error handling
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
 
 app.get('/OrderItem/:productOrder', async (req, res) => {
     const productOrder = req.params.productOrder;
@@ -586,8 +647,13 @@ app.post('/PlaceOrder', async (req, res) => {
                         SET @NewOrderID = (SELECT TOP 1 OrderID FROM tbl_Order ORDER BY OrderID DESC);
                         SET @Total = @Price * @quantity;
 
+
                         INSERT INTO tbl_OrderItem (Quantity, Price, ProductID, OrderID)
                         VALUES (@quantity, @Total, @ProdID, @NewOrderID);
+                        
+                        UPDATE tbl_Order
+                        SET TotalPrice = (SELECT SUM(Price) FROM tbl_OrderItem WHERE OrderID = @NewOrderID)
+                        WHERE OrderID = @NewOrderID
 
                         DELETE tbl_cart FROM tbl_Cart INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_Cart.ProductID WHERE ProductName LIKE @productName AND Quantity = @quantity;
                     END

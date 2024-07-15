@@ -69,19 +69,8 @@
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Total</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Status</h1>
             </div>
-            <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg space-x-[7rem]">
-                <h2 class="ml-[7rem] text-[#6B707B] font-Inter font-extrabold text-[14px]">04NDFSMCF264I</h2>
-                <h2 class="font-Montserrat font-semibold text-[14px]">July 13, 2024</h2>
-                <h2 class="relative left-[2rem] font-Montserrat font-semibold text-[14px]">JENNIE KIM</h2>
-                <h2 class="relative left-[6rem] font-Montserrat font-semibold text-[14px]">₱ 5,500.00</h2>
-                <div class="relative left-16 w-[90px] h-[25px] rounded-2xl bg-[#037E2680]">
-                    <p class="font-Montserrat font-semibold text-[#037E26] text-sm text-center">Confirmed</p>
-                </div>
-                <a href="OrderDetails.html"><div class="relative right-10 w-[100px] h-[25px] rounded-2xl bg-[#032D7E80] outline outline-[3px] outline-[#032D7E]">
-                    <p class="font-Montserrat text-[#032D7E] font-semibold text-center text-sm">View Details</p>
-                </div></a>
-                
-            </div>
+            <!-- Here -->
+            <div id="OrderList" ></div>
         </div>
 
 
@@ -108,18 +97,62 @@
 
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const Profile = document.getElementById('Profile');
-        const Menu = document.getElementById('AdminMenu');
 
-        Profile.addEventListener('click', () => {
+fetch('/Orders')
+    .then(response => response.json())
+    .then(Items => {
+        console.log(Items);
+        Items.forEach(Item => {
+            const ItemList = document.getElementById('OrderList');
+            // Create HTML elements to display product information
+            const ItemElement = document.createElement('div');
+            ItemElement.innerHTML = `
+            <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg">
+                <div id="ProdCon" class="w-[10rem] text-center item-center h-[2rem] absolute left-[5.5rem]">
+                <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.productOrder}</h2>
+                </div>
+                <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[19rem]">
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.OrderedDate}</h2>
+                </div>
+                <div class="w-[15rem] text-center item-center h-[2rem] absolute right-[30.5rem]">
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.ProductName}</h2>
+                </div>
+                <div class="w-[10rem] text-center item-center h-[2rem] absolute right-[17.75rem]">
+                    <h2 class="relative font-Montserrat mx-auto font-semibold text-[14px]">${Item.ProductTotal}</h2>
+                </div>
+                <div class="absolute right-[10.5rem] w-[90px] h-[25px] rounded-2xl bg-[#037E2680]">
+                    <p class="font-Montserrat font-semibold text-[#037E26] text-sm text-center">Confirmed</p>
+                </div>
+                <div id="View" class="absolute right-12 w-[100px] top-[0.75rem] h-[25px] rounded-2xl bg-[#032D7E80] outline outline-[3px] outline-[#032D7E]">
+                    <p class="font-Montserrat text-[#032D7E] font-semibold text-center text-sm" >View Details</p>
+                </div>
+                
+            </div>
+            `;
+            ItemList.appendChild(ItemElement);
 
-            if (!Menu.classList.contains('hidden')) {
-                Menu.classList.add('hidden');
-            } else {
-                Menu.classList.remove('hidden');
-            }
+            const viewButton = ItemElement.querySelector('#View');
+            viewButton.addEventListener('click', () => {
+            
+                // Get the value of #Transac
+                const transacValue = ItemElement.querySelector('#Transac').textContent;
+
+                // Construct the URL with the transacValue
+                //const url = `/Orderdetails?id=${encodeURIComponent(transacValue)}`;
+
+                 // Store the transacValue in sessionStorage
+                sessionStorage.setItem('transacValue', transacValue);
+                
+                // Redirect to OrderDetails.html
+                window.location.href = 'OrderDetails.html';
+                
+            });
+
         });
     });
+
+   
+   
+
 </script>
 </html>

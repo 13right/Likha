@@ -20,57 +20,109 @@
         </nav>
     </div>
     <div class="bg-Likha min-h-screen p-[5rem] pt-[9rem] space-y-12">
-        <div class="flex space-x-12">
-            <div class="w-[882px] relative h-[566px] outline outline-1 outline-outline bg-sign rounded-2xl">
-                <div class="w-[844px] pt-6 pl-[3.5rem] relative mx-auto mt-7 h-[101px] bg-outline rounded-2xl">
-                    <p class="font-Inter font-extrabold text-[20px] text-[#FFFFFF]">04NDFSMCF264I</p>
-                    <p class="font-Montserrat font-semibold text-[14px] text-[#FFFFFF]">July 13, 2024</p>
-                </div>
-                <div class="flex space-x-[28.5rem] ml-[2.5rem] mt-4">
-                    <div><h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Item(s)</h1></div>
-                    <div class="flex space-x-[6rem]">
-                        <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Quality</h1>
-                        <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Amount</h1>
-                    </div>
-                    
-                </div>
-                <hr class="w-[800px] border-outline mx-auto">
-
-                <!-- Product dito then hr ulit -->
-
-            </div>
-            <div class="space-y-4">
-                <div class="w-[396px] h-[339px] outline outline-1 pl-10 pt-5 outline-outline bg-sign rounded-2xl ">
-                    <p class="font-Montserrat font-semibold text-[24px] text-[#00000080]">Order Status</p>
-                    <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
-                            </div>
-                            <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
-                        </div>
-                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
-                            </div>
-                            <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
-                        </div>
-                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center"></div>
-                            <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="outline outline-1 outline-outline bg-sign rounded-2xl w-[396px] h-[212px]">
-
-                </div>
-            </div>
+        <div id="Container" class="relative space-y-12">
+               
         </div>
-        <div class="w-[1334px] h-[213px] outline outline-1 outline-outline bg-sign rounded-2xl">
-
-        </div>
+        
     </div>
 </body>
+<script>
+    const transacValue = sessionStorage.getItem('transacValue');
+
+    // Check if transacValue is not null
+    if (transacValue) {
+    fetch(`/OrderDetails?transac=${(transacValue)}`)
+    .then(response => response.json())
+    .then(Items => {
+        console.log(Items);
+        Items.forEach(Item => {
+            const ItemList = document.getElementById('Container');
+            // Create HTML elements to display product information
+            const ItemElement = document.createElement('div');
+            ItemElement.innerHTML = `
+            <div class = "space-y-12">
+             <div class="flex relative space-x-12">
+                    <div class="w-[882px] relative h-[566px] outline outline-1 outline-outline bg-sign rounded-2xl">
+                    <div class="w-[844px] pt-6 pl-[3.5rem] relative mx-auto mt-7 h-[101px] bg-outline rounded-2xl">
+                        <p class="font-Inter font-extrabold text-[20px] text-[#FFFFFF]">${Item.productOrder}</p>
+                        <p class="font-Montserrat font-semibold text-[14px] text-[#FFFFFF]">${Item.OrderedDate}</p>
+                    </div>
+                    <div class="flex space-x-[28.5rem] ml-[2.5rem] mt-4">
+                        <div><h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Item(s)</h1></div>
+                        <div class="flex space-x-[6rem]">
+                            <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Quality</h1>
+                            <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Amount</h1>
+                        </div>
+                        
+                    </div>
+                    <hr class="w-[800px] border-outline mx-auto">
+                    <div id="Product" class="w-[800px] h-[6rem] space-x-[19.5rem] flex items-center p-2 my-1  mx-auto">
+                        <div class="flex items-center">
+                            <img src="img/aphrodite-dress.png" alt="" class="w-[3.5rem]">
+                            <p class="font-Montagu font-semibold text-2xl ml-4">Aphrodite Dress</p>
+                        </div>
+                        <div class="flex space-x-[9.5rem]">
+                            <h1 class="font-Montserrat font-medium text-xl">1</h1>
+                            <p class="font-Montserrat font-medium text-xl">5,000</p>
+                        </div>
+                    </div>
+                    <hr class="w-[800px] border-outline mx-auto">
+                    <!-- Product dito then hr ulit -->
+
+                </div>
+                <div class="space-y-4">
+                    <div class="w-[396px] h-[339px] outline outline-1 pl-10 pt-5 outline-outline bg-sign rounded-2xl ">
+                        <p class="font-Montserrat font-semibold text-[24px] text-[#00000080]">Order Status</p>
+                        <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center"></div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outline outline-1 outline-outline bg-sign space-y-4 p-[1rem] pt-[1.5rem] rounded-2xl w-[396px] h-[212px]">
+                        <div class="flex space-x-[4.25rem]">
+                            <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">Total:</p>
+                            <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">${Item.ProductTotal}</p>
+                        </div>
+                        
+                        <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">Discount %:  </p>
+                        <hr class="w-[300px] border-[#F07C54] border">
+                        <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">Order Total: ${Item.ProductTotal}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="w-[1334px] h-[213px] outline outline-1 outline-outline bg-sign space-y-3 rounded-2xl pt-4">
+                <div class="relative font-Inter font-extrabold text-xl text-[#00000080] left-[2rem]">Customer Details</div>
+                <h1 class="font-Inter font-bold text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerName}</h1>
+                <h2 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerEmail}</h2>
+                <h3 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerNum}</h3>
+            </div>
+            </div>
+            `;
+            ItemList.appendChild(ItemElement);
+
+        });
+    });
+
+}else{
+    console.error('No transacValue found in sessionStorage');
+}
+
+   
+</script>
 </html>
