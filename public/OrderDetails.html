@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
 </head>
+<style>
+    #Item-Con::-webkit-scrollbar{
+        display: none;
+    }
+</style>
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
@@ -25,6 +30,25 @@
         </div>
         
     </div>
+    <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
+        <a href="OrderList.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">Order</p>
+        </a>
+        
+        <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">Landing</p>
+        </a>
+        <a href="AdminHome.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">Home Page</p>
+        </a>
+        <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">3D Customization</p>
+        </a>
+        <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center" onclick="LogOut()">
+            <p class="font-Montserrat font-semibold">Log Out</p>
+        </a>
+    </div>
+    <div id="userInfo" class="hidden"></div>
 </body>
 <script>
     const transacValue = sessionStorage.getItem('transacValue');
@@ -40,56 +64,59 @@
             // Create HTML elements to display product information
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
-            <div class = "space-y-12">
+            <div class = "flex  space-x-12 relative">
              <div class="flex relative space-x-12">
-                    <div class="w-[882px] relative h-[566px] outline outline-1 outline-outline bg-sign rounded-2xl">
-                    <div class="w-[844px] pt-6 pl-[3.5rem] relative mx-auto mt-7 h-[101px] bg-outline rounded-2xl">
-                        <p class="font-Inter font-extrabold text-[20px] text-[#FFFFFF]">${Item.productOrder}</p>
-                        <p class="font-Montserrat font-semibold text-[14px] text-[#FFFFFF]">${Item.OrderedDate}</p>
-                    </div>
-                    <div class="flex space-x-[28.5rem] ml-[2.5rem] mt-4">
-                        <div><h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Item(s)</h1></div>
-                        <div class="flex space-x-[6rem]">
-                            <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Quality</h1>
-                            <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Amount</h1>
+                    <div id="Item-Con" class="w-[882px] relative overflow-y-auto h-[566px] outline outline-1 outline-outline bg-sign rounded-2xl">
+                        <div class="w-[844px] pt-6 pl-[3.5rem] relative mx-auto mt-7 h-[101px] bg-outline rounded-2xl">
+                            <p class="font-Inter font-extrabold text-[20px] text-[#FFFFFF]">${Item.productOrder}</p>
+                            <p class="font-Montserrat font-semibold text-[14px] text-[#FFFFFF]">${Item.OrderedDate}</p>
                         </div>
+                        <div class="flex space-x-[28.5rem] ml-[2.5rem] mt-4">
+                            <div><h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Item(s)</h1></div>
+                            <div class="flex space-x-[6rem]">
+                                <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Quality</h1>
+                                <h1 class="font-Montserrat font-semibold text-[20px] text-[#00000080]">Amount</h1>
+                            </div>
+                            
+                        </div>
+                        <hr class="w-[800px] border-outline mx-auto">
                         
-                    </div>
-                    <hr class="w-[800px] border-outline mx-auto">
-                    <div id="Product" class="w-[800px] h-[6rem] space-x-[19.5rem] flex items-center p-2 my-1  mx-auto">
-                        <div class="flex items-center">
-                            <img src="img/aphrodite-dress.png" alt="" class="w-[3.5rem]">
-                            <p class="font-Montagu font-semibold text-2xl ml-4">Aphrodite Dress</p>
-                        </div>
-                        <div class="flex space-x-[9.5rem]">
-                            <h1 class="font-Montserrat font-medium text-xl">1</h1>
-                            <p class="font-Montserrat font-medium text-xl">5,000</p>
+                        <div id="Product-Container-${Item.productOrder}" class="relative overflow-y-auto">
+                            
                         </div>
                     </div>
-                    <hr class="w-[800px] border-outline mx-auto">
                     <!-- Product dito then hr ulit -->
 
                 </div>
-                <div class="space-y-4">
+                <div class="space-y-4 bg-likha  ">
                     <div class="w-[396px] h-[339px] outline outline-1 pl-10 pt-5 outline-outline bg-sign rounded-2xl ">
                         <p class="font-Montserrat font-semibold text-[24px] text-[#00000080]">Order Status</p>
                         <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
-                            <div class="flex items-center space-x-3">
+                            <div id="Ordered" class="flex items-center space-x-3 cursor-pointer">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
                                     <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
                                 </div>
                                 <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
                             </div>
                             <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div class="flex items-center space-x-3">
+                            <div id="Confirmed" class="flex items-center space-x-3 cursor-pointer">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                                    <div id="Con-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
                                 </div>
                                 <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
                             </div>
                             <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div class="flex items-center space-x-3">
-                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center"></div>
+                            <div id="OrderPacked" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="OP-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Order Packed</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Ready" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="Ready-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
                                 <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
                             </div>
                         </div>
@@ -106,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-[1334px] h-[213px] outline outline-1 outline-outline bg-sign space-y-3 rounded-2xl pt-4">
+            <div class="w-[1334px] h-[213px] outline outline-1 outline-outline bg-sign mt-[3rem] space-y-3 rounded-2xl pt-4">
                 <div class="relative font-Inter font-extrabold text-xl text-[#00000080] left-[2rem]">Customer Details</div>
                 <h1 class="font-Inter font-bold text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerName}</h1>
                 <h2 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerEmail}</h2>
@@ -115,7 +142,109 @@
             </div>
             `;
             ItemList.appendChild(ItemElement);
+            
+            document.getElementById('Confirmed').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Confirmed', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+            document.getElementById('OrderPacked').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Order Packed', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+            document.getElementById('Ready').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Ready to Pick Up', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
 
+            async function checkStat(){
+                const Status = Item.Status;
+
+                if(Status === 'Confirmed'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.add('hidden');
+                    document.getElementById('Ready-Circle').classList.add('hidden');
+                    
+                }
+                else if(Status === 'Order Packed'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.remove('hidden');
+                    document.getElementById('Ready-Circle').classList.add('hidden');
+                }
+                else if(Status === 'Ready to Pick Up'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.remove('hidden');
+                    document.getElementById('Ready-Circle').classList.remove('hidden');
+                }
+            }
+
+            checkStat();
+                        
+            fetch(`/Items/${Item.productOrder}`)
+                .then(response => response.json())
+                .then(orderItems => {
+                    const orderItemsContainer = document.getElementById(`Product-Container-${Item.productOrder}`);
+
+                    orderItems.forEach(orderItem => {
+                        const IElement = document.createElement('div');
+                        IElement.innerHTML = `
+                        <div id="Product" class="w-[800px] relative h-[6rem] flex items-center p-2 my-1  mx-auto">
+                            <div class="flex items-center">
+                                <img src="data:image/jpeg;base64,${orderItem.productImage}" alt="" class="w-[3.5rem]">
+                                <p class="font-Montagu font-semibold text-2xl ml-4">${orderItem.productName}</p>
+                            </div>
+                            <div class="flex item-center">
+                                <div class="absolute right-[11.25rem] text-center w-[7rem] top-[2rem]">
+                                    <h1 class="font-Montserrat font-medium text-xl">${orderItem.Quantity}</h1>
+                                </div>
+                                <div class="absolute top-[2rem] text-center w-[7rem] right-[0.25rem]">
+                                    <p class="font-Montserrat font-medium  text-xl">${orderItem.Price}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="w-[800px] border-outline mx-auto">
+                        `;
+                        orderItemsContainer.appendChild(IElement);
+                    });
+                })
         });
     });
 
@@ -123,6 +252,21 @@
     console.error('No transacValue found in sessionStorage');
 }
 
+document.addEventListener('DOMContentLoaded', (event) => {
+        const Profile = document.getElementById('Profile');
+        const Menu = document.getElementById('AdminMenu');
+
+        Profile.addEventListener('click', () => {
+
+            if (!Menu.classList.contains('hidden')) {
+                Menu.classList.add('hidden');
+            } else {
+                Menu.classList.remove('hidden');
+            }
+        });
+    });
    
 </script>
+<script src="AuthorizationBE.js"></script>
+<script src="AdminPage.js"></script>
 </html>

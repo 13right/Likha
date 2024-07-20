@@ -73,30 +73,67 @@
                 <hr class="w-[1180.16px] mt-[2rem] ml-3 text-[#F07C54]">
                 <div class="w-[75rem] h-auto my-4 flex">
                     <div id="OrderItems-container-${Item.productOrder}" class="w-[75rem] h-auto "></div>
-                    <div class="w-[14rem] h-[13rem] flex flex-col ml-[3.5rem] mt-[2rem]">
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                    <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
+                            <div id="Ordered" class="flex items-center space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
                             </div>
-                            <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
-                        </div>
-                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Confirmed" class="flex items-center space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="Con-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
                             </div>
-                            <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="OrderPacked" class="flex items-center space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="OP-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Order Packed</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Ready" class="flex items-center space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="Ready-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
+                            </div>
                         </div>
-                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center"></div>
-                            <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             `;
             ItemList.appendChild(ItemElement);
+
+            const Confirmed = ItemElement.querySelector('#Con-Circle');
+            const OP = ItemElement.querySelector('#OP-Circle');
+            const Ready = ItemElement.querySelector('#Ready-Circle');
+
+            async function checkStat(){
+                const Status = Item.Status;
+
+                if(Status === 'Confirmed'){
+                    Confirmed.classList.remove('hidden');
+                    OP.classList.add('hidden');
+                    Ready.classList.add('hidden');
+                    
+                }
+                else if(Status === 'Order Packed'){
+                    Confirmed.classList.remove('hidden');
+                    OP.classList.remove('hidden');
+                    Ready.classList.add('hidden');
+                }
+                else if(Status === 'Ready to Pick Up'){
+                    Confirmed.classList.remove('hidden');
+                    OP.classList.remove('hidden');
+                    Ready.classList.remove('hidden');
+                }
+            }
+
+            checkStat();
+
             fetch(`/OrderItem/${Item.productOrder}`)
                 .then(response => response.json())
                 .then(orderItems => {
@@ -120,6 +157,7 @@
         });
     });
     
+
             
     </script>
     

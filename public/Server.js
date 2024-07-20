@@ -416,15 +416,15 @@ app.get('/Order', async (req, res) => {
         const request = pool.request();
         request.input('UserID', sql.Int, ID);
         // Query to select productName, productPrice, and productImage columns
-        const query = `SELECT OrderID, convert(varchar, Date, 0) AS Date FROM tbl_Order WHERE UserID = @UserID`;
+        const query = `SELECT OrderID, convert(varchar, Date, 0) AS Date, Status FROM tbl_Order WHERE UserID = @UserID`;
         const result = await request.query(query);
         // Convert VARBINARY images to Base64 encoded strings
         const products = result.recordset.map(product => {
             //const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
             return {
                 OrderedDate: product.Date,
-                productOrder: product.OrderID
-
+                productOrder: product.OrderID,
+                Status: product.Status
                 // productName: product.ProductName,
                 // productPrice: product.Price,
                 // productDes: product.Description,
@@ -449,7 +449,7 @@ app.get('/Orders', async (req, res) => {
         await sql.connect(config);
         const request = pool.request();
         // Query to select productName, productPrice, and productImage columns
-        const query = `SELECT TransactionID, convert(varchar, Date, 0) AS Date, Name, TotalPrice
+        const query = `SELECT TransactionID,Status, convert(varchar, Date, 0) AS Date, Name, TotalPrice
                        FROM tbl_Order INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID;`;
         const result = await request.query(query);
         // Convert VARBINARY images to Base64 encoded strings
@@ -459,7 +459,8 @@ app.get('/Orders', async (req, res) => {
                 OrderedDate: product.Date,
                 productOrder: product.TransactionID,
                 ProductName: product.Name,
-                ProductTotal: product.TotalPrice
+                ProductTotal: product.TotalPrice,
+                Status: product.Status
 
             };
         });
@@ -510,6 +511,22 @@ app.get('/OrderDetails', async (req, res) => {
     }
 });
 
+app.put('/UpdateStat', async (req, res) => {
+    const { status, TransID } = req.body;
+
+    try {
+        const request = pool.request();
+        request.input('Stat', sql.VarChar, status);
+        request.input('TransID',sql.VarChar,TransID);
+        
+        const result = await request.query("UPDATE tbl_Order SET Status = @Stat WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OrderID), 4) = @TransID");
+            
+        console.log("Status successfully Updated!");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error inserting data into database');
+    }
+});
 
 app.get('/OrderItem/:productOrder', async (req, res) => {
     const productOrder = req.params.productOrder;
@@ -525,6 +542,44 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
             FROM tbl_OrderItem OI
             INNER JOIN tbl_Product P ON OI.ProductID = P.ProductID
             WHERE OI.OrderID = @OrderID
+        `;
+        const result = await request.query(query);
+       
+        // Convert result to the desired format
+        const orderItems = result.recordset.map(item => {
+            const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
+            return {
+                productName: item.ProductName,
+                Quantity: item.Quantity,
+                Price: item.Price,
+                productImage: base64Image
+            };
+        });
+
+        // Send the modified result as JSON
+        res.json(orderItems);
+    } catch (err) {
+        // Error handling
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+app.get('/Items/:productOrder', async (req, res) => {
+    const productOrder = req.params.productOrder;
+    try {
+        // Connect to the database
+        await sql.connect(config);
+        const request = pool.request();
+        request.input('OrderID', sql.VarChar, productOrder);
+        console.log(productOrder)
+        // Query to select order items based on OrderID
+        
+        const query = `
+            SELECT P.ProductImage, P.ProductName, OI.Quantity, OI.Price
+            FROM tbl_OrderItem OI
+            INNER JOIN tbl_Product P ON OI.ProductID = P.ProductID
+            WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OI.OrderID), 4) = @OrderID
         `;
         const result = await request.query(query);
        
@@ -626,7 +681,7 @@ app.post('/PlaceOrder', async (req, res) => {
             const ID = parseInt(user.UserID);
             const order =  pool.request()
                 .input('ID',sql.Int,ID)
-                .query('INSERT INTO tbl_Order ([Date], UserID) VALUES (convert(varchar, getdate(), 0), @ID)');
+                .query('INSERT INTO tbl_Order ([Date], UserID, Status) VALUES (convert(varchar, getdate(), 0), @ID)');
 
         // Execute the query for each order
         for (const order of orders) {

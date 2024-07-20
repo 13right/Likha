@@ -83,7 +83,7 @@
             </div>
         </nav>
     </div>
-    <div class="bg-Likha min-h-screen  ">
+    <div class="bg-Likha min-h-screen pb-[3rem]">
         <div id="main-container" class="">
             <div id="slide-container">    
                 <div id="slider-wrapper" class="relative max-w-[65-rem] pt-[5rem]"  >
@@ -134,10 +134,24 @@
                 <div>
                     <H6 class="text-6xl font-libre font-extrabold">Shop</H6>
                 </div>
-                <div class="flex-col space-y-[16rem] ">
-                    <div id="product-list" class="flex space-x-9 flex-wrap justify-center"></div>
+                <div class="flex-col">
+                    <div id="product-list" class="flex space-x-9 flex-wrap justify-center hidden "></div>
                     <div id="product-view" class=""></div>
-                    
+                    <div id="loading" class="relative flex justify-center space-x-9 ">
+                        <div class="w-[318px] shadow-lg relative rounded-xl h-[500px] bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                        <div class="w-[318px] rounded-xl shadow-lg h-[500px] bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                        <div class="w-[318px] h-[500px] shadow-lg rounded-xl bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                        <div class="w-[318px] h-[500px] shadow-lg rounded-xl bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
             <div class="flex space-x-[4rem] w-[70rem] h-[35rem] bg-sign  outline outline-outline outline-2 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden" id="Cartel">
@@ -189,8 +203,10 @@
             
             <button id="ok" onclick="OrderOk()" class="ml-[38%] mt-3 bg-outline  text-[#FFF] rounded-3xl w-20">OK</button>
         </div>
+        
     </div>
-    <div id="userInfo"></div>
+    <div id="userInfo hidden"></div>
+    
 </body>
 <script>
         function OrderOk(){
@@ -247,7 +263,13 @@
     function fetchProducts(category = '') {
     // Fetch data from Node.js server
     fetch(`/products?category=${category}`)
-        .then(response => response.json())
+        .then(response => {
+        if (response.ok) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('product-list').classList.remove('hidden');
+        }
+        return response.json();
+    })
         .then(products => {
             
             products.forEach(product => {
