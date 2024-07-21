@@ -67,7 +67,7 @@
                         <h2 class="font-Inter font-medium">Order Date: <span>${Item.OrderedDate}</span></h2>
                     </div>
                     <div>
-                        <button id="Cancel"  class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
+                        <button id="Cancel" onclick="Cancel()" class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
                     </div>
                     <div id="Cancelled" class="font-Montserrat font-semibold text-xl absolute text-[#DD0707] right-[1rem] hidden">Cancelled</div>
                 </div>
@@ -148,7 +148,9 @@
 
             checkStat();
 
-            document.getElementById('Cancel'),addEventListener('click',function(){
+            const CancelBtn = ItemElement.querySelector('#Cancel');
+            
+            CancelBtn.addEventListener('click',function(){
                 const Status = Item.Status;
                 const Cancel = { status: 'Cancelled', OrderID: Item.Transac};
                 if(Status === 'Ordered'){
@@ -172,7 +174,7 @@
                 }
             
             });
-                
+        
 
             fetch(`/OrderItem/${Item.productOrder}`)
                 .then(response => response.json())

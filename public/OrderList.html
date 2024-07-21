@@ -143,10 +143,13 @@ fetch('/Orders')
                     statusDiv.classList.add('bg-[#037E2680]');
                 }
                 else if(Status === 'Order Packed'){
-                    statusDiv.classList.add('bg-[#FFC107]')
+                    statusDiv.classList.add('bg-[#FFC107]');
                 }
                 else if(Status === 'Ready to Pick Up'){
-                    statusDiv.classList.add('bg-[#6F42C1]')
+                    statusDiv.classList.add('bg-[#6F42C1]');
+                }
+                else if(Status === 'Cancelled'){
+                    statusDiv.classList.add('bg-[#F08080]');
                 }
             }
 

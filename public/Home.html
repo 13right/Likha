@@ -574,7 +574,9 @@ document.getElementById('CartIcon').addEventListener('click', fetchCart);
         totalPriceDisplay.textContent = `₱${sum.toLocaleString('en-PH')}`;
     }
 
-    document.getElementById('PlaceOrder').addEventListener('click', function() {
+    const PlaceOrderBtn = document.querySelector('#PlaceOrder');
+
+        PlaceOrderBtn.addEventListener('click', function() {
         const checkboxes = document.querySelectorAll('#Product-Cart input[type="checkbox"]');
         console.log(checkboxes);
         const checkedValues = [];
