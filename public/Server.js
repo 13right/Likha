@@ -681,7 +681,7 @@ app.post('/PlaceOrder', async (req, res) => {
             const ID = parseInt(user.UserID);
             const order =  pool.request()
                 .input('ID',sql.Int,ID)
-                .query('INSERT INTO tbl_Order ([Date], UserID, Status) VALUES (convert(varchar, getdate(), 0), @ID)');
+                .query('INSERT INTO tbl_Order ([Date], UserID, Status) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT)');
 
         // Execute the query for each order
         for (const order of orders) {
