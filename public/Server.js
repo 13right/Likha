@@ -416,7 +416,7 @@ app.get('/Order', async (req, res) => {
         const request = pool.request();
         request.input('UserID', sql.Int, ID);
         // Query to select productName, productPrice, and productImage columns
-        const query = `SELECT OrderID, convert(varchar, Date, 0) AS Date, Status FROM tbl_Order WHERE UserID = @UserID`;
+        const query = `SELECT OrderID, TransactionID, convert(varchar, Date, 0) AS Date, Status FROM tbl_Order WHERE UserID = @UserID`;
         const result = await request.query(query);
         // Convert VARBINARY images to Base64 encoded strings
         const products = result.recordset.map(product => {
@@ -424,7 +424,8 @@ app.get('/Order', async (req, res) => {
             return {
                 OrderedDate: product.Date,
                 productOrder: product.OrderID,
-                Status: product.Status
+                Status: product.Status,
+                Transac: product.TransactionID
                 // productName: product.ProductName,
                 // productPrice: product.Price,
                 // productDes: product.Description,
@@ -534,7 +535,7 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
         // Connect to the database
         await sql.connect(config);
         const request = pool.request();
-        request.input('OrderID', sql.Int, productOrder);
+        request.input('OrderID', sql.VarChar, productOrder);
         // Query to select order items based on OrderID
         
         const query = `
@@ -726,6 +727,22 @@ app.post('/PlaceOrder', async (req, res) => {
     }
 });
 
+app.put('/Cancel', async (req, res) => {
+    const { status, OrderID } = req.body;
+
+    try {
+        const request = pool.request();
+        request.input('Stat', sql.VarChar, status);
+        request.input('TransID',sql.VarChar,OrderID);
+        
+        const result = await request.query("UPDATE tbl_Order SET Status = @Stat WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OrderID), 4) = @TransID");
+            
+        console.log("Status successfully Updated!");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error inserting data into database');
+    }
+});
 
 
 //Server itu guys
