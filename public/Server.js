@@ -292,7 +292,14 @@ app.post('/LogOut', (req, res) => {
     }
 });
 
-
+app.get('/api/current_user', (req, res) => {
+    if (req.session.user) {
+      res.json(req.session.user);
+    } else {
+        res.redirect('/SignIn.html');    
+        //res.status(401).send('Not authenticated');
+    }
+  });
 
 // Route for uploading an image
 app.post('/upload', upload.single('image'), async (req, res) => {
