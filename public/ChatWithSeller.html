@@ -23,38 +23,54 @@
     <script>
         // Fetch the user ID from the div with id "User"
 
-
-
-
-        // Fetch the admin user ID
-        // fetch('/Admin')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         receiverId = data.userId;
-        //         fetchMessages();
-        //     });
-
-        //Function to fetch messages
-        function fetchMessages() {
-            fetch(`/api/messages`)
-                .then(response => response.json())
-                .then(messages => {
-                    const chatBox = document.getElementById('chat-box');
-                    chatBox.innerHTML = '';
-                    messages.forEach(msg => {
-                        const messageElement = document.createElement('div');
-                        
-                        messageElement.textContent = msg.message;
-                        
-                        chatBox.appendChild(messageElement);
-                    });
-                    chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the bottom
-                });
-                
+        async function getCurrentUser() {
+            try {
+                const response = await fetch('/api/current_user');
+                if (response.ok) {
+                    const user = await response.json();
+                    return user; // Assuming user object contains user ID
+                } else {
+                    window.location.href = '/SignIn.html'; // Redirect to sign-in if not authenticated
+                }
+            } catch (error) {
+                console.error('Error fetching current user:', error);
+            }
         }
 
-        // Fetch messages every 2 seconds
-        setInterval(fetchMessages, 2000);
+async function fetchMessages() {
+    try {
+        const user = await getCurrentUser();
+        if (user) {
+            const userID = user.UserID; // Adjust based on your user object structure
+            const response = await fetch(`/api/messages`);
+            console.log(userID);
+            if (response.ok) {
+                const messages = await response.json();
+                const chatBox = document.getElementById('chat-box');
+                chatBox.innerHTML = '';
+                messages.forEach(msg => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('my-2', 'p-2', 'rounded-lg','inline-block','flex');
+                    messageElement.textContent = msg.message;
+                    if (msg.SenderID === userID) {
+                        messageElement.classList.add('bg-Likha','text-right', 'text-white', 'self-end','justify-end');
+                    } else {
+                        messageElement.classList.add('bg-sign', 'text-black', 'self-start');
+                    }
+                    chatBox.appendChild(messageElement);
+                });
+            } else {
+                throw new Error('Failed to fetch messages');
+            }
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
+}
+
+// Call fetchMessages to start
+fetchMessages();
+setInterval(fetchMessages,2000);
 
         // Send message
         document.getElementById('message-form').addEventListener('submit', function (e) {
