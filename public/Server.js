@@ -293,14 +293,7 @@ app.post('/LogOut', (req, res) => {
 });
 
 
-app.get('/api/current_user', (req, res) => {
-    if (req.session.user) {
-      res.json(req.session.user);
-    } else {
-        res.redirect('/SignIn.html');    
-        //res.status(401).send('Not authenticated');
-    }
-  });
+
 // Route for uploading an image
 app.post('/upload', upload.single('image'), async (req, res) => {
     try {
@@ -342,6 +335,138 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/Index.html');
 });
 
+// Fetch admin
+// app.get('/api/admin', (req, res) => {
+//     const query = 'SELECT UserID FROM tbl_User WHERE Type = "Admin"';
+//     config.query(query, (err, results) => {
+//         if (err) throw err;
+//         res.send(results[0]);
+//     });
+// });
+
+app.get('/Admin', async (req, res) => {
+    const Type = "Admin";
+    const query = `SELECT UserID FROM tbl_User WHERE Type = @Type`;
+    
+    try {
+        const request = pool.request();
+        request.input('Type', sql.VarChar, Type);
+        
+        const result = await request.query(query);
+        
+        const Admin = result.recordset.map(admin => {
+            return {
+                UserID: admin.UserID
+            };
+        });
+        
+        res.json(Admin);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+// app.post('/Chat', (req, res) => {
+//     const { sender_id, receiver_id, message } = req.body;
+//     const query = 'INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (?, ?, ?)';
+//     config.query(query, [sender_id, receiver_id, message], (err, result) => {
+//         if (err) throw err;
+//         res.send({ message: 'Message sent' });
+//     });
+// });
+
+//SignUp
+app.post('/Chat', async (req, res) => {
+    const {receiver_id, message } = req.body;
+
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    try {
+        const request = pool.request();
+        request.input('Sender', sql.Int, ID);
+        request.input('message',sql.Text,message);
+        const result = await request.query("INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (@Sender,(SELECT UserID FROM tbl_User WHERE Type = 'Admin'),@message)");
+        res.send('Chat successfully inserted!');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error inserting data into database');
+    }
+});
+
+app.post('/Chat/Admin', async (req, res) => {
+    const {receiver_id, message } = req.body;
+
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    try {
+        const request = pool.request();
+        request.input('Sender', sql.Int, ID);
+        request.input('message',sql.Text,message);
+        const result = await request.query("INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (@Sender,8,@message)");
+        res.send('Chat successfully inserted!');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error inserting data into database');
+    }
+});
+
+//Resume later
+app.get('/api/messages', async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    const query = `
+        SELECT * FROM tbl_message 
+        WHERE (SenderID = @sender_id AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
+        OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = @sender_id)
+    `;
+
+    try {
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('sender_id', sql.Int, ID)
+            .query(query);
+        const messages = result.recordset;
+        res.json(messages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+app.get('/api/messages/Admin', async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    const query = `
+        SELECT * FROM tbl_message 
+        WHERE (SenderID = 8 AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
+        OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = 8)
+    `;
+
+    try {
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('sender_id', sql.Int, ID)
+            .query(query);
+        const messages = result.recordset;
+        res.json(messages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+// API to get messages
+// app.get('/api/messages/:sender_id/:receiver_id', (req, res) => {
+//     const { sender_id, receiver_id } = req.params;
+//     const query = 'SELECT * FROM tbl_message WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)';
+//     config.query(query, [sender_id, receiver_id, receiver_id, sender_id], (err, results) => {
+//         if (err) throw err;
+//         res.send(results);
+//     });
+// });
 
 // Route to fetch data from MSSQL and send it as JSON
 app.get('/products', async (req, res) => {

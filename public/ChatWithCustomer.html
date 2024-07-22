@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="userInfo"></div>  <!-- Example user ID for the current logged-in user -->
+    
+    <div class="container mx-auto p-4 bg-white rounded-lg shadow-lg max-w-lg">
+        <h2 class="text-2xl font-bold mb-4 text-center">Chat with Customer</h2>
+        <div id="chat-box" class="border p-4 h-96 overflow-y-scroll bg-gray-50 rounded-lg">
+            <!-- Messages will be appended here -->
+        </div>
+        <form id="message-form" class="mt-4 flex">
+            <input type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded-r-lg">Send</button>
+        </form>
+    </div>
+
+    <script>
+        // Fetch the user ID from the div with id "User"
+
+
+
+
+        // Fetch the admin user ID
+        // fetch('/Admin')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         receiverId = data.userId;
+        //         fetchMessages();
+        //     });
+
+        //Function to fetch messages
+        function fetchMessages() {
+            fetch(`/api/messages/Admin`)
+                .then(response => response.json())
+                .then(messages => {
+                    const chatBox = document.getElementById('chat-box');
+                    chatBox.innerHTML = '';
+                    messages.forEach(msg => {
+                        const messageElement = document.createElement('div');
+                        
+                        messageElement.textContent = msg.message;
+                        
+                        chatBox.appendChild(messageElement);
+                    });
+                    chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the bottom
+                });
+                
+        }
+
+        // Fetch messages every 2 seconds
+        setInterval(fetchMessages, 2000);
+
+        // Send message
+        document.getElementById('message-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const message = document.getElementById('message-input').value;
+            fetch('/Chat/Admin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({  message })
+            }).then(() => {
+                document.getElementById('message-input').value = '';
+                fetchMessages();
+            });
+        });
+
+        // Initial fetch of messages
+        fetchMessages();
+    </script>
+    <script ></script>
+</body>
+</html>
