@@ -63,7 +63,7 @@
             fetch('/Chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ receiver_id: receiverId, message })
+                body: JSON.stringify({ message })
             }).then(() => {
                 document.getElementById('message-input').value = '';
                 fetchMessages();
