@@ -404,6 +404,7 @@ app.post('/Chat', async (req, res) => {
 
 app.post('/Chat/Admin', async (req, res) => {
     const CustomerName = req.query.Name;
+    //console.log(CustomerName);
     const { message } = req.body;
     console.log(CustomerName);
     const user = req.session.user;
