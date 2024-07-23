@@ -403,21 +403,48 @@ app.post('/Chat', async (req, res) => {
 });
 
 app.post('/Chat/Admin', async (req, res) => {
-    const {receiver_id, message } = req.body;
-
+    const CustomerName = req.query.Name;
+    const { message } = req.body;
+    console.log(CustomerName);
     const user = req.session.user;
     const ID = parseInt(user.UserID);
     try {
         const request = pool.request();
         request.input('Sender', sql.Int, ID);
+        request.input('Receiver',sql.VarChar,CustomerName)
         request.input('message',sql.Text,message);
-        const result = await request.query("INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (@Sender,8,@message)");
+        const result = await request.query("INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (@Sender,(SELECT UserID FROM tbl_User WHERE Name LIKE @Receiver),@message)");
         res.send('Chat successfully inserted!');
     } catch (err) {
         console.error(err);
         res.status(500).send('Error inserting data into database');
     }
 });
+
+app.get('/Inbox', async (req, res) => {
+    const query = `
+        SELECT u.Name, m.Message
+        FROM tbl_message m
+        INNER JOIN tbl_User u ON u.UserID = m.SenderID
+        WHERE u.Type = 'Customer'
+        AND m.ID IN (
+            SELECT MAX(ID)
+            FROM tbl_message
+            WHERE SenderID = m.SenderID
+        ) ORDER BY ID DESC;
+    `;
+    try {
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .query(query);
+        const messages = result.recordset;
+        res.json(messages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
 
 //Resume later
 app.get('/api/messages', async (req, res) => {
@@ -444,17 +471,20 @@ app.get('/api/messages', async (req, res) => {
 
 app.get('/api/messages/Admin', async (req, res) => {
     const user = req.session.user;
+    const CustomerName = req.query.Name;
+    //console.log(CustomerName);
     const ID = parseInt(user.UserID);
     const query = `
         SELECT * FROM tbl_message 
-        WHERE (SenderID = 8 AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
-        OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = 8)
+        WHERE (SenderID = (SELECT UserID FROM tbl_User WHERE Name = @Receiver) AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
+        OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Name = @Receiver))
     `;
 
     try {
         const pool = await sql.connect(config);
         const result = await pool.request()
             .input('sender_id', sql.Int, ID)
+            .input('Receiver',sql.VarChar,CustomerName)
             .query(query);
         const messages = result.recordset;
         res.json(messages);
@@ -614,7 +644,7 @@ app.get('/OrderDetails', async (req, res) => {
         await sql.connect(config);
         const request = pool.request();
         request.input('Transac', sql.VarChar, transactionId);
-        console.log(transactionId);
+        //console.log(transactionId);
         // Query to select productName, productPrice, and productImage columns
         const query = `SELECT TransactionID,Email,MobileNum, convert(varchar, Date, 0) AS Date, Status, TotalPrice, Name
                        FROM tbl_Order

@@ -53,8 +53,10 @@ async function fetchMessages() {
     try {
         const user = await getCurrentUser();
         if (user) {
+            const CustomerName = sessionStorage.getItem('CustomerName');
+            //console.log(CustomerName);
             const userID = user.UserID; // Adjust based on your user object structure
-            const response = await fetch(`/api/messages/Admin`);
+            const response = await fetch(`/api/messages/Admin?Name=${(CustomerName)}`);
             console.log(userID);
             if (response.ok) {
                 const messages = await response.json();
@@ -88,7 +90,8 @@ setInterval(fetchMessages,2000);
         document.getElementById('message-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const message = document.getElementById('message-input').value;
-            fetch('/Chat/Admin', {
+            const CustomerName = sessionStorage.getItem('CustomerName');
+            fetch('/Chat/Admin?Name=${(CustomerName)}', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({  message })

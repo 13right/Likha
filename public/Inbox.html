@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+    <title>Orders</title>
+</head>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
+        <nav class="md:flex md:items-center">   
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+            </div>
+            
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <img id="Profile" class="cursor-pointer h-[3rem] w-[3rem]" src="img/PROFILE.png"  alt="">
+            </div>
+        </nav>
+    </div>
+    <div class="bg-Likha min-h-screen pt-[5rem] p-[3rem] items-center">
+        <!-- Contents -->
+
+        <div class="mt-[3rem] mx-auto relative w-[55rem] h-[40rem] rounded-lg bg-sign outline outline-[3px] outline-outline p-7" >
+                <div class="bg-Likha relative mx-auto w-[51rem] h-[36.5rem] rounded-lg">
+                    <p class="font-Inter relative ml-4 top-4 font-bold text-2xl">INBOX</p>
+                    <div id="message" class=" w-auto h-[31rem] mx-4 mt-8  space-y-4 p-[2rem]">
+                        
+                    </div>
+                </div>
+        </div>
+
+    </div>
+
+    
+</body>
+<script>
+let initialFetch = true;
+
+function Inbox() {
+    fetch('/Inbox')
+        .then(response => response.json())
+        .then(Items => {
+            console.log(Items);
+            const ItemList = document.getElementById('message');
+            
+            if (initialFetch) {
+                ItemList.innerHTML = ''; // Clear previous items on the initial fetch
+                initialFetch = false;
+            }
+                ItemList.innerHTML = '';
+            Items.forEach(Item => {
+                // Create HTML elements to display product information
+                const ItemElement = document.createElement('div');
+                ItemElement.innerHTML = `
+                <div id="Customer" class="bg-Likha min-w-min h-[4rem] p-2 outline-outline outline-1 outline rounded-lg cursor-pointer">
+                    <h1 id="Name" class="font-Montserrat text-lg font-semibold">${Item.Name}</h1>
+                    <p>
+                    ${Item.Message}
+                    </p>
+                </div>
+                `;
+                ItemList.appendChild(ItemElement);
+
+                const Customer = ItemElement.querySelector('#Customer');
+
+                    Customer.addEventListener('click', () => {
+                    
+                    // Get the value of #Transac
+                    const CustomerName = ItemElement.querySelector('#Name').textContent;
+
+                    // Construct the URL with the transacValue
+                    //const url = `/Orderdetails?id=${encodeURIComponent(transacValue)}`;
+
+                    // Store the transacValue in sessionStorage
+                    sessionStorage.setItem('CustomerName', CustomerName);
+                    
+                    // Redirect to OrderDetails.html
+                    window.location.href = 'ChatWithCustomer.html';
+                    
+                });
+
+            });
+        });
+
+
+}
+
+setInterval(Inbox, 2000);
+Inbox();
+</script>
+</html>
