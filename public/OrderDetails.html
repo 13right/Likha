@@ -53,7 +53,7 @@
 <script>
     const transacValue = sessionStorage.getItem('transacValue');
 
-    // Check if transacValue is not null
+
     if (transacValue) {
     fetch(`/OrderDetails?transac=${(transacValue)}`)
     .then(response => response.json())
@@ -61,7 +61,6 @@
         console.log(Items);
         Items.forEach(Item => {
             const ItemList = document.getElementById('Container');
-            // Create HTML elements to display product information
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
             <div class = "flex  space-x-12 relative">

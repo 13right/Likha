@@ -6,13 +6,13 @@
     <title>Chat</title>
     <link href="./style.css" rel="stylesheet">
 </head>
-<body>
-    <div id="userInfo" class="hidden"></div>  <!-- Example user ID for the current logged-in user -->
+<body id="body">
+    <div id="userInfo" class="hidden"></div>  
     
     <div class="container mx-auto p-4 bg-white rounded-lg shadow-lg max-w-lg">
-        <h2 class="text-2xl font-bold mb-4 text-center">Chat with Admin</h2>
+        <h2 class="text-2xl font-bold mb-4 text-center">Chat with Seller</h2>
         <div id="chat-box" class="border p-4 h-96 overflow-y-scroll bg-gray-50 rounded-lg">
-            <!-- Messages will be appended here -->
+            
         </div>
         <form id="message-form" class="mt-4 flex">
             <input type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
@@ -21,58 +21,88 @@
     </div>
 
     <script>
-        // Fetch the user ID from the div with id "User"
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            fetchMessages();
+            
+            setInterval(fetchMessages, 2000);
+        });
 
         async function getCurrentUser() {
             try {
                 const response = await fetch('/api/current_user');
                 if (response.ok) {
                     const user = await response.json();
-                    return user; // Assuming user object contains user ID
+                    return user.UserID;
+                    
                 } else {
-                    window.location.href = '/SignIn.html'; // Redirect to sign-in if not authenticated
+                    window.location.href = '/SignIn.html'; 
                 }
             } catch (error) {
                 console.error('Error fetching current user:', error);
             }
         }
-
-async function fetchMessages() {
-    try {
-        const user = await getCurrentUser();
-        if (user) {
-            const userID = user.UserID; // Adjust based on your user object structure
-            const response = await fetch(`/api/messages`);
-            console.log(userID);
-            if (response.ok) {
-                const messages = await response.json();
+        let previousMessageCount = 0;
+            function scrollToBottom() {
                 const chatBox = document.getElementById('chat-box');
-                chatBox.innerHTML = '';
-                messages.forEach(msg => {
-                    const messageElement = document.createElement('div');
-                    messageElement.classList.add('my-2', 'p-2', 'rounded-lg','inline-block','flex');
-                    messageElement.textContent = msg.message;
-                    if (msg.SenderID === userID) {
-                        messageElement.classList.add('bg-Likha','text-right', 'text-white', 'self-end','justify-end');
-                    } else {
-                        messageElement.classList.add('bg-sign', 'text-black', 'self-start');
-                    }
-                    chatBox.appendChild(messageElement);
-                });
-            } else {
-                throw new Error('Failed to fetch messages');
+                if (chatBox) {
+                    requestAnimationFrame(() => {
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                        console.log(chatBox.scrollHeight);
+                        console.log(chatBox.scrollTop);
+                    });
+                } else {
+                    console.error('chatBox element not found.');
+                }
             }
+    async function fetchMessages() {
+    
+    const userID = await getCurrentUser();
+    fetch('/api/messages')
+    .then(response => response.json())
+    .then(messages => {
+        //console.log(messages);
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML = '';
+        const ID = parseInt(userID);
+       //console.log(ID);
+        messages.forEach(msg => {
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `
+                <div id="CC" class="flex items-start">
+                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+                        <p id="Content" class="text-sm">${msg.message}</p>
+                    </div>
+                </div>
+            `;
+            const ChatContainer = messageElement.querySelector('#CC');
+            const ChatBG = messageElement.querySelector('#Chats');
+                //console.log(msg.SenderID);
+            if ( msg.SenderID === ID) {
+                ChatContainer.classList.add('justify-end');
+                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+                ChatBG.classList.remove('bg-outline');
+            } else {
+                ChatBG.classList.add('bg-outline');
+            }
+
+            chatBox.appendChild(messageElement);
+        });
+        // console.log(previousMessageCount);
+        // console.log(messages.length);
+        if (messages.length > previousMessageCount) {
+            scrollToBottom();
+            console.log("Scroll"); 
         }
-    } catch (error) {
+
+        previousMessageCount = messages.length;
+    })
+    .catch(error => {
         console.error('Network error:', error);
-    }
+    });
 }
 
-// Call fetchMessages to start
-fetchMessages();
-setInterval(fetchMessages,2000);
-
-        // Send message
         document.getElementById('message-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const message = document.getElementById('message-input').value;
@@ -86,7 +116,6 @@ setInterval(fetchMessages,2000);
             });
         });
 
-        // Initial fetch of messages
         fetchMessages();
     </script>
     <script src="AuthorizationBE.js"></script>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./landingstyle.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+    <title>Zappnott</title>
+</head>
+<body class="bg-[#f7f8ea]">
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-10">
+        <nav class="md:flex md:items-center">   
+            <div>
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name="menu" id="menubutton">
+            </div>
+            <div class="">
+                <ul class="md:flex md:space-x-9 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
+                    <li class="my-6 md:my-0">
+                        <a href="Home.html" class="hover:text-outline duration-300">
+                            HOME
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="#Shop" class="hover:text-outline duration-300">
+                            SHOP
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="#3D" class="hover:text-outline duration-300">
+                            CUSTOMIZATION
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="#about" class="hover:text-outline duration-300">
+                            ABOUT
+                        </a>
+                    </li>
+                    <li class="my-6 md:my-0">
+                        <a href="#contact" class="hover:text-outline duration-300">
+                            CONTACT
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+        <div class="pt-20">
+            <img class="w-full h-[50rem]" src="img/background.png" alt="Background Image">
+            <div class="absolute top-[62%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <a href="SignIn.html">
+                    <button class="bg-outline w-[243px] h-[51px] font-bold py-2 px-4 rounded-full text-Likha">SHOP NOW</button>
+                </a>
+            </div>
+        </div>
+
+        <h1 class="text-center mt-8 text-4xl font-extrabold font-Montagu" id="Shop">Products</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-48 container mt-8 mx-10">
+
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] p-4 w-[419px] h-[503px] rounded-xl flex items-center">
+                    <div class="flex-col items-center pl-[2.5rem]">
+                        <img src="img/aphrodite-dress.png" class="card-img-top w-[19rem]" alt="Mia Dress">
+                    </div>
+                </div>
+                <div class="ml-[8rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Aphrodite Dress</p>
+                </div>
+            </div>
+            
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[419px] h-[503px] rounded-xl flex items-center">
+                    <div class="flex-col items-center pl-[2.5rem]">
+                        <img src="img/coleen-dress.png" class="card-img-top w-[21rem]" alt="Coleen Dress">
+                    </div>
+                </div>
+                <div class="ml-[9rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Coleen Dress</p>
+                </div>
+            </div>
+            
+
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[419px] h-[503px] rounded-xl flex items-center">
+                    <div class="flex-col items-center pl-[5.5rem]">
+                        <img src="img/dress sample.png" class="card-img-top w-[15rem]" alt="Aphrodite Dress">                
+                    </div>
+                </div>
+                <div class="ml-[10rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Mia Dress</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[11.5rem] container mt-8 mx-10 ">
+            <!-- Product 1 -->
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-4 rounded-xl">
+                    <div class="card">
+                        <img src="img/earings.png" class="card-img-top w-full" alt="...">
+                    </div>
+                </div>
+                <div class="ml-[6.5rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Earrings</p>
+                </div>
+            </div>
+            
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-4 rounded-xl">
+                    <div class="card">
+                        <img src="img/bracelet.png" class="card-img-top w-full" alt="...">
+                    </div>
+                </div>
+                <div class="ml-[7.25rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Bracelet</p>
+                </div>
+            </div>
+            
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-0 rounded-xl">
+                    <div class="card">
+                        <img src="img/necklace.png" class="card-img-top w-[19rem] rounded-tl-xl" alt="...">
+                    </div>
+                </div>
+                <div class="ml-[7rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Necklace</p>
+                </div>
+            </div>
+
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-4 rounded-xl">
+                    <div class="card">
+                        <img src="img/ring.png" class="card-img-top w-full" alt="...">
+                    </div>
+                </div>
+                <div class="ml-[8rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Ring</p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-[4.5rem] ontainer mx-10 mt-8">
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[419px] h-[300px] p-4 rounded-xl flex items-center">
+                    <div class="ml-[5.25rem]">
+                        <img src="img/Kelly bag.png" class="card-img-top w-[200px]" alt="Mia Dress">
+                    </div>
+                </div>
+                <div>
+                    <div class="ml-[9.25rem]">
+                        <p class="font-Montagu text-2xl font-semibold">Kelly Bag</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[419px] h-[300px] p-4 rounded-xl flex items-center">
+                    <div class="ml-[2.5rem]">
+                        <img src="img/potli-bag.png" class="card-img-top w-[290px]" alt="Coleen Dress">
+                    </div>
+                </div>
+                <div class="ml-[10.25rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Potli Bag</p>
+                </div>
+            </div>
+
+            <div class="flex-col items-center space-y-2">
+                <div class="bg-[#D8BC8C80] w-[419px] h-[300px] p-4 rounded-xl flex items-center">
+                    <div class="ml-[5.75rem]">
+                        <img src="img/swagger bag.png" class="card-img-top w-[183px]" alt="Aphrodite Dress">                
+                    </div>
+                </div>
+                <div class="ml-[9rem]">
+                    <p class="font-Montagu text-2xl font-semibold">Swagger Bag</p>
+                </div>
+            </div>
+        </div>
+
+        <h1 id="3D" class="text-center mt-[7rem] text-6xl font-bold font-Montagu">3D CUSTOMIZATION</h1>
+        <script type="module" src="https://unpkg.com/@splinetool/viewer@1.3.2/build/spline-viewer.js"></script>
+        <spline-viewer url="https://prod.spline.design/UYtcBvhc4HQdfpM3/scene.splinecode"></spline-viewer>  
+        </div>
+
+        <div class="flex relative">
+            <div class="bg-[#CCC699] w-[383px] h-[1024px]">
+                <div class="absolute top-[32rem]">
+                    <img src="img/Ellipse 6.png" alt="">
+                </div>
+            </div>
+            <div class="bg-[#EAECDF] w-[1100px] h-[1024px]">
+                <div class="absolute right-[12rem] top-[12rem]">
+                    <p id="about" class="text-8xl font-extrabold font-Montagu">ABOUT US</p>
+                </div>
+            </div>
+        </div>
+       
+        <div id="footer" class="flex bg-[#c4ccbc] h-[744px] w-full pl-[4rem] pr-[4rem]">
+            <div id="container" class="flex items-center flex-wrap space-y-4 mt-[17rem]">
+                <div class="md:mr-[12rem] ml-[4.5rem]">
+                    <img src="img/ZappnottLogo.png" alt="" class="md:h-[10rem] h-[10rem]">
+                </div>
+                <div class="flex flex-1 flex-wrap md:space-y-0 space-y-7">
+                    <div class="ml-4 mr-[5rem] items-center space-y-3">
+                        <h1 class="font-bold text-2xl">Info</h1>
+                        <ul class="space-y-4">
+                            <li>HOME</li>
+                            <li>SHOP</li>
+                            <li>CUSTOMIZATION</li>
+                            <li>ABOUT</li>
+                        </ul>
+                    </div>
+                    <div class="mr-[5rem] items-center" id="contact">
+                            <h1 class="font-bold text-2xl ml-3">Contact</h1>
+                            <ul>
+                                <li>
+                                    <a href="https://www.instagram.com/zappnott?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+                                        <div class="flex items-center">
+                                            <img src="img/IGIcon.png" alt="" class="h-12 w-12 " >
+                                            <span>Zappnott</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="ml-1">
+                                    <a href="https://www.facebook.com/profile.php?id=100063855583369">
+                                        <div class="flex items-center">
+                                            <img src="img/FBLogo.png" alt="" class="h-10">
+                                            <span class="ml-1">Zappnott</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="flex items-center">
+                                        <img src="img/PhoneLogo.png" alt="" class="h-12">
+                                        <span>+639272886113<br/>+639604343935</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="flex items-center">
+                                        <img src="img/EmailLogo.png" alt="" class="h-11">
+                                        <span>zappnott@gmail.com</span>
+                                    </div>
+                                </li>
+                            </ul>
+                    </div>
+                    <div class="">
+                        <h1 class="font-bold text-2xl ml-3" >Visit Us</h1>
+                        <ul>
+                            <li>
+                                <a href="prac.html">
+                                    <div class="flex items-center">
+                                        <img src="img/WebsiteLogo.png" alt="" class="h-11">
+                                        <span>www.zappnott.com</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://maps.app.goo.gl/an2F3pbprEk1Wusb8">
+                                    <div class="flex items-center">
+                                        <img src="img/LocationLogo.png" alt="" class="h-11">
+                                        <span class="text-sm">3F MARKET MARKET Ayala Malls McKinley Parkway, BGC,<br/>
+                                            Taguig City, Metro Manila Philippines 1630</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+    <!-- Fixed Elements -->
+    <div class="flex fixed p-3 top-1 right-1 md:right-16 z-10">
+        <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
+        <img src="img/PROFILE.png" class="h-[3rem]" alt="">
+        <img src="img/CART.png" class="h-[3rem]" alt="">
+    </div>
+</body>
+</html>

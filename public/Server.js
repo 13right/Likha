@@ -4,7 +4,9 @@ const path = require('path');
 const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
-const { compile } = require('ejs');
+const { constrainedMemory } = require('process');
+const axios = require('axios');
+//const { compile } = require('ejs');
 
 
 
@@ -32,64 +34,36 @@ app.use((req, res, next) => {
   });
 
 app.use(session({
-    secret: 'Hatdog', // Replace with a strong, secure key
+    secret: 'Hatdog',
     resave: true,
     saveUninitialized: true
 
   }));
 
-// config = {
-//     server : "LAPTOP-GV6HVKVU\\Lyster Liwanag",
-//     database : "try",
-//     port : 1433
-// }
 
-// const config = {
-//     authentication: {
-//         type: 'default',
-//         options: {
-//             userName: 'LAPTOP-GV6HVKVU\\Lyster Liwanag', // Replace with your Windows username and domain
-//             password: ''
-//         }
-//     },
-//     server: 'LAPTOP-GV6HVKVU\\Lyster Liwanag', // Replace with your local SQL Server instance name
-//     options: {
-//         database: 'try', // Replace with your database name
-//         encrypt: true,
-//         trustServerCertificate: true // Set to true if using self-signed certificates
-//     }
-// };
 
 //Local Machine sa baba
-// const config = {
-//     user: 'Jennie',
-//     password: '2harmaine!',
-//     server: 'LAPTOP-GV6HVKVU',
-//     database: 'Capstone',
-//     options: {
-//         encrypt: false
-//     }
-// };
-//Cloud Server
 const config = {
-    user: 'sqlserver',
-    password: '$Lu=o+G<1_>);Aq8',
-    server: '34.44.250.42',
+    user: 'Jennie',
+    password: '2harmaine!',
+    server: 'LAPTOP-GV6HVKVU',
     database: 'Capstone',
     options: {
         encrypt: false
     }
 };
-
+//Cloud Server
 // const config = {
-//     user: 'Jennie',
-//     password: '2harmaine!',
-//     server: 'localhost\\MSSQLSERVER', // You may need to change this
-//     database: 'try',
+//     user: 'sqlserver',
+//     password: '$Lu=o+G<1_>);Aq8',
+//     server: '34.44.250.42',
+//     database: 'Capstone',
 //     options: {
-//       encrypt: true // If you're connecting to Azure SQL Database, set this to true
+//         encrypt: false
 //     }
-//   };
+// };
+
+
 
 const pool = new sql.ConnectionPool(config);
 pool.connect();
@@ -103,26 +77,24 @@ app.put('/updateProduct/:productName', async (req, res) => {
     const { updatedName, updatedPrice } = req.body;
 
     try {
-        // Connect to the database
-        await sql.connect(config);
 
-        // Update the product in the database
-        const result = await sql.query`
+        const request = pool.request();
+
+        request.input('ProductName',sql.VarChar,productName);
+        request.input('NewName',sql.VarChar,updatedName);
+        request.input('UpdatedPrice',sql.Int,updatedPrice);
+
+        const query = `
             UPDATE tbl_Product
-            SET ProductName = ${updatedName}, Price = ${updatedPrice}
-            WHERE ProductName = ${productName}
+            SET ProductName = @NewName, Price = @UpdatedPrice
+            WHERE ProductName = @ProductName
         `;
 
-        // Check if the product was updated successfully
-        if (result.rowsAffected[0] > 0) {
-            res.status(200).json({ message: 'Product updated successfully' });
-            
-        } else {
-            res.status(404).json({ message: 'Product not found' });
-        }
+       const result = await request.query(query);
+        res.status(200).send('Product Updated')
     } catch (err) {
-        console.error('Error updating product:', err);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Database Error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -130,37 +102,38 @@ app.put('/updateProduct/:productName', async (req, res) => {
 
 app.post('/AddToCart', async (req, res) => {
     const { ProductName,Quantity} = req.body;
+    const quan = parseInt(Quantity);
     const user = req.session.user;
     const ID = parseInt(user.UserID);
     try {   
-        // Connect to the database
-        const pool = await sql.connect(config);
-
-        // Use parameterized queries to prevent SQL injection
         const request = pool.request();
 
-        // Insert data into the database
-        const query = await sql.query`BEGIN 
+        request.input('PN',sql.VarChar,ProductName);
+        request.input('Quan',sql.Int,quan);
+        request.input('ID',sql.Int,ID);
+
+
+        const query = `BEGIN 
         
         DECLARE @ProdID int,@Price int,@Total int;
 
-        SELECT @Price = Price FROM tbl_Product WHERE ProductName = ${ProductName};
-        SET @Total = @Price * ${Quantity};
-        SELECT @ProdID = ProductID FROM tbl_Product WHERE ProductName = ${ProductName};
+        SELECT @Price = Price FROM tbl_Product WHERE ProductName = @PN;
+        SET @Total = @Price * @Quan;
+        SELECT @ProdID = ProductID FROM tbl_Product WHERE ProductName = @PN;
         BEGIN
-        IF EXISTS (SELECT 1 FROM tbl_Cart WHERE ProductID = @ProdID AND UserID = ${ID})
+        IF EXISTS (SELECT 1 FROM tbl_Cart WHERE ProductID = @ProdID AND UserID = @ID)
         UPDATE tbl_Cart
-        SET Quantity = Quantity + ${Quantity}, Price = Price * (Quantity + ${Quantity})
+        SET Quantity = Quantity + @Quan, Price = Price * (Quantity + @Quan)
         WHERE ProductID = @ProdID
         ELSE
-        INSERT INTO tbl_Cart VALUES (${Quantity},@Total,${ID},@ProdID);
+        INSERT INTO tbl_Cart VALUES (@Quan,@Total,@ID,@ProdID);
         END
 		END  
         `;
 
         const result = await request.query(query);
+        res.status(200).json({ message: 'Added to Cart successfully' });
 
-        res.status(200).json({ message: 'Product saved successfully', result });
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
@@ -172,27 +145,26 @@ app.put('/UpdateCart', async (req, res) => {
     const user = req.session.user;
     const ID = parseInt(user.UserID);
     try {   
-        // Connect to the database
-        const pool = await sql.connect(config);
-
-        // Use parameterized queries to prevent SQL injection
         const request = pool.request();
 
-        // Insert data into the database
-        const query = await sql.query`
+        request.input('PN',sql.VarChar,ProductN);
+        request.input('Quan',sql.Int,Quantity);
+        request.input('ID',sql.Int,ID);
+
+        const query =`
         BEGIN
-            DECLARE @Quantity int = ${Quantity};
-            DECLARE @Price int = (SELECT Price FROM tbl_Product WHERE ProductName LIKE ${ProductN});
+            DECLARE @Quantity int = @Quan;
+            DECLARE @Price int = (SELECT Price FROM tbl_Product WHERE ProductName LIKE @PN);
             DECLARE @TotalPrice int = @Quantity * @Price
             UPDATE tbl_Cart 
             SET Quantity = @Quantity , Price = @TotalPrice
-            WHERE UserID = ${ID} AND ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName LIKE ${ProductN});
+            WHERE UserID = @ID AND ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName LIKE @PN);
         END
         `;
 
         const result = await request.query(query);
 
-        res.status(200).json({ message: 'Product Updated successfully', result });
+        res.status(200).json({ message: 'Cart Updated successfully' });
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
@@ -203,45 +175,39 @@ app.put('/UpdateCart', async (req, res) => {
 //Delete
 app.delete('/DeleteProduct/:productName', async (req, res) => {
     const productName = req.params.productName;
-
-
-
     try{
-        await sql.connect(config);
+        const request = pool.request();
 
-        const ressult = await sql.query`
+        request.input('@PN',sql.VarChar,productName);
+
+        const query = `
         DELETE FROM tbl_Product WHERE ProductName = ${productName}
         `;
-        if(ressult.rowsAffected[0]>0){
-            res.status(200).json({ message: 'Product Delete successfully' });
-            
-        }
-        else{
-            res.status(404).json({ message: 'Product not found' });
-        }
+        const result = await request.query(query);
+        res.status(200).send('Product Deleted');
     }
     catch(err){
-        console.log(err);
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
 //SignUp
 app.post('/SignUp', async (req, res) => {
-    console.log("Request Body:", req.body);
     const { name, num, Password } = req.body;
 
     try {
-        const request = pool.request();
-        request.input('name', sql.NVarChar, name);
-        request.input('number', sql.NVarChar, num);
-        request.input('Password',sql.NVarChar,Password);
-        const result = await request.query("INSERT INTO tbl_User (Name,MobileNum,Password,Type) VALUES (@name, @number,@Password,'Customer')");
+        const request = pool.request()
+        .input('name', sql.NVarChar, name)
+        .input('number', sql.NVarChar, num)
+        .input('Password',sql.NVarChar,Password);
+        const query = `INSERT INTO tbl_User (Name,MobileNum,Password,Type) VALUES (@name, @number,@Password,'Customer');`;
+        const result = await request.query(query);
             
-        console.log("Data successfully inserted!");
-        res.send('Data successfully inserted!' + name + email);
+        res.status(200).json({messages: 'Sign Up Successful'});
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error inserting data into database');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -251,12 +217,11 @@ app.post('/LogIn', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const pool = await sql.connect(config);
-        const result = await pool.request()
-            .input('username', sql.NVarChar, username)
-            .query('SELECT * FROM tbl_User WHERE Name = @username');
+        const request = await pool.request()
+        .input('username', sql.NVarChar, username)
+        .query('SELECT * FROM tbl_User WHERE Name = @username');
 
-        const user = result.recordset[0]; // Retrieve the first user from the recordset
+        const user = request.recordset[0]; // Retrieve the first user from the recordset
 
         if (user && user.Password === password) { 
             //console.log(req.session);
@@ -301,21 +266,16 @@ app.get('/api/current_user', (req, res) => {
     }
   });
 
-// Route for uploading an image
+
 app.post('/upload', upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).send('No file uploaded');
         }
 
-        // Read the uploaded image file
         const data = fs.readFileSync(req.file.path);
 
-        // Connect to the SQL Server database
-        const pool = await sql.connect(config);
-
-        // Insert the image data into the database
-        const result = await pool.request()
+        const request = await pool.request()
         
         .input('Image', sql.VarBinary, data)
         .input('Pname', sql.VarChar, req.body.productName)
@@ -325,31 +285,19 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         .input('Cat', sql.Int, req.body.Cat)
         .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@Image);");
 
-       
-
-
-        // Delete the temporary file after upload
         fs.unlinkSync(req.file.path);
 
-        res.sendStatus(200); // Send a success response
+        res.sendStatus(200);
     } catch (error) {
         console.error('Error uploading image:', error);
         res.status(500).send('Error uploading image');
     }
 });
-// Serve the HTML form for uploading images
+
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/Index.html');
+    res.sendFile('/Landing.html');
 });
 
-// Fetch admin
-// app.get('/api/admin', (req, res) => {
-//     const query = 'SELECT UserID FROM tbl_User WHERE Type = "Admin"';
-//     config.query(query, (err, results) => {
-//         if (err) throw err;
-//         res.send(results[0]);
-//     });
-// });
 
 app.get('/Admin', async (req, res) => {
     const Type = "Admin";
@@ -361,11 +309,7 @@ app.get('/Admin', async (req, res) => {
         
         const result = await request.query(query);
         
-        const Admin = result.recordset.map(admin => {
-            return {
-                UserID: admin.UserID
-            };
-        });
+        const Admin = result.recordset;
         
         res.json(Admin);
     } catch (err) {
@@ -374,7 +318,80 @@ app.get('/Admin', async (req, res) => {
     }
 });
 
+    app.post('/create-payment-link', async (req, res) => {
+        const { amount } = req.body;
+      
+        const options = {
+          method: 'POST',
+          url: 'https://api.paymongo.com/v1/links',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            authorization: 'Basic c2tfdGVzdF9jcXk0ak5BNHUyTHIxcXBKR2E2OTg1Mkc6'
+          },
+          data: {
+            data: {
+              attributes: {
+                amount: amount,  
+                description: 'Payment'
+              }
+            }
+          }
+        };
+      
+        try {
+          const response = await axios.request(options);
+          res.status(200).json(response.data);
+        } catch (error) {
+          console.error('Error creating payment link:', error);
+          res.status(500).json({ error: error.message });
+        }
+      });
 
+
+      app.post('/archive-link', async (req, res) => {
+        const { ID } = req.body;
+    
+        try {
+            const options = {
+                method: 'POST',
+                url: `https://api.paymongo.com/v1/links/${ID}/archive`,
+                headers: {
+                    accept: 'application/json',
+                    authorization: 'Basic c2tfdGVzdF9jcXk0ak5BNHUyTHIxcXBKR2E2OTg1Mkc6'
+                }
+            };
+    
+            const response = await axios.request(options);
+            console.log(response.data);
+            res.status(200).json(response.data);
+    
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Failed to archive payment link' });
+        }
+    });
+
+      app.post('/retrieve-payment-link', async (req, res) => {
+    const { reference_number } = req.body;
+        //console.log(reference_number);
+    try {
+        const options = {
+            method: 'GET',
+            url: `https://api.paymongo.com/v1/links?reference_number=${reference_number}`,
+            headers: {
+                accept: 'application/json',
+                authorization: 'Basic c2tfdGVzdF9jcXk0ak5BNHUyTHIxcXBKR2E2OTg1Mkc6', 
+            },
+        };
+
+        const response = await axios.request(options);
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.error('Error retrieving payment link:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: error.response ? error.response.data : 'Internal Server Error' });
+    }
+});
 // app.post('/Chat', (req, res) => {
 //     const { sender_id, receiver_id, message } = req.body;
 //     const query = 'INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (?, ?, ?)';
@@ -390,15 +407,29 @@ app.post('/Chat', async (req, res) => {
 
     const user = req.session.user;
     const ID = parseInt(user.UserID);
+    const query = `BEGIN
+                    DECLARE @UserID INT, @Admin INT, @ConvoID INT, @LatestConvo INT
+                    SET @UserID = @Sender
+                    SET @LatestConvo = (SELECT ISNULL(MAX(ConversationID),0) FROM tbl_message)
+                    SET @Admin = (SELECT UserID FROM tbl_User WHERE Type = 'Admin' )
+                    IF EXISTS (SELECT 1 FROM tbl_message WHERE (SenderID = @UserID AND ReceiverID = @Admin) OR (SenderID = @Admin AND ReceiverID = @UserID))
+                        BEGIN
+                            INSERT INTO tbl_message (SenderID, ReceiverID, message, ConversationID,Status) VALUES (@UserID,@Admin,@message,(SELECT TOP 1 ConversationID FROM tbl_message WHERE (SenderID = @UserID AND ReceiverID = @Admin) OR (SenderID = @Admin AND ReceiverID = @UserID)),DEFAULT)
+                        END
+                    ELSE 
+                        BEGIN
+                            INSERT INTO tbl_message (SenderID, ReceiverID, message, ConversationID,Status) VALUES (@UserID,@Admin,@message,@LatestConvo + 1,DEFAULT)
+                        END
+                    END`;
     try {
         const request = pool.request();
         request.input('Sender', sql.Int, ID);
         request.input('message',sql.Text,message);
-        const result = await request.query("INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (@Sender,(SELECT UserID FROM tbl_User WHERE Type = 'Admin'),@message)");
-        res.send('Chat successfully inserted!');
+        const result = await request.query(query);
+        res.status(200).send('Chat successfully!');
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error inserting data into database');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -406,7 +437,19 @@ app.post('/Chat/Admin', async (req, res) => {
     const CustomerName = req.query.Name;
     //console.log(CustomerName);
     const { message } = req.body;
-    console.log(CustomerName);
+    const query = `BEGIN
+                    DECLARE @LatestConvo INT, @recei INT
+                    SET @LatestConvo = (SELECT ISNULL(MAX(ConversationID),0) FROM tbl_message)
+                    SET @recei = (SELECT UserID FROM tbl_User WHERE Name LIKE @Receiver)
+                    IF EXISTS (SELECT 1 FROM tbl_message WHERE (SenderID = @Sender AND ReceiverID = @recei) OR (SenderID = @recei AND ReceiverID = @Sender))
+                        BEGIN
+                            INSERT INTO tbl_message (SenderID, ReceiverID, message, ConversationID,Status) VALUES (@Sender,@recei,@message,(SELECT TOP 1 ConversationID FROM tbl_message WHERE (SenderID = @Sender AND ReceiverID = @recei) OR (SenderID = @recei AND ReceiverID = @Sender)),DEFAULT)
+                        END
+                    ELSE 
+                        BEGIN
+                            INSERT INTO tbl_message (SenderID, ReceiverID, message,ConversationID,Status) VALUES (@Sender,@recei,@message,@LatestConvo + 1,DEFAULT)
+                        END
+                    END`;
     const user = req.session.user;
     const ID = parseInt(user.UserID);
     try {
@@ -414,42 +457,85 @@ app.post('/Chat/Admin', async (req, res) => {
         request.input('Sender', sql.Int, ID);
         request.input('Receiver',sql.VarChar,CustomerName)
         request.input('message',sql.Text,message);
-        const result = await request.query("INSERT INTO tbl_message (SenderID, ReceiverID, message) VALUES (@Sender,(SELECT UserID FROM tbl_User WHERE Name LIKE @Receiver),@message)");
-        res.send('Chat successfully inserted!');
+        const result = await request.query(query);
+        res.status(200).send('Chat successfully inserted!');
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error inserting data into database');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
 app.get('/Inbox', async (req, res) => {
     const query = `
-        SELECT u.Name, m.Message
-        FROM tbl_message m
-        INNER JOIN tbl_User u ON u.UserID = m.SenderID
-        WHERE u.Type = 'Customer'
-        AND m.ID IN (
-            SELECT MAX(ID)
-            FROM tbl_message
-            WHERE SenderID = m.SenderID
-        ) ORDER BY ID DESC;
+        SELECT 
+            m.message,
+            u.Name AS CustomerName,
+            (SELECT COUNT(*) 
+            FROM tbl_message 
+            WHERE conversationID = m.conversationID
+            AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Name = 'Zappnott' AND Type = 'Admin') 
+            AND SenderID = u.UserID 
+            AND Status = 'Unread') AS Notif_Count
+        FROM 
+            tbl_message m
+        JOIN 
+            tbl_User u ON (
+                (u.UserID = m.ReceiverID AND u.Type = 'Customer') 
+                OR 
+                (u.UserID = m.SenderID AND u.Type = 'Customer')
+            )
+        WHERE 
+            m.ID = (
+                SELECT 
+                    MAX(ID) 
+                FROM 
+                    tbl_message 
+                WHERE 
+                    conversationID = m.conversationID
+                    AND (SenderID = (SELECT UserID FROM tbl_User WHERE Name = 'Zappnott' AND Type = 'Admin') 
+                        OR ReceiverID = (SELECT UserID FROM tbl_User WHERE Name = 'Zappnott' AND Type = 'Admin'))
+            )
+        ORDER BY 
+            m.conversationID;
+
     `;
     try {
-        const pool = await sql.connect(config);
         const result = await pool.request()
             .query(query);
         const messages = result.recordset;
         res.json(messages);
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
+app.get('/ChatNotif', async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    const query = `
+        SELECT COUNT(*) AS Notif FROM tbl_message WHERE ReceiverID = @Admin AND Status = 'Unread'
+    `;
+    try {
+        const result = await pool.request()
+            .input('Admin',sql.Int,ID)
+            .query(query);
+        const notif = result.recordset[0].Notif;
+        res.json({ Notif: notif });
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
 
 //Resume later
 app.get('/api/messages', async (req, res) => {
     const user = req.session.user;
+
+    if(!user || user.UserID === undefined){
+        return res.redirect('SignIn.html');
+    }
+
     const ID = parseInt(user.UserID);
     const query = `
         SELECT * FROM tbl_message 
@@ -458,15 +544,14 @@ app.get('/api/messages', async (req, res) => {
     `;
 
     try {
-        const pool = await sql.connect(config);
         const result = await pool.request()
             .input('sender_id', sql.Int, ID)
             .query(query);
         const messages = result.recordset;
         res.json(messages);
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -476,9 +561,19 @@ app.get('/api/messages/Admin', async (req, res) => {
     //console.log(CustomerName);
     const ID = parseInt(user.UserID);
     const query = `
+        BEGIN
+        BEGIN
         SELECT * FROM tbl_message 
-        WHERE (SenderID = (SELECT UserID FROM tbl_User WHERE Name = @Receiver) AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
-        OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Name = @Receiver))
+        WHERE (SenderID = (SELECT UserID FROM tbl_User WHERE Name = @Receiver) AND ReceiverID = @sender_id) 
+        OR (SenderID = @sender_id AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Name = @Receiver))
+        END
+        BEGIN
+        UPDATE tbl_message
+        SET Status = 'Read'
+        WHERE SenderID = (SELECT UserID FROM tbl_User WHERE Name = @Receiver) AND ReceiverID = @sender_id
+        END
+        END
+        
     `;
 
     try {
@@ -490,43 +585,25 @@ app.get('/api/messages/Admin', async (req, res) => {
         const messages = result.recordset;
         res.json(messages);
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
-
-// API to get messages
-// app.get('/api/messages/:sender_id/:receiver_id', (req, res) => {
-//     const { sender_id, receiver_id } = req.params;
-//     const query = 'SELECT * FROM tbl_message WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)';
-//     config.query(query, [sender_id, receiver_id, receiver_id, sender_id], (err, results) => {
-//         if (err) throw err;
-//         res.send(results);
-//     });
-// });
-
-// Route to fetch data from MSSQL and send it as JSON
 app.get('/products', async (req, res) => {
     try {
-        // Connect to the database
-        await sql.connect(config);
-        
-        // Get the category from the query parameter
+        const request = pool.request();
         const category = req.query.category || '';
-
-        // Create the base query
         let query = 'SELECT ProductName, Price, Description, ProductImage FROM tbl_Product INNER JOIN tbl_Category ON tbl_Product.CategoryID = tbl_Category.CategoryID';
-
-        // Modify the query if a category is provided
+        
         if (category) {
             query += ` WHERE CategoryName LIKE '${category}'`;
         }
+
         //console.log(category);
-        // Execute the query
-        const result = await sql.query(query);  
+
+        const result = await request.query(query);  
         
-        // Convert VARBINARY images to Base64 encoded strings
         const products = result.recordset.map(product => {
             const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
             return {
@@ -538,12 +615,10 @@ app.get('/products', async (req, res) => {
             };
         });
 
-        // Send the modified result as JSON
         res.json(products);
     } catch (err) {
-        // Error handling
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -553,20 +628,15 @@ app.get('/User', async (req, res) => {
     const user = req.session.user;
     const ID = parseInt(user.UserID);
     try{
-        await sql.connect(config);
         const request = pool.request();
         request.input('UserID', sql.Int, ID);
         const query = 'SELECT Name FROM tbl_User WHERE UserID = @UserID';
         const result = await request.query(query);
-        const Name = result.recordset.map(name => {
-            return{
-                UserName: name.Name
-            };
-        });
+        const Name = result.recordset;
         res.json(Name);
     }catch(err){
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -574,51 +644,27 @@ app.get('/Order', async (req, res) => {
     const user = req.session.user;
             const ID = parseInt(user.UserID);
     try {
-        // Connect to the database
-        await sql.connect(config);
         const request = pool.request();
         request.input('UserID', sql.Int, ID);
-        // Query to select productName, productPrice, and productImage columns
         const query = `SELECT OrderID, TransactionID, convert(varchar, Date, 0) AS Date, Status FROM tbl_Order WHERE UserID = @UserID`;
         const result = await request.query(query);
-        // Convert VARBINARY images to Base64 encoded strings
-        const products = result.recordset.map(product => {
-            //const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
-            return {
-                OrderedDate: product.Date,
-                productOrder: product.OrderID,
-                Status: product.Status,
-                Transac: product.TransactionID
-                // productName: product.ProductName,
-                // productPrice: product.Price,
-                // productDes: product.Description,
-                // productImage: base64Image
-                
-            };
-        });
+        const products = result.recordset;
         
-        // Send the modified result as JSON
         res.json(products);
     } catch (err) {
-        // Error handling
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 //OrderList AdminView
 app.get('/Orders', async (req, res) => {
            
     try {
-        // Connect to the database
-        await sql.connect(config);
         const request = pool.request();
-        // Query to select productName, productPrice, and productImage columns
         const query = `SELECT TransactionID,Status, convert(varchar, Date, 0) AS Date, Name, TotalPrice
                        FROM tbl_Order INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID;`;
         const result = await request.query(query);
-        // Convert VARBINARY images to Base64 encoded strings
         const products = result.recordset.map(product => {
-            //const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
             return {
                 OrderedDate: product.Date,
                 productOrder: product.TransactionID,
@@ -628,33 +674,26 @@ app.get('/Orders', async (req, res) => {
 
             };
         });
-        
-        // Send the modified result as JSON
         res.json(products);
     } catch (err) {
-        // Error handling
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
 app.get('/OrderDetails', async (req, res) => {
     const transactionId = req.query.transac;
     try {
-        // Connect to the database
-        await sql.connect(config);
         const request = pool.request();
         request.input('Transac', sql.VarChar, transactionId);
         //console.log(transactionId);
-        // Query to select productName, productPrice, and productImage columns
         const query = `SELECT TransactionID,Email,MobileNum, convert(varchar, Date, 0) AS Date, Status, TotalPrice, Name
                        FROM tbl_Order
                        INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID
                        WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), tbl_Order.OrderID), 4) = @Transac;`;
         const result = await request.query(query);
-        // Convert VARBINARY images to Base64 encoded strings
         const products = result.recordset.map(product => {
-            //const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
+
             return {
                 OrderedDate: product.Date,
                 productOrder: product.TransactionID,
@@ -665,13 +704,11 @@ app.get('/OrderDetails', async (req, res) => {
                 Status: product.Status
             };
         });
-        console.log(products);
-        // Send the modified result as JSON
+        //console.log(products);
         res.json(products);
     } catch (err) {
-        // Error handling
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -679,27 +716,24 @@ app.put('/UpdateStat', async (req, res) => {
     const { status, TransID } = req.body;
 
     try {
-        const request = pool.request();
-        request.input('Stat', sql.VarChar, status);
-        request.input('TransID',sql.VarChar,TransID);
-        
-        const result = await request.query("UPDATE tbl_Order SET Status = @Stat WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OrderID), 4) = @TransID");
+        const request = pool.request()
+        .input('Stat', sql.VarChar, status)
+        .input('TransID',sql.VarChar,TransID);
+        await request.query("UPDATE tbl_Order SET Status = @Stat WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OrderID), 4) = @TransID");
             
         console.log("Status successfully Updated!");
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error inserting data into database');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
 app.get('/OrderItem/:productOrder', async (req, res) => {
     const productOrder = req.params.productOrder;
+    //console.log(productOrder);
     try {
-        // Connect to the database
-        await sql.connect(config);
         const request = pool.request();
         request.input('OrderID', sql.VarChar, productOrder);
-        // Query to select order items based on OrderID
         
         const query = `
             SELECT P.ProductImage, P.ProductName, OI.Quantity, OI.Price
@@ -708,8 +742,7 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
             WHERE OI.OrderID = @OrderID
         `;
         const result = await request.query(query);
-       
-        // Convert result to the desired format
+
         const orderItems = result.recordset.map(item => {
             const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
             return {
@@ -720,25 +753,61 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
             };
         });
 
-        // Send the modified result as JSON
         res.json(orderItems);
     } catch (err) {
-        // Error handling
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+app.get('/Notif', async (req, res) => {
+    const user = req.session.user;
+
+    if(!user || user.UserID === undefined){
+        return res.redirect('/SignIN.html');
+    }
+
+    const ID = parseInt(user.UserID);
+    try {
+        const request = pool.request()
+        .input('UserID', sql.Int, ID);
+        
+        const query = `
+            SELECT DISTINCT CONCAT('Your Order ' , tbl_Order.TransactionID , ' is ' , NewStatus) AS Content, convert(varchar, NotificationDate, 0)AS NotificationDate, 
+            tbl_Product.ProductImage, NotificationID, tbl_notification.Status FROM tbl_notification 
+            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
+            INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
+            INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+            WHERE tbl_Order.UserID = @UserID AND tbl_Product.ProductID =(SELECT MIN(tbl_Product.ProductID)
+            FROM tbl_OrderItem INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+            WHERE tbl_OrderItem.OrderID = tbl_Order.OrderID) ORDER BY NotificationID DESC ;
+        `;
+        const result = await request.query(query);
+       
+        const orderItems = result.recordset.map(item => {
+            const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
+            return {
+                Content: item.Content,
+                Date: item.NotificationDate,
+                productImage: base64Image,
+                Status: item.Status
+            };
+        });
+
+        res.json(orderItems);
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
 app.get('/Items/:productOrder', async (req, res) => {
     const productOrder = req.params.productOrder;
     try {
-        // Connect to the database
-        await sql.connect(config);
-        const request = pool.request();
-        request.input('OrderID', sql.VarChar, productOrder);
-        console.log(productOrder)
-        // Query to select order items based on OrderID
-        
+        const request = pool.request()
+        .input('OrderID', sql.VarChar, productOrder);
+        //console.log(productOrder)
+
         const query = `
             SELECT P.ProductImage, P.ProductName, OI.Quantity, OI.Price
             FROM tbl_OrderItem OI
@@ -746,8 +815,7 @@ app.get('/Items/:productOrder', async (req, res) => {
             WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OI.OrderID), 4) = @OrderID
         `;
         const result = await request.query(query);
-       
-        // Convert result to the desired format
+
         const orderItems = result.recordset.map(item => {
             const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
             return {
@@ -758,12 +826,11 @@ app.get('/Items/:productOrder', async (req, res) => {
             };
         });
 
-        // Send the modified result as JSON
+
         res.json(orderItems);
     } catch (err) {
-        // Error handling
-        console.error(err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -771,14 +838,8 @@ app.get('/Cart', async (req, res) => {
     try {
         const user = req.session.user;
         const ID = parseInt(user.UserID);
-        
-        // Log UserID for debugging
-
-        const pool = await sql.connect(config);
-        const request = pool.request();
-
-        request.input('UserID', sql.Int, ID);
-        // Use parameterized queries to prevent SQL injection
+        const request = pool.request()
+        .input('UserID', sql.Int, ID);
         const query = `
             SELECT 
                 tbl_Product.ProductName, 
@@ -800,13 +861,7 @@ app.get('/Cart', async (req, res) => {
 
         
 
-        const result = await request.query(query);
-
-        // Log the result for debugging
-
-
-        if (result.recordset) {
-            // Convert VARBINARY images to Base64 encoded strings
+            const result = await request.query(query);
             const productsCart = result.recordset.map(productCart => {
                 const base64Image = Buffer.from(productCart.ProductImage, 'binary').toString('base64');
                 return {
@@ -816,41 +871,26 @@ app.get('/Cart', async (req, res) => {
                     productImage: base64Image
                 };
             });
-            // Send the modified result as JSON
             res.json(productsCart);
-        } else {
-            console.log('No records found');
-            res.status(404).send('No records found');
-        }
     } catch (err) {
-        // Error handling
-        console.error('Error:', err);
-        res.status(500).send('Server Error');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 //PlaceOrder
 app.post('/PlaceOrder', async (req, res) => {
     const { orders } = req.body;
-    const user = req.session.user;
-
-    // Check if the user is authenticated
-    if (!user) {
-        return res.status(401).json({ error: 'User not authenticated' });
-    }
 
     try {
-        // Connect to the database
-        const pool = await sql.connect(config);
+
         const user = req.session.user;
             const ID = parseInt(user.UserID);
             const order =  pool.request()
                 .input('ID',sql.Int,ID)
                 .query('INSERT INTO tbl_Order ([Date], UserID, Status) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT)');
-
-        // Execute the query for each order
         for (const order of orders) {
             
-            const query = await pool.request()
+            const request = await pool.request()
                 .input('productName', sql.NVarChar(255), order.OrderProductName)
                 .input('quantity', sql.Int, order.OrderQuantity)
                 .query(`
@@ -878,15 +918,13 @@ app.post('/PlaceOrder', async (req, res) => {
                     END
                 `);
 
-            // If needed, handle the result here
+
         }
 
-        // If everything is successful, send a response
-        res.status(200).json({ message: 'Order placed successfully' });
+        res.status(200).json({message: 'Order placed successfully'});
     } catch (error) {
-        // If an error occurs during database operations, send an error response
-        console.error('Error placing order:', error);
-        res.status(500).json({ error: 'An error occurred while placing the order' });
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
@@ -894,19 +932,70 @@ app.put('/Cancel', async (req, res) => {
     const { status, OrderID } = req.body;
 
     try {
-        const request = pool.request();
-        request.input('Stat', sql.VarChar, status);
-        request.input('TransID',sql.VarChar,OrderID);
-        
-        const result = await request.query("UPDATE tbl_Order SET Status = @Stat WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OrderID), 4) = @TransID");
-            
-        console.log("Status successfully Updated!");
+        const request = pool.request()
+        .input('Stat', sql.VarChar, status)
+        .input('TransID',sql.VarChar,OrderID);
+        const result = await request.query("UPDATE tbl_Order SET Status = @Stat WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OrderID), 4) = @TransID");     
+        //console.log(result);
+        res.status(200).json({message: "Status successfully Updated!", result});
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error inserting data into database');
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
+app.get('/NotifBadge', async (req, res) => {
+    const user = req.session.user;
+
+    if(!user || user.UserID === undefined){
+        return res.redirect('/Sign.html');
+    }
+    const ID = parseInt(user.UserID);
+    try {
+
+        
+        const request = pool.request()
+        .input('UserID', sql.Int, ID);
+        
+        const query = `
+            SELECT COUNT(NotificationID) AS NotificationID FROM tbl_notification
+            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
+            WHERE tbl_Notification.Status = 'unread' AND tbl_Order.UserID = @UserID
+        `;
+        const result = await request.query(query);
+
+        const notif = result.recordset[0].NotificationID
+
+        //console.log(notif);
+
+        res.json({NotificationID : notif});
+        
+        
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+
+app.put('/UpdateNotif', async (req, res) => {
+    const { UpdatedNotif } = req.body;
+    //console.log(UpdatedNotif);
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    try {
+        //console.log(UpdatedNotif);
+        const request = pool.request()
+        .input('UserID', sql.Int, ID)
+        .input('Status',sql.VarChar,UpdatedNotif)
+        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID WHERE tbl_notification.Status = 'unread' AND tbl_Order.UserID = @UserID");
+
+        res.status(200).json();
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
 
 //Server itu guys
 app.listen(port, () => {

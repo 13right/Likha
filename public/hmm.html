@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger Chat UI</title>
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+<body class="bg-gray-100">
+
+<div class="flex justify-center items-center h-screen">
+    <div class="bg-white w-full max-w-md rounded-lg shadow-lg flex flex-col">
+        <!-- Header -->
+        <div class="bg-sign text-white py-4 px-6 rounded-t-lg">
+            <h2 class="text-lg font-semibold">Chat with User</h2>
+        </div>
+
+        <!-- Messages -->
+        <div class="flex-1 p-4 space-y-4 overflow-y-auto">
+            <!-- Message from other user -->
+            <div class="flex items-start">
+                <div class="bg-outline rounded-lg p-3 max-w-xs">
+                    <p class="text-sm">Hello! How are you?</p>
+                </div>
+            </div>
+
+            <!-- Message from self -->
+            <div class="flex items-start justify-end">
+                <div class="bg-[#6cc4f4] text-[#FFF] rounded-lg p-3 max-w-xs">
+                    <p class="text-sm">I'm good, thanks! How about you?</p>
+                </div>
+            </div>
+
+            <!-- More messages -->
+            <!-- You can repeat the structure above for more messages -->
+        </div>
+
+        <!-- Input -->
+        <div class="bg-gray-200 p-4 rounded-b-lg flex items-center space-x-2">
+            <input type="text" placeholder="Type a message..." class="flex-1 py-2 px-4 rounded-full border border-gray-300 focus:outline-none">
+            <button class="bg-blue-500 text-white p-2 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.94 6.106a1 1 0 00-.646 1.173l1.359 5.67a1 1 0 001.03.78l2.65-.26a1 1 0 01.893.427l1.693 2.3a1 1 0 001.55.038l2.43-2.43a1 1 0 00.14-1.265l-5.67-8.736a1 1 0 00-1.332-.315L3.94 5.557a1 1 0 00-.78 1.03l-.22 2.64z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

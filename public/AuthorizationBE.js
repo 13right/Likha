@@ -73,6 +73,7 @@ function LogIn() {
                 window.location.href = "Home.html";
             } else if (xhr.status === 401) {
                 alert("Invalid username or password");
+                document.getElementById('Passwordtxt').value = '';
             }  else if (xhr.status === 250) {
                 alert("Admin");
                 localStorage.setItem("userRole", "admin");
@@ -91,7 +92,7 @@ function LogIn() {
 function LogOut() {
     fetch('/LogOut', {
         method: 'POST',
-        credentials: 'include', // Ensure cookies are included in the request
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -99,7 +100,6 @@ function LogOut() {
     .then(response => {
         if (response.ok) {
             alert('Logout successful');
-            // Redirect to login page or home page
             window.location.href = '/SignIn.html';
         } else {
             alert('Error logging out');

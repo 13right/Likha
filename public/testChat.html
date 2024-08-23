@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link href="./style.css" rel="stylesheet">
+</head>
+<style>
+    /* Custom CSS for Tailwind */
+    .search-bar.expanded {
+        width: 12rem; /* Width when expanded */
+        opacity: 1;
+        padding-left: 2.5rem; /* Space for the icon on the left */
+    }
+
+    .search-icon.expanded {
+        transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
+    }
+</style>
+
+
+
+
+<body>
+    <div class="relative flex items-center">
+        <input type="text" id="search-bar" class="search-bar w-0 opacity-0 transition-all duration-500 ease-in-out px-4 py-2 rounded-full border border-gray-300 focus:opacity-100 focus:w-48" placeholder="Search...">
+        <div class="search-icon cursor-pointer absolute right-2 transition-all duration-500 ease-in-out" onclick="expandSearchBar()">
+            <!-- Use an SVG or FontAwesome icon here -->
+            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-3.5-3.5m0 0a5 5 0 1110 0 5 5 0 01-10 0zm-7 7a10 10 0 1110-10 10 10 0 01-10 10z"></path>
+            </svg>
+        </div>
+    </div>
+    
+    
+    
+    
+
+    <div id="userInfo"></div>  <!-- Example user ID for the current logged-in user -->
+    
+    <div class="container mx-auto p-4 bg-white rounded-lg shadow-lg max-w-lg">
+        <h2 class="text-2xl font-bold mb-4 text-center">Chat with Customer</h2>
+        <div id="chat-box" class="border p-4 h-96 overflow-y-scroll bg-gray-50 rounded-lg">
+            <!-- Messages will be appended here -->
+        </div>
+        <form id="message-form" class="mt-4 flex">
+            <input type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded-r-lg">Send</button>
+        </form>
+    </div>
+
+
+    <script>
+        // Fetch the user ID from the div with id "User"
+
+
+
+
+        // Fetch the admin user ID
+        // fetch('/Admin')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         receiverId = data.userId;
+        //         fetchMessages();
+        //     });
+
+
+        async function getCurrentUser() {
+            try {
+                const response = await fetch('/api/current_user');
+                if (response.ok) {
+                    const user = await response.json();
+                    return user; // Assuming user object contains user ID
+                } else {
+                    window.location.href = '/SignIn.html'; // Redirect to sign-in if not authenticated
+                }
+            } catch (error) {
+                console.error('Error fetching current user:', error);
+            }
+        }
+    let previousMessageCount = 0;
+    function scrollToBottom() {
+    const chatBox = document.getElementById('chat-box');
+    chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function fetchMessages() {
+    
+    const userID = await getCurrentUser();
+    fetch('/api/messages')
+    .then(response => response.json())
+    .then(messages => {
+        //console.log(messages);
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML = ''; // Clear existing messages to avoid duplication
+        const ID = parseInt(userID);
+        console.log(ID);
+        messages.forEach(msg => {
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `
+                <div id="CC" class="flex items-start">
+                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+                        <p id="Content" class="text-sm">${msg.message}</p>
+                    </div>
+                </div>
+            `;
+            const ChatContainer = messageElement.querySelector('#CC');
+            const ChatBG = messageElement.querySelector('#Chats');
+                console.log(msg.SenderID);
+            if ( msg.SenderID === 3) {
+                ChatContainer.classList.add('justify-end');
+                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+                ChatBG.classList.remove('bg-outline');
+            } else {
+                ChatBG.classList.add('bg-outline');
+            }
+
+            chatBox.appendChild(messageElement);
+        });
+        // console.log(previousMessageCount);
+        // console.log(messages.length);
+        if (messages.length > previousMessageCount) {
+            scrollToBottom();
+            console.log("Scroll"); // Assuming you have a function to scroll to the bottom
+        }
+
+        previousMessageCount = messages.length;
+    })
+    .catch(error => {
+        console.error('Network error:', error);
+    });
+}
+
+// Call fetchMessages to start
+fetchMessages();
+setInterval(fetchMessages,2000);
+
+        // Send message
+        document.getElementById('message-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const message = document.getElementById('message-input').value;
+            fetch('/Chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            }).then(() => {
+                document.getElementById('message-input').value = '';
+                fetchMessages();
+            });
+        });
+
+        // Initial fetch of messages
+        fetchMessages();
+
+        function expandSearchBar() {
+    const searchBar = document.getElementById('search-bar');
+    const searchIcon = document.querySelector('.search-icon');
+    
+    searchBar.classList.toggle('expanded');
+    searchIcon.classList.toggle('expanded');
+}
+
+
+
+    </script>
+    <script src="AuthorizationBE.js"></script>
+</body>
+</html>

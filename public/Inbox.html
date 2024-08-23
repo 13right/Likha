@@ -20,11 +20,10 @@
         </nav>
     </div>
     <div class="bg-Likha min-h-screen pt-[5rem] p-[3rem] items-center">
-        <!-- Contents -->
 
         <div class="mt-[3rem] mx-auto relative w-[55rem] h-[40rem] rounded-lg bg-sign outline outline-[3px] outline-outline p-7" >
                 <div class="bg-Likha relative mx-auto w-[51rem] h-[36.5rem] rounded-lg">
-                    <p class="font-Inter relative ml-4 top-4 font-bold text-2xl">INBOX</p>
+                    <p class="font-Inter  relative ml-4 top-4 font-bold text-2xl">INBOX</p>
                     <div id="message" class=" w-auto h-[31rem] mx-4 mt-8  space-y-4 p-[2rem]">
                         
                     </div>
@@ -46,41 +45,48 @@ function Inbox() {
             const ItemList = document.getElementById('message');
             
             if (initialFetch) {
-                ItemList.innerHTML = ''; // Clear previous items on the initial fetch
+                ItemList.innerHTML = ''; 
                 initialFetch = false;
             }
                 ItemList.innerHTML = '';
             Items.forEach(Item => {
-                // Create HTML elements to display product information
+
                 const ItemElement = document.createElement('div');
                 ItemElement.innerHTML = `
                 <div id="Customer" class="bg-Likha min-w-min h-[4rem] p-2 outline-outline outline-1 outline rounded-lg cursor-pointer">
-                    <h1 id="Name" class="font-Montserrat text-lg font-semibold">${Item.Name}</h1>
+                    <div class="flex space-x-1">
+                    <h1 id="Name" class="font-Montserrat text-lg font-semibold">${Item.CustomerName}</h1>
+                    <span id="Notif" class="relative top-0 right-[-1] w-3 h-3 inline-flex items-center justify-center text-[8px] font-bold text-[#FFFFFF] bg-[#FF0000] rounded-full">${Item.Notif_Count}</span>
+                    </div>
                     <p>
-                    ${Item.Message}
+                    ${Item.message}
                     </p>
                 </div>
                 `;
                 ItemList.appendChild(ItemElement);
 
+                async function Notif(){
+                    const Notif = ItemElement.querySelector('#Notif')
+                    if(Item.Notif_Count == 0){
+                        Notif.classList.add('hidden');
+                    }
+                    else{
+                        Notif.classList.remove('hidden');
+                    }
+                }
+                Notif();
                 const Customer = ItemElement.querySelector('#Customer');
 
                     Customer.addEventListener('click', () => {
                     
-                    // Get the value of #Transac
                     const CustomerName = ItemElement.querySelector('#Name').textContent;
 
-                    // Construct the URL with the transacValue
-                    //const url = `/Orderdetails?id=${encodeURIComponent(transacValue)}`;
-
-                    // Store the transacValue in sessionStorage
                     sessionStorage.setItem('CustomerName', CustomerName);
                     
-                    // Redirect to OrderDetails.html
                     window.location.href = 'ChatWithCustomer.html';
                     
                 });
-
+            
             });
         });
 

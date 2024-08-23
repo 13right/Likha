@@ -3,291 +3,504 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./landingstyle.css">
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
-    <title>Zappnott</title>
+    <title>Landing Page</title>
 </head>
-<body class="bg-[#f7f8ea]">
-    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-10">
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const target = document.getElementById('target');
+    const Left = document.getElementById('Left');
+    const Right = document.getElementById('Right');
+    const AboutUs = document.getElementById('AboutUs');
+    const P = document.getElementById('p-tag-about');
+
+    const handleIntersect = (entries, observer) => {
+        entries.forEach(entry => {
+            console.log('Entry:', entry.target.id); // Log the ID of the intersecting element
+            if (entry.isIntersecting) {
+                if (entry.target === Left) {
+                    console.log('Left is in view');
+                    Left.classList.add('animation-fadeInLeft');
+                } else if (entry.target === Right) {
+                    console.log('Right is in view');
+                    Right.classList.add('animation-fadeInRight');
+                } else if (entry.target === AboutUs) {
+                    console.log('About is in view');
+                    AboutUs.classList.add('animation-Pop');
+                } else if (entry.target === target) {
+                    console.log('Target is in view');
+                    target.classList.add('fade-in-blur');
+                } else if (entry.target === P) {
+                    console.log('P is in view');
+                    P.classList.add('animtaion-Down');
+                }
+
+                // Optionally stop observing after it becomes visible
+                observer.unobserve(entry.target);
+            } else {
+                console.log(`${entry.target.id} is not in view`);
+            }
+        });
+    };
+
+    // Create a new Intersection Observer instance
+    const observer = new IntersectionObserver(handleIntersect, {
+        threshold: 0.1 // Adjust as needed
+    });
+
+    // Observe the target elements
+    observer.observe(target);
+    observer.observe(Left);
+    observer.observe(Right);
+    observer.observe(AboutUs);
+    observer.observe(P);
+});
+
+</script>
+<style>
+
+    .rotating-text p {
+    display: inline-flex;
+    margin: 0;
+    vertical-align: top;
+    }
+    .rotating-text p .word {
+        position: absolute;
+        display: flex;
+        opacity: 0;
+    }
+    .rotating-text p .word .letter {
+    transform-origin: center center 25px;
+    }
+    .rotating-text p .word .letter.out {
+    transform: rotateX(90deg);
+    transition: 0.32s cubic-bezier(0.6, 0, 0.7, 0.2);
+    }
+    .rotating-text p .word .letter.in {
+    transition: 0.38s ease;
+    }
+    .rotating-text p .word .letter.behind {
+    transform: rotateX(-90deg);
+    }
+        .w-1 {
+        color:#96A378 ;
+    }
+    .w-2 {
+        color:#f17d55 ;
+    }
+    .w-3 {
+        color: #2596be;
+    }
+
+    @keyframes Down{
+        0%{
+            opacity: 0;
+            transform: translateY(-20%);
+        }
+        100%{
+            opacity: 100;
+            transform: translateY(0%);
+        }
+    }
+    .animtaion-Down {
+        animation: Down 1.5s ease-in-out;
+    }
+   
+   @keyframes fadeInBlur {
+      0% {
+        opacity: 0;
+        filter: blur(10px);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+    .fade-in-blur {
+      animation: fadeInBlur 1s ease-out forwards;
+    }
+    .hidden {
+      opacity: 0;
+      filter: blur(10px);
+    }
+    @keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    }
+    .animation-fadeInLeft {
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+    }
+    @keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    }
+    .animation-fadeInRight {
+    animation: fadeInRight 1.5s ease-in-out forwards;
+    }
+    @keyframes Pop {
+    0%{
+        opacity: 0;
+        transform: translateY(50%);
+    }
+    100%{
+        opacity: 1;
+        transform: translate(0);
+    }
+    }
+    .animation-Pop {
+    animation: Pop 1.5s ease-in-out;
+    }
+
+</style>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50" >
         <nav class="md:flex md:items-center">   
-            <div>
-                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name="menu" id="menubutton">
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
             </div>
             <div class="">
-                <ul class="md:flex md:space-x-9 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
+                <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
                     <li class="my-6 md:my-0">
-                        <a href="/api/current_user" class="hover:text-outline duration-300">
+                        <a href="#main-container" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             HOME
                         </a>
                     </li>
-                    <li class="my-6 md:my-0">
-                        <a href="#Shop" class="hover:text-outline duration-300">
-                            SHOP
-                        </a>
+                    <li>
+                        <div class="relative inline-block text-left">
+                            <div>
+                              <button type="button" class="inline-flex w-full justify-center font-Montserrat text-[12px] rounded-md bg-Likha text-sm font-semibold hover:text-outline duration-300" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                                SHOP
+                                <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                </svg>
+                              </button>
+                            </div>
+                          
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                  const menuButton = document.getElementById('menu-button');
+                                  const dropdownMenu = document.querySelector('[role="menu"]');
+                              
+                                  menuButton.addEventListener('click', function () {
+                                    dropdownMenu.classList.toggle('hidden');
+                                  });
+                              
+                                  document.addEventListener('click', function (event) {
+                                    if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                                      dropdownMenu.classList.add('hidden');
+                                    }
+                                  });
+                                });
+                              </script>
+                              
+                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden shadow-lg" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                              <div class="py-1" role="none">
+                                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                                <a href="AllCategory.html" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">All</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Dress</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Bag</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Jewelry</a>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#3D" class="hover:text-outline duration-300">
+                        <a href="#Shop" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             CUSTOMIZATION
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#about" class="hover:text-outline duration-300">
+                        <a href="/3D" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#contact" class="hover:text-outline duration-300">
+                        <a href="/3D" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
                 </ul>
             </div>
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <div class="relative flex items-center p-[0.75rem] pt-2">
+                    <input type="text" id="search-bar" class="search-bar w-0 h-8 opacity-0 transition-all duration-500 ease-in-out px-4 py-2 rounded-full border border-gray-300 focus:opacity-100 focus:w-48" placeholder="Search">
+
+                    <lord-icon
+                        id="search-icon"
+                        onclick="expandSearchBar()"
+                        src="https://cdn.lordicon.com/kkvxgpti.json"
+                        trigger="hover"
+                        class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
+                        style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
+                    </lord-icon>
+                </div>
+            
+
+                <a href="Profile.html" class="relative cursor-pointer inline-block p-[0.75rem]">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/bgebyztw.json"
+                        trigger="hover"
+                        stroke="bold"
+                        colors="primary:#000,secondary:#000"
+                        style="width:1.75rem;height:1.75rem;">
+                    </lord-icon>
+                </a>
+
+                <div class="relative cursor-pointer inline-block p-[0.75rem]">
+                    <lord-icon
+                        id="NotifIcon"
+                        src="https://cdn.lordicon.com/vspbqszr.json"
+                        trigger="hover"
+                        style="width:1.75rem;height:1.75rem;">
+                    </lord-icon>
+                </div>
+
+                <div class="relative cursor-pointer inline-block p-[0.5rem]">
+                    <lord-icon
+                        id="CartIcon"
+                        src="https://cdn.lordicon.com/taymdfsf.json"
+                        trigger="hover"
+                        stroke="bold"
+                        colors="primary:#121331,secondary:#121331"
+                        style="width:2rem;height:2rem;">
+                    </lord-icon>
+                </div>
+            </div>
+            
         </nav>
     </div>
-    <!-- this is a responsive container for the background image -->
-        <!-- this is the image to be shown -->
-        <div class="pt-20">
-            <img class="w-full h-[50rem]" src="img/background.png" alt="Background Image">
-            <!-- this is the button container to center the button with the image -->
-            <div class="absolute top-[62%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <a href="SignIn.html">
-                    <button class="bg-outline w-[243px] h-[51px] font-bold py-2 px-4 rounded-full text-Likha">SHOP NOW</button>
-                </a>
-            </div>
-        </div>
-
-        <h1 class="text-center mt-8 text-4xl font-extrabold font-Montagu" id="Shop">Products</h1>
-
-        <!-- Product Grid 1 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-48 container mt-8 mx-10">
-            <!-- Product 1 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] p-4 w-[419px] h-[503px] rounded-xl flex items-center">
-                    <div class="flex-col items-center pl-[2.5rem]">
-                        <img src="img/aphrodite-dress.png" class="card-img-top w-[19rem]" alt="Mia Dress">
+    <div class="bg-Likha min-h-screen" class="">
+        <div id="main-container" class="">
+            <div id="slide-container">    
+                <div id="slider-wrapper" class="relative max-w-[65-rem] pt-[5rem]"  >
+                    <div class="absolute font-Sheppards top-[13rem] left-[50%] mr-[-50%] translate-x-[-50%] text-[96px] text-[#FFFFFF]">La mode est  sans limites</div>
+                    <div class="absolute top-[62%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <a href="SignIn.html">
+                            <button class="bg-outline w-[243px] h-[51px] font-bold py-2 px-4 rounded-full text-Likha">SHOP NOW</button>
+                        </a>
                     </div>
-                </div>
-                <div class="ml-[8rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Aphrodite Dress</p>
-                </div>
-            </div>
-            
-            <!-- Product 2 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[419px] h-[503px] rounded-xl flex items-center">
-                    <div class="flex-col items-center pl-[2.5rem]">
-                        <img src="img/coleen-dress.png" class="card-img-top w-[21rem]" alt="Coleen Dress">
+                    <div id="slider" class="flex aspect-[25/9] scroll-smooth overflow-x-hidden ">
+                        <img src="img/Slider1.jpg" class="flex flex-1  snap-align-start" id="Slider1" alt="">
+                        <img src="img/Slider2.jpg" class="flex flex-1 snap-align-start" id="Slider2"alt="">
+                        <img src="img/Slider3.jpg" class="flex flex-1 snap-align-start" id="Slider3" alt="">
                     </div>
-                </div>
-                <div class="ml-[9rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Coleen Dress</p>
-                </div>
-            </div>
-            
-            <!-- Product 3 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[419px] h-[503px] rounded-xl flex items-center">
-                    <div class="flex-col items-center pl-[5.5rem]">
-                        <img src="img/dress sample.png" class="card-img-top w-[15rem]" alt="Aphrodite Dress">                
-                    </div>
-                </div>
-                <div class="ml-[10rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Mia Dress</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product Grid 2 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[11.5rem] container mt-8 mx-10 ">
-            <!-- Product 1 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-4 rounded-xl">
-                    <div class="card">
-                        <img src="img/earings.png" class="card-img-top w-full" alt="...">
-                    </div>
-                </div>
-                <div class="ml-[6.5rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Earrings</p>
-                </div>
-            </div>
-            
-            <!-- Product 2 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-4 rounded-xl">
-                    <div class="card">
-                        <img src="img/bracelet.png" class="card-img-top w-full" alt="...">
-                    </div>
-                </div>
-                <div class="ml-[7.25rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Bracelet</p>
-                </div>
-            </div>
-            
-            <!-- Product 3 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-0 rounded-xl">
-                    <div class="card">
-                        <img src="img/necklace.png" class="card-img-top w-[19rem] rounded-tl-xl" alt="...">
-                    </div>
-                </div>
-                <div class="ml-[7rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Necklace</p>
-                </div>
-            </div>
-            
-            <!-- Product 4 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[300px] h-[300px] p-4 rounded-xl">
-                    <div class="card">
-                        <img src="img/ring.png" class="card-img-top w-full" alt="...">
-                    </div>
-                </div>
-                <div class="ml-[8rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Ring</p>
-                </div>
-            </div>
-            
-        </div>
-
-        <!-- Product Grid 3 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-[4.5rem] ontainer mx-10 mt-8">
-            <!-- Product 1 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[419px] h-[300px] p-4 rounded-xl flex items-center">
-                    <div class="ml-[5.25rem]">
-                        <img src="img/Kelly bag.png" class="card-img-top w-[200px]" alt="Mia Dress">
-                    </div>
-                </div>
-                <div>
-                    <div class="ml-[9.25rem]">
-                        <p class="font-Montagu text-2xl font-semibold">Kelly Bag</p>
+                    <div id="slider-nav" class="flex grid-cols-2 gap-x-4 absolute bottom-[1.25rem] left-[50%] translate-x-[-50%]">
+                        <a id="Nav1" href="#Slider1" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-[1]"></a>
+                        <a  id="Nav2" href="#Slider2" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
+                        <a id="Nav3" href="#Slider3" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
                     </div>
                 </div>
             </div>
-            <!-- Product 2 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[419px] h-[300px] p-4 rounded-xl flex items-center">
-                    <div class="ml-[2.5rem]">
-                        <img src="img/potli-bag.png" class="card-img-top w-[290px]" alt="Coleen Dress">
+            <div class="flex items-center flex-col justify-center mt-4">
+                <div class="font-Montagu text-[#96A378] font-bold text-[64px] rotating-text relative mr-[8rem]">
+                    <p>Shop to Slay, Create To </p>
+                    <p>
+                        <span class="word w-1">
+                            Wear
+                        </span>
+                        <span class="word w-2">
+                            Style
+                        </span>
+                        <span class="word w-3">
+                            Inspire
+                        </span>
+                    </p>
+                </div>
+                
+                <h2 class="font-Inter font-medium text-[40px]">customize in your own way.</h2>
+            </div>
+            <div class="flex h-[703px] relative justify-around items-center gap-2 p-5 hover:gap-2 mt-[4rem] ">
+                <div class="card relative flex-1 w-[370px] h-[703px] bg-sign flex justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
+                    <img src="img/dresslanding.png" class="h-full w-full object-cover" alt="">
+                    <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
+                    <u class="absolute left-8 bottom-[6rem] font-Inter font-bold text-[24px] text-[#FFFFFF] cursor-pointer ">Dress/Gowns >>></u>
+                </div>
+                <div class="card relative w-[370px] h-[703px] bg-sign flex-1 justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
+                    <img src="img/set.png" class="h-full w-full object-cover" alt="">
+                    <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
+                    <u class="absolute left-8 bottom-[6rem] font-Inter font-bold text-[24px] text-[#FFFFFF] cursor-pointer ">Jewelry >>></u>
+                </div>
+                <div class="card relative flex-1 w-[370px] h-[703px] bg-sign flex justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
+                    <img src="img/baglanding.png" class="h-full w-full object-cover" alt="">
+                    <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
+                    <u class="absolute left-8 bottom-[6rem] font-Inter font-bold text-[24px] text-[#FFFFFF] cursor-pointer ">Bags >>></u>
+                </div>
+            </div>
+            <div class="flex justify-center mt-4">
+                <h1 class="font-Montagu font-bold text-[64px] text-[#96A378]">Why Customize?</h1>
+            </div>
+            <div id="target" class="flex justify-between px-16 mt-4 ">
+                <div class=" h-[205px] w-[205px] flex flex-col items-center">
+                    <h1 class="font-Inter font-semibold text-[15px]">
+                        PREFERRED STYLE
+                    </h1>
+                    <img src="img/preferred.png" class="object-contain aspect-square h-32" alt="">
+                    <h1 class="font-Inter font-normal text-[15px]">Make the bag, shoes, and dress that you like.</h1>
+                </div>
+                <div class=" h-[205px] w-[205px] flex flex-col items-center">
+                    <h1 class="font-Inter font-semibold text-[15px]">
+                        OWN MEASUREMENT
+                    </h1>
+                    <img src="img/measurement.png" class="object-contain aspect-square h-32" alt="">
+                    <h1 class="font-Inter font-normal text-[15px]">Fit or size that suits you.</h1>
+                </div>
+                <div class=" h-[205px] w-[205px] flex flex-col items-center">
+                    <h1 class="font-Inter font-semibold text-[15px]">
+                        PICK COLOR
+                    </h1>
+                    <img src="img/Color.png" class="object-contain aspect-square h-32" alt="">
+                    <h1 class="font-Inter font-normal text-[15px]">Choose the color you like.</h1>
+                </div>
+                <div class=" h-[205px] w-[205px] flex flex-col items-center">
+                    <h1 class="font-Inter font-semibold text-[15px]">
+                        CHOOSE MATTERIALS
+                    </h1>
+                    <img src="img/Materials.png" class="object-contain aspect-square h-32" alt="">
+                    <h1 class="font-Inter font-normal text-[15px]">Choose selected materials that are available.</h1>
+                </div>
+            </div>
+            <div class="min-w-min h-[1251px] bg-outline mt-16">
+                <img src="img/Gown.png" class="w-[1496px] h-[1251px] object-cover" alt="">
+            </div>
+            <div id="h1" class="flex h-[12rem] items-center justify-evenly">
+                <div id="Left" class=" w-[355px] flex flex-col items-center space-y-6">
+                    <h1 class="font-Inter font-semibold text-[32px]">Support Local</h1>
+                    <h2 class="font-Inter font-normal text-[15px]">All products here are sourced and originated from the Philippines.</h2>
+                </div>
+                <div id="Right" class=" w-[355px] flex flex-col items-center space-y-6">
+                    <h1 class="font-Inter font-semibold text-[32px]">Unlock Creativity</h1>
+                    <h2 class="font-Inter font-normal text-[15px]">Tailoring unique solutions that reflect individual preferences and needs.</h2>
+                </div>
+            </div>
+            <div id="About" class="min-w-min h-[588px] bg-outline relative">
+                <h1 id="AboutUs" class="absolute font-Montagu top-[15rem] font-bold left-[35%] text-[96px] text-[#FFFFFF] z-20 ">ABOUT US</h1>
+                <img src="img/About.png" class="object-cover h-full w-full" alt="">
+                <div class="absolute inset-0 opacity-40" style="background: #000000;" ></div>
+            </div>
+            <div class="flex items-center justify-center mt-8">
+                <div class="w-[984px] ">
+                    <p id="p-tag-about" class="font-Inter font-normal text-[15px] text-center text-[#000000] ">LIKHA for Zappnott is an online boutique, where the art of handcrafted elegance meets cutting-edge technology. We are a LIKHA of artisans and tech enthusiasts dedicated to bringing you a personalized shopping experience like no other. Explore our collection of handcrafted bracelets, bags, necklaces, earrings, and dresses, all you can customizable in stunning 3D detail.
+                        <br>
+                        <br>
+                        Unleashing Your Creativity, One Click at a Time <br>
+                        At our store, we believe that true style is a reflection of your individuality. With our innovative 3D customization tool, you have the power to design your own one-of-a-kind pieces, tailored to your unique taste and preferences. From selecting materials and adding personal touches, the possibilities are endless. Let your creativity soar as you craft accessories and apparel that truly speak to you.
+                    </p>
+                </div>
+            </div>
+            <div class=" flex justify-between mt-[2rem]">
+                <div class="w-[365px] h-[419px] bg-outline">
+                    <img src="img/pic1.png" alt="" class="h-full w-full object-cover">
+                </div>
+                <div class="w-[365px] h-[419px] bg-outline">
+                    <img src="img/pic2.png" alt="" class="h-full w-full object-cover">
+                </div>
+                <div class="w-[365px] h-[419px] bg-outline">
+                    <img src="img/pic3.png" alt="" class="h-full w-full object-cover">
+                </div>
+                <div class="w-[365px] h-[419px] bg-outline">
+                    <img src="img/pic4.png" alt="" class="h-full w-full object-cover">
+                </div>
+            </div>
+            <div id="footer" class="flex bg-[#c4ccbc] h-auto w-full p-[4rem]">
+                <div id="container" class="flex items-center flex-wrap space-y-4">
+                    <div class="md:mr-[12rem] ml-[4.5rem]">
+                        <img src="img/ZappnottLogo.png" alt="" class="md:h-[10rem] h-[10rem]">
                     </div>
-                </div>
-                <div class="ml-[10.25rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Potli Bag</p>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="flex-col items-center space-y-2">
-                <div class="bg-[#D8BC8C80] w-[419px] h-[300px] p-4 rounded-xl flex items-center">
-                    <div class="ml-[5.75rem]">
-                        <img src="img/swagger bag.png" class="card-img-top w-[183px]" alt="Aphrodite Dress">                
-                    </div>
-                </div>
-                <div class="ml-[9rem]">
-                    <p class="font-Montagu text-2xl font-semibold">Swagger Bag</p>
-                </div>
-            </div>
-        </div>
-
-        <h1 id="3D" class="text-center mt-[7rem] text-6xl font-bold font-Montagu">3D CUSTOMIZATION</h1>
-        <script type="module" src="https://unpkg.com/@splinetool/viewer@1.3.2/build/spline-viewer.js"></script>
-        <spline-viewer url="https://prod.spline.design/UYtcBvhc4HQdfpM3/scene.splinecode"></spline-viewer>  
-        </div>
-
-        <div class="flex relative">
-            <div class="bg-[#CCC699] w-[383px] h-[1024px]">
-                <div class="absolute top-[32rem]">
-                    <img src="img/Ellipse 6.png" alt="">
-                </div>
-            </div>
-            <div class="bg-[#EAECDF] w-[1100px] h-[1024px]">
-                <div class="absolute right-[12rem] top-[12rem]">
-                    <p id="about" class="text-8xl font-extrabold font-Montagu">ABOUT US</p>
-                </div>
-            </div>
-        </div>
-       
-        <!-- Footer -->
-        <div id="footer" class="flex bg-[#c4ccbc] h-[744px] w-full pl-[4rem] pr-[4rem]">
-            <div id="container" class="flex items-center flex-wrap space-y-4 mt-[17rem]">
-                <div class="md:mr-[12rem] ml-[4.5rem]">
-                    <img src="img/ZappnottLogo.png" alt="" class="md:h-[10rem] h-[10rem]">
-                </div>
-                <div class="flex flex-1 flex-wrap md:space-y-0 space-y-7">
-                    <div class="ml-4 mr-[5rem] items-center space-y-3">
-                        <h1 class="font-bold text-2xl">Info</h1>
-                        <ul class="space-y-4">
-                            <li>HOME</li>
-                            <li>SHOP</li>
-                            <li>CUSTOMIZATION</li>
-                            <li>ABOUT</li>
-                        </ul>
-                    </div>
-                    <div class="mr-[5rem] items-center" id="contact">
-                            <h1 class="font-bold text-2xl ml-3">Contact</h1>
+                    <div class="flex flex-1 flex-wrap md:space-y-0 space-y-7">
+                        <div class="ml-4 mr-[5rem] items-center space-y-3">
+                            <h1 class="font-bold text-2xl">Info</h1>
+                            <ul class="space-y-4">
+                                <li>HOME</li>
+                                <li>SHOP</li>
+                                <li>CUSTOMIZATION</li>
+                                <li>ABOUT</li>
+                            </ul>
+                        </div>
+                        <div class="mr-[5rem] items-center">
+                                <h1 class="font-bold text-2xl ml-3">Contact</h1>
+                                <ul>
+                                    <li>
+                                        <a href="https://www.instagram.com/zappnott?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+                                            <div class="flex items-center">
+                                                <img src="img/IGIcon.png" alt="" class="h-12 w-12 " >
+                                                <span>Zappnott</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="ml-1">
+                                        <a href="https://www.facebook.com/profile.php?id=100063855583369">
+                                            <div class="flex items-center">
+                                                <img src="img/FBLogo.png" alt="" class="h-10">
+                                                <span class="ml-1">Zappnott</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center">
+                                            <img src="img/PhoneLogo.png" alt="" class="h-12">
+                                            <span>+639272886113<br/>+639604343935</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center">
+                                            <img src="img/EmailLogo.png" alt="" class="h-11">
+                                            <span>zappnott@gmail.com</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="">
+                            <h1 class="font-bold text-2xl ml-3" >Visit Us</h1>
                             <ul>
                                 <li>
-                                    <a href="https://www.instagram.com/zappnott?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+                                    <a href="">
                                         <div class="flex items-center">
-                                            <img src="img/IGIcon.png" alt="" class="h-12 w-12 " >
-                                            <span>Zappnott</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="ml-1">
-                                    <a href="https://www.facebook.com/profile.php?id=100063855583369">
-                                        <div class="flex items-center">
-                                            <img src="img/FBLogo.png" alt="" class="h-10">
-                                            <span class="ml-1">Zappnott</span>
+                                            <img src="img/WebsiteLogo.png" alt="" class="h-11">
+                                            <span>www.zappnott.com</span>
                                         </div>
                                     </a>
                                 </li>
                                 <li>
-                                    <div class="flex items-center">
-                                        <img src="img/PhoneLogo.png" alt="" class="h-12">
-                                        <span>+639272886113<br/>+639604343935</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center">
-                                        <img src="img/EmailLogo.png" alt="" class="h-11">
-                                        <span>zappnott@gmail.com</span>
-                                    </div>
+                                    <a href="https://maps.app.goo.gl/an2F3pbprEk1Wusb8">
+                                        <div class="flex items-center">
+                                            <img src="img/LocationLogo.png" alt="" class="h-11">
+                                            <span class="text-sm">3F MARKET MARKET Ayala Malls McKinley Parkway, BGC,<br/>
+                                                Taguig City, Metro Manila Philippines 1630</span>
+                                        </div>
+                                    </a>
                                 </li>
                             </ul>
-                    </div>
-                    <div class="">
-                        <h1 class="font-bold text-2xl ml-3" >Visit Us</h1>
-                        <ul>
-                            <li>
-                                <a href="prac.html">
-                                    <div class="flex items-center">
-                                        <img src="img/WebsiteLogo.png" alt="" class="h-11">
-                                        <span>www.zappnott.com</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://maps.app.goo.gl/an2F3pbprEk1Wusb8">
-                                    <div class="flex items-center">
-                                        <img src="img/LocationLogo.png" alt="" class="h-11">
-                                        <span class="text-sm">3F MARKET MARKET Ayala Malls McKinley Parkway, BGC,<br/>
-                                            Taguig City, Metro Manila Philippines 1630</span>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
+                        </div>
                     </div>
                 </div>
+                <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                    <a href=""><img src="img/SEARCH BAR.png" class="h-[3rem]" alt=""></a>
+                    <a href=""><img src="img/PROFILE.png" class="h-[3rem]" alt=""></a>
+                    <a href=""><img src="img/CART.png" class="h-[3rem]" alt=""></a>
+                </div>
             </div>
-
-    <!-- Fixed Elements -->
-    <div class="flex fixed p-3 top-1 right-1 md:right-16 z-10">
-        <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
-        <img src="img/PROFILE.png" class="h-[3rem]" alt="">
-        <img src="img/CART.png" class="h-[3rem]" alt="">
+        </div>
     </div>
+    <script src="Rotatingtext.js"></script>
 </body>
+<script src="https://cdn.lordicon.com/lordicon.js"></script>
+<script src="SliderScript.js"></script>
+<script>
+
+</script>
 </html>

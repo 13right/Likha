@@ -12,7 +12,8 @@ module.exports = {
       libre: ['Libre Baskerville'],
       Montagu: ['Montagu Slab'],
       Inter:['Inter'],
-      Montserrat: ['Montserrat']
+      Montserrat: ['Montserrat'],
+      Sheppards: ['Mrs Sheppards']
     }
   },
   plugins: [],

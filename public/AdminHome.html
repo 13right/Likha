@@ -163,13 +163,12 @@ function CloseAdd(){
     var editForm = document.getElementById("additionalDiv");
         editForm.classList.add("hidden");
 }   
-// Fetch data from Node.js server
+
 fetch('/products')
     .then(response => response.json())
     .then(products => {
         products.forEach(product => {
             const productList = document.getElementById('product-list');
-            // Create HTML elements to display product information
             const productElement = document.createElement('div');
             productElement.innerHTML = `
                 <div class="flex bg-[#D8BC8C80] w-[318px] h-[500px] group outline outline-outline outline-1 rounded-xl justify-center relative mb-[2rem]" id="product-container">
@@ -236,10 +235,8 @@ fetch('/products')
             `;
             productList.appendChild(productElement);
             
-            // Event listener for closing the edit form
             const CloseEditButton = productElement.querySelector('#CloseEdit');
             CloseEditButton.addEventListener('click', function() {
-                // Hide the edit form
                 const editForm = productElement.querySelector('#editForm');
                 editForm.classList.add('hidden');
             });
@@ -247,14 +244,11 @@ fetch('/products')
             document.addEventListener('click', function(event) {
                 const editButton = event.target.closest('#Edit');
                 if (editButton) {
-                    // Get the product container
                     const productContainer = editButton.closest('#product-container');
-                    // Get the product name, price, and image
                     const productName = productContainer.querySelector('h2').innerText;
                     const productPrice = productContainer.querySelector('p').innerText.replace('Price: ', '');
                     const productImage = productContainer.querySelector('img').src;
 
-                    // Set the values in the edit form inputs
                     const editedProductNameInput = productContainer.querySelector('#editedProductName');
                     const editedProductPriceInput = productContainer.querySelector('#editedProductPrice');
                     const editedProductImage = productContainer.querySelector('#editedProductImage');
@@ -262,14 +256,11 @@ fetch('/products')
                     editedProductPriceInput.value = productPrice;
                     editedProductImage.src = productImage;
 
-                    // Add event listener for Save button
                     const saveButton = productContainer.querySelector('#saveEdit');
                     saveButton.addEventListener('click', function() {
-                        // Get updated name and price
                         const updatedName = editedProductNameInput.value;
                         const updatedPrice = editedProductPriceInput.value;
 
-                        // Make a fetch request to update the product
                         fetch(`/updateProduct/${encodeURIComponent(productName)}`, {
                             method: 'PUT',
                             headers: {
@@ -292,7 +283,6 @@ fetch('/products')
                             });
                     });
 
-                    // Show the edit form
                     const editForm = productContainer.querySelector('#editForm');
                     editForm.classList.remove('hidden');
                 }
@@ -303,15 +293,10 @@ fetch('/products')
             document.addEventListener('click', function(event) {
                 const DeleteButton = event.target.closest('#Delete');
                 if (DeleteButton) {
-                    // Get the product container
                     const productContainer = DeleteButton.closest('#product-container');
-                    // Get the product name
+
                     const productName = productContainer.querySelector('h2').innerText;
-                    // Add event listener for Delete button
-                    // Ask for confirmation
-                    // const confirmed = window.confirm(`Are you sure you want to delete ${productName}?`);
-                    // if (confirmed) {
-                    // Make a fetch request to delete the product
+
                     fetch(`/DeleteProduct/${encodeURIComponent(productName)}`, {
                         method: 'DELETE'
                     })
@@ -330,7 +315,6 @@ fetch('/products')
                 }
             });
 
-            // Now, add the event listener to the newly created button
             const addButton = productElement.querySelector('#Add');
             addButton.addEventListener('click', function() {
                 document.getElementById('additionalDiv').classList.remove('hidden');
@@ -368,7 +352,7 @@ function previewFile() {
     if (file) {
         reader.readAsDataURL(file);
     } else {
-        preview.src = "img/+.png"; // If no file is selected, display default image
+        preview.src = "img/+.png"; 
     }
 }
 

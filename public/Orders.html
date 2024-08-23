@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
     <title>Orders</title>
-    <script src="AuthorizationBE.js"></script>
+    <!-- <script src="AuthorizationBE.js"></script> -->
     <script src="UserPage.js"></script>
 </head>
 <body>
@@ -57,23 +57,22 @@
         console.log(Items);
         Items.forEach(Item => {
             const ItemList = document.getElementById('Order-container');
-            // Create HTML elements to display product information
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
             <div id="Order-${Item.OrderID}"class="ml-[1rem] pt-9 px-[2rem] bg-[#F07C541A] w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
                 <div class="ml-[4rem] w-[68rem] relative flex items-center justify-between">
                     <div>
-                        <h1 class="font-extrabold font-Inter text-[#6B707B]">Order ID: ${Item.Transac}</h1>
-                        <h2 class="font-Inter font-medium">Order Date: <span>${Item.OrderedDate}</span></h2>
+                        <h1 class="font-extrabold font-Inter text-[#6B707B]">Order ID: ${Item.TransactionID}</h1>
+                        <h2 class="font-Inter font-medium">Order Date: <span>${Item.Date}</span></h2>
                     </div>
                     <div>
-                        <button id="Cancel" onclick="Cancel()" class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
+                        <button id="Cancel" class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
                     </div>
                     <div id="Cancelled" class="font-Montserrat font-semibold text-xl absolute text-[#DD0707] right-[1rem] hidden">Cancelled</div>
                 </div>
                 <hr class="w-[1180.16px] mt-[2rem] ml-3 text-[#F07C54]">
                 <div class="w-[75rem] h-auto my-4 flex">
-                    <div id="OrderItems-container-${Item.productOrder}" class="w-[75rem] h-auto "></div>
+                    <div id="OrderItems-container-${Item.OrderID}" class="w-[75rem] h-auto "></div>
                     <div id="StatusDiv" class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
                             <div id="Ordered" class="flex items-center space-x-3">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
@@ -152,7 +151,8 @@
             
             CancelBtn.addEventListener('click',function(){
                 const Status = Item.Status;
-                const Cancel = { status: 'Cancelled', OrderID: Item.Transac};
+                //console.log(Status);
+                const Cancel = { status: 'Cancelled', OrderID: Item.TransactionID};
                 if(Status === 'Ordered'){
                     fetch('/Cancel', {
                                 method: 'PUT',
@@ -176,10 +176,10 @@
             });
         
 
-            fetch(`/OrderItem/${Item.productOrder}`)
+            fetch(`/OrderItem/${Item.OrderID}`)
                 .then(response => response.json())
                 .then(orderItems => {
-                    const orderItemsContainer = document.getElementById(`OrderItems-container-${Item.productOrder}`);
+                    const orderItemsContainer = document.getElementById(`OrderItems-container-${Item.OrderID}`);
 
                     orderItems.forEach(orderItem => {
                         const IElement = document.createElement('div');
@@ -201,10 +201,8 @@
 
         });
     });
-    
-
             
-    </script>
+</script>
     
 </body>
 </html>
