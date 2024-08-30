@@ -6,6 +6,7 @@ async function fetchCurrentUser() {
             if (user && user.UserID) {  // Ensure user and UserID are defined
                 const userID = parseInt(user.UserID);
                 document.getElementById('userInfo').innerText = `Logged in as: ${userID}`;
+                console.log(userID);
             } else {
                 throw new Error('Invalid user data');
             }

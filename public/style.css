@@ -631,6 +631,10 @@ video {
   right: 0px;
 }
 
+.bottom-0{
+  bottom: 0px;
+}
+
 .bottom-1{
   bottom: 0.25rem;
 }
@@ -709,6 +713,10 @@ video {
 
 .left-\[5px\]{
   left: 5px;
+}
+
+.left-\[6rem\]{
+  left: 6rem;
 }
 
 .right-0{
@@ -835,10 +843,6 @@ video {
   top: 11.5rem;
 }
 
-.top-\[124px\]{
-  top: 124px;
-}
-
 .top-\[12rem\]{
   top: 12rem;
 }
@@ -851,16 +855,16 @@ video {
   top: 15rem;
 }
 
+.top-\[1rem\]{
+  top: 1rem;
+}
+
 .top-\[20rem\]{
   top: 20rem;
 }
 
 .top-\[22rem\]{
   top: 22rem;
-}
-
-.top-\[265px\]{
-  top: 265px;
 }
 
 .top-\[28rem\]{
@@ -955,14 +959,19 @@ video {
   margin-right: 1rem;
 }
 
-.mx-8{
-  margin-left: 2rem;
-  margin-right: 2rem;
+.mx-\[0\.65rem\]{
+  margin-left: 0.65rem;
+  margin-right: 0.65rem;
 }
 
 .mx-\[10rem\]{
   margin-left: 10rem;
   margin-right: 10rem;
+}
+
+.mx-\[1rem\]{
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .mx-\[3rem\]{
@@ -1018,8 +1027,16 @@ video {
   margin-bottom: 0px;
 }
 
+.mb-14{
+  margin-bottom: 3.5rem;
+}
+
 .mb-4{
   margin-bottom: 1rem;
+}
+
+.mb-5{
+  margin-bottom: 1.25rem;
 }
 
 .mb-6{
@@ -1064,6 +1081,10 @@ video {
 
 .ml-6{
   margin-left: 1.5rem;
+}
+
+.ml-8{
+  margin-left: 2rem;
 }
 
 .ml-9{
@@ -1134,6 +1155,10 @@ video {
   margin-left: 5.25rem;
 }
 
+.ml-\[5\.5rem\]{
+  margin-left: 5.5rem;
+}
+
 .ml-\[5\.75rem\]{
   margin-left: 5.75rem;
 }
@@ -1186,12 +1211,20 @@ video {
   margin-right: 6rem;
 }
 
+.mr-\[8rem\]{
+  margin-right: 8rem;
+}
+
 .mt-0{
   margin-top: 0px;
 }
 
 .mt-11{
   margin-top: 2.75rem;
+}
+
+.mt-14{
+  margin-top: 3.5rem;
 }
 
 .mt-16{
@@ -1238,10 +1271,6 @@ video {
   margin-top: 1rem;
 }
 
-.mt-\[2\.5rem\]{
-  margin-top: 2.5rem;
-}
-
 .mt-\[2rem\]{
   margin-top: 2rem;
 }
@@ -1264,34 +1293,6 @@ video {
 
 .mt-\[7rem\]{
   margin-top: 7rem;
-}
-
-.mr-\[15rem\]{
-  margin-right: 15rem;
-}
-
-.mr-\[18rem\]{
-  margin-right: 18rem;
-}
-
-.mr-\[17rem\]{
-  margin-right: 17rem;
-}
-
-.mr-\[16rem\]{
-  margin-right: 16rem;
-}
-
-.ml-\[6rem\]{
-  margin-left: 6rem;
-}
-
-.mr-\[4rem\]{
-  margin-right: 4rem;
-}
-
-.mr-\[8rem\]{
-  margin-right: 8rem;
 }
 
 .block{
@@ -1538,6 +1539,10 @@ video {
   height: 400px;
 }
 
+.h-\[402px\]{
+  height: 402px;
+}
+
 .h-\[40px\]{
   height: 40px;
 }
@@ -1582,6 +1587,10 @@ video {
   height: 53px;
 }
 
+.h-\[547px\]{
+  height: 547px;
+}
+
 .h-\[55px\]{
   height: 55px;
 }
@@ -1604,6 +1613,10 @@ video {
 
 .h-\[61\.84px\]{
   height: 61.84px;
+}
+
+.h-\[61px\]{
+  height: 61px;
 }
 
 .h-\[62px\]{
@@ -1798,6 +1811,10 @@ video {
   width: 175px;
 }
 
+.w-\[17rem\]{
+  width: 17rem;
+}
+
 .w-\[183px\]{
   width: 183px;
 }
@@ -1840,6 +1857,10 @@ video {
 
 .w-\[243px\]{
   width: 243px;
+}
+
+.w-\[245\.42px\]{
+  width: 245.42px;
 }
 
 .w-\[25rem\]{
@@ -1958,12 +1979,24 @@ video {
   width: 400.25px;
 }
 
+.w-\[400px\]{
+  width: 400px;
+}
+
+.w-\[40px\]{
+  width: 40px;
+}
+
 .w-\[415px\]{
   width: 415px;
 }
 
 .w-\[419px\]{
   width: 419px;
+}
+
+.w-\[42rem\]{
+  width: 42rem;
 }
 
 .w-\[45\%\]{
@@ -1992,6 +2025,10 @@ video {
 
 .w-\[51rem\]{
   width: 51rem;
+}
+
+.w-\[551px\]{
+  width: 551px;
 }
 
 .w-\[55rem\]{
@@ -2210,6 +2247,10 @@ video {
 
 .items-center{
   align-items: center;
+}
+
+.justify-start{
+  justify-content: flex-start;
 }
 
 .justify-end{
@@ -2477,6 +2518,10 @@ video {
   border-radius: 15px;
 }
 
+.rounded-\[25px\]{
+  border-radius: 25px;
+}
+
 .rounded-\[50\%\]{
   border-radius: 50%;
 }
@@ -2620,6 +2665,11 @@ video {
 
 .bg-\[\#D8BC8C80\]{
   background-color: #D8BC8C80;
+}
+
+.bg-\[\#D8E2C7\]{
+  --tw-bg-opacity: 1;
+  background-color: rgb(216 226 199 / var(--tw-bg-opacity));
 }
 
 .bg-\[\#E2E2D0\]{
@@ -2822,6 +2872,11 @@ video {
   padding-right: 2rem;
 }
 
+.px-\[8rem\]{
+  padding-left: 8rem;
+  padding-right: 8rem;
+}
+
 .py-1{
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -2844,6 +2899,10 @@ video {
 
 .pb-1{
   padding-bottom: 0.25rem;
+}
+
+.pb-8{
+  padding-bottom: 2rem;
 }
 
 .pb-\[3rem\]{
@@ -3073,6 +3132,10 @@ video {
 
 .text-\[40px\]{
   font-size: 40px;
+}
+
+.text-\[48px\]{
+  font-size: 48px;
 }
 
 .text-\[64px\]{
@@ -3345,6 +3408,12 @@ video {
 
 .transition-all{
   transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-colors{
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }

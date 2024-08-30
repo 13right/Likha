@@ -7,7 +7,7 @@
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
     <title>Home</title>
 </head>
-<script src="AuthorizationBE.js"></script>
+
 <script src="UserPage.js"></script>
 <style>
     input[type=number]::-webkit-inner-spin-button,
@@ -293,7 +293,7 @@
                     <H6 class="text-6xl font-libre font-extrabold">Shop</H6>
                 </div>
                 <div class="flex-col">
-                    <div id="product-list" class="flex space-x-9 flex-wrap justify-center hidden "></div>
+                    <div id="product-list" class="flex flex-wrap justify-start mx-10 hidden"></div>
                     <div id="product-view" class=""></div>
                     <div id="loading" class="relative flex justify-center space-x-9 ">
                         <div class="w-[318px] shadow-lg relative rounded-xl h-[500px] bg-[#E2E2D0] animate-pulse">
@@ -308,7 +308,6 @@
                         <div class="w-[318px] h-[500px] shadow-lg rounded-xl bg-[#E2E2D0] animate-pulse">
                             <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -671,46 +670,45 @@
             setCategory('Dress');
             scrollToShop(); 
         });
-     async function Notif(){
-        fetch(`/Notif`)
-        .then(response => {
-            return response.json();
-        })
-        .then(products => {
-            
-            products.forEach(product => {
-                const productList = document.getElementById('NotifContent');
-                
-                const productElement = document.createElement('div');
-                productElement.innerHTML = `
-                    <div class="flex relative w-auto py-auto justify-between">
-                        <div class="justify-center flex pl-2">
-                            <div class="items-center flex">
-                                <div id="notifdot" class="bg-outline hidden w-2 h-2 rounded-full"></div>
-                            </div>
-                            <div class="justify-center flex flex-col pl-5">
-                                <h1 class="font-Inter text-sm">${product.Content}</h1>
-                                <h1 class="font-Inter text-sm">${product.Date}</h1>
-                            </div>
+        async function Notif() {
+    try {
+        const response = await fetch(`/Notif`);
+        const products = await response.json();
+        
+        const productList = document.getElementById('NotifContent');
+        productList.innerHTML = '';
+        
+        products.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.innerHTML = `
+                <div class="flex relative w-auto py-auto justify-between">
+                    <div class="justify-center flex pl-2">
+                        <div class="items-center flex">
+                            <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
                         </div>
-                        <div class="">
-                            <img src="data:image/jpeg;base64,${product.productImage}" alt="${product.productName}" class="w-[7rem] h-[7rem]">
+                        <div class="justify-center flex flex-col pl-5">
+                            <h1 class="font-Inter text-sm">${product.Content}</h1>
+                            <h1 class="font-Inter text-sm">${product.Date}</h1>
                         </div>
                     </div>
-                `;
-                productList.appendChild(productElement);
-                    //console.log(product.Status);
-                const notifdot = productElement.querySelector('#notifdot');
-                if(product.Status === 'unread'){
-                    notifdot.classList.remove('hidden');
-                }
-                else{
-                    notifdot.classList.add('hidden');
-                }
-            });
+                    <div>
+                        <img src="${product.productImage}" alt="${product.productName}" class="w-[7rem] h-[7rem]">
+                    </div>
+                </div>
+            `;
+            productList.appendChild(productElement);
 
-        })
+            const notifdot = productElement.querySelector('.notifdot');
+            if (product.Status === 'unread') {
+                notifdot.classList.remove('hidden');
+            } else {
+                notifdot.classList.add('hidden');
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
     }
+}
     
     function fetchProducts(category = '') {
     
@@ -730,9 +728,9 @@
                 const productElement = document.createElement('div');
                 productElement.innerHTML = `
                     <div id="main-container"> 
-                        <div class="bg-[#D8BC8C80] w-[318px] h-[500px] group outline outline-outline outline-1 rounded-xl pt-5 pr-5 relative mb-[2rem]" id="product-container">
+                        <div class="bg-[#D8BC8C80] w-[318px] h-[500px] mx-[1rem] group outline outline-outline outline-1 rounded-xl pt-5 pr-5 relative mb-[2rem]" id="product-container">
                             <div class="flex flex-col items-center">
-                                <img src="data:image/jpeg;base64,${product.productImage}" alt="${product.productName}" class="w-[80%] my-[4rem] group-hover:opacity-75 transition delay-300">
+                                <img src="${product.imagePath}" alt="${product.productName}" class="w-[80%] my-[4rem] object-fill group-hover:opacity-75 transition delay-300">
                                 <div class="bottom-3 mx-4 px-2 absolute inset-x-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-300 w-[291px] h-[113px] bg-[#FFFFFF80] rounded-[5px]">
                                     <div class="flex-cols h-[95px] w-[200px]">
                                         <h2 class="font-Montagu font-extrabold text-3xl">${product.productName}</h2>
@@ -898,7 +896,7 @@
                 <div class="flex items-center space-x-10">
                     <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value="${productCart.productPrice}"></input>
                     <div>
-                        <img src="data:image/jpeg;base64,${productCart.productImage}" alt="Product Image" class="w-28">
+                        <img src="${productCart.productImage}" alt="Product Image" class="w-28">
                     </div>
                     <div>
                         <h1>${productCart.productName}</h1>

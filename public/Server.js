@@ -7,6 +7,7 @@ const fs = require('fs');
 const { constrainedMemory } = require('process');
 const axios = require('axios');
 //const { compile } = require('ejs');
+require('dotenv').config();
 
 
 
@@ -14,9 +15,11 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-const port = 8000;
+const port = process.env.PORT || 3000;
 
 const upload = multer({ dest: 'uploads/' });
+
+app.use('/images', express.static(path.join(__dirname, 'UploadedImage')));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -43,15 +46,28 @@ app.use(session({
 
 
 //Local Machine sa baba
+// const config = {
+//     user: 'Jennie',
+//     password: '2harmaine!',
+//     server: 'LAPTOP-GV6HVKVU',
+//     database: 'Capstone',
+//     options: {
+//         encrypt: false
+//     }
+// };
+
+//try
 const config = {
-    user: 'Jennie',
-    password: '2harmaine!',
-    server: 'LAPTOP-GV6HVKVU',
-    database: 'Capstone',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    server: process.env.DB_SERVER,
+    database: process.env.DB_DATABASE,
     options: {
-        encrypt: false
+        encrypt: process.env.DB_ENCRYPT === 'true' // Convert 'true' or 'false' to boolean
     }
 };
+
+
 //Cloud Server
 // const config = {
 //     user: 'sqlserver',
@@ -221,11 +237,11 @@ app.post('/LogIn', async (req, res) => {
         .input('username', sql.NVarChar, username)
         .query('SELECT * FROM tbl_User WHERE Name = @username');
 
-        const user = request.recordset[0]; // Retrieve the first user from the recordset
+        const user = request.recordset[0];
 
         if (user && user.Password === password) { 
             //console.log(req.session);
-            req.session.user = user; // Store user in session
+            req.session.user = user;
             //console.log(req.session.user);
             if (user.Type === "Admin") {
                 res.status(250).send('Admin');
@@ -266,26 +282,28 @@ app.get('/api/current_user', (req, res) => {
     }
   });
 
-
-app.post('/upload', upload.single('image'), async (req, res) => {
+  app.post('/upload', upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).send('No file uploaded');
         }
+        const uploadFolder = path.join(__dirname, 'UploadedImage');
 
-        const data = fs.readFileSync(req.file.path);
+        if (!fs.existsSync(uploadFolder)) {
+            fs.mkdirSync(uploadFolder, { recursive: true });
+        }
 
+        const imagePath = path.join(uploadFolder, req.file.originalname);
+
+        fs.renameSync(req.file.path, imagePath);
         const request = await pool.request()
-        
-        .input('Image', sql.VarBinary, data)
-        .input('Pname', sql.VarChar, req.body.productName)
-        .input('Price', sql.Int, req.body.productPrice)
-        .input('Des', sql.VarChar,req.body.productDes)
-        .input('Stock',sql.Int,req.body.Stock)
-        .input('Cat', sql.Int, req.body.Cat)
-        .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@Image);");
-
-        fs.unlinkSync(req.file.path);
+            .input('ImagePath', sql.VarChar, imagePath)
+            .input('Pname', sql.VarChar, req.body.productName)
+            .input('Price', sql.Int, req.body.productPrice)
+            .input('Des', sql.VarChar, req.body.productDes)
+            .input('Stock', sql.Int, req.body.Stock)
+            .input('Cat', sql.Int, req.body.Cat)
+            .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@ImagePath);");
 
         res.sendStatus(200);
     } catch (error) {
@@ -293,6 +311,34 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         res.status(500).send('Error uploading image');
     }
 });
+
+
+// app.post('/upload', upload.single('image'), async (req, res) => {
+//     try {
+//         if (!req.file) {
+//             return res.status(400).send('No file uploaded');
+//         }
+
+//         const data = fs.readFileSync(req.file.path);
+
+//         const request = await pool.request()
+        
+//         .input('Image', sql.VarBinary, data)
+//         .input('Pname', sql.VarChar, req.body.productName)
+//         .input('Price', sql.Int, req.body.productPrice)
+//         .input('Des', sql.VarChar,req.body.productDes)
+//         .input('Stock',sql.Int,req.body.Stock)
+//         .input('Cat', sql.Int, req.body.Cat)
+//         .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@Image);");
+
+//         fs.unlinkSync(req.file.path);
+
+//         res.sendStatus(200);
+//     } catch (error) {
+//         console.error('Error uploading image:', error);
+//         res.status(500).send('Error uploading image');
+//     }
+// });
 
 app.get('/', (req, res) => {
     res.sendFile('/Landing.html');
@@ -373,17 +419,17 @@ app.get('/Admin', async (req, res) => {
     });
 
       app.post('/retrieve-payment-link', async (req, res) => {
-    const { reference_number } = req.body;
-        //console.log(reference_number);
-    try {
-        const options = {
-            method: 'GET',
-            url: `https://api.paymongo.com/v1/links?reference_number=${reference_number}`,
-            headers: {
-                accept: 'application/json',
-                authorization: 'Basic c2tfdGVzdF9jcXk0ak5BNHUyTHIxcXBKR2E2OTg1Mkc6', 
-            },
-        };
+        const { reference_number } = req.body;
+        console.log(reference_number);
+        try {
+            const options = {
+                method: 'GET',
+                url: `https://api.paymongo.com/v1/links?reference_number=${reference_number}`,
+                headers: {
+                    accept: 'application/json',
+                    authorization: 'Basic c2tfdGVzdF9jcXk0ak5BNHUyTHIxcXBKR2E2OTg1Mkc6', 
+                },
+            };
 
         const response = await axios.request(options);
         res.status(200).json(response.data);
@@ -592,33 +638,121 @@ app.get('/api/messages/Admin', async (req, res) => {
 
 app.get('/products', async (req, res) => {
     try {
-        const request = pool.request();
-        const category = req.query.category || '';
-        let query = 'SELECT ProductName, Price, Description, ProductImage FROM tbl_Product INNER JOIN tbl_Category ON tbl_Product.CategoryID = tbl_Category.CategoryID';
-        
-        if (category) {
-            query += ` WHERE CategoryName LIKE '${category}'`;
+        const result = await pool.request()
+            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product");
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Product not found');
         }
-
-        //console.log(category);
-
-        const result = await request.query(query);  
-        
         const products = result.recordset.map(product => {
-            const base64Image = Buffer.from(product.ProductImage, 'binary').toString('base64');
+            const fileName = path.basename(product.ProductImage);
+            const imagePath = `UploadedImage/${fileName}`;
+
             return {
                 productName: product.ProductName,
                 productPrice: product.Price,
-                productDes: product.Description,
-                productImage: base64Image
-                
+                description: product.Description,
+                stock: product.Stock,
+                categoryId: product.CategoryID,
+                imagePath: imagePath
             };
         });
 
         res.json(products);
-    } catch (err) {
-        console.error('Database error:', err);
-        res.status(500).json({ error: 'Database error', details: err });
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).send('Error fetching product');
+    }
+});
+
+
+app.get('/productsJewelry', async (req, res) => {
+    try {
+
+        const result = await pool.request()
+            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3");
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Product not found');
+        }
+
+        const products = result.recordset.map(product => {
+            const fileName = path.basename(product.ProductImage);
+
+            const imagePath = `UploadedImage/${fileName}`;
+
+            return {
+                productName: product.ProductName,
+                productPrice: product.Price,
+                description: product.Description,
+                stock: product.Stock,
+                categoryId: product.CategoryID,
+                imagePath: imagePath 
+            };
+        });
+
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).send('Error fetching product');
+    }
+});
+
+app.get('/productsBag', async (req, res) => {
+    try {
+        const result = await pool.request()
+            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1");
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Product not found');
+        }
+        const products = result.recordset.map(product => {
+            const fileName = path.basename(product.ProductImage);
+            const imagePath = `UploadedImage/${fileName}`;
+
+            return {
+                productName: product.ProductName,
+                productPrice: product.Price,
+                description: product.Description,
+                stock: product.Stock,
+                categoryId: product.CategoryID,
+                imagePath: imagePath 
+            };
+        });
+
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).send('Error fetching product');
+    }
+});
+
+app.get('/productsDress', async (req, res) => {
+    try {
+        const result = await pool.request()
+            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2");
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Product not found');
+        }
+        const products = result.recordset.map(product => {
+            const fileName = path.basename(product.ProductImage);
+            const imagePath = `UploadedImage/${fileName}`;
+
+            return {
+                productName: product.ProductName,
+                productPrice: product.Price,
+                description: product.Description,
+                stock: product.Stock,
+                categoryId: product.CategoryID,
+                imagePath: imagePath 
+            };
+        });
+
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).send('Error fetching product');
     }
 });
 
@@ -744,12 +878,13 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
         const result = await request.query(query);
 
         const orderItems = result.recordset.map(item => {
-            const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
+        const fileName = path.basename(item.ProductImage);
+        const imagePath = `UploadedImage/${fileName}`;
             return {
                 productName: item.ProductName,
                 Quantity: item.Quantity,
                 Price: item.Price,
-                productImage: base64Image
+                productImage: imagePath
             };
         });
 
@@ -764,7 +899,7 @@ app.get('/Notif', async (req, res) => {
     const user = req.session.user;
 
     if(!user || user.UserID === undefined){
-        return res.redirect('/SignIN.html');
+        return res.redirect('/SignIn.html');
     }
 
     const ID = parseInt(user.UserID);
@@ -785,11 +920,12 @@ app.get('/Notif', async (req, res) => {
         const result = await request.query(query);
        
         const orderItems = result.recordset.map(item => {
-            const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
+        const fileName = path.basename(item.ProductImage);
+        const imagePath = `UploadedImage/${fileName}`;
             return {
                 Content: item.Content,
                 Date: item.NotificationDate,
-                productImage: base64Image,
+                productImage: imagePath,
                 Status: item.Status
             };
         });
@@ -863,12 +999,15 @@ app.get('/Cart', async (req, res) => {
 
             const result = await request.query(query);
             const productsCart = result.recordset.map(productCart => {
-                const base64Image = Buffer.from(productCart.ProductImage, 'binary').toString('base64');
+
+            const fileName = path.basename(productCart.ProductImage);
+
+            const imagePath = `UploadedImage/${fileName}`;
                 return {
                     productName: productCart.ProductName,
                     productPrice: productCart.Price,
                     productQuantity: productCart.Quantity,
-                    productImage: base64Image
+                    productImage: imagePath
                 };
             });
             res.json(productsCart);

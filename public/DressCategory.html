@@ -50,6 +50,7 @@
                               
                             <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                               <div class="py-1" role="none">
+                                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                                 <a href="AllCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">All</a>
                                 <a href="DressCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Dress</a>
                                 <a href="BagCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Bag</a>
@@ -221,7 +222,7 @@
 let currentPage = 1;
 const itemsPerPage = 12;
 
-fetch(`/products`)
+fetch(`/productsDress`)
     .then(response => {
         if (response.ok) {
             return response.json();
@@ -256,16 +257,6 @@ fetch(`/products`)
                     </div> 
                 `;
                 productList.appendChild(productElement);
-
-                    productElement.querySelector('#main-container').addEventListener('click', function() {
-
-                        const productContainer = productElement.querySelector('#main-container');
-                        const productName = productContainer.querySelector('p').innerText;
-
-                        sessionStorage.setItem('productName', productName);
-
-                        window.location.href = 'ProductDetails.html';
-                    })
             });
         }
 
@@ -288,12 +279,11 @@ fetch(`/products`)
                 paginationContainer.appendChild(pageButton);
             }
         }
+
         renderProducts(currentPage);
         renderPagination();
     })
     .catch(error => console.error('Error fetching products:', error));
-
-
 
 </script>
 </html>

@@ -173,7 +173,7 @@ fetch('/products')
             productElement.innerHTML = `
                 <div class="flex bg-[#D8BC8C80] w-[318px] h-[500px] group outline outline-outline outline-1 rounded-xl justify-center relative mb-[2rem]" id="product-container">
                     <div class="flex flex-col z-1">
-                        <img src="data:image/jpeg;base64,${product.productImage}" alt="${product.productName}" class="w-[12rem] mt-[6rem] group-hover:opacity-75 transition delay-300">
+                        <img src="${product.imagePath}" alt="${product.productName}" class="w-[12rem] mt-[6rem] group-hover:opacity-75 transition delay-300">
                         <div class="bottom-1 absolute text-center flex-cols inset-x-0 p-4 items-center h-[5rem] w-auto">
                             <h2>${product.productName}</h2>
                             <p>Price: ${product.productPrice}</p>
