@@ -117,34 +117,38 @@ app.put('/updateProduct/:productName', async (req, res) => {
 //Add To Cart
 
 app.post('/AddToCart', async (req, res) => {
-    const { ProductName,Quantity} = req.body;
+    const { ProductName, Quantity } = req.body;
     const quan = parseInt(Quantity);
     const user = req.session.user;
+
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json({ error: 'User not authenticated' });
+    }
     const ID = parseInt(user.UserID);
-    try {   
+
+    try {
         const request = pool.request();
 
-        request.input('PN',sql.VarChar,ProductName);
-        request.input('Quan',sql.Int,quan);
-        request.input('ID',sql.Int,ID);
+        request.input('PN', sql.VarChar, ProductName);
+        request.input('Quan', sql.Int, quan);
+        request.input('ID', sql.Int, ID);
 
-
-        const query = `BEGIN 
-        
-        DECLARE @ProdID int,@Price int,@Total int;
-
-        SELECT @Price = Price FROM tbl_Product WHERE ProductName = @PN;
-        SET @Total = @Price * @Quan;
-        SELECT @ProdID = ProductID FROM tbl_Product WHERE ProductName = @PN;
+        const query = `
         BEGIN
-        IF EXISTS (SELECT 1 FROM tbl_Cart WHERE ProductID = @ProdID AND UserID = @ID)
-        UPDATE tbl_Cart
-        SET Quantity = Quantity + @Quan, Price = Price * (Quantity + @Quan)
-        WHERE ProductID = @ProdID
-        ELSE
-        INSERT INTO tbl_Cart VALUES (@Quan,@Total,@ID,@ProdID);
+            DECLARE @ProdID INT, @Price INT, @Total INT;
+
+            SELECT @Price = Price FROM tbl_Product WHERE ProductName = @PN;
+            SET @Total = @Price * @Quan;
+            SELECT @ProdID = ProductID FROM tbl_Product WHERE ProductName = @PN;
+
+            IF EXISTS (SELECT 1 FROM tbl_Cart WHERE ProductID = @ProdID AND UserID = @ID)
+                UPDATE tbl_Cart
+                SET Quantity = Quantity + @Quan, Price = Price * (Quantity + @Quan)
+                WHERE ProductID = @ProdID;
+            ELSE
+                INSERT INTO tbl_Cart (Quantity, Price, UserID, ProductID)
+                VALUES (@Quan, @Total, @ID, @ProdID);
         END
-		END  
         `;
 
         const result = await request.query(query);
@@ -152,9 +156,10 @@ app.post('/AddToCart', async (req, res) => {
 
     } catch (err) {
         console.error('Database error:', err);
-        res.status(500).json({ error: 'Database error', details: err });
+        res.status(500).json({ error: 'Database error', details: err.message });
     }
 });
+
 
 app.put('/UpdateCart', async (req, res) => {
     const { ProductN , Quantity} = req.body;
@@ -639,7 +644,7 @@ app.get('/api/messages/Admin', async (req, res) => {
 app.get('/products', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product");
+            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -666,11 +671,39 @@ app.get('/products', async (req, res) => {
 });
 
 
+app.get('/productsDetails/:product', async (req, res) => {
+    const product = req.params.product;
+    try{
+        const request = pool.request();
+        request.input('productName', sql.VarChar, product);
+        const query = `SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE ProductName LIKE @productName`;
+        const result = await request.query(query);
+        const products = result.recordset.map(product => {
+            const fileName = path.basename(product.ProductImage);
+            const imagePath = `UploadedImage/${fileName}`;
+
+            return {
+                productName: product.ProductName,
+                productPrice: product.Price,
+                description: product.Description,
+                stock: product.Stock,
+                categoryId: product.CategoryID,
+                imagePath: imagePath
+            };
+        });
+
+        res.json(products);
+    }catch(err){
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 app.get('/productsJewelry', async (req, res) => {
     try {
 
         const result = await pool.request()
-            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3");
+            .query("SELECT ProductName, FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -701,7 +734,7 @@ app.get('/productsJewelry', async (req, res) => {
 app.get('/productsBag', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1");
+            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -730,7 +763,7 @@ app.get('/productsBag', async (req, res) => {
 app.get('/productsDress', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName, Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2");
+            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -899,7 +932,7 @@ app.get('/Notif', async (req, res) => {
     const user = req.session.user;
 
     if(!user || user.UserID === undefined){
-        return res.redirect('/SignIn.html');
+        return res.status(401).json();
     }
 
     const ID = parseInt(user.UserID);
@@ -973,7 +1006,11 @@ app.get('/Items/:productOrder', async (req, res) => {
 app.get('/Cart', async (req, res) => {
     try {
         const user = req.session.user;
-        const ID = parseInt(user.UserID);
+
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json();
+    }
+    const ID = parseInt(user.UserID);
         const request = pool.request()
         .input('UserID', sql.Int, ID);
         const query = `
@@ -1018,20 +1055,21 @@ app.get('/Cart', async (req, res) => {
 });
 //PlaceOrder
 app.post('/PlaceOrder', async (req, res) => {
-    const { orders } = req.body;
+    const orders  = req.body;
 
     try {
 
         const user = req.session.user;
             const ID = parseInt(user.UserID);
+            console.log(orders)
             const order =  pool.request()
                 .input('ID',sql.Int,ID)
                 .query('INSERT INTO tbl_Order ([Date], UserID, Status) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT)');
         for (const order of orders) {
             
             const request = await pool.request()
-                .input('productName', sql.NVarChar(255), order.OrderProductName)
-                .input('quantity', sql.Int, order.OrderQuantity)
+                .input('productName', sql.NVarChar(255), order.name)
+                .input('quantity', sql.Int, order.quantity)
                 .query(`
                     BEGIN 
                         DECLARE @NewOrderID INT;
@@ -1067,6 +1105,60 @@ app.post('/PlaceOrder', async (req, res) => {
     }
 });
 
+
+
+app.get('/CheckOut', async (req, res) => {
+    try {
+        const user = req.session.user;
+
+        if (!user || user.UserID === undefined) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        const ID = parseInt(user.UserID);
+
+        // Parse the orders from the query string
+        const orders = JSON.parse(decodeURIComponent(req.query.orders));
+
+        const results = [];
+
+        for (const order of orders) {
+            const result = await pool.request()
+                .input('productName', sql.NVarChar, `%${order}%`)
+                .input('ID', sql.Int, ID)
+                .query(`
+                    SELECT tbl_Product.ProductName, FORMAT(CAST(tbl_Cart.Price AS DECIMAL(10, 2)), 'N2')  as Price, tbl_Cart.Quantity, tbl_Product.ProductImage 
+                    FROM tbl_Cart
+                    INNER JOIN tbl_Product
+                    ON tbl_Cart.ProductID = tbl_Product.ProductID
+                    WHERE tbl_Product.ProductName LIKE @productName AND tbl_Cart.UserID = @ID
+                `);
+
+            // Map the results and push them into the results array
+            results.push(...result.recordset.map(item => {
+                const fileName = path.basename(item.ProductImage);
+                const imagePath = `UploadedImage/${fileName}`;
+                return {
+                    ProductName: item.ProductName,
+                    Price: item.Price,
+                    Quantity: item.Quantity,
+                    Image: imagePath
+                };
+            }));
+        }
+
+        // Send the mapped results as JSON
+        res.json(results);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('An error occurred');
+    }
+});
+
+
+
+
+
 app.put('/Cancel', async (req, res) => {
     const { status, OrderID } = req.body;
 
@@ -1086,9 +1178,10 @@ app.put('/Cancel', async (req, res) => {
 app.get('/NotifBadge', async (req, res) => {
     const user = req.session.user;
 
-    if(!user || user.UserID === undefined){
-        return res.redirect('/Sign.html');
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json({ error: 'Unauthorized' });
     }
+
     const ID = parseInt(user.UserID);
     try {
 
@@ -1121,6 +1214,11 @@ app.put('/UpdateNotif', async (req, res) => {
     const { UpdatedNotif } = req.body;
     //console.log(UpdatedNotif);
     const user = req.session.user;
+
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     const ID = parseInt(user.UserID);
     try {
         //console.log(UpdatedNotif);

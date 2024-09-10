@@ -40,7 +40,7 @@ function submitForm() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 500) {
+            if (xhr.status === 200) {
                 nameValue = document.getElementById("Usernametxt").value = "";
                 numValue = document.getElementById("Numbertxt").value = "";
                 Password = document.getElementById("Passwordtxt").value = "";
@@ -71,7 +71,7 @@ function LogIn() {
             if (xhr.status === 200) {
                 alert("Login successful");
                 localStorage.setItem("userRole", "customer");
-                window.location.href = "Home.html";
+                window.location.href = "index.html";
             } else if (xhr.status === 401) {
                 alert("Invalid username or password");
                 document.getElementById('Passwordtxt').value = '';
