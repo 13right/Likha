@@ -57,26 +57,26 @@ app.use(session({
 // };
 
 //try
-const config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    server: process.env.DB_SERVER,
-    database: process.env.DB_DATABASE,
-    options: {
-        encrypt: process.env.DB_ENCRYPT === 'true' // Convert 'true' or 'false' to boolean
-    }
-};
-
-// MSCloud
 // const config = {
-//     user: 'Likha_Admin',
-//     password: 'Zappnott@',
-//     server: 'likha.database.windows.net',
-//     database: 'Capstone',
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASSWORD,
+//     server: process.env.DB_SERVER,
+//     database: process.env.DB_DATABASE,
 //     options: {
-//         encrypt: true
+//         encrypt: process.env.DB_ENCRYPT === 'true' // Convert 'true' or 'false' to boolean
 //     }
 // };
+
+// MSCloud
+const config = {
+    user: 'Likha_Admin',
+    password: 'Zappnott@',
+    server: 'likha.database.windows.net',
+    database: 'Capstone',
+    options: {
+        encrypt: true
+    }
+};
 
 
 //Cloud Server
