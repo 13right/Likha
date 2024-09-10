@@ -70,7 +70,7 @@ app.use(session({
 // MSCloud
 const config = {
     user: 'Likha_Admin',
-    password: 'Zappnot@',
+    password: 'Zappnott@',
     server: 'likha.database.windows.net',
     database: 'Capstone',
     options: {
