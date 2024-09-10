@@ -71,7 +71,7 @@ function LogIn() {
             if (xhr.status === 200) {
                 alert("Login successful");
                 localStorage.setItem("userRole", "customer");
-                window.location.href = "index.html";
+                window.location.href = "Index.html";
             } else if (xhr.status === 401) {
                 alert("Invalid username or password");
                 document.getElementById('Passwordtxt').value = '';
