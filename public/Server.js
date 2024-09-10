@@ -662,7 +662,7 @@ app.get('/products', async (req, res) => {
         const products = result.recordset.map(product => {
             const fileName = path.basename(product.ProductImage);
             const imagePath = `UploadedImage/${fileName}`;
-
+            console.log(imagePath);
             return {
                 productName: product.ProductName,
                 productPrice: product.Price,
@@ -671,6 +671,7 @@ app.get('/products', async (req, res) => {
                 categoryId: product.CategoryID,
                 imagePath: imagePath
             };
+            
         });
 
         res.json(products);
@@ -804,6 +805,7 @@ app.get('/User', async (req, res) => {
 
     const user = req.session.user;
     const ID = parseInt(user.UserID);
+    
     try{
         const request = pool.request();
         request.input('UserID', sql.Int, ID);
