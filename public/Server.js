@@ -356,9 +356,9 @@ app.get('/api/current_user', (req, res) => {
 //     }
 // });
 
-// app.get('/', (req, res) => {
-//     res.sendFile('/Index.html');
-// });
+app.get('/', (req, res) => {
+    res.sendFile('Index.html');
+});
 
 
 app.get('/Admin', async (req, res) => {
