@@ -15,7 +15,7 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 const upload = multer({ dest: 'uploads/' });
 
