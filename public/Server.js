@@ -361,6 +361,7 @@ app.get('/', (req, res) => {
 });
 
 
+
 app.get('/Admin', async (req, res) => {
     const Type = "Admin";
     const query = `SELECT UserID FROM tbl_User WHERE Type = @Type`;
