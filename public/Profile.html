@@ -254,6 +254,7 @@
                         id="search-icon"
                         onclick="expandSearchBar()"
                         src="https://cdn.lordicon.com/kkvxgpti.json"
+                        stroke="light"
                         trigger="hover"
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
                         style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
@@ -263,11 +264,10 @@
 
                 <a href="Profile.html" class="relative cursor-pointer inline-block p-[0.75rem]">
                     <lord-icon
-                        src="https://cdn.lordicon.com/bgebyztw.json"
+                        src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
-                        stroke="bold"
-                        colors="primary:#000,secondary:#000"
-                        style="width:1.75rem;height:1.75rem;">
+                        colors="primary:#000000"
+                        style="width:1.75rem;height:1.75rem">
                     </lord-icon>
                 </a>
 
@@ -275,6 +275,7 @@
                     <lord-icon
                         id="NotifIcon"
                         src="https://cdn.lordicon.com/vspbqszr.json"
+                        stroke="light"
                         trigger="hover"
                         style="width:1.75rem;height:1.75rem;">
                     </lord-icon>
@@ -297,35 +298,48 @@
         </nav>
     </div>
     <div class="bg-Likha min-h-screen">
-        <div id="main-container" class=" relative w-[1200px] h-[40rem] left-[12rem] top-[8rem] space-y-7">
-            <div class="flex items-center space-x-[5rem]">
-                <div class="w-[415px] h-[205px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] ml-[4rem] flex">
-                   <div class="flex-1 text-center mt-[1rem] relative">
-                    <div class="h-[82px] w-[82px] outline outline-2 outline-outline relative left-[10.5rem] rounded-full mt-[2rem] ">
-                        <div>
-                            <img src="img/profilepic.jpeg" alt="" class="h-[82px] w-[82px] rounded-full">
+        <div id="main-container" class="relative min-w-min h-[40rem] top-[8rem]">
+            <div class=" w-[1250px] h-[40rem] mx-auto relative">
+                <div class="w-[25rem] h-auto space-x-10 flex mb-16 ml-[3rem]">
+                    <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                        <img src="img/profilepic.jpeg" class="w-[80px] h-[80px] rounded-full" alt="">
+                    </div>
+                    <div class="flex flex-col items-center justify-center">
+                        <h1 id="Name" class="font-Inter font-semibold text-[15px] text-center">
+                            JENNIE KIM
+                        </h1>
+                        <h2 class="font-Inter font-normal text-[14px] text-center">
+                            jennierubyjane
+                        </h2>
+                        <u class=" cursor-pointer font-Inter font-normal text-[12px] text-[#00000080]"> 
+                            Delete Account
+                        </u>
+                    </div>
+                </div>
+                <div class="w-auto h-[3rem]  flex justify-center space-x-8 mb-6">
+                    <button id="Edit" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">EDIT PROFILE</button>
+                    <button id="Password" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">PASSWORD</button>
+                </div>
+                <form action="">
+                    <hr class="w-auto border-1 border-outline">
+                    <div class="outline outline-1 outline-outline w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center">
+                        <div class="outline outline-1 outline-outline h-[15rem] w-[30rem]">
+                            <div>
+
+                            </div>
+                            <div>
+                                
+                            </div>
+                        </div>
+                        <div class="outline outline-1 outline-outline h-[15rem] w-[30rem]">
+
                         </div>
                     </div>
-                    <div>
-                        <h1 id="Name" class="font-Inter font-medium text-xl"></h1>
+                    <div class=" flex justify-center">
+                        <button id="PlaceOrder" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#FFFF]">Save</button>
                     </div>
-                    </div>
-                    
-                    <div class="absolute top-[-1] ml-[23rem] cursor-pointer">
-                        <img src="/img/LogOut.png" class="w-[50px] h-[50px]" alt="" id="LogOut">
-                       
-                    </div>
-                </div>
-                <div class="w-[464px] h-[117px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] items-center flex space-x-5">
-                    <a href="Orders.html"><button class="justify-center bg-outline ml-[2rem] w-[190px] h-[53px] flex items-center rounded-xl space-x-2"><img class="w-[2rem] h-[2rem] float-left" src="img/Orders.png" alt=""><span class="text-[#FFF]">Orders</span></button></a>
-                    <button class="justify-center w-[190px] h-[53px] bg-outline flex items-center rounded-lg space-x-2"><img src="img/History.png" class="w-[2rem] h-[2rem] float-left" alt=""><span class="text-[#FFF]">History</span></button>
-                </div>
-            </div>
-            <div class="w-[1100px] h-[400px] bg-[#F07C541A] outline outline-[3px] outline-outline rounded-[15px] pt-5">
-                <div class="font-Montagu font-bold text-2xl text-center">Profile Info</div>
-                <div class="">
-                    
-                </div>
+                </form>
+                
             </div>
         </div>
         <div class="fixed hidden right-0 top-0 h-full w-[570px] bg-Likha z-[50] shadow-2xl p-6" id="Cartel">
@@ -379,6 +393,23 @@
 </body>
 <script src="AuthorizationBE.js"></script>
 <script>
+        const Edit = document.getElementById('Edit');
+        const Pass = document.getElementById('Password');
+
+        Edit.addEventListener('click', function(event){
+            if(!Edit.classList.contains('bg-[#F07C5480]')){
+                Edit.classList.add('bg-[#F07C5480]');
+                Pass.classList.remove('bg-[#F07C5480]');
+            }
+        });
+        Pass.addEventListener('click', function(event){
+            if(!Pass.classList.contains('bg-[#F07C5480]')){
+                Pass.classList.add('bg-[#F07C5480]');
+                Edit.classList.remove('bg-[#F07C5480]');
+            }
+        });
+
+
     document.getElementById('LogOut').addEventListener('click', () => {
     fetch('/LogOut', {
         method: 'POST',
@@ -413,7 +444,7 @@ async function fetchUserName(){
         console.error('Error fetching user name:', error);
     }
 }
-fetchUserName();
+//fetchUserName();
 
 function expandSearchBar() {
     const searchBar = document.getElementById('search-bar');
