@@ -305,7 +305,7 @@
                         <img src="img/profilepic.jpeg" class="w-[80px] h-[80px] rounded-full" alt="">
                     </div>
                     <div class="flex flex-col items-center justify-center">
-                        <h1 id="Name" class="font-Inter font-semibold text-[15px] text-center">
+                        <h1 id="" class="font-Inter font-semibold text-[15px] text-center">
                             JENNIE KIM
                         </h1>
                         <h2 class="font-Inter font-normal text-[14px] text-center">
@@ -322,22 +322,72 @@
                 </div>
                 <form action="">
                     <hr class="w-auto border-1 border-outline">
-                    <div class="outline outline-1 outline-outline w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center">
-                        <div class="outline outline-1 outline-outline h-[15rem] w-[30rem]">
-                            <div>
-                                <h1>Name</h1>
-                                <input type="text" name="" id="Name">
+                    <div id="PasswordEdit" class=" w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center hidden">
+                        <div class="h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
+                            <div class="relative">
+                                <h1 class="ml-4">Old Password</h1>
+                                <div class="relative flex items-center">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="" value="">
+                                    <span class="absolute right-2">edit</span>
+                                </div>
                             </div>
-                            <div>
-
+                            <div >
+                                <h1 class="ml-4">Confirm Password</h1>
+                                <div class="relative flex items-center">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="" value="">
+                                <span class="absolute right-2">edit</span>
+                                </div>
+                                
                             </div>
                         </div>
-                        <div class="outline outline-1 outline-outline h-[15rem] w-[30rem]">
-
+                        <div class="h-[15rem] w-[30rem] flex flex-col items-center mt-[4.75rem]">
+                            <div>
+                                <h1 class="ml-4">New Password</h1>
+                                <div class="relative flex items-center">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="" value="">
+                                    <span class="absolute right-2">edit</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class=" flex justify-center">
-                        <button id="PlaceOrder" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#FFFF]">Save</button>
+                    <div id="ProfileEdit" class=" w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center">
+                        <div class="h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
+                            <div class="relative">
+                                <h1 class="ml-4">Name</h1>
+                                <div class="relative flex items-center">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Name" value="JENNIE KIM" disabled>
+                                    <span id="EditName" class="absolute right-2 cursor-pointer focus:bg-hehe">edit</span>
+                                </div>
+                            </div>
+                            <div >
+                                <h1 class="ml-4">Username</h1>
+                                <div class="relative flex items-center">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Username" value="jennierubyjane" disabled>
+                                <span class="absolute right-2">edit</span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class=" h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
+                            <div>
+                                <h1 class="ml-4">Mobile No.</h1>
+                                <div class="relative flex items-center">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Mobile" value="+63 9033526492" disabled>
+                                    <span class="absolute right-2">edit</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h1 class="ml-4">Email</h1>
+                                <div class="relative flex items-center">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Email" value="jennierubyjane.kim@email.com" disabled>
+                                    <span class="absolute right-2">edit</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div  class=" flex justify-center ">
+                        <button id="Save" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#fff]">Save</button>
+                        <button id="Change" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#FFFF] hidden">Change</button>
                     </div>
                 </form>
                 
@@ -396,17 +446,36 @@
 <script>
         const Edit = document.getElementById('Edit');
         const Pass = document.getElementById('Password');
+        const ProfileEdit = document.getElementById('ProfileEdit');
+        const PasswordEdit = document.getElementById('PasswordEdit');
+        const Save = document.getElementById('Save');
+        const Change = document.getElementById('Change');
+        const EditName = document.getElementById('EditName');
 
         Edit.addEventListener('click', function(event){
             if(!Edit.classList.contains('bg-[#F07C5480]')){
                 Edit.classList.add('bg-[#F07C5480]');
                 Pass.classList.remove('bg-[#F07C5480]');
+                ProfileEdit.classList.remove('hidden');
+                PasswordEdit.classList.add('hidden');
+                Change.classList.add('hidden');
+                Save.classList.remove('hidden');
             }
         });
         Pass.addEventListener('click', function(event){
             if(!Pass.classList.contains('bg-[#F07C5480]')){
                 Pass.classList.add('bg-[#F07C5480]');
                 Edit.classList.remove('bg-[#F07C5480]');
+                ProfileEdit.classList.add('hidden');
+                PasswordEdit.classList.remove('hidden');
+                Change.classList.remove('hidden');
+                Save.classList.add('hidden');
+            }
+        });
+        EditName.addEventListener('click', function(event){
+            if(document.getElementById('Name').disabled = true ){
+                document.getElementById('Name').disabled = false;
+                
             }
         });
 
