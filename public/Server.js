@@ -804,6 +804,11 @@ app.get('/productsDress', async (req, res) => {
 app.get('/User', async (req, res) => {
 
     const user = req.session.user;
+
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     const ID = parseInt(user.UserID);
     
     try{
@@ -821,7 +826,7 @@ app.get('/User', async (req, res) => {
 
 app.get('/Order', async (req, res) => {
     const user = req.session.user;
-            const ID = parseInt(user.UserID);
+    const ID = parseInt(user.UserID);
     try {
         const request = pool.request();
         request.input('UserID', sql.Int, ID);

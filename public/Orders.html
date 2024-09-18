@@ -302,11 +302,11 @@
         <div id="main-container" class="flex flex-col space-y-12">
             <p class="font-Montagu font-extrabold text-4xl text-center">Orders</p>
             <div class="flex justify-center space-x-[3.5rem]">
-                <button id="Edit" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">ALL</button>
-                <button id="Password" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CONFIRMED</button>
-                <button id="Edit" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">TO PICK UP</button>
-                <button id="Password" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">COMPLETED</button>
-                <button id="Edit" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CANCELLED</button>
+                <button id="ALL" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">ALL</button>
+                <button id="CONFIRMED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CONFIRMED</button>
+                <button id="TPU" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">TO PICK UP</button>
+                <button id="COMPLETED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">COMPLETED</button>
+                <button id="CANCELLED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CANCELLED</button>
             </div>
             <hr class="w-[1300px] border-1 border-outline mx-auto">
             <div id="Order-container" class="flex flex-col space-y-11 mx-auto">
@@ -521,7 +521,60 @@
     
     searchBar.classList.toggle('expanded');
     searchIcon.classList.toggle('expanded');
-    }        
+    } 
+    
+    const ALL = document.getElementById('ALL');
+    const CONFIRMED = document.getElementById('CONFIRMED');
+    const TPU = document.getElementById('TPU');
+    const COMPLETED = document.getElementById('COMPLETED');
+    const CANCELLED = document.getElementById('CANCELLED');
+
+    ALL.addEventListener('click', function(event){
+        if(!ALL.classList.contains('bg-[#F07C5480]')){
+            ALL.classList.add('bg-[#F07C5480]');
+            COMPLETED.classList.remove('bg-[#F07C5480]');
+            TPU.classList.remove('bg-[#F07C5480]');
+            CONFIRMED.classList.remove('bg-[#F07C5480]');
+            CANCELLED.classList.remove('bg-[#F07C5480]');
+        }
+    });
+    CONFIRMED.addEventListener('click', function(event){
+        if(!CONFIRMED.classList.contains('bg-[#F07C5480]')){
+            CONFIRMED.classList.add('bg-[#F07C5480]');
+            ALL.classList.remove('bg-[#F07C5480]');
+            TPU.classList.remove('bg-[#F07C5480]');
+            COMPLETED.classList.remove('bg-[#F07C5480]');
+            CANCELLED.classList.remove('bg-[#F07C5480]');
+        }
+    });
+    TPU.addEventListener('click', function(event){
+        if(!TPU.classList.contains('bg-[#F07C5480]')){
+            TPU.classList.add('bg-[#F07C5480]');
+            ALL.classList.remove('bg-[#F07C5480]');
+            CONFIRMED.classList.remove('bg-[#F07C5480]');
+            COMPLETED.classList.remove('bg-[#F07C5480]');
+            CANCELLED.classList.remove('bg-[#F07C5480]');
+        }
+    });
+    COMPLETED.addEventListener('click', function(event){
+        if(!COMPLETED.classList.contains('bg-[#F07C5480]')){
+            COMPLETED.classList.add('bg-[#F07C5480]');
+            ALL.classList.remove('bg-[#F07C5480]');
+            TPU.classList.remove('bg-[#F07C5480]');
+            CONFIRMED.classList.remove('bg-[#F07C5480]');
+            CANCELLED.classList.remove('bg-[#F07C5480]');
+        }
+    });
+    CANCELLED.addEventListener('click', function(event){
+        if(!CANCELLED.classList.contains('bg-[#F07C5480]')){
+            CANCELLED.classList.add('bg-[#F07C5480]');
+            ALL.classList.remove('bg-[#F07C5480]');
+            TPU.classList.remove('bg-[#F07C5480]');
+            COMPLETED.classList.remove('bg-[#F07C5480]');
+            CONFIRMED.classList.remove('bg-[#F07C5480]');
+        }
+    });
+    
     //Cart
     async function fetchCart() {
     const CartList = document.getElementById('Product-Cart');
@@ -841,8 +894,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             console.error('Error fetching unread count:', error);
         }
     }
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
 
+document.addEventListener('DOMContentLoaded', fetchUnreadCount);
 
 setInterval(fetchUnreadCount,10); 
 

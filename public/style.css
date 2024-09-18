@@ -1212,10 +1212,6 @@ video {
   margin-left: 5.75rem;
 }
 
-.ml-\[5rem\]{
-  margin-left: 5rem;
-}
-
 .ml-\[6\.5rem\]{
   margin-left: 6.5rem;
 }
@@ -1340,8 +1336,8 @@ video {
   margin-top: 3rem;
 }
 
-.mt-\[4\.5rem\]{
-  margin-top: 4.5rem;
+.mt-\[4\.75rem\]{
+  margin-top: 4.75rem;
 }
 
 .mt-\[4rem\]{
@@ -1358,14 +1354,6 @@ video {
 
 .mt-\[7rem\]{
   margin-top: 7rem;
-}
-
-.mt-\[4\.75rem\]{
-  margin-top: 4.75rem;
-}
-
-.ml-\[6rem\]{
-  margin-left: 6rem;
 }
 
 .block{
@@ -1884,6 +1872,10 @@ video {
   width: 12rem;
 }
 
+.w-\[1300px\]{
+  width: 1300px;
+}
+
 .w-\[1334px\]{
   width: 1334px;
 }
@@ -2264,14 +2256,6 @@ video {
   width: 100%;
 }
 
-.w-\[1350px\]{
-  width: 1350px;
-}
-
-.w-\[1300px\]{
-  width: 1300px;
-}
-
 .min-w-min{
   min-width: -moz-min-content;
   min-width: min-content;
@@ -2528,6 +2512,12 @@ video {
   margin-left: calc(28.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.space-x-\[3\.5rem\] > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(3.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(3.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
 .space-x-\[4\.25rem\] > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(4.25rem * var(--tw-space-x-reverse));
@@ -2622,18 +2612,6 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(16rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(16rem * var(--tw-space-y-reverse));
-}
-
-.space-x-\[3rem\] > :not([hidden]) ~ :not([hidden]){
-  --tw-space-x-reverse: 0;
-  margin-right: calc(3rem * var(--tw-space-x-reverse));
-  margin-left: calc(3rem * calc(1 - var(--tw-space-x-reverse)));
-}
-
-.space-x-\[3\.5rem\] > :not([hidden]) ~ :not([hidden]){
-  --tw-space-x-reverse: 0;
-  margin-right: calc(3.5rem * var(--tw-space-x-reverse));
-  margin-left: calc(3.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .overflow-auto{
@@ -3259,12 +3237,12 @@ video {
   padding-top: 6rem;
 }
 
-.pt-\[9rem\]{
-  padding-top: 9rem;
-}
-
 .pt-\[7rem\]{
   padding-top: 7rem;
+}
+
+.pt-\[9rem\]{
+  padding-top: 9rem;
 }
 
 .text-left{

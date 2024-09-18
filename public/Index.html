@@ -433,8 +433,8 @@ input[type="checkbox"] {
                         trigger="hover"
                         style="width:1.75rem;height:1.75rem;">
                     </lord-icon>
-                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] inline-flex items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full hidden"></span>
-                    <span id="notifBadge" class="hidden absolute top-3 right-[13px] inline-flex items-center justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
+                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
+                    <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
                 </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.5rem]">
@@ -1087,165 +1087,186 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (unreadCount > 0) {
                 notifBadge.style.display = 'inline-flex';
                 notifPing.style.display = 'inline-flex';
+                notifBadge.classList.remove('hidden');
+                notifPing.classList.remove('hidden');
             } else {
                 notifBadge.style.display = 'none';
                 notifPing.style.display = 'none';
             }
         } catch (error) {
-            console.error('Error fetching unread count:', error);
+            //console.error('Error fetching unread count:', error);
         }
     }
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
 
-
-setInterval(fetchUnreadCount,10); 
-
-setInterval(Notif, 1000);
-
-//Chat
-document.addEventListener('DOMContentLoaded', () => {
-            fetchMessages();
-            setInterval(fetchMessages, 2000);
-        });
-
-        async function getCurrentUser() {
-            try {
-                const response = await fetch('/api/current_user');
-                if (response.ok) {
-                    const user = await response.json();
-                    return user.UserID;
-                    //console.log("User ID" + user.UserID); 
-                } else {
-                    window.location.href = '/SignIn.html'; 
-                }
-            } catch (error) {
-                console.error('Error fetching current user:', error);
-            }
+async function fetchUser() {
+    try {
+        const response = await fetch('/User');
+        if (response.ok) {
+        const data = await response.json();
+        console.log('User:', data);
+        setInterval(fetchUnreadCount, 10000); // 10 seconds
+        setInterval(Notif, 1000); // 1 second
+        } else {
+        console.error('Failed to fetch user data.');
         }
-        let previousMessageCount = 0;
-        function scrollToBottom() {
-            const chatBox = document.getElementById('chat-box');
-            if (chatBox) {
-                requestAnimationFrame(() => {
-                    chatBox.scrollTo({
-                        top: chatBox.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                });
-            } else {
-                console.error('chatBox element not found.');
-            }
-        }
-    async function fetchMessages() {
-    
-    const userID = await getCurrentUser();
-    fetch('/api/messages')
-    .then(response => response.json())
-    .then(messages => {
-        //console.log(messages);
-        const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML = '';
-        const ID = parseInt(userID);
-       //console.log(ID);
-        messages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `
-                <div id="CC" class="flex items-start">
-                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
-                        <p id="Content" class="text-sm">${msg.message}</p>
-                    </div>
-                </div>
-            `;
-            const ChatContainer = messageElement.querySelector('#CC');
-            const ChatBG = messageElement.querySelector('#Chats');
-                //console.log(msg.SenderID);
-            if ( msg.SenderID === ID) {
-                ChatContainer.classList.add('justify-end');
-                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
-                ChatBG.classList.remove('bg-outline');
-            } else {
-                ChatBG.classList.add('bg-outline');
-            }
-
-            chatBox.appendChild(messageElement);
-        });
-        // console.log(previousMessageCount);
-        // console.log(messages.length);
-        if (messages.length > previousMessageCount) {
-            scrollToBottom();
-            console.log("Scroll");
-        }
-
-        previousMessageCount = messages.length;
-    })
-    .catch(error => {
-        console.error('Network error:', error);
-    });
+    } catch (err) {
+        console.error('Error fetching user:', err);
+    }
 }
 
-        document.getElementById('message-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const message = document.getElementById('message-input').value;
-            fetch('/Chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
-            }).then(() => {
-                document.getElementById('message-input').value = '';
-                fetchMessages();
-            });
-        });
 
-        fetchMessages();
-        const logo = document.getElementById('ChatLogo');
-        const content = document.getElementById('ChatContent');
-        const closeButton = document.getElementById('ChatClose');
+document.addEventListener('DOMContentLoaded', async () => {
+    // Fetch the user once on page load
+    await fetchUser();
+    // Start fetching unread count
+    fetchUnreadCount();
+  });
 
-        logo.addEventListener('click', () => {
+
+//Chat
+// document.addEventListener('DOMContentLoaded', () => {
+//             fetchMessages();
+//             setInterval(fetchMessages, 2000);
+//         });
+
+//         async function getCurrentUser() {
+//             try {
+//                 const response = await fetch('/api/current_user');
+//                 if (response.ok) {
+//                     const user = await response.json();
+//                     return user.UserID;
+//                     //console.log("User ID" + user.UserID); 
+//                 } else {
+//                     window.location.href = '/SignIn.html'; 
+//                 }
+//             } catch (error) {
+//                 console.error('Error fetching current user:', error);
+//             }
+//         }
+//         let previousMessageCount = 0;
+//         function scrollToBottom() {
+//             const chatBox = document.getElementById('chat-box');
+//             if (chatBox) {
+//                 requestAnimationFrame(() => {
+//                     chatBox.scrollTo({
+//                         top: chatBox.scrollHeight,
+//                         behavior: 'smooth'
+//                     });
+//                 });
+//             } else {
+//                 console.error('chatBox element not found.');
+//             }
+//         }
+//     async function fetchMessages() {
+    
+//     const userID = await getCurrentUser();
+//     fetch('/api/messages')
+//     .then(response => response.json())
+//     .then(messages => {
+//         //console.log(messages);
+//         const chatBox = document.getElementById('chat-box');
+//         chatBox.innerHTML = '';
+//         const ID = parseInt(userID);
+//        //console.log(ID);
+//         messages.forEach(msg => {
+//             const messageElement = document.createElement('div');
+//             messageElement.innerHTML = `
+//                 <div id="CC" class="flex items-start">
+//                     <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+//                         <p id="Content" class="text-sm">${msg.message}</p>
+//                     </div>
+//                 </div>
+//             `;
+//             const ChatContainer = messageElement.querySelector('#CC');
+//             const ChatBG = messageElement.querySelector('#Chats');
+//                 //console.log(msg.SenderID);
+//             if ( msg.SenderID === ID) {
+//                 ChatContainer.classList.add('justify-end');
+//                 ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+//                 ChatBG.classList.remove('bg-outline');
+//             } else {
+//                 ChatBG.classList.add('bg-outline');
+//             }
+
+//             chatBox.appendChild(messageElement);
+//         });
+//         // console.log(previousMessageCount);
+//         // console.log(messages.length);
+//         if (messages.length > previousMessageCount) {
+//             scrollToBottom();
+//             console.log("Scroll");
+//         }
+
+//         previousMessageCount = messages.length;
+//     })
+//     .catch(error => {
+//         console.error('Network error:', error);
+//     });
+// }
+
+//         document.getElementById('message-form').addEventListener('submit', function (e) {
+//             e.preventDefault();
+//             const message = document.getElementById('message-input').value;
+//             fetch('/Chat', {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ message })
+//             }).then(() => {
+//                 document.getElementById('message-input').value = '';
+//                 fetchMessages();
+//             });
+//         });
+
+//         fetchMessages();
+//         const logo = document.getElementById('ChatLogo');
+//         const content = document.getElementById('ChatContent');
+//         const closeButton = document.getElementById('ChatClose');
+
+//         logo.addEventListener('click', () => {
             
-            const logoRect = logo.getBoundingClientRect();
+//             const logoRect = logo.getBoundingClientRect();
 
-            content.style.right = `${window.innerWidth - logoRect.right}px`;
-            content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
-            content.style.width = `${logoRect.width}px`;
-            content.style.height = `${logoRect.height}px`;
+//             content.style.right = `${window.innerWidth - logoRect.right}px`;
+//             content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
+//             content.style.width = `${logoRect.width}px`;
+//             content.style.height = `${logoRect.height}px`;
 
-            logo.classList.add('spin-fade');
+//             logo.classList.add('spin-fade');
             
 
-            setTimeout(() => {
-                logo.classList.add('hidden'); 
-                content.classList.remove('hidden', 'content-hidden');
-                content.classList.add('expand-from-logo');
-                content.classList.remove('collapse-to-logo');
+//             setTimeout(() => {
+//                 logo.classList.add('hidden'); 
+//                 content.classList.remove('hidden', 'content-hidden');
+//                 content.classList.add('expand-from-logo');
+//                 content.classList.remove('collapse-to-logo');
 
-                setTimeout(() => {
-                    content.style.width = '35rem';
-                    content.style.height = '25rem';
+//                 setTimeout(() => {
+//                     content.style.width = '35rem';
+//                     content.style.height = '25rem';
 
-                    setTimeout(() => {
-                        scrollToBottom();
-                        content.classList.remove('content-hidden');
-                        content.classList.add('content-visible');
-                    }, 700); 
-                }, 0);
-            }, 300);
-        });
-        closeButton.addEventListener('click', () => {
-            content.classList.remove('expand-from-logo', 'content-visible');
-            content.classList.add('collapse-to-logo');
+//                     setTimeout(() => {
+//                         scrollToBottom();
+//                         content.classList.remove('content-hidden');
+//                         content.classList.add('content-visible');
+//                     }, 700); 
+//                 }, 0);
+//             }, 300);
+//         });
+//         closeButton.addEventListener('click', () => {
+//             content.classList.remove('expand-from-logo', 'content-visible');
+//             content.classList.add('collapse-to-logo');
 
 
-            setTimeout(() => {
-                content.classList.add('content-hidden');
-                content.classList.add('hidden');
-                content.style.width = 'initial';
-                content.style.height = 'initial';
+//             setTimeout(() => {
+//                 content.classList.add('content-hidden');
+//                 content.classList.add('hidden');
+//                 content.style.width = 'initial';
+//                 content.style.height = 'initial';
                 
 
-                logo.classList.remove('hidden');
-                logo.classList.remove('spin-fade');
-            }, 400); 
-        });
+//                 logo.classList.remove('hidden');
+//                 logo.classList.remove('spin-fade');
+//             }, 400); 
+//         });
 </script>
 </html>
