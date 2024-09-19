@@ -1126,6 +1126,7 @@ async function fetchUser() {
         if (response.ok) {
         const data = await response.json();
         console.log('User:', data);
+        fetchUserInfo();
         setInterval(fetchUnreadCount, 10); 
         setInterval(Notif, 1000);
         } else {
@@ -1155,7 +1156,6 @@ async function fetchUserInfo() {
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchUser();
     fetchUnreadCount();
-    fetchUserInfo();
   });
 
 
