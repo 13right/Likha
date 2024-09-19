@@ -9,11 +9,9 @@ const axios = require('axios');
 //const { compile } = require('ejs');
 require('dotenv').config();
 
-const compression = require('compression');
-const expressStaticGzip = require('express-static-gzip');
+
 
 const app = express();
-
 
 app.set('view engine', 'ejs');
 
@@ -33,57 +31,32 @@ app.use('/Build', express.static(path.join(__dirname, 'Build')));
 
 app.use(express.static(path.join(__dirname)));
 
-// app.use((req, res, next) => {
-//     if (req.url.endsWith('.br')) {
-//       res.setHeader('Content-Encoding', 'br');
-//       if (req.url.endsWith('.wasm.br')) {
-//         res.setHeader('Content-Type', 'application/wasm');
-//       } else if (req.url.endsWith('.json.br')) {
-//         res.setHeader('Content-Type', 'application/json');
-//       } else if (req.url.endsWith('.data.br')) {
-//         res.setHeader('Content-Type', 'application/octet-stream');
-//       } else if (req.url.endsWith('.js.br')) {
-//         res.setHeader('Content-Type', 'application/javascript');
-//       }
-//     } else if (req.url.endsWith('.gz')) {
-//       res.setHeader('Content-Encoding', 'gzip');
-//       if (req.url.endsWith('.wasm.gz')) {
-//         res.setHeader('Content-Type', 'application/wasm');
-//       } else if (req.url.endsWith('.json.gz')) {
-//         res.setHeader('Content-Type', 'application/json');
-//       } else if (req.url.endsWith('.data.gz')) {
-//         res.setHeader('Content-Type', 'application/octet-stream');
-//       } else if (req.url.endsWith('.js.gz')) {
-//         res.setHeader('Content-Type', 'application/javascript');
-//       }
-//     }
-//     next();
-//   });
-
-// Enable gzip compression for non-Brotli clients
-app.use(compression());
-
-// Serve Brotli and gzip files from the build folder
-app.use(
-  '/',
-  expressStaticGzip(path.join(__dirname, 'build'), {
-    enableBrotli: true, // Enable Brotli
-    orderPreference: ['br', 'gz'], // Serve Brotli first, then gzip
-    setHeaders: function (res, path) {
-      // Ensure the correct headers are sent
-      if (path.endsWith('.br')) {
-        res.setHeader('Content-Encoding', 'br');
-        res.setHeader('Content-Type', 'application/javascript');
-      } else if (path.endsWith('.gz')) {
-        res.setHeader('Content-Encoding', 'gzip');
+app.use((req, res, next) => {
+    if (req.url.endsWith('.br')) {
+      res.setHeader('Content-Encoding', 'br');
+      if (req.url.endsWith('.wasm.br')) {
+        res.setHeader('Content-Type', 'application/wasm');
+      } else if (req.url.endsWith('.json.br')) {
+        res.setHeader('Content-Type', 'application/json');
+      } else if (req.url.endsWith('.data.br')) {
+        res.setHeader('Content-Type', 'application/octet-stream');
+      } else if (req.url.endsWith('.js.br')) {
         res.setHeader('Content-Type', 'application/javascript');
       }
-    },
-  })
-);
-
-// Fallback to the uncompressed file if no compression is supported
-app.use(express.static(path.join(__dirname, 'build')));
+    } else if (req.url.endsWith('.gz')) {
+      res.setHeader('Content-Encoding', 'gzip');
+      if (req.url.endsWith('.wasm.gz')) {
+        res.setHeader('Content-Type', 'application/wasm');
+      } else if (req.url.endsWith('.json.gz')) {
+        res.setHeader('Content-Type', 'application/json');
+      } else if (req.url.endsWith('.data.gz')) {
+        res.setHeader('Content-Type', 'application/octet-stream');
+      } else if (req.url.endsWith('.js.gz')) {
+        res.setHeader('Content-Type', 'application/javascript');
+      }
+    }
+    next();
+  });
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
