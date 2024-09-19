@@ -30,6 +30,20 @@ app.get('/3D', (req, res) => {
 app.use(express.static(path.join(__dirname)));
 
 app.use((req, res, next) => {
+    if (req.url.endsWith('.gz')) {
+      res.setHeader('Content-Encoding', 'gzip');
+      if (req.url.endsWith('.wasm.gz')) {
+        res.setHeader('Content-Type', 'application/wasm');
+      } else if (req.url.endsWith('.json.gz')) {
+        res.setHeader('Content-Type', 'application/json');
+      } else if (req.url.endsWith('.data.gz')) {
+        res.setHeader('Content-Type', 'application/octet-stream');
+      }
+    }
+    next();
+  });
+
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');

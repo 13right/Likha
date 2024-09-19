@@ -3,45 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Dress Studio</title>
+    <title>Unity WebGL Player | Custom_Studio_Maker</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
   </head>
   <body>
-    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
-      <nav class="md:flex md:items-center">   
-          <div >
-              <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
-          </div>
-          <div class="">
-              <ul class="md:flex md:space-x-16 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
-                  <li class="my-6 md:my-0">
-                      <a href="Home.html" class="hover:text-outline duration-300">
-                          HOME
-                      </a>
-                  </li>
-                  <li class="my-6 md:my-0">
-                      <a href="#Shop" class="hover:text-outline duration-300">
-                          SHOP
-                      </a>
-                  </li>
-                  <li class="my-6 md:my-0">
-                      <a href="3D.html" class="hover:text-outline duration-300">
-                          CREATE
-                      </a>
-              </ul>
-          </div>
-          <div class="flex fixed p-3 top-1 right-1 md:right-16">
-              <img src="img/SEARCH BAR.png" class="h-[3rem]" alt="">
-              <a href="Profile.html"><img src="img/PROFILE.png" class="h-[3rem]" alt=""></a>
-              <img src="img/CART.png" class="h-[3rem] cursor-pointer" alt="" id="CartIcon">
-
-          </div>
-      </nav>
-  </div>
-  <div class="bg-Likha min-h-screen  ">
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
@@ -54,9 +20,8 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Dress Studio</div>
+        <div id="unity-build-title">Custom_Studio_Maker</div>
       </div>
-    </div>
     </div>
     <script>
 
@@ -92,15 +57,15 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Studio v0.1.1-2.loader.js";
+      var loaderUrl = buildUrl + "/Build.loader.js";
       var config = {
-        dataUrl: buildUrl + "/Studio v0.1.1-2.data",
-        frameworkUrl: buildUrl + "/Studio v0.1.1-2.framework.js",
-        codeUrl: buildUrl + "/Studio v0.1.1-2.wasm",
+        dataUrl: buildUrl + "/Build.data.br",
+        frameworkUrl: buildUrl + "/Build.framework.js.br",
+        codeUrl: buildUrl + "/Build.wasm.br",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "Dress Studio",
-        productVersion: "v0.1.1",
+        productName: "Custom_Studio_Maker",
+        productVersion: "0.1.0",
         showBanner: unityShowBanner,
       };
 
