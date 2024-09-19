@@ -417,14 +417,14 @@ input[type="checkbox"] {
                 </div>
             
 
-                <a class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
+                <div class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
                     <lord-icon
                         src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
                         colors="primary:#000000"
                         style="width:1.75rem;height:1.75rem">
                     </lord-icon>
-                </a>
+                </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.75rem]">
                     <lord-icon
@@ -714,7 +714,7 @@ input[type="checkbox"] {
                 <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
                     <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
                 </div>
-                <div class="font-Inter">
+                <div id="UsernameMenu" class="font-Inter">
                     jennierubyjane
                 </div>
             </div>
@@ -760,12 +760,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const ProfileIcon = document.getElementById('ProfileIcon');
     const ProfileMenu = document.getElementById('ProfileMenu');
 
-    ProfileIcon.addEventListener('click', () => {
-        if (!ProfileMenu.classList.contains('hidden')) {
+    ProfileIcon.addEventListener('click', async () => {
+       
+        const user = await fetch ('/User');
+
+        if(user.ok){
+            if (!ProfileMenu.classList.contains('hidden')) {
             ProfileMenu.classList.add('hidden');
-        } else {
-            ProfileMenu.classList.remove('hidden');
+            } else {
+                ProfileMenu.classList.remove('hidden');
+            }
         }
+        else{
+            window.location.href = 'SignIn.html';
+        }
+           
     });
 });
 
@@ -786,6 +795,7 @@ async function fetchCart() {
         if (!response.ok) {
             if(response.status === 401){
                 window.location.href = '/SignIn.html';
+                return 'redirect';
             }
             else{
                 throw new Error('Network response was not ok');
@@ -848,15 +858,20 @@ function updateSum() {
         const cartToggle = document.getElementById('CartIcon');
         const productCart = document.getElementById('Cartel');
 
-        cartToggle.addEventListener('click', () => {
-            fetchCart();
-            if (!productCart.classList.contains('hidden')) {
+        cartToggle.addEventListener('click', async () => {
+           const cart = await fetchCart();
+            if(cart != "redirect"){
+                if (!productCart.classList.contains('hidden')) {
                 productCart.classList.add('hidden');
-            } else {
+                } 
+                else {
                 productCart.classList.remove('hidden');
                 productCart.classList.add('animation-Cart');
                 productCart.classList.remove('Close-Cart');
+                }
             }
+
+            
         });
     });
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -1047,9 +1062,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const container = document.getElementById('main-container');
         const body = document.getElementById('body');
 
-        NotifIcon.addEventListener('click', () => {
+        NotifIcon.addEventListener('click', async () => {
 
-            if (!Notif.classList.contains('hidden')) {
+        const user = await fetch ('/User');
+
+            if(user.ok){
+                if (!Notif.classList.contains('hidden')) {
                 Notif.classList.add('hidden');
                 container.classList.remove('pointer-events-none');
                 enableScroll();
@@ -1068,12 +1086,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             .catch(error => {
                                 console.error('Error updating status:', error);
                             });
-            } else {
-                Notif.classList.remove('hidden');
-                container.classList.add('pointer-events-none');
-                disableScroll();
-                        
+                } else {
+                    Notif.classList.remove('hidden');
+                    container.classList.add('pointer-events-none');
+                    disableScroll();        
+                }
             }
+            else{
+                window.location.href = 'SignIn.html';
+            }
+            
         });
     });
     async function fetchUnreadCount() {
@@ -1104,8 +1126,8 @@ async function fetchUser() {
         if (response.ok) {
         const data = await response.json();
         console.log('User:', data);
-        setInterval(fetchUnreadCount, 10000); // 10 seconds
-        setInterval(Notif, 1000); // 1 second
+        setInterval(fetchUnreadCount, 10); 
+        setInterval(Notif, 1000);
         } else {
         console.error('Failed to fetch user data.');
         }
@@ -1114,12 +1136,26 @@ async function fetchUser() {
     }
 }
 
+async function fetchUserInfo() {
+    try{
+        const result = await fetch('/UserInfo');
+
+        if(result.ok){
+
+            const User = await result.json();
+            const UserName = User.UserName;
+            document.getElementById('UsernameMenu').innerText = UserName;
+        }
+    }
+    catch(error){
+        console.error('Error fetching user', error);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Fetch the user once on page load
     await fetchUser();
-    // Start fetching unread count
     fetchUnreadCount();
+    fetchUserInfo();
   });
 
 

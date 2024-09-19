@@ -177,7 +177,7 @@
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <body>
-    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50" >
         <nav class="md:flex md:items-center">   
             <div >
                 <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
@@ -235,12 +235,12 @@
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
@@ -254,33 +254,30 @@
                         id="search-icon"
                         onclick="expandSearchBar()"
                         src="https://cdn.lordicon.com/kkvxgpti.json"
-                        stroke="light"
                         trigger="hover"
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
                         style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
                     </lord-icon>
                 </div>
-            
 
-                <a href="Profile.html" class="relative cursor-pointer inline-block p-[0.75rem]">
+                <div class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
                     <lord-icon
                         src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
                         colors="primary:#000000"
                         style="width:1.75rem;height:1.75rem">
                     </lord-icon>
-                </a>
+                </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.75rem]">
                     <lord-icon
                         id="NotifIcon"
                         src="https://cdn.lordicon.com/vspbqszr.json"
-                        stroke="light"
                         trigger="hover"
                         style="width:1.75rem;height:1.75rem;">
                     </lord-icon>
-                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] inline-flex items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full"></span>
-                    <span id="notifBadge" class="absolute top-3 right-[13px] inline-flex items-center justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
+                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
+                    <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
                 </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.5rem]">
@@ -305,11 +302,11 @@
                         <img src="img/profilepic.jpeg" class="w-[80px] h-[80px] rounded-full" alt="">
                     </div>
                     <div class="flex flex-col items-center justify-center">
-                        <h1 id="" class="font-Inter font-semibold text-[15px] text-center">
-                            JENNIE KIM
+                        <h1 id="Name" class="font-Inter font-semibold text-[15px] text-center" >
+                            
                         </h1>
-                        <h2 class="font-Inter font-normal text-[14px] text-center">
-                            jennierubyjane
+                        <h2 id="UsernameDisplay" class="font-Inter font-normal text-[14px] text-center">
+                            
                         </h2>
                         <u class=" cursor-pointer font-Inter font-normal text-[12px] text-[#00000080]"> 
                             Delete Account
@@ -320,21 +317,20 @@
                     <button id="Edit" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">EDIT PROFILE</button>
                     <button id="Password" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">PASSWORD</button>
                 </div>
-                <form action="">
                     <hr class="w-auto border-1 border-outline">
                     <div id="PasswordEdit" class=" w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center hidden">
                         <div class="h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
                             <div class="relative">
                                 <h1 class="ml-4">Old Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="" value="">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="OldPass" value="">
                                     <span class="absolute right-2">edit</span>
                                 </div>
                             </div>
                             <div >
                                 <h1 class="ml-4">Confirm Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="" value="">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="ConPass" value="">
                                 <span class="absolute right-2">edit</span>
                                 </div>
                                 
@@ -344,26 +340,27 @@
                             <div>
                                 <h1 class="ml-4">New Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="" value="">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="NewPass" value="">
                                     <span class="absolute right-2">edit</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div id="ProfileEdit" class=" w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center">
                         <div class="h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
                             <div class="relative">
                                 <h1 class="ml-4">Name</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Name" value="JENNIE KIM" disabled>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" id="NameInput" value="JENNIE KIM" disabled>
                                     <span id="EditName" class="absolute right-2 cursor-pointer focus:bg-hehe">edit</span>
                                 </div>
                             </div>
                             <div >
                                 <h1 class="ml-4">Username</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Username" value="jennierubyjane" disabled>
-                                <span class="absolute right-2">edit</span>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" id="Username" value="jennierubyjane" disabled>
+                                <span id="EditUsername" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                                 
                             </div>
@@ -372,15 +369,15 @@
                             <div>
                                 <h1 class="ml-4">Mobile No.</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Mobile" value="+63 9033526492" disabled>
-                                    <span class="absolute right-2">edit</span>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text"  id="Mobile" value="+63 9033526492" disabled>
+                                    <span id="EditMobile" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                             </div>
                             <div>
                                 <h1 class="ml-4">Email</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" name="" id="Email" value="jennierubyjane.kim@email.com" disabled>
-                                    <span class="absolute right-2">edit</span>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" id="Email" value="jennierubyjane.kim@email.com" disabled>
+                                    <span id="EditEmail" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                             </div>
                         </div>
@@ -389,7 +386,6 @@
                         <button id="Save" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#fff]">Save</button>
                         <button id="Change" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#FFFF] hidden">Change</button>
                     </div>
-                </form>
                 
             </div>
         </div>
@@ -440,10 +436,97 @@
                 
             </div>
         </div>
+        <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
+            <div class="flex flex-col items-center">
+                <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                    <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
+                </div>
+                <div class="font-Inter" id="UsernameMenu">
+                    
+                </div>
+            </div>
+            <div class="py-1 flex" ></div>
+                <div class="flex-col flex relative">
+                    <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                    <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
+                    <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                    <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
+                    <a href="AllCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</a>
+                </div>
+            </div>
+            
+        </div>
     </div>
+    
 </body>
-<script src="AuthorizationBE.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+        const saveButton = document.getElementById('Save');
+        const nameInput = document.getElementById('NameInput');
+        const usernameInput = document.getElementById('Username');
+        const mobileInput = document.getElementById('Mobile');
+        const emailInput = document.getElementById('Email');
+        
+        saveButton.addEventListener('click', async function() { // Prevent the default form submission behavior
+
+            // Collect the values from the form inputs
+            const name = nameInput.value;
+            const username = usernameInput.value;
+            const mobile = mobileInput.value;
+            const email = emailInput.value;
+
+            // Create the payload for the POST request
+            const data = {
+                name: name,
+                username: username,
+                mobile: mobile,
+                email: email
+            };
+
+            fetch('/UpdateProfile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Success update:', data);
+                fetchUser();
+                })
+                .catch((error) => {
+                     console.error('Error:', error);
+                });
+        });
+
+    });
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    fetchUser();
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const ProfileIcon = document.getElementById('ProfileIcon');
+    const ProfileMenu = document.getElementById('ProfileMenu');
+
+    ProfileIcon.addEventListener('click', async () => {
+       
+        const user = await fetch ('/User');
+
+        if(user.ok){
+            if (!ProfileMenu.classList.contains('hidden')) {
+            ProfileMenu.classList.add('hidden');
+            } else {
+                ProfileMenu.classList.remove('hidden');
+            }
+        }
+        else{
+            window.location.href = 'SignIn.html';
+        }
+           
+    });
+});
         const Edit = document.getElementById('Edit');
         const Pass = document.getElementById('Password');
         const ProfileEdit = document.getElementById('ProfileEdit');
@@ -451,6 +534,9 @@
         const Save = document.getElementById('Save');
         const Change = document.getElementById('Change');
         const EditName = document.getElementById('EditName');
+        const EditUsername = document.getElementById('EditUsername');
+        const EditMobile = document.getElementById('EditMobile');
+        const EditEmail = document.getElementById('EditEmail');
 
         Edit.addEventListener('click', function(event){
             if(!Edit.classList.contains('bg-[#F07C5480]')){
@@ -473,48 +559,51 @@
             }
         });
         EditName.addEventListener('click', function(event){
-            if(document.getElementById('Name').disabled = true ){
-                document.getElementById('Name').disabled = false;
-                
+            if(document.getElementById('NameInput').disabled = true ){
+                document.getElementById('NameInput').disabled = false; 
+            }
+        });
+        EditUsername.addEventListener('click', function(event){
+            if(document.getElementById('Username').disabled = true ){
+                document.getElementById('Username').disabled = false; 
+            }
+        });
+        EditMobile.addEventListener('click', function(event){
+            if(document.getElementById('Mobile').disabled = true ){
+                document.getElementById('Mobile').disabled = false; 
+            }
+        });
+        EditEmail.addEventListener('click', function(event){
+            if(document.getElementById('Email').disabled = true ){
+                document.getElementById('Email').disabled = false; 
             }
         });
 
 
-    document.getElementById('LogOut').addEventListener('click', () => {
-    fetch('/LogOut', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Logout successful');
-            window.location.href = '/SignIn.html';
-        } else {
-            alert('Error logging out');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error logging out');
-    });
-});
-
-async function fetchUserName(){
+async function fetchUser() {
     try{
-        const reseult = await fetch('/User');
-        if(reseult.ok){
-            const Name = await reseult.json();
-            document.getElementById('Name').innerText = Name[0].Name
-        }
+        const result = await fetch('/UserInfo');
 
-    }catch (error){
-        console.error('Error fetching user name:', error);
+        if(result.ok){
+
+            const User = await result.json();
+            const UserName = User.UserName;
+            const Name = User.Name;
+            console.log(User);
+            document.getElementById('Mobile').value = User.MobileNum;
+            document.getElementById('UsernameMenu').innerText = UserName;
+            document.getElementById('Username').value = UserName;
+            document.getElementById('Name').innerText = User.Name;
+            document.getElementById('NameInput').value = User.Name;
+            document.getElementById('Email').value = User.Email;
+            document.getElementById('UsernameDisplay').innerText = UserName;
+        }
+    }
+    catch(error){
+        console.error('Error fetching user', error);
     }
 }
-//fetchUserName();
+fetchUser();
 
 function expandSearchBar() {
     const searchBar = document.getElementById('search-bar');
@@ -733,266 +822,294 @@ PlaceOrderBtn.addEventListener('click', async function() {
 });
 
 //Notif
-async function Notif() {
-    try {
-        const response = await fetch(`/Notif`);
-        const products = await response.json();
+// async function Notif() {
+//     try {
+//         const response = await fetch(`/Notif`);
+//         const products = await response.json();
         
-        const productList = document.getElementById('NotifContent');
-        productList.innerHTML = '';
+//         const productList = document.getElementById('NotifContent');
+//         productList.innerHTML = '';
         
-        products.forEach(product => {
-            const productElement = document.createElement('div');
-            productElement.innerHTML = `
-                <div class="flex relative w-auto py-auto justify-between mr-6">
-                    <div class="justify-center flex pl-2">
-                        <div class="items-center flex">
-                            <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
-                        </div>
-                        <div class="justify-center flex flex-col pl-5">
-                            <h1 class="font-Inter text-sm">${product.Content}</h1>
-                            <h1 class="font-Inter text-sm">${product.Date}</h1>
-                        </div>
-                    </div>
-                    <div>
-                        <img src="${product.productImage}" alt="${product.productName}" class="w-[7rem] h-[7rem]">
-                    </div>
-                </div>
-            `;
-            productList.appendChild(productElement);
+//         products.forEach(product => {
+//             const productElement = document.createElement('div');
+//             productElement.innerHTML = `
+//                 <div class="flex relative w-auto py-auto justify-between mr-6">
+//                     <div class="justify-center flex pl-2">
+//                         <div class="items-center flex">
+//                             <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
+//                         </div>
+//                         <div class="justify-center flex flex-col pl-5">
+//                             <h1 class="font-Inter text-sm">${product.Content}</h1>
+//                             <h1 class="font-Inter text-sm">${product.Date}</h1>
+//                         </div>
+//                     </div>
+//                     <div>
+//                         <img src="${product.productImage}" alt="${product.productName}" class="w-[7rem] h-[7rem]">
+//                     </div>
+//                 </div>
+//             `;
+//             productList.appendChild(productElement);
 
-            const notifdot = productElement.querySelector('.notifdot');
-            if (product.Status === 'unread') {
-                notifdot.classList.remove('hidden');
-            } else {
-                notifdot.classList.add('hidden');
-            }
-        });
-    } catch (error) {
-        console.error('Error fetching notifications:', error);
-    }
-}
-    function disableScroll() {
+//             const notifdot = productElement.querySelector('.notifdot');
+//             if (product.Status === 'unread') {
+//                 notifdot.classList.remove('hidden');
+//             } else {
+//                 notifdot.classList.add('hidden');
+//             }
+//         });
+//     } catch (error) {
+//         console.error('Error fetching notifications:', error);
+//     }
+// }
+//     function disableScroll() {
 
-    scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
-    scrollLeft =
-        window.pageXOffset || document.documentElement.scrollLeft;
-
-
-
-    window.onscroll = function() {
-    window.scrollTo(scrollLeft, scrollTop);
-    };
-    }
-    function enableScroll() {
-    window.onscroll = function() {};
-    }
-document.addEventListener('DOMContentLoaded', (event) => {
-        const NotifIcon = document.getElementById('NotifIcon');
-        const Notif = document.getElementById('Notif');
-        const container = document.getElementById('main-container');
-        const body = document.getElementById('body');
-
-        NotifIcon.addEventListener('click', () => {
-
-            if (!Notif.classList.contains('hidden')) {
-                Notif.classList.add('hidden');
-                container.classList.remove('pointer-events-none');
-                enableScroll();
-                fetch('/UpdateNotif', {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                UpdatedNotif: 'read'
-                            })
-                        })
-                            .then(response => {
-                                return response.json;
-                            })
-                            .catch(error => {
-                                console.error('Error updating status:', error);
-                            });
-            } else {
-                Notif.classList.remove('hidden');
-                container.classList.add('pointer-events-none');
-                disableScroll();
-                        
-            }
-        });
-    });
-    async function fetchUnreadCount() {
-        try {
-            const response = await fetch('/NotifBadge'); 
-            const data = await response.json();
-            const unreadCount = data.NotificationID;
-            //console.log(data);
-            const notifBadge = document.getElementById('notif-badge');
-            const notifPing = document.getElementById('notifBadge');
-            if (unreadCount > 0) {
-                notifBadge.style.display = 'inline-flex';
-                notifPing.style.display = 'inline-flex';
-            } else {
-                notifBadge.style.display = 'none';
-                notifPing.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Error fetching unread count:', error);
-        }
-    }
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+//     scrollTop =
+//         window.pageYOffset || document.documentElement.scrollTop;
+//     scrollLeft =
+//         window.pageXOffset || document.documentElement.scrollLeft;
 
 
-setInterval(fetchUnreadCount,10); 
 
-setInterval(Notif, 1000);
+//     window.onscroll = function() {
+//     window.scrollTo(scrollLeft, scrollTop);
+//     };
+//     }
+//     function enableScroll() {
+//     window.onscroll = function() {};
+//     }
+// document.addEventListener('DOMContentLoaded', (event) => {
+//         const NotifIcon = document.getElementById('NotifIcon');
+//         const Notif = document.getElementById('Notif');
+//         const container = document.getElementById('main-container');
+//         const body = document.getElementById('body');
+
+//         NotifIcon.addEventListener('click', async () => {
+
+//         const user = await fetch ('/User');
+
+//             if(user.ok){
+//                 if (!Notif.classList.contains('hidden')) {
+//                 Notif.classList.add('hidden');
+//                 container.classList.remove('pointer-events-none');
+//                 enableScroll();
+//                 fetch('/UpdateNotif', {
+//                             method: 'PUT',
+//                             headers: {
+//                                 'Content-Type': 'application/json'
+//                             },
+//                             body: JSON.stringify({
+//                                 UpdatedNotif: 'read'
+//                             })
+//                         })
+//                             .then(response => {
+//                                 return response.json;
+//                             })
+//                             .catch(error => {
+//                                 console.error('Error updating status:', error);
+//                             });
+//                 } else {
+//                     Notif.classList.remove('hidden');
+//                     container.classList.add('pointer-events-none');
+//                     disableScroll();        
+//                 }
+//             }
+//             else{
+//                 window.location.href = 'SignIn.html';
+//             }
+            
+//         });
+//     });
+//     async function fetchUnreadCount() {
+//         try {
+//             const response = await fetch('/NotifBadge'); 
+//             const data = await response.json();
+//             const unreadCount = data.NotificationID;
+//             //console.log(data);
+//             const notifBadge = document.getElementById('notif-badge');
+//             const notifPing = document.getElementById('notifBadge');
+//             if (unreadCount > 0) {
+//                 notifBadge.style.display = 'inline-flex';
+//                 notifPing.style.display = 'inline-flex';
+//                 notifBadge.classList.remove('hidden');
+//                 notifPing.classList.remove('hidden');
+//             } else {
+//                 notifBadge.style.display = 'none';
+//                 notifPing.style.display = 'none';
+//             }
+//         } catch (error) {
+//             //console.error('Error fetching unread count:', error);
+//         }
+//     }
+
+//     async function fetchUser() {
+//     try {
+//         const response = await fetch('/User');
+//         if (response.ok) {
+//         const data = await response.json();
+//         console.log('User:', data);
+//         setInterval(fetchUnreadCount, 10); // 10 seconds
+//         setInterval(Notif, 1000); // 1 second
+//         } else {
+//         console.error('Failed to fetch user data.');
+//         }
+//     } catch (err) {
+//         console.error('Error fetching user:', err);
+//     }
+// }
+
+
+
+// document.addEventListener('DOMContentLoaded', async () => {
+//     // Fetch the user once on page load
+//     await fetchUser();
+//     // Start fetching unread count
+//     fetchUnreadCount();
+//   });
 
 //Chat
-document.addEventListener('DOMContentLoaded', () => {
-            fetchMessages();
-            setInterval(fetchMessages, 2000);
-        });
+// document.addEventListener('DOMContentLoaded', () => {
+//             fetchMessages();
+//             setInterval(fetchMessages, 2000);
+//         });
 
-        async function getCurrentUser() {
-            try {
-                const response = await fetch('/api/current_user');
-                if (response.ok) {
-                    const user = await response.json();
-                    return user.UserID;
-                    //console.log("User ID" + user.UserID); 
-                } else {
-                    window.location.href = '/SignIn.html'; 
-                }
-            } catch (error) {
-                console.error('Error fetching current user:', error);
-            }
-        }
-        let previousMessageCount = 0;
-        function scrollToBottom() {
-            const chatBox = document.getElementById('chat-box');
-            if (chatBox) {
-                requestAnimationFrame(() => {
-                    chatBox.scrollTo({
-                        top: chatBox.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                });
-            } else {
-                console.error('chatBox element not found.');
-            }
-        }
-    async function fetchMessages() {
+//         async function getCurrentUser() {
+//             try {
+//                 const response = await fetch('/api/current_user');
+//                 if (response.ok) {
+//                     const user = await response.json();
+//                     return user.UserID;
+//                     //console.log("User ID" + user.UserID); 
+//                 } else {
+//                     window.location.href = '/SignIn.html'; 
+//                 }
+//             } catch (error) {
+//                 console.error('Error fetching current user:', error);
+//             }
+//         }
+//         let previousMessageCount = 0;
+//         function scrollToBottom() {
+//             const chatBox = document.getElementById('chat-box');
+//             if (chatBox) {
+//                 requestAnimationFrame(() => {
+//                     chatBox.scrollTo({
+//                         top: chatBox.scrollHeight,
+//                         behavior: 'smooth'
+//                     });
+//                 });
+//             } else {
+//                 console.error('chatBox element not found.');
+//             }
+//         }
+//     async function fetchMessages() {
     
-    const userID = await getCurrentUser();
-    fetch('/api/messages')
-    .then(response => response.json())
-    .then(messages => {
-        //console.log(messages);
-        const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML = '';
-        const ID = parseInt(userID);
-       //console.log(ID);
-        messages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `
-                <div id="CC" class="flex items-start">
-                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
-                        <p id="Content" class="text-sm">${msg.message}</p>
-                    </div>
-                </div>
-            `;
-            const ChatContainer = messageElement.querySelector('#CC');
-            const ChatBG = messageElement.querySelector('#Chats');
-                //console.log(msg.SenderID);
-            if ( msg.SenderID === ID) {
-                ChatContainer.classList.add('justify-end');
-                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
-                ChatBG.classList.remove('bg-outline');
-            } else {
-                ChatBG.classList.add('bg-outline');
-            }
+//     const userID = await getCurrentUser();
+//     fetch('/api/messages')
+//     .then(response => response.json())
+//     .then(messages => {
+//         //console.log(messages);
+//         const chatBox = document.getElementById('chat-box');
+//         chatBox.innerHTML = '';
+//         const ID = parseInt(userID);
+//        //console.log(ID);
+//         messages.forEach(msg => {
+//             const messageElement = document.createElement('div');
+//             messageElement.innerHTML = `
+//                 <div id="CC" class="flex items-start">
+//                     <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+//                         <p id="Content" class="text-sm">${msg.message}</p>
+//                     </div>
+//                 </div>
+//             `;
+//             const ChatContainer = messageElement.querySelector('#CC');
+//             const ChatBG = messageElement.querySelector('#Chats');
+//                 //console.log(msg.SenderID);
+//             if ( msg.SenderID === ID) {
+//                 ChatContainer.classList.add('justify-end');
+//                 ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+//                 ChatBG.classList.remove('bg-outline');
+//             } else {
+//                 ChatBG.classList.add('bg-outline');
+//             }
 
-            chatBox.appendChild(messageElement);
-        });
-        // console.log(previousMessageCount);
-        // console.log(messages.length);
-        if (messages.length > previousMessageCount) {
-            scrollToBottom();
-            console.log("Scroll");
-        }
+//             chatBox.appendChild(messageElement);
+//         });
+//         // console.log(previousMessageCount);
+//         // console.log(messages.length);
+//         if (messages.length > previousMessageCount) {
+//             scrollToBottom();
+//             console.log("Scroll");
+//         }
 
-        previousMessageCount = messages.length;
-    })
-    .catch(error => {
-        console.error('Network error:', error);
-    });
-}
+//         previousMessageCount = messages.length;
+//     })
+//     .catch(error => {
+//         console.error('Network error:', error);
+//     });
+// }
 
-        document.getElementById('message-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const message = document.getElementById('message-input').value;
-            fetch('/Chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
-            }).then(() => {
-                document.getElementById('message-input').value = '';
-                fetchMessages();
-            });
-        });
+//         document.getElementById('message-form').addEventListener('submit', function (e) {
+//             e.preventDefault();
+//             const message = document.getElementById('message-input').value;
+//             fetch('/Chat', {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ message })
+//             }).then(() => {
+//                 document.getElementById('message-input').value = '';
+//                 fetchMessages();
+//             });
+//         });
 
-        fetchMessages();
-        const logo = document.getElementById('ChatLogo');
-        const content = document.getElementById('ChatContent');
-        const closeButton = document.getElementById('ChatClose');
+//         fetchMessages();
+//         const logo = document.getElementById('ChatLogo');
+//         const content = document.getElementById('ChatContent');
+//         const closeButton = document.getElementById('ChatClose');
 
-        logo.addEventListener('click', () => {
+//         logo.addEventListener('click', () => {
             
-            const logoRect = logo.getBoundingClientRect();
+//             const logoRect = logo.getBoundingClientRect();
 
-            content.style.right = `${window.innerWidth - logoRect.right}px`;
-            content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
-            content.style.width = `${logoRect.width}px`;
-            content.style.height = `${logoRect.height}px`;
+//             content.style.right = `${window.innerWidth - logoRect.right}px`;
+//             content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
+//             content.style.width = `${logoRect.width}px`;
+//             content.style.height = `${logoRect.height}px`;
 
-            logo.classList.add('spin-fade');
+//             logo.classList.add('spin-fade');
             
 
-            setTimeout(() => {
-                logo.classList.add('hidden'); 
-                content.classList.remove('hidden', 'content-hidden');
-                content.classList.add('expand-from-logo');
-                content.classList.remove('collapse-to-logo');
+//             setTimeout(() => {
+//                 logo.classList.add('hidden'); 
+//                 content.classList.remove('hidden', 'content-hidden');
+//                 content.classList.add('expand-from-logo');
+//                 content.classList.remove('collapse-to-logo');
 
-                setTimeout(() => {
-                    content.style.width = '35rem';
-                    content.style.height = '25rem';
+//                 setTimeout(() => {
+//                     content.style.width = '35rem';
+//                     content.style.height = '25rem';
 
-                    setTimeout(() => {
-                        scrollToBottom();
-                        content.classList.remove('content-hidden');
-                        content.classList.add('content-visible');
-                    }, 700); 
-                }, 0);
-            }, 300);
-        });
-        closeButton.addEventListener('click', () => {
-            content.classList.remove('expand-from-logo', 'content-visible');
-            content.classList.add('collapse-to-logo');
+//                     setTimeout(() => {
+//                         scrollToBottom();
+//                         content.classList.remove('content-hidden');
+//                         content.classList.add('content-visible');
+//                     }, 700); 
+//                 }, 0);
+//             }, 300);
+//         });
+//         closeButton.addEventListener('click', () => {
+//             content.classList.remove('expand-from-logo', 'content-visible');
+//             content.classList.add('collapse-to-logo');
 
 
-            setTimeout(() => {
-                content.classList.add('content-hidden');
-                content.classList.add('hidden');
-                content.style.width = 'initial';
-                content.style.height = 'initial';
+//             setTimeout(() => {
+//                 content.classList.add('content-hidden');
+//                 content.classList.add('hidden');
+//                 content.style.width = 'initial';
+//                 content.style.height = 'initial';
                 
 
-                logo.classList.remove('hidden');
-                logo.classList.remove('spin-fade');
-            }, 400); 
-        });
+//                 logo.classList.remove('hidden');
+//                 logo.classList.remove('spin-fade');
+//             }, 400); 
+//         });
 </script>
 </html>

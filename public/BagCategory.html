@@ -8,7 +8,7 @@
     <title>Shop</title>
 </head>
 <style>
-        input[type="checkbox"] {
+    input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
@@ -185,7 +185,7 @@
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
                     <li class="my-6 md:my-0">
-                        <a href="index.html" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="Index.html" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             HOME
                         </a>
                     </li>
@@ -261,13 +261,12 @@
                 </div>
             
 
-                <a href="Profile.html" class="relative cursor-pointer inline-block p-[0.75rem]">
+                <a class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
                     <lord-icon
-                        src="https://cdn.lordicon.com/bgebyztw.json"
+                        src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
-                        stroke="bold"
-                        colors="primary:#000,secondary:#000"
-                        style="width:1.75rem;height:1.75rem;">
+                        colors="primary:#000000"
+                        style="width:1.75rem;height:1.75rem">
                     </lord-icon>
                 </a>
 
@@ -278,8 +277,8 @@
                         trigger="hover"
                         style="width:1.75rem;height:1.75rem;">
                     </lord-icon>
-                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] inline-flex items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full"></span>
-                    <span id="notifBadge" class="absolute top-3 right-[13px] inline-flex items-center justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
+                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
+                    <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
                 </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.5rem]">
@@ -303,8 +302,23 @@
                     <H6 class="text-6xl font-Montagu font-extrabold text-[#96A378]">Shop</H6>
                 </div>
                 <div class="flex-col mt-14">
-                    <div id="Product" class="flex flex-wrap justify-start mx-10"></div>
+                    <div id="loading" class="relative flex justify-center space-x-9">
+                        <div class="w-[318px] shadow-lg relative rounded-xl h-[500px] bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                        <div class="w-[318px] rounded-xl shadow-lg h-[500px] bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                        <div class="w-[318px] h-[500px] shadow-lg rounded-xl bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                        <div class="w-[318px] h-[500px] shadow-lg rounded-xl bg-[#E2E2D0] animate-pulse">
+                            <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
+                        </div>
+                    </div>
+                    <div id="Product" class="flex flex-wrap justify-start mx-10 hidden"></div>
                     <div id="Page" class="flex justify-center mb-14"></div>
+                    
                 </div>
             </div>
             <div id="footer" class="flex bg-[#c4ccbc] h-auto w-full p-[4rem]">
@@ -433,15 +447,109 @@
                 
             </div>
         </div>
+        <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center"></div>
+            <div class="flex flex-col items-center">
+                <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                    <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
+                </div>
+                <div class="font-Inter">
+                    jennierubyjane
+                </div>
+            </div>
+            <div class="py-1 flex" ></div>
+                <div class="flex-col flex relative">
+                    <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                    <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
+                    <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                    <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
+                    <a href="AllCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</a>
+                </div>
+            </div>
+            
+        </div>
     </div>
 </body>
 <script>
+
+function expandSearchBar() {
+    const searchBar = document.getElementById('search-bar');
+    const searchIcon = document.getElementById('search-icon');
+    
+    searchBar.classList.toggle('expanded');
+    searchIcon.classList.toggle('expanded');
+}
+document.addEventListener('DOMContentLoaded', (event) => {
+    const ProfileIcon = document.getElementById('ProfileIcon');
+    const ProfileMenu = document.getElementById('ProfileMenu');
+
+    ProfileIcon.addEventListener('click', async () => {
+       
+        const user = await fetch ('/User');
+
+        if(user.ok){
+            if (!ProfileMenu.classList.contains('hidden')) {
+            ProfileMenu.classList.add('hidden');
+            } else {
+                ProfileMenu.classList.remove('hidden');
+            }
+        }
+        else{
+            window.location.href = 'SignIn.html';
+        }
+        
+        
+    });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+        const NotifIcon = document.getElementById('NotifIcon');
+        const Notif = document.getElementById('Notif');
+        const container = document.getElementById('main-container');
+        const body = document.getElementById('body');
+
+        NotifIcon.addEventListener('click', async () => {
+
+        const user = await fetch ('/User');
+
+            if(user.ok){
+                if (!Notif.classList.contains('hidden')) {
+                Notif.classList.add('hidden');
+                container.classList.remove('pointer-events-none');
+                enableScroll();
+                fetch('/UpdateNotif', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                UpdatedNotif: 'read'
+                            })
+                        })
+                            .then(response => {
+                                return response.json;
+                            })
+                            .catch(error => {
+                                console.error('Error updating status:', error);
+                            });
+                } else {
+                    Notif.classList.remove('hidden');
+                    container.classList.add('pointer-events-none');
+                    disableScroll();        
+                }
+            }
+            else{
+                window.location.href = 'SignIn.html';
+            }
+            
+        });
+    });
 let currentPage = 1;
 const itemsPerPage = 12;
 
-fetch(`/productsBag`)
+fetch('/productsBag')
     .then(response => {
         if (response.ok) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('Product').classList.remove('hidden');
             return response.json();
         }
         throw new Error('Network response was not ok.');
@@ -475,15 +583,15 @@ fetch(`/productsBag`)
                 `;
                 productList.appendChild(productElement);
 
-                productElement.querySelector('#main-container').addEventListener('click', function() {
+                    productElement.querySelector('#main-container').addEventListener('click', function() {
 
-                const productContainer = productElement.querySelector('#main-container');
-                const productName = productContainer.querySelector('p').innerText;
+                        const productContainer = productElement.querySelector('#main-container');
+                        const productName = productContainer.querySelector('p').innerText;
 
-                sessionStorage.setItem('productName', productName);
+                        sessionStorage.setItem('productName', productName);
 
-                window.location.href = 'ProductDetails.html';
-                })
+                        window.location.href = 'ProductDetails.html';
+                    })
             });
         }
 
@@ -506,20 +614,10 @@ fetch(`/productsBag`)
                 paginationContainer.appendChild(pageButton);
             }
         }
-
         renderProducts(currentPage);
         renderPagination();
     })
     .catch(error => console.error('Error fetching products:', error));
-
-    function expandSearchBar() {
-    const searchBar = document.getElementById('search-bar');
-    const searchIcon = document.getElementById('search-icon');
-    
-    searchBar.classList.toggle('expanded');
-    searchIcon.classList.toggle('expanded');
-}
-
 //Cart
 async function fetchCart() {
     const CartList = document.getElementById('Product-Cart');
@@ -530,6 +628,7 @@ async function fetchCart() {
         if (!response.ok) {
             if(response.status === 401){
                 window.location.href = '/SignIn.html';
+                return 'redirect';
             }
             else{
                 throw new Error('Network response was not ok');
@@ -592,15 +691,20 @@ function updateSum() {
         const cartToggle = document.getElementById('CartIcon');
         const productCart = document.getElementById('Cartel');
 
-        cartToggle.addEventListener('click', () => {
-            fetchCart();
-            if (!productCart.classList.contains('hidden')) {
+        cartToggle.addEventListener('click', async () => {
+           const cart = await fetchCart();
+            if(cart != "redirect"){
+                if (!productCart.classList.contains('hidden')) {
                 productCart.classList.add('hidden');
-            } else {
+                } 
+                else {
                 productCart.classList.remove('hidden');
                 productCart.classList.add('animation-Cart');
                 productCart.classList.remove('Close-Cart');
+                }
             }
+
+            
         });
     });
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -733,6 +837,7 @@ PlaceOrderBtn.addEventListener('click', async function() {
 async function Notif() {
     try {
         const response = await fetch(`/Notif`);
+
         const products = await response.json();
         
         const productList = document.getElementById('NotifContent');
@@ -766,7 +871,7 @@ async function Notif() {
             }
         });
     } catch (error) {
-        console.error('Error fetching notifications:', error);
+        //console.error('Error fetching notifications:', error);
     }
 }
     function disableScroll() {
@@ -785,41 +890,7 @@ async function Notif() {
     function enableScroll() {
     window.onscroll = function() {};
     }
-document.addEventListener('DOMContentLoaded', (event) => {
-        const NotifIcon = document.getElementById('NotifIcon');
-        const Notif = document.getElementById('Notif');
-        const container = document.getElementById('main-container');
-        const body = document.getElementById('body');
 
-        NotifIcon.addEventListener('click', () => {
-
-            if (!Notif.classList.contains('hidden')) {
-                Notif.classList.add('hidden');
-                container.classList.remove('pointer-events-none');
-                enableScroll();
-                fetch('/UpdateNotif', {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                UpdatedNotif: 'read'
-                            })
-                        })
-                            .then(response => {
-                                return response.json;
-                            })
-                            .catch(error => {
-                                console.error('Error updating status:', error);
-                            });
-            } else {
-                Notif.classList.remove('hidden');
-                container.classList.add('pointer-events-none');
-                disableScroll();
-                        
-            }
-        });
-    });
     async function fetchUnreadCount() {
         try {
             const response = await fetch('/NotifBadge'); 
@@ -836,11 +907,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 notifPing.style.display = 'none';
             }
         } catch (error) {
-            console.error('Error fetching unread count:', error);
+            //console.error('Error fetching unread count:', error);
         }
     }
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
 
+
+document.addEventListener('DOMContentLoaded', fetchUnreadCount);
 
 setInterval(fetchUnreadCount,10); 
 
@@ -991,5 +1063,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 logo.classList.remove('spin-fade');
             }, 400); 
         });
+</script>   
 </script>
 </html>

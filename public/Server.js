@@ -280,7 +280,7 @@ app.post('/LogIn', async (req, res) => {
     try {
         const request = await pool.request()
         .input('username', sql.NVarChar, username)
-        .query('SELECT * FROM tbl_User WHERE Name = @username');
+        .query('SELECT * FROM tbl_User WHERE UserName = @username');
 
         const user = request.recordset[0];
 
@@ -302,6 +302,37 @@ app.post('/LogIn', async (req, res) => {
     }
 });
 
+//UpdateProfile
+app.put('/UpdateProfile', async (req, res) => {
+
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    const {name, username, mobile, email} = req.body;
+
+    try {
+
+        const request = pool.request();
+
+        request.input('Name',sql.VarChar,name);
+        request.input('UserName',sql.VarChar,username);
+        request.input('Mobile',sql.VarChar,mobile);
+        request.input('Email',sql.VarChar,email);
+        request.input('ID',sql.Int,ID);
+
+        const query = `
+            UPDATE tbl_User
+            SET UserName = @UserName, Name = @Name, MobileNum = @Mobile, Email = @Email
+            WHERE UserID = @ID
+        `;
+
+       const result = await request.query(query);
+       res.status(200).json({ success: true });
+    } catch (err) {
+        console.error('Database Error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+
+});
 //LogOut
 app.post('/LogOut', (req, res) => {
     if (req.session.user) {
@@ -325,7 +356,32 @@ app.get('/api/current_user', (req, res) => {
         res.redirect('/SignIn.html');    
         //res.status(401).send('Not authenticated');
     }
-  });
+});
+
+app.get('/UserInfo', async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+
+    const query = `SELECT * FROM tbl_User WHERE UserID = @ID`;
+    
+    try {
+        const request = pool.request();
+        request.input('ID', sql.Int, ID);
+        
+        const result = await request.query(query); // Await the result
+        
+        if (result.recordset.length > 0) {
+            const User = result.recordset[0]; // Assuming you're fetching a single user
+            res.json(User); // Send the user data as JSON
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
 
   app.post('/upload', upload.single('image'), async (req, res) => {
     try {
@@ -843,7 +899,7 @@ app.get('/User', async (req, res) => {
     try{
         const request = pool.request();
         request.input('UserID', sql.Int, ID);
-        const query = 'SELECT Name FROM tbl_User WHERE UserID = @UserID';
+        const query = 'SELECT UserName FROM tbl_User WHERE UserID = @UserID';
         const result = await request.query(query);
         const Name = result.recordset;
         res.json(Name);
