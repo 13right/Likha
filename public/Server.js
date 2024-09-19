@@ -27,10 +27,23 @@ app.get('/3D', (req, res) => {
     res.sendFile(path.join(__dirname, '3D.html'));
 });
 
+app.use('/Build', express.static(path.join(__dirname, 'Build')));
+
 app.use(express.static(path.join(__dirname)));
 
 app.use((req, res, next) => {
-    if (req.url.endsWith('.gz')) {
+    if (req.url.endsWith('.br')) {
+      res.setHeader('Content-Encoding', 'br');
+      if (req.url.endsWith('.wasm.br')) {
+        res.setHeader('Content-Type', 'application/wasm');
+      } else if (req.url.endsWith('.json.br')) {
+        res.setHeader('Content-Type', 'application/json');
+      } else if (req.url.endsWith('.data.br')) {
+        res.setHeader('Content-Type', 'application/octet-stream');
+      } else if (req.url.endsWith('.js.br')) {
+        res.setHeader('Content-Type', 'application/javascript');
+      }
+    } else if (req.url.endsWith('.gz')) {
       res.setHeader('Content-Encoding', 'gzip');
       if (req.url.endsWith('.wasm.gz')) {
         res.setHeader('Content-Type', 'application/wasm');
@@ -38,6 +51,8 @@ app.use((req, res, next) => {
         res.setHeader('Content-Type', 'application/json');
       } else if (req.url.endsWith('.data.gz')) {
         res.setHeader('Content-Type', 'application/octet-stream');
+      } else if (req.url.endsWith('.js.gz')) {
+        res.setHeader('Content-Type', 'application/javascript');
       }
     }
     next();
