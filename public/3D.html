@@ -6,23 +6,141 @@
     <title>Unity WebGL Player | Custom_Studio_Maker</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
   </head>
   <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50" >
+      <nav class="md:flex md:items-center">   
+          <div >
+              <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+          </div>
+          <div class="">
+              <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
+                  <li class="my-6 md:my-0">
+                      <a href="index.html" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                          HOME
+                      </a>
+                  </li>
+                  <li>
+                      <div class="relative inline-block text-left">
+                          <div>
+                            <button type="button" class="inline-flex w-full justify-center font-Montserrat text-[12px] rounded-md bg-Likha text-sm font-semibold hover:text-outline duration-300" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                              SHOP
+                              <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                              </svg>
+                            </button>
+                          </div>
+                        
+                          <script>
+                              document.addEventListener('DOMContentLoaded', function () {
+                                const menuButton = document.getElementById('menu-button');
+                                const dropdownMenu = document.querySelector('[role="menu"]');
+                            
+                                menuButton.addEventListener('click', function () {
+                                  dropdownMenu.classList.toggle('hidden');
+                                });
+                            
+                                document.addEventListener('click', function (event) {
+                                  if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                                    dropdownMenu.classList.add('hidden');
+                                  }
+                                });
+                              });
+                            </script>
+                            
+                          <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="py-1" role="none">
+                              <a href="AllCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">All</a>
+                              <a href="DressCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Dress</a>
+                              <a href="BagCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Bag</a>
+                              <a href="JewelryCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Jewelry</a>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                  </li>
+                  <li class="my-6 md:my-0">
+                      <a href="/3D" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                          CUSTOMIZATION
+                      </a>
+                  </li>
+                  <li class="my-6 md:my-0">
+                      <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                          ABOUT
+                      </a>
+                  </li>
+                  <li class="my-6 md:my-0">
+                      <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                          CONTACT
+                      </a>
+                  </li>
+              </ul>
+          </div>
+          <div class="flex fixed p-3 top-1 right-1 md:right-16">
+              <div class="relative flex items-center">
+                  <input type="text" id="search-bar" class="search-bar w-0 h-8 opacity-0 transition-all duration-500 ease-in-out px-4 py-2 rounded-full border border-gray-300 focus:opacity-100 focus:w-48" placeholder="Search">
+
+                  <lord-icon
+                      id="search-icon"
+                      onclick="expandSearchBar()"
+                      src="https://cdn.lordicon.com/kkvxgpti.json"
+                      trigger="hover"
+                      class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
+                      style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
+                  </lord-icon>
+              </div>
+          
+
+              <div class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
+                  <lord-icon
+                      src="https://cdn.lordicon.com/kthelypq.json"
+                      trigger="hover"
+                      colors="primary:#000000"
+                      style="width:1.75rem;height:1.75rem">
+                  </lord-icon>
+              </div>
+
+              <div class="relative cursor-pointer inline-block p-[0.75rem]">
+                  <lord-icon
+                      id="NotifIcon"
+                      src="https://cdn.lordicon.com/vspbqszr.json"
+                      trigger="hover"
+                      style="width:1.75rem;height:1.75rem;">
+                  </lord-icon>
+                  <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
+                  <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
+              </div>
+
+              <div class="relative cursor-pointer inline-block p-[0.5rem]">
+                  <lord-icon
+                      id="CartIcon"
+                      src="https://cdn.lordicon.com/taymdfsf.json"
+                      trigger="hover"
+                      stroke="bold"
+                      colors="primary:#121331,secondary:#121331"
+                      style="width:2rem;height:2rem;">
+                  </lord-icon>
+              </div>
+          </div>
+          
+      </nav>
+  </div>
+  <div class="bg-Likha min-h-screen pt-[4rem]">
+    <div id="unity-container" class="unity-desktop"></div>
+      <canvas id="unity-canvas" width=1480 height=900 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Custom_Studio_Maker</div>
-      </div>
+      <div id="unity-warning"> </div> 
     </div>
+  </div>
+    
     <script>
 
       var container = document.querySelector("#unity-container");
@@ -57,11 +175,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Build.loader.js";
+      var loaderUrl = buildUrl + "/Custom_Studio - New_Build.loader.js";
       var config = {
-        dataUrl: buildUrl + "/Build.data.br",
-        frameworkUrl: buildUrl + "/Build.framework.js.br",
-       codeUrl: buildUrl + "/Build.wasm.br",
+        dataUrl: buildUrl + "/Custom_Studio - New_Build.data",
+        frameworkUrl: buildUrl + "/Custom_Studio - New_Build.framework.js",
+        codeUrl: buildUrl + "/Custom_Studio - New_Build.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Custom_Studio_Maker",
@@ -94,8 +212,8 @@
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
+        canvas.style.width = "1480px";
+        canvas.style.height = "900px";
       }
 
       loadingBar.style.display = "block";
@@ -107,9 +225,9 @@
           progressBarFull.style.width = 100 * progress + "%";
               }).then((unityInstance) => {
                 loadingBar.style.display = "none";
-                fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
+                // fullscreenButton.onclick = () => {
+                //   unityInstance.SetFullscreen(1);
+                // };
               }).catch((message) => {
                 alert(message);
               });
