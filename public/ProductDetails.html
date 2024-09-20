@@ -80,7 +80,7 @@
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
                     <li class="my-6 md:my-0">
-                        <a href="index.html" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="Index.html" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             HOME
                         </a>
                     </li>
@@ -125,17 +125,17 @@
                           
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#Shop" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="/3D" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             CUSTOMIZATION
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="/3D" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="/3D" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
@@ -156,15 +156,14 @@
                 </div>
             
 
-                <a href="Profile.html" class="relative cursor-pointer inline-block p-[0.75rem]">
+                <div class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
                     <lord-icon
-                        src="https://cdn.lordicon.com/bgebyztw.json"
+                        src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
-                        stroke="bold"
-                        colors="primary:#000,secondary:#000"
-                        style="width:1.75rem;height:1.75rem;">
+                        colors="primary:#000000"
+                        style="width:1.75rem;height:1.75rem">
                     </lord-icon>
-                </a>
+                </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.75rem]">
                     <lord-icon
@@ -173,8 +172,8 @@
                         trigger="hover"
                         style="width:1.75rem;height:1.75rem;">
                     </lord-icon>
-                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] inline-flex items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full hidden"></span>
-                    <span id="notifBadge" class="absolute top-3 right-[13px] inline-flex items-center justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full hidden"></span>
+                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
+                    <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
                 </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.5rem]">
@@ -188,7 +187,6 @@
                     </lord-icon>
                 </div>
             </div>
-            
         </nav>
     </div>
 
@@ -302,8 +300,251 @@
         <hr class="border-1 border-outline w-auto ">
         <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
     </div>
+    <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
+        <div class="shadow-sm">
+            <p class="my-2 ml-2 font-Inter">Notification</p>
+            <hr class="border-1 border-[#D8BC8C80] w-[28.5rem] mb-1">
+        </div>
+        <div id="NotifContents" class="overflow-y-auto  h-[20rem]">
+            <div id="NotifContent" class="relative space-y-5 ">
+            
+            </div>
+        </div>
+    </div>
+    <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
+        <div class="flex flex-col items-center">
+            <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
+            </div>
+            <div id="UsernameMenu" class="font-Inter">
+                jennierubyjane
+            </div>
+        </div>
+        <div class="py-1 flex" ></div>
+            <div class="flex-col flex relative">
+                <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
+                <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
+                <a href="AllCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</a>
+            </div>
+        </div>
+        
+    </div>
+
 </body>
 <script>
+
+document.getElementById('LogOut').addEventListener('click', () => {
+    fetch('/LogOut', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Logout successful');
+            window.location.href = '/SignIn.html';
+        } else {
+            alert('Error logging out');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error logging out');
+    });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+    const ProfileIcon = document.getElementById('ProfileIcon');
+    const ProfileMenu = document.getElementById('ProfileMenu');
+
+    ProfileIcon.addEventListener('click', async () => {
+       
+        const user = await fetch ('/User');
+
+        if(user.ok){
+            if (!ProfileMenu.classList.contains('hidden')) {
+            ProfileMenu.classList.add('hidden');
+            } else {
+                ProfileMenu.classList.remove('hidden');
+            }
+        }
+        else{
+            window.location.href = 'SignIn.html';
+        }
+           
+    });
+});
+
+function expandSearchBar() {
+    const searchBar = document.getElementById('search-bar');
+    const searchIcon = document.getElementById('search-icon');
+    
+    searchBar.classList.toggle('expanded');
+    searchIcon.classList.toggle('expanded');
+}
+
+async function fetchUser() {
+    try {
+        const response = await fetch('/User');
+        if (response.ok) {
+        const data = await response.json();
+        console.log('User:', data);
+        fetchUserInfo();
+        setInterval(fetchUnreadCount, 10); 
+        setInterval(Notif, 1000);
+        } else {
+        console.error('Failed to fetch user data.');
+        }
+    } catch (err) {
+        console.error('Error fetching user:', err);
+    }
+}
+
+async function fetchUserInfo() {
+    try{
+        const result = await fetch('/UserInfo');
+
+        if(result.ok){
+
+            const User = await result.json();
+            const UserName = User.UserName;
+            document.getElementById('UsernameMenu').innerText = UserName;
+        }
+    }
+    catch(error){
+        console.error('Error fetching user', error);
+    }
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await fetchUser();
+    fetchUnreadCount();
+  });
+
+
+//Notif
+async function Notif() {
+    try {
+        const response = await fetch(`/Notif`);
+        const products = await response.json();
+        
+        const productList = document.getElementById('NotifContent');
+        productList.innerHTML = '';
+        
+        products.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.innerHTML = `
+                <div class="flex relative w-auto py-auto justify-between mr-6">
+                    <div class="justify-center flex pl-2">
+                        <div class="items-center flex">
+                            <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
+                        </div>
+                        <div class="justify-center flex flex-col pl-5">
+                            <h1 class="font-Inter text-sm">${product.Content}</h1>
+                            <h1 class="font-Inter text-sm">${product.Date}</h1>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="${product.productImage}" alt="${product.productName}" class="w-[7rem] h-[7rem]">
+                    </div>
+                </div>
+            `;
+            productList.appendChild(productElement);
+
+            const notifdot = productElement.querySelector('.notifdot');
+            if (product.Status === 'unread') {
+                notifdot.classList.remove('hidden');
+            } else {
+                notifdot.classList.add('hidden');
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+    }
+}
+    function disableScroll() {
+
+    scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+    scrollLeft =
+        window.pageXOffset || document.documentElement.scrollLeft;
+
+
+
+    window.onscroll = function() {
+    window.scrollTo(scrollLeft, scrollTop);
+    };
+    }
+    function enableScroll() {
+    window.onscroll = function() {};
+    }
+document.addEventListener('DOMContentLoaded', (event) => {
+        const NotifIcon = document.getElementById('NotifIcon');
+        const Notif = document.getElementById('Notif');
+        const container = document.getElementById('main-container');
+        const body = document.getElementById('body');
+
+        NotifIcon.addEventListener('click', async () => {
+
+        const user = await fetch ('/User');
+
+            if(user.ok){
+                if (!Notif.classList.contains('hidden')) {
+                Notif.classList.add('hidden');
+                container.classList.remove('pointer-events-none');
+                enableScroll();
+                fetch('/UpdateNotif', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                UpdatedNotif: 'read'
+                            })
+                        })
+                            .then(response => {
+                                return response.json;
+                            })
+                            .catch(error => {
+                                console.error('Error updating status:', error);
+                            });
+                } else {
+                    Notif.classList.remove('hidden');
+                    container.classList.add('pointer-events-none');
+                    disableScroll();        
+                }
+            }
+            else{
+                window.location.href = 'SignIn.html';
+            }
+            
+        });
+    });
+    async function fetchUnreadCount() {
+        try {
+            const response = await fetch('/NotifBadge'); 
+            const data = await response.json();
+            const unreadCount = data.NotificationID;
+            //console.log(data);
+            const notifBadge = document.getElementById('notif-badge');
+            const notifPing = document.getElementById('notifBadge');
+            if (unreadCount > 0) {
+                notifBadge.style.display = 'inline-flex';
+                notifPing.style.display = 'inline-flex';
+                notifBadge.classList.remove('hidden');
+                notifPing.classList.remove('hidden');
+            } else {
+                notifBadge.style.display = 'none';
+                notifPing.style.display = 'none';
+            }
+        } catch (error) {
+            //console.error('Error fetching unread count:', error);
+        }
+    }
+
     function OrderOk(){
             document.getElementById('OrderPopup').classList.add('hidden');
         }

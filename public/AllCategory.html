@@ -447,26 +447,28 @@
                 
             </div>
         </div>
-        <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center"></div>
-            <div class="flex flex-col items-center">
-                <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
-                    <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
-                </div>
-                <div class="font-Inter">
-                    jennierubyjane
-                </div>
+       
+        
+    </div>
+    <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
+        <div class="flex flex-col items-center">
+            <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
             </div>
-            <div class="py-1 flex" ></div>
-                <div class="flex-col flex relative">
-                    <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
-                    <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
-                    <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
-                    <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
-                    <a href="AllCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</a>
-                </div>
+            <div id="UsernameMenu" class="font-Inter">
+                jennierubyjane
             </div>
-            
         </div>
+        <div class="py-1 flex" ></div>
+            <div class="flex-col flex relative">
+                <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
+                <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
+                <a href="AllCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</a>
+            </div>
+        </div>
+        
     </div>
 </body>
 <script>
@@ -488,7 +490,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         if(user.ok){
             if (!ProfileMenu.classList.contains('hidden')) {
-            ProfileMenu.classList.add('hidden');
+                ProfileMenu.classList.add('hidden');
             } else {
                 ProfileMenu.classList.remove('hidden');
             }
@@ -496,8 +498,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         else{
             window.location.href = 'SignIn.html';
         }
-        
-        
     });
 });
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -910,13 +910,43 @@ async function Notif() {
             //console.error('Error fetching unread count:', error);
         }
     }
+    async function fetchUser() {
+    try {
+        const response = await fetch('/User');
+        if (response.ok) {
+        const data = await response.json();
+        console.log('User:', data);
+        fetchUserInfo();
+        setInterval(fetchUnreadCount, 10); 
+        setInterval(Notif, 1000);
+        } else {
+        console.error('Failed to fetch user data.');
+        }
+    } catch (err) {
+        console.error('Error fetching user:', err);
+    }
+}
 
+async function fetchUserInfo() {
+    try{
+        const result = await fetch('/UserInfo');
 
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+        if(result.ok){
 
-setInterval(fetchUnreadCount,10); 
+            const User = await result.json();
+            const UserName = User.UserName;
+            document.getElementById('UsernameMenu').innerText = UserName;
+        }
+    }
+    catch(error){
+        console.error('Error fetching user', error);
+    }
+}
 
-setInterval(Notif, 1000);
+document.addEventListener('DOMContentLoaded', async () => {
+    await fetchUser();
+    fetchUnreadCount();
+  });
 
 //Chat
 document.addEventListener('DOMContentLoaded', () => {

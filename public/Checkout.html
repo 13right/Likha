@@ -53,7 +53,7 @@
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
                     <li class="my-6 md:my-0">
-                        <a href="index.html" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="Index.html" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             HOME
                         </a>
                     </li>
@@ -175,17 +175,17 @@
                                 Name
                             </h1>
                             <div class="w-[269px] h-[40px] outline outline-2 outline-outline p-2">
-                                <p class="font-Inter font-normal text-[16px] text-[#00000080]">
+                                <p id="Name" class="font-Inter font-normal text-[16px] text-[#00000080]">
                                     JENNIE KIM
                                 </p>
                             </div>
                         </div>
                         <div class="relative left-[3rem] top-[2rem] space-y-1">
-                            <h1 class="font-Inter font-semibold text-[16px] text-[#00000080]">
+                            <h1  class="font-Inter font-semibold text-[16px] text-[#00000080]">
                                 Email
                             </h1>
                             <div class="w-[269px] h-[40px] outline outline-2 outline-outline p-2">
-                                <p class="font-Inter font-normal text-[16px] text-[#00000080]">
+                                <p id="Email" class="font-Inter font-normal text-[16px] text-[#00000080]">
                                     jennierubyjane.kim@email.com
                                 </p>
                             </div>
@@ -195,7 +195,7 @@
                                 Mobile No.
                             </h1>
                             <div class="w-[269px] h-[40px] outline outline-2 outline-outline p-2">
-                                <p class="font-Inter font-normal text-[16px] text-[#00000080]">
+                                <p id="Mobile" class="font-Inter font-normal text-[16px] text-[#00000080]">
                                     +63 9033526492
                                 </p>
                             </div>
@@ -331,6 +331,28 @@
 // testCheckout();
 
 
+async function fetchUser() {
+    try{
+        const result = await fetch('/UserInfo');
+
+        if(result.ok){
+
+            const User = await result.json();
+            const UserName = User.UserName;
+            const Name = User.Name;
+            console.log(User);
+            document.getElementById('Mobile').innerText = User.MobileNum;
+            document.getElementById('Name').innerText = User.Name;
+            document.getElementById('Email').innerText = User.Email;
+
+        }
+    }
+    catch(error){
+        console.error('Error fetching user', error);
+    }
+}
+fetchUser();
+
 document.addEventListener('DOMContentLoaded', function() {
     const onlineRadio = document.getElementById('Online');
     const otcRadio = document.getElementById('OTC');
@@ -356,7 +378,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Initial check
     toggleOP();
 
     onlineRadio.addEventListener('change', toggleOP);
@@ -558,8 +579,31 @@ PlaceOrderBtn.addEventListener('click',async function () {
                 overlay.classList.add('hidden'); 
         }
     }
-    else{
-        console.log("otc");
+    else if (PlaceOrderBtn.innerText == "Place Order") {
+        fetch('/PlaceOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            
+            body: JSON.stringify(JSON.parse(sessionStorage.getItem('productData')))
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(text);
+                });
+            }
+            console.log(JSON.parse(sessionStorage.getItem('productName')))
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            document.getElementById('OrderPopup').classList.remove('hidden');
+        })
+        .catch((error) => {
+            console.error('Error:', error.message);
+        });
     }
         
 });
