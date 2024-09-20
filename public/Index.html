@@ -1161,149 +1161,149 @@ document.addEventListener('DOMContentLoaded', async () => {
   
 
 //Chat
-document.addEventListener('DOMContentLoaded', () => {
-            fetchMessages();
-            setInterval(fetchMessages, 2000);
-        });
+// document.addEventListener('DOMContentLoaded', () => {
+//             fetchMessages();
+//             setInterval(fetchMessages, 2000);
+//         });
 
-        async function getCurrentUser() {
-            try {
-                const response = await fetch('/api/current_user');
-                if (response.ok) {
-                    const user = await response.json();
-                    return user.UserID;
-                    //console.log("User ID" + user.UserID); 
-                } else {
-                    window.location.href = '/SignIn.html'; 
-                }
-            } catch (error) {
-                console.error('Error fetching current user:', error);
-            }
-        }
-        let previousMessageCount = 0;
-        function scrollToBottom() {
-            const chatBox = document.getElementById('chat-box');
-            if (chatBox) {
-                requestAnimationFrame(() => {
-                    chatBox.scrollTo({
-                        top: chatBox.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                });
-            } else {
-                console.error('chatBox element not found.');
-            }
-        }
-    async function fetchMessages() {
+//         async function getCurrentUser() {
+//             try {
+//                 const response = await fetch('/api/current_user');
+//                 if (response.ok) {
+//                     const user = await response.json();
+//                     return user.UserID;
+//                     //console.log("User ID" + user.UserID); 
+//                 } else {
+//                     window.location.href = '/SignIn.html'; 
+//                 }
+//             } catch (error) {
+//                 console.error('Error fetching current user:', error);
+//             }
+//         }
+//         let previousMessageCount = 0;
+//         function scrollToBottom() {
+//             const chatBox = document.getElementById('chat-box');
+//             if (chatBox) {
+//                 requestAnimationFrame(() => {
+//                     chatBox.scrollTo({
+//                         top: chatBox.scrollHeight,
+//                         behavior: 'smooth'
+//                     });
+//                 });
+//             } else {
+//                 console.error('chatBox element not found.');
+//             }
+//         }
+//     async function fetchMessages() {
     
-    const userID = await getCurrentUser();
-    fetch('/api/messages')
-    .then(response => response.json())
-    .then(messages => {
-        //console.log(messages);
-        const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML = '';
-        const ID = parseInt(userID);
-       //console.log(ID);
-        messages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `
-                <div id="CC" class="flex items-start">
-                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
-                        <p id="Content" class="text-sm">${msg.message}</p>
-                    </div>
-                </div>
-            `;
-            const ChatContainer = messageElement.querySelector('#CC');
-            const ChatBG = messageElement.querySelector('#Chats');
-                //console.log(msg.SenderID);
-            if ( msg.SenderID === ID) {
-                ChatContainer.classList.add('justify-end');
-                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
-                ChatBG.classList.remove('bg-outline');
-            } else {
-                ChatBG.classList.add('bg-outline');
-            }
+//     const userID = await getCurrentUser();
+//     fetch('/api/messages')
+//     .then(response => response.json())
+//     .then(messages => {
+//         //console.log(messages);
+//         const chatBox = document.getElementById('chat-box');
+//         chatBox.innerHTML = '';
+//         const ID = parseInt(userID);
+//        //console.log(ID);
+//         messages.forEach(msg => {
+//             const messageElement = document.createElement('div');
+//             messageElement.innerHTML = `
+//                 <div id="CC" class="flex items-start">
+//                     <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+//                         <p id="Content" class="text-sm">${msg.message}</p>
+//                     </div>
+//                 </div>
+//             `;
+//             const ChatContainer = messageElement.querySelector('#CC');
+//             const ChatBG = messageElement.querySelector('#Chats');
+//                 //console.log(msg.SenderID);
+//             if ( msg.SenderID === ID) {
+//                 ChatContainer.classList.add('justify-end');
+//                 ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+//                 ChatBG.classList.remove('bg-outline');
+//             } else {
+//                 ChatBG.classList.add('bg-outline');
+//             }
 
-            chatBox.appendChild(messageElement);
-        });
-        // console.log(previousMessageCount);
-        // console.log(messages.length);
-        if (messages.length > previousMessageCount) {
-            scrollToBottom();
-            console.log("Scroll");
-        }
+//             chatBox.appendChild(messageElement);
+//         });
+//         // console.log(previousMessageCount);
+//         // console.log(messages.length);
+//         if (messages.length > previousMessageCount) {
+//             scrollToBottom();
+//             console.log("Scroll");
+//         }
 
-        previousMessageCount = messages.length;
-    })
-    .catch(error => {
-        console.error('Network error:', error);
-    });
-}
+//         previousMessageCount = messages.length;
+//     })
+//     .catch(error => {
+//         console.error('Network error:', error);
+//     });
+// }
 
-        document.getElementById('message-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const message = document.getElementById('message-input').value;
-            fetch('/Chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
-            }).then(() => {
-                document.getElementById('message-input').value = '';
-                fetchMessages();
-            });
-        });
+//         document.getElementById('message-form').addEventListener('submit', function (e) {
+//             e.preventDefault();
+//             const message = document.getElementById('message-input').value;
+//             fetch('/Chat', {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ message })
+//             }).then(() => {
+//                 document.getElementById('message-input').value = '';
+//                 fetchMessages();
+//             });
+//         });
 
-        fetchMessages();
-        const logo = document.getElementById('ChatLogo');
-        const content = document.getElementById('ChatContent');
-        const closeButton = document.getElementById('ChatClose');
+//         fetchMessages();
+//         const logo = document.getElementById('ChatLogo');
+//         const content = document.getElementById('ChatContent');
+//         const closeButton = document.getElementById('ChatClose');
 
-        logo.addEventListener('click', () => {
+//         logo.addEventListener('click', () => {
             
-            const logoRect = logo.getBoundingClientRect();
+//             const logoRect = logo.getBoundingClientRect();
 
-            content.style.right = `${window.innerWidth - logoRect.right}px`;
-            content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
-            content.style.width = `${logoRect.width}px`;
-            content.style.height = `${logoRect.height}px`;
+//             content.style.right = `${window.innerWidth - logoRect.right}px`;
+//             content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
+//             content.style.width = `${logoRect.width}px`;
+//             content.style.height = `${logoRect.height}px`;
 
-            logo.classList.add('spin-fade');
+//             logo.classList.add('spin-fade');
             
 
-            setTimeout(() => {
-                logo.classList.add('hidden'); 
-                content.classList.remove('hidden', 'content-hidden');
-                content.classList.add('expand-from-logo');
-                content.classList.remove('collapse-to-logo');
+//             setTimeout(() => {
+//                 logo.classList.add('hidden'); 
+//                 content.classList.remove('hidden', 'content-hidden');
+//                 content.classList.add('expand-from-logo');
+//                 content.classList.remove('collapse-to-logo');
 
-                setTimeout(() => {
-                    content.style.width = '35rem';
-                    content.style.height = '25rem';
+//                 setTimeout(() => {
+//                     content.style.width = '35rem';
+//                     content.style.height = '25rem';
 
-                    setTimeout(() => {
-                        scrollToBottom();
-                        content.classList.remove('content-hidden');
-                        content.classList.add('content-visible');
-                    }, 700); 
-                }, 0);
-            }, 300);
-        });
-        closeButton.addEventListener('click', () => {
-            content.classList.remove('expand-from-logo', 'content-visible');
-            content.classList.add('collapse-to-logo');
+//                     setTimeout(() => {
+//                         scrollToBottom();
+//                         content.classList.remove('content-hidden');
+//                         content.classList.add('content-visible');
+//                     }, 700); 
+//                 }, 0);
+//             }, 300);
+//         });
+//         closeButton.addEventListener('click', () => {
+//             content.classList.remove('expand-from-logo', 'content-visible');
+//             content.classList.add('collapse-to-logo');
 
 
-            setTimeout(() => {
-                content.classList.add('content-hidden');
-                content.classList.add('hidden');
-                content.style.width = 'initial';
-                content.style.height = 'initial';
+//             setTimeout(() => {
+//                 content.classList.add('content-hidden');
+//                 content.classList.add('hidden');
+//                 content.style.width = 'initial';
+//                 content.style.height = 'initial';
                 
 
-                logo.classList.remove('hidden');
-                logo.classList.remove('spin-fade');
-            }, 400); 
-        });
+//                 logo.classList.remove('hidden');
+//                 logo.classList.remove('spin-fade');
+//             }, 400); 
+//         });
 </script>
 </html>

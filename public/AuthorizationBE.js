@@ -2,6 +2,7 @@ async function fetchCurrentUser() {
     try {
         const response = await fetch('/api/current_user');
         if (response.ok) {
+            
             const user = await response.json();
             if (user && user.UserID) {  // Ensure user and UserID are defined
                 const userID = parseInt(user.UserID);

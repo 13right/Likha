@@ -8,7 +8,8 @@ const { constrainedMemory } = require('process');
 const axios = require('axios');
 //const { compile } = require('ejs');
 require('dotenv').config();
-
+const RedisStore = require('connect-redis').default;
+const redis = require('redis');
 
 
 const app = express();
@@ -31,32 +32,29 @@ app.use('/Build', express.static(path.join(__dirname, 'Build')));
 
 app.use(express.static(path.join(__dirname)));
 
-app.use((req, res, next) => {
-    if (req.url.endsWith('.br')) {
-      res.setHeader('Content-Encoding', 'br');
-      if (req.url.endsWith('.wasm.br')) {
-        res.setHeader('Content-Type', 'application/wasm');
-      } else if (req.url.endsWith('.json.br')) {
-        res.setHeader('Content-Type', 'application/json');
-      } else if (req.url.endsWith('.data.br')) {
-        res.setHeader('Content-Type', 'application/octet-stream');
-      } else if (req.url.endsWith('.js.br')) {
-        res.setHeader('Content-Type', 'application/javascript');
-      }
-    } else if (req.url.endsWith('.gz')) {
-      res.setHeader('Content-Encoding', 'gzip');
-      if (req.url.endsWith('.wasm.gz')) {
-        res.setHeader('Content-Type', 'application/wasm');
-      } else if (req.url.endsWith('.json.gz')) {
-        res.setHeader('Content-Type', 'application/json');
-      } else if (req.url.endsWith('.data.gz')) {
-        res.setHeader('Content-Type', 'application/octet-stream');
-      } else if (req.url.endsWith('.js.gz')) {
-        res.setHeader('Content-Type', 'application/javascript');
-      }
+const REDIS_URL = 'rediss://red-crmmir9u0jms7396hggg:ahHz0fHYSrv3yKXY7Bz6w2yflyEXcYvK@oregon-redis.render.com:6379';
+
+// Create Redis client
+const redisClient = redis.createClient({
+  url: REDIS_URL
+});
+
+// Connect to Redis
+redisClient.connect()
+  .then(() => console.log('Connected to Redis'))
+  .catch(err => console.error('Redis connection error', err));
+
+  app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: 'Hatdog',  // Change this to your own secret
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
+      maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
     }
-    next();
-  });
+  }));
+  
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -65,12 +63,12 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use(session({
-    secret: 'Hatdog',
-    resave: true,
-    saveUninitialized: true
+// app.use(session({
+//     secret: 'Hatdog',
+//     resave: true,
+//     saveUninitialized: true
 
-  }));
+//   }));
 
 
 
@@ -287,7 +285,7 @@ app.post('/LogIn', async (req, res) => {
         if (user && user.Password === password) { 
             //console.log(req.session);
             req.session.user = user;
-            //console.log(req.session.user);
+            //console.log(req.session.user.UserID);
             if (user.Type === "Admin") {
                 res.status(250).send('Admin');
             } else {
