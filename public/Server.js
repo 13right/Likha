@@ -32,7 +32,7 @@ app.use('/Build', express.static(path.join(__dirname, 'Build')));
 
 app.use(express.static(path.join(__dirname)));
 
-const REDIS_URL = 'rediss://red-crmmir9u0jms7396hggg:ahHz0fHYSrv3yKXY7Bz6w2yflyEXcYvK@oregon-redis.render.com:6379';
+const REDIS_URL = process.env.REDIS_URL;
 
 // Create Redis client
 const redisClient = redis.createClient({
