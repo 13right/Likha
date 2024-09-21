@@ -10,7 +10,7 @@ const axios = require('axios');
 require('dotenv').config();
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
-
+const WebSocket = require('ws');
 
 const app = express();
 
@@ -31,6 +31,50 @@ app.get('/3D', (req, res) => {
 app.use('/Build', express.static(path.join(__dirname, 'Build')));
 
 app.use(express.static(path.join(__dirname)));
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    
+    // Send a welcome message
+    ws.send(JSON.stringify({ message: 'Welcome to WebSocket!' }));
+
+    // Handle incoming messages from the client
+    ws.on('notifBadge', async (message) => {
+        const user = req.session.user;  // Assuming session is accessible
+
+        if (!user || user.UserID === undefined) {
+            ws.send(JSON.stringify({ error: 'Unauthorized' }));
+            return;
+        }
+
+        const ID = parseInt(user.UserID);
+
+        try {
+            const request = pool.request().input('UserID', sql.Int, ID);
+
+            const query = `
+                SELECT COUNT(NotificationID) AS NotificationID 
+                FROM tbl_notification
+                INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
+                WHERE tbl_Notification.Status = 'unread' 
+                AND tbl_Order.UserID = @UserID
+            `;
+            const result = await request.query(query);
+            const notif = result.recordset[0].NotificationID;
+
+            // Send notification count via WebSocket
+            ws.send(JSON.stringify({ NotificationID: notif }));
+        } catch (err) {
+            console.error('Database error:', err);
+            ws.send(JSON.stringify({ error: 'Database error', details: err }));
+        }
+    });
+});
+
+const socket = new WebSocket('ws://localhost:8080');
+
 
 const REDIS_URL = process.env.REDIS_URL;
 
@@ -333,19 +377,21 @@ app.put('/UpdateProfile', async (req, res) => {
 });
 //LogOut
 app.post('/LogOut', (req, res) => {
-    if (req.session.user) {
+    if (req.session && req.session.user) {
         req.session.destroy((err) => {
             if (err) {
-                console.error(err);
-                res.status(500).send('Error logging out');
+                console.error('Error destroying session:', err);
+                return res.status(500).json({ error: 'Error logging out' });
             } else {
-                res.status(200).send('Logout successful');
+                console.log('logout na');
+                return res.status(200).json({ message: 'Logout successful' });
             }
         });
     } else {
-        res.status(401).send('Not authenticated');
+        return res.status(401).json({ error: 'Not authenticated' });
     }
 });
+
 
 app.get('/api/current_user', (req, res) => {
     if (req.session.user) {
@@ -358,6 +404,7 @@ app.get('/api/current_user', (req, res) => {
 
 app.get('/UserInfo', async (req, res) => {
     const user = req.session.user;
+    //console.log(user.UserID);
     const ID = parseInt(user.UserID);
 
     const query = `SELECT * FROM tbl_User WHERE UserID = @ID`;

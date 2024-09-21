@@ -16,7 +16,8 @@
     "multer": "^1.4.5-lts.1",
     "path": "^0.12.7",
     "redis": "^4.7.0",
-    "tedious": "^18.2.0"
+    "tedious": "^18.2.0",
+    "ws": "^8.18.0"
   },
   "scripts": {
     "start": "node src/public/server.js"

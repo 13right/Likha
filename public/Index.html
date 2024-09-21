@@ -739,23 +739,25 @@ document.getElementById('LogOut').addEventListener('click', () => {
     fetch('/LogOut', {
         method: 'POST',
         credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json'
-        }
     })
     .then(response => {
-        if (response.ok) {
+        console.log('Response Status:', response.status);
+        return response.json().then(data => ({ status: response.status, body: data }));
+    })
+    .then(({ status, body }) => {
+        if (status === 200) {
             alert('Logout successful');
-            window.location.href = '/SignIn.html';
+            window.location.href = 'Index.html';
         } else {
-            alert('Error logging out');
+            alert('Error logging out: ' + body);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error logging out');
+        alert('Error logging outt'+ error);
     });
 });
+
 document.addEventListener('DOMContentLoaded', (event) => {
     const ProfileIcon = document.getElementById('ProfileIcon');
     const ProfileMenu = document.getElementById('ProfileMenu');
@@ -1098,27 +1100,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
             
         });
     });
-    async function fetchUnreadCount() {
-        try {
-            const response = await fetch('/NotifBadge'); 
-            const data = await response.json();
-            const unreadCount = data.NotificationID;
-            //console.log(data);
-            const notifBadge = document.getElementById('notif-badge');
-            const notifPing = document.getElementById('notifBadge');
-            if (unreadCount > 0) {
-                notifBadge.style.display = 'inline-flex';
-                notifPing.style.display = 'inline-flex';
-                notifBadge.classList.remove('hidden');
-                notifPing.classList.remove('hidden');
-            } else {
-                notifBadge.style.display = 'none';
-                notifPing.style.display = 'none';
-            }
-        } catch (error) {
-            //console.error('Error fetching unread count:', error);
-        }
-    }
+    // async function fetchUnreadCount() {
+    //     try {
+    //         const response = await fetch('/NotifBadge'); 
+    //         const data = await response.json();
+    //         const unreadCount = data.NotificationID;
+    //         //console.log(data);
+    //         const notifBadge = document.getElementById('notif-badge');
+    //         const notifPing = document.getElementById('notifBadge');
+    //         if (unreadCount > 0) {
+    //             notifBadge.style.display = 'inline-flex';
+    //             notifPing.style.display = 'inline-flex';
+    //             notifBadge.classList.remove('hidden');
+    //             notifPing.classList.remove('hidden');
+    //         } else {
+    //             notifBadge.style.display = 'none';
+    //             notifPing.style.display = 'none';
+    //         }
+    //     } catch (error) {
+    //         //console.error('Error fetching unread count:', error);
+    //     }
+    // }
 
 async function fetchUser() {
     try {
@@ -1127,7 +1129,7 @@ async function fetchUser() {
         const data = await response.json();
         console.log('User:', data);
         fetchUserInfo();
-        setInterval(fetchUnreadCount, 10); 
+        //setInterval(fetchUnreadCount, 10); 
         setInterval(Notif, 1000);
         } else {
         console.error('Failed to fetch user data.');
@@ -1136,6 +1138,56 @@ async function fetchUser() {
         console.error('Error fetching user:', err);
     }
 }
+
+// Initialize a WebSocket connection
+const socket = new WebSocket('ws://localhost:8080');  // Replace with your server's WebSocket URL
+
+// Handle the connection open event
+socket.addEventListener('open', (event) => {
+    console.log('Connected to WebSocket server');
+
+    // Optionally, send a message to the server (not necessary for notifications)
+    socket.send(JSON.stringify({ action: 'getNotifications' }));
+});
+
+async function fetchNotifCount() {
+    // Handle incoming messages from the WebSocket server
+socket.addEventListener('notifBadge', (event) => {
+    const data = JSON.parse(event.data);
+    
+    if (data.NotificationID !== undefined) {
+        console.log(`Unread notifications: ${data.NotificationID}`);
+
+        // Update the notification badge in your UI
+        const notifBadge = document.getElementById('notif-badge');
+        const notifPing = document.getElementById('notifBadge');
+
+        if (data.NotificationID > 0) {
+            notifBadge.style.display = 'inline-flex';
+            notifPing.style.display = 'inline-flex';
+            notifBadge.classList.remove('hidden');
+            notifPing.classList.remove('hidden');
+        } else {
+            notifBadge.style.display = 'none';
+            notifPing.style.display = 'none';
+        }
+    } else if (data.error) {
+        console.error(`Error: ${data.error}`);
+    }
+});
+
+// Handle the connection close event
+socket.addEventListener('close', () => {
+    console.log('Disconnected from WebSocket server');
+});
+
+// Handle any WebSocket errors
+socket.addEventListener('error', (error) => {
+    console.error('WebSocket error:', error);
+});
+}
+
+
 
 async function fetchUserInfo() {
     try{
@@ -1155,8 +1207,10 @@ async function fetchUserInfo() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchUser();
-    fetchUnreadCount();
-  });
+    console.log('yo');
+    //await fetchNotifCount();
+    console.log('yoo');
+});
 
   
 
