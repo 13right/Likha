@@ -747,7 +747,7 @@ document.getElementById('LogOut').addEventListener('click', () => {
     .then(({ status, body }) => {
         if (status === 200) {
             alert('Logout successful');
-            window.location.href = 'Index.html';
+            window.location.href = 'SignIn.html';
         } else {
             alert('Error logging out: ' + body);
         }
