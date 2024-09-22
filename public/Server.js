@@ -14,10 +14,7 @@ const WebSocket = require('ws');
 const http = require('http');
 
 const app = express();
-const server = http.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
-});
+const server = http.createServer(app);
 
 
 app.set('view engine', 'ejs');
