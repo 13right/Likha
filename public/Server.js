@@ -63,20 +63,20 @@ const notifyClients = (notifCount) => {
     });
 };
 
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    clients.push(ws);
+// wss.on('connection', (ws) => {
+//     console.log('Client connected');
+//     clients.push(ws);
 
-    // Start checking notifications every second for the connected user
-    const userID = 3; // Replace with actual user ID from session
-    const interval = setInterval(() => checkNotifications(userID), 1000);
+//     // Start checking notifications every second for the connected user
+//     const userID = 3; // Replace with actual user ID from session
+//     const interval = setInterval(() => checkNotifications(userID), 1000);
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        clients = clients.filter(client => client !== ws);
-        clearInterval(interval); // Stop checking when the client disconnects
-    });
-});
+//     ws.on('close', () => {
+//         console.log('Client disconnected');
+//         clients = clients.filter(client => client !== ws);
+//         clearInterval(interval); // Stop checking when the client disconnects
+//     });
+// });
 
 const socket = new WebSocket('ws://localhost:8080');
 
@@ -89,20 +89,20 @@ const redisClient = redis.createClient({
 });
 
 // Connect to Redis
-// redisClient.connect()
-//   .then(() => console.log('Connected to Redis'))
-//   .catch(err => console.error('Redis connection error', err));
+redisClient.connect()
+  .then(() => console.log('Connected to Redis'))
+  .catch(err => console.error('Redis connection error', err));
 
-//   app.use(session({
-//     store: new RedisStore({ client: redisClient }),
-//     secret: 'Hatdog',  // Change this to your own secret
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
-//       maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
-//     }
-//   }));
+  app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: 'Hatdog',  // Change this to your own secret
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
+      maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
+    }
+  }));
   
 
 app.use((req, res, next) => {
@@ -112,12 +112,12 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use(session({
-    secret: 'Hatdog',
-    resave: true,
-    saveUninitialized: true
+// app.use(session({
+//     secret: 'Hatdog',
+//     resave: true,
+//     saveUninitialized: true
 
-  }));
+//   }));
 
 
 
