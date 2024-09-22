@@ -32,7 +32,7 @@ app.use('/Build', express.static(path.join(__dirname, 'Build')));
 
 app.use(express.static(path.join(__dirname)));
 
-const wss = new WebSocket.Server({ port: port });
+const wss = new WebSocket.Server({ port: 8080 });
 
 let clients = [];
 
