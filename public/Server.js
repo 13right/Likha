@@ -34,42 +34,47 @@ app.use(express.static(path.join(__dirname)));
 
 const wss = new WebSocket.Server({ port: 8080 });
 
+let clients = [];
+
+const checkNotifications = async (userID) => {
+    try {
+        const request = pool.request().input('UserID', sql.Int, userID);
+        const query = `
+            SELECT COUNT(NotificationID) AS NotificationID 
+            FROM tbl_notification
+            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
+            WHERE tbl_Notification.Status = 'unread' 
+            AND tbl_Order.UserID = @UserID
+        `;
+        const result = await request.query(query);
+        const notifCount = result.recordset[0].NotificationID;
+
+        notifyClients(notifCount);
+    } catch (err) {
+        console.error('Database error:', err);
+    }
+};
+
+const notifyClients = (notifCount) => {
+    clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({ NotificationID: notifCount }));
+        }
+    });
+};
+
 wss.on('connection', (ws) => {
     console.log('Client connected');
-    
-    // Send a welcome message
-    ws.send(JSON.stringify({ message: 'Welcome to WebSocket!' }));
+    clients.push(ws);
 
-    // Handle incoming messages from the client
-    ws.on('notifBadge', async (message) => {
-        const user = req.session.user;  // Assuming session is accessible
+    // Start checking notifications every second for the connected user
+    const userID = 3; // Replace with actual user ID from session
+    const interval = setInterval(() => checkNotifications(userID), 1000);
 
-        if (!user || user.UserID === undefined) {
-            ws.send(JSON.stringify({ error: 'Unauthorized' }));
-            return;
-        }
-
-        const ID = parseInt(user.UserID);
-
-        try {
-            const request = pool.request().input('UserID', sql.Int, ID);
-
-            const query = `
-                SELECT COUNT(NotificationID) AS NotificationID 
-                FROM tbl_notification
-                INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
-                WHERE tbl_Notification.Status = 'unread' 
-                AND tbl_Order.UserID = @UserID
-            `;
-            const result = await request.query(query);
-            const notif = result.recordset[0].NotificationID;
-
-            // Send notification count via WebSocket
-            ws.send(JSON.stringify({ NotificationID: notif }));
-        } catch (err) {
-            console.error('Database error:', err);
-            ws.send(JSON.stringify({ error: 'Database error', details: err }));
-        }
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        clients = clients.filter(client => client !== ws);
+        clearInterval(interval); // Stop checking when the client disconnects
     });
 });
 
