@@ -34,49 +34,7 @@ app.use(express.static(path.join(__dirname)));
 
 const wss = new WebSocket.Server({ port: 8080 });
 
-let clients = [];
 
-const checkNotifications = async (userID) => {
-    try {
-        const request = pool.request().input('UserID', sql.Int, userID);
-        const query = `
-            SELECT COUNT(NotificationID) AS NotificationID 
-            FROM tbl_notification
-            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
-            WHERE tbl_Notification.Status = 'unread' 
-            AND tbl_Order.UserID = @UserID
-        `;
-        const result = await request.query(query);
-        const notifCount = result.recordset[0].NotificationID;
-
-        notifyClients(notifCount);
-    } catch (err) {
-        console.error('Database error:', err);
-    }
-};
-
-const notifyClients = (notifCount) => {
-    clients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ NotificationID: notifCount }));
-        }
-    });
-};
-
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    clients.push(ws);
-
-    // Start checking notifications every second for the connected user
-    const userID = 3; // Replace with actual user ID from session
-    const interval = setInterval(() => checkNotifications(userID), 1000);
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        clients = clients.filter(client => client !== ws);
-        clearInterval(interval); // Stop checking when the client disconnects
-    });
-});
 
 const socket = new WebSocket('ws://localhost:8080');
 
@@ -173,6 +131,51 @@ pool.connect();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+let clients = [];
+
+const checkNotifications = async (userID) => {
+    try {
+        const request = pool.request().input('UserID', sql.Int, userID);
+        const query = `
+            SELECT COUNT(NotificationID) AS NotificationID 
+            FROM tbl_notification
+            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
+            WHERE tbl_Notification.Status = 'unread' 
+            AND tbl_Order.UserID = @UserID
+        `;
+        const result = await request.query(query);
+        const notifCount = result.recordset[0].NotificationID;
+
+        notifyClients(notifCount);
+    } catch (err) {
+        console.error('Database error:', err);
+    }
+};
+
+const notifyClients = (notifCount) => {
+    clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({ NotificationID: notifCount }));
+        }
+    });
+};
+
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    clients.push(ws);
+
+    // Start checking notifications every second for the connected user
+    const userID = 3; // Replace with actual user ID from session
+    const interval = setInterval(() => checkNotifications(userID), 1000);
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        clients = clients.filter(client => client !== ws);
+        clearInterval(interval); // Stop checking when the client disconnects
+    });
+});
 
 //Update
 app.put('/updateProduct/:productName', async (req, res) => {
