@@ -169,20 +169,22 @@ const notifyClients = (notifCount) => {
     });
 };
 
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    clients.push(ws);
+checkNotifications();
 
-    // Start checking notifications every second for the connected user
-    const userID = 3; // Replace with actual user ID from session
-    const interval = setInterval(() => checkNotifications(userID), 1000);
+// wss.on('connection', (ws) => {
+//     console.log('Client connected');
+//     clients.push(ws);
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        clients = clients.filter(client => client !== ws);
-        clearInterval(interval); // Stop checking when the client disconnects
-    });
-});
+//     // Start checking notifications every second for the connected user
+//     const userID = 3; // Replace with actual user ID from session
+//     const interval = setInterval(() => checkNotifications(userID), 1000);
+
+//     ws.on('close', () => {
+//         console.log('Client disconnected');
+//         clients = clients.filter(client => client !== ws);
+//         clearInterval(interval); // Stop checking when the client disconnects
+//     });
+// });
 
 //Update
 app.put('/updateProduct/:productName', async (req, res) => {
