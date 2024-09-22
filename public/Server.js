@@ -11,8 +11,11 @@ require('dotenv').config();
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 const WebSocket = require('ws');
+const http = require('http');
 
 const app = express();
+const server = http.createServer(app);
+
 
 app.set('view engine', 'ejs');
 
@@ -32,7 +35,7 @@ app.use('/Build', express.static(path.join(__dirname, 'Build')));
 
 app.use(express.static(path.join(__dirname)));
 
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: server });
 
 
 
@@ -1390,6 +1393,6 @@ app.put('/UpdateNotif', async (req, res) => {
 });
 
 //Server itu guys
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
