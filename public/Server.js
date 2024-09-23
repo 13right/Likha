@@ -144,7 +144,15 @@ let clients = [];
 
 const checkNotifications = async (userID) => {
     try {
+
+        if (!pool.connected) {
+            await pool.connect();
+            
+        }
+
+        // Proceed with the database query
         const request = await pool.request();
+                
         request.input('UserID', sql.Int, userID);
         const query = `
             SELECT COUNT(NotificationID) AS NotificationID 
