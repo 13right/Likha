@@ -14,10 +14,7 @@ const WebSocket = require('ws');
 const http = require('http');
 
 const app = express();
-const server = http.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
-});
+const server = http.createServer(app);
 
 
 app.set('view engine', 'ejs');
@@ -53,20 +50,20 @@ const redisClient = redis.createClient({
 });
 
 // Connect to Redis
-// redisClient.connect()
-//   .then(() => console.log('Connected to Redis'))
-//   .catch(err => console.error('Redis connection error', err));
+redisClient.connect()
+  .then(() => console.log('Connected to Redis'))
+  .catch(err => console.error('Redis connection error', err));
 
-//   app.use(session({
-//     store: new RedisStore({ client: redisClient }),
-//     secret: 'Hatdog',  // Change this to your own secret
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
-//       maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
-//     }
-//   }));
+  app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: 'Hatdog',  // Change this to your own secret
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
+      maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
+    }
+  }));
   
 
 app.use((req, res, next) => {
@@ -76,12 +73,12 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use(session({
-    secret: 'Hatdog',
-    resave: true,
-    saveUninitialized: true
+// app.use(session({
+//     secret: 'Hatdog',
+//     resave: true,
+//     saveUninitialized: true
 
-  }));
+//   }));
 
 
 
@@ -147,7 +144,7 @@ let clients = [];
 
 const checkNotifications = async (userID) => {
     try {
-        const request = pool.request();
+        const request = await pool.request();
         request.input('UserID', sql.Int, userID);
         const query = `
             SELECT COUNT(NotificationID) AS NotificationID 
@@ -175,20 +172,20 @@ const notifyClients = (notifCount) => {
 
 
 
-// wss.on('connection', (ws) => {
-//     console.log('Client connected');
-//     clients.push(ws);
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    clients.push(ws);
 
-//     // Start checking notifications every second for the connected user
-//     const userID = 3; // Replace with actual user ID from session
-//     const interval = setInterval(() => checkNotifications(userID), 1000);
+    // Start checking notifications every second for the connected user
+    const userID = 3; // Replace with actual user ID from session
+    const interval = setInterval(() => checkNotifications(userID), 1000);
 
-//     ws.on('close', () => {
-//         console.log('Client disconnected');
-//         clients = clients.filter(client => client !== ws);
-//         clearInterval(interval); // Stop checking when the client disconnects
-//     });
-// });
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        clients = clients.filter(client => client !== ws);
+        clearInterval(interval); // Stop checking when the client disconnects
+    });
+});
 
 //Update
 app.put('/updateProduct/:productName', async (req, res) => {
