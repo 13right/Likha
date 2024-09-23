@@ -39,7 +39,7 @@ const wss = new WebSocket.Server({ server });
 
 
 
-const socket = new WebSocket('ws://localhost:8080');
+//const socket = new WebSocket('ws://localhost:8080');
 
 
 const REDIS_URL = process.env.REDIS_URL;
