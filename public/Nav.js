@@ -516,7 +516,6 @@ document.getElementById('message-form').addEventListener('submit', function (e) 
         body: JSON.stringify({ message })
     }).then(() => {
         document.getElementById('message-input').value = '';
-        fetchMessages();
     });
 });
 
@@ -530,11 +529,7 @@ logo.addEventListener('click', async () => {
     const user = await fetch ('/User');
 
     if(user.ok){
-        if (!ProfileMenu.classList.contains('hidden')) {
-        ProfileMenu.classList.add('hidden');
-        } else {
-            ProfileMenu.classList.remove('hidden');
-        }
+
     }
     else{
         window.location.href = 'SignIn.html';
