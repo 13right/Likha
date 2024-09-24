@@ -425,7 +425,7 @@ app.post('/SignUp', async (req, res) => {
         .input('name', sql.NVarChar, name)
         .input('number', sql.NVarChar, num)
         .input('Password',sql.NVarChar,Password);
-        const query = `INSERT INTO tbl_User (Name,MobileNum,Password,Type) VALUES (@name, @number,@Password,'Customer');`;
+        const query = `INSERT INTO tbl_User (UserName,MobileNum,Password,Type) VALUES (@name, @number,@Password,'Customer');`;
         const result = await request.query(query);
             
         res.status(200).json({messages: 'Sign Up Successful'});
