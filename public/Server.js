@@ -163,8 +163,29 @@ const checkNotifications = async (userID) => {
         `;
         const result = await request.query(query);
         const notifCount = result.recordset[0].NotificationID;
-        console.log(notifCount);
+       // console.log(notifCount);
         notifyClients(notifCount);
+    } catch (err) {
+        console.error('Database error:', err);
+    }
+};
+
+const getMessages = async (userID, ws) => {
+    const query = `
+        SELECT * FROM tbl_message 
+        WHERE (SenderID = @sender_id AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
+        OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = @sender_id)
+    `;
+
+    try {
+        const result = await pool.request()
+            .input('sender_id', sql.Int, userID)
+            .query(query);
+
+        const messages = result.recordset;
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ messages }));
+        }
     } catch (err) {
         console.error('Database error:', err);
     }
@@ -184,16 +205,37 @@ wss.on('connection', (ws) => {
     console.log('Client connected');
     clients.push(ws);
 
-    // Start checking notifications every second for the connected user
+    // Assuming userID is retrieved from the session, replace this with actual user session logic
     const userID = 3; // Replace with actual user ID from session
-    const interval = setInterval(() => checkNotifications(userID), 1000);
+
+    // Start checking notifications every second for the connected user
+    const notifInterval = setInterval(() => checkNotifications(userID), 1000);
+
+    // Start checking messages every second for the connected user
+    const messageInterval = setInterval(() => getMessages(userID, ws), 1000);
+
+    // Immediately fetch messages for the user upon connection
+    getMessages(userID, ws);
+
+    ws.on('message', (message) => {
+        const data = JSON.parse(message);
+
+        // If the client requests a refresh of messages
+        if (data.type === 'getMessages') {
+            getMessages(userID, ws); // Fetch messages again if requested
+        }
+    });
 
     ws.on('close', () => {
         console.log('Client disconnected');
         clients = clients.filter(client => client !== ws);
-        clearInterval(interval); // Stop checking when the client disconnects
+        
+        // Stop checking both notifications and messages when the client disconnects
+        clearInterval(notifInterval); 
+        clearInterval(messageInterval); 
     });
 });
+
 
 //Update
 app.put('/updateProduct/:productName', async (req, res) => {
