@@ -337,8 +337,8 @@ async function fetchUser() {
     }
 }
 // Initialize a WebSocket connection
-//const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
+const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
+//const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
 
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
