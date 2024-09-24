@@ -732,7 +732,7 @@ app.get('/Inbox', async (req, res) => {
             (SELECT COUNT(*) 
             FROM tbl_message 
             WHERE conversationID = m.conversationID
-            AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Name = 'Zappnott' AND Type = 'Admin') 
+            AND ReceiverID = (SELECT UserID FROM tbl_User WHERE UserName = 'Zappnott' AND Type = 'Admin') 
             AND SenderID = u.UserID 
             AND Status = 'Unread') AS Notif_Count
         FROM 
@@ -751,8 +751,8 @@ app.get('/Inbox', async (req, res) => {
                     tbl_message 
                 WHERE 
                     conversationID = m.conversationID
-                    AND (SenderID = (SELECT UserID FROM tbl_User WHERE Name = 'Zappnott' AND Type = 'Admin') 
-                        OR ReceiverID = (SELECT UserID FROM tbl_User WHERE Name = 'Zappnott' AND Type = 'Admin'))
+                    AND (SenderID = (SELECT UserID FROM tbl_User WHERE UserName = 'Zappnott' AND Type = 'Admin') 
+                        OR ReceiverID = (SELECT UserID FROM tbl_User WHERE UserName = 'Zappnott' AND Type = 'Admin'))
             )
         ORDER BY 
             m.conversationID;
