@@ -73,14 +73,15 @@ app.use((req, res, next) => {
     next();
   });
 
-  const sessionMiddleware = session({
+app.use(session({
     secret: 'Hatdog',
     resave: true,
     saveUninitialized: true
-});
 
-// Apply the session middleware to all HTTP requests
-app.use(sessionMiddleware);
+  }));
+
+
+
 
 //Local Machine sa baba
 // const config = {
@@ -243,70 +244,76 @@ const notifyClients = (notifCount) => {
     });
 };
 
-const wrapSessionMiddleware = (middleware) => (req, res, next) => {
-    middleware(req, {}, next);
-};
+app.get('/getUserID', (req, res) => {
+    try{
+        if (req.session && req.session.user) {
+            const user = req.session.user;
+            const userID = parseInt(user.UserID);
+            console.log(req.session.user);
+            res.json({ userID: req.session.user.UserID });
+        }
+    }
+     catch(err) {
+        res.status(401).json({ message: 'User not authenticated' });
+    }
+});
 
-wss.on('connection', async (ws,req) => {
+wss.on('connection', async (ws, req) => {
     console.log('Client connected');
     clients.push(ws);
 
-    // Retrieve userID from session
-    const userID = req.session.user ? parseInt(req.session.user.userID) : null;
-    
-    if (!userID) {
-        console.log('No userID found in session');
-        ws.close();  // Close connection if no userID is found
-        return;
-    }
-
-
-    console.log(`UserID: ${userID}`);
-
-    // Start checking notifications every second for the connected user
-    const notifInterval = setInterval(() => checkNotifications(userID), 1000);
-
-    // Start checking messages every second for the connected user
-    const messageInterval = setInterval(() => getMessages(userID, ws), 1000);
-
-    const notificationInterval = setInterval(() => getNotifications(userID, ws), 1000);
-
-    // Immediately fetch messages for the user upon connection
-    getMessages(userID, ws);
-    getNotifications(userID,ws);
-    checkNotifications(userID,ws);
-
-    ws.on('message', (message) => {
-        const data = JSON.parse(message);
-
-        // If the client requests a refresh of messages
-        if (data.type === 'getMessages') {
-            getMessages(userID, ws); // Fetch messages again if requested
-        }
-
-        if (data.type === 'getNotifications') {
-            getNotifications(userID, ws); // Fetch notifications again if requested
-        }
-    });
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        clients = clients.filter(client => client !== ws);
-        
-        // Stop checking both notifications and messages when the client disconnects
-        clearInterval(notifInterval); 
-        clearInterval(messageInterval); 
-        clearInterval(notificationInterval);
-    });
-});
-wss.on('upgrade', (req, socket, head) => {
-    // Run the session middleware on WebSocket upgrade
-    wrapSessionMiddleware(sessionMiddleware)(req, {}, () => {
-        wss.handleUpgrade(req, socket, head, (ws) => {
-            wss.emit('connection', ws, req);
+    try {
+        const response = await axios.get('http://localhost:3000/getUserID', {
+            headers: {
+                Cookie: req.headers.cookie // Pass the cookie from WebSocket request
+            }
         });
-    });
+
+        const userID = response.data.userID;
+        console.log(`UserID: ${userID}`);
+
+        // Start checking notifications every second for the connected user
+        const notifInterval = setInterval(() => checkNotifications(userID), 1000);
+
+        // Start checking messages every second for the connected user
+        const messageInterval = setInterval(() => getMessages(userID, ws), 1000);
+
+        const notificationInterval = setInterval(() => getNotifications(userID, ws), 1000);
+
+        // Immediately fetch messages for the user upon connection
+        getMessages(userID, ws);
+        getNotifications(userID, ws);
+        checkNotifications(userID, ws);
+
+        ws.on('message', (message) => {
+            const data = JSON.parse(message);
+
+            // If the client requests a refresh of messages
+            if (data.type === 'getMessages') {
+                getMessages(userID, ws); // Fetch messages again if requested
+            }
+
+            if (data.type === 'getNotifications') {
+                getNotifications(userID, ws); // Fetch notifications again if requested
+            }
+        });
+
+        ws.on('close', () => {
+            console.log('Client disconnected');
+            clients = clients.filter(client => client !== ws);
+            
+            // Stop checking both notifications and messages when the client disconnects
+            clearInterval(notifInterval); 
+            clearInterval(messageInterval); 
+            clearInterval(notificationInterval);
+        });
+
+    } catch (error) {
+        console.log('Error fetching userID:', error);
+        ws.close();  // Close WebSocket connection if userID retrieval fails
+    }
 });
+
 
 //Update
 app.put('/updateProduct/:productName', async (req, res) => {

@@ -337,8 +337,8 @@ async function fetchUser() {
     }
 }
 // Initialize a WebSocket connection
-const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-//const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
+//const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
+const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
 
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
@@ -525,8 +525,21 @@ const logo = document.getElementById('ChatLogo');
 const content = document.getElementById('ChatContent');
 const closeButton = document.getElementById('ChatClose');
 
-logo.addEventListener('click', () => {
+logo.addEventListener('click', async () => {
     
+    const user = await fetch ('/User');
+
+    if(user.ok){
+        if (!ProfileMenu.classList.contains('hidden')) {
+        ProfileMenu.classList.add('hidden');
+        } else {
+            ProfileMenu.classList.remove('hidden');
+        }
+    }
+    else{
+        window.location.href = 'SignIn.html';
+    }
+
     const logoRect = logo.getBoundingClientRect();
 
     content.style.right = `${window.innerWidth - logoRect.right}px`;
