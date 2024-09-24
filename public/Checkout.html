@@ -443,7 +443,7 @@
                 <p class="absolute right-6 font-Montserrat font-semibold text-[16px]" id="totalPriceDisplay">₱ 0.00</p>
             </div>
             <hr class="border-1 border-outline w-auto ">
-            <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
+            <button id="PlaceO" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
         </div>
         <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
             <div class="shadow-sm">
@@ -556,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const onlineRadio = document.getElementById('Online');
     const otcRadio = document.getElementById('OTC');
     const OP = document.getElementById('OP');
-    const button = document.getElementById('PlaceOrder');
+    const button = document.getElementById('PlaceO');
 
 
     function toggleOP() {
@@ -636,7 +636,7 @@ fetch(`/CheckOut?orders=${encodeURIComponent(JSON.stringify(orders))}`)
 
     return total.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });;
 }
-const PlaceOrder = document.querySelector('#PlaceOrder');
+const PlaceOrder = document.querySelector('#PlaceO');
 PlaceOrder.addEventListener('click',async function () {
 
     if(PlaceOrder.innerText == "Pay now"){
