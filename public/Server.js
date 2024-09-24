@@ -50,20 +50,20 @@ const redisClient = redis.createClient({
 });
 
 // Connect to Redis
-redisClient.connect()
-  .then(() => console.log('Connected to Redis'))
-  .catch(err => console.error('Redis connection error', err));
+// redisClient.connect()
+//   .then(() => console.log('Connected to Redis'))
+//   .catch(err => console.error('Redis connection error', err));
 
-  app.use(session({
-    store: new RedisStore({ client: redisClient }),
-    secret: 'Hatdog',  // Change this to your own secret
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
-      maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
-    }
-  }));
+//   app.use(session({
+//     store: new RedisStore({ client: redisClient }),
+//     secret: 'Hatdog',  // Change this to your own secret
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
+//       maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
+//     }
+//   }));
   
 
 app.use((req, res, next) => {
@@ -73,14 +73,14 @@ app.use((req, res, next) => {
     next();
   });
 
-// app.use(session({
-//     secret: 'Hatdog',
-//     resave: true,
-//     saveUninitialized: true
+  const sessionMiddleware = session({
+    secret: 'Hatdog',
+    resave: true,
+    saveUninitialized: true
+});
 
-//   }));
-
-
+// Apply the session middleware to all HTTP requests
+app.use(sessionMiddleware);
 
 //Local Machine sa baba
 // const config = {
@@ -243,14 +243,25 @@ const notifyClients = (notifCount) => {
     });
 };
 
+const wrapSessionMiddleware = (middleware) => (req, res, next) => {
+    middleware(req, {}, next);
+};
 
-
-wss.on('connection', (ws) => {
+wss.on('connection', async (ws,req) => {
     console.log('Client connected');
     clients.push(ws);
 
-    // Assuming userID is retrieved from the session, replace this with actual user session logic
-    const userID = 3; // Replace with actual user ID from session
+    // Retrieve userID from session
+    const userID = req.session.user ? parseInt(req.session.user.userID) : null;
+    
+    if (!userID) {
+        console.log('No userID found in session');
+        ws.close();  // Close connection if no userID is found
+        return;
+    }
+
+
+    console.log(`UserID: ${userID}`);
 
     // Start checking notifications every second for the connected user
     const notifInterval = setInterval(() => checkNotifications(userID), 1000);
@@ -288,7 +299,14 @@ wss.on('connection', (ws) => {
         clearInterval(notificationInterval);
     });
 });
-
+wss.on('upgrade', (req, socket, head) => {
+    // Run the session middleware on WebSocket upgrade
+    wrapSessionMiddleware(sessionMiddleware)(req, {}, () => {
+        wss.handleUpgrade(req, socket, head, (ws) => {
+            wss.emit('connection', ws, req);
+        });
+    });
+});
 
 //Update
 app.put('/updateProduct/:productName', async (req, res) => {
@@ -323,7 +341,7 @@ app.post('/AddToCart', async (req, res) => {
     const { ProductName, Quantity } = req.body;
     const quan = parseInt(Quantity);
     const user = req.session.user;
-
+    console.log(user);
     if (!user || user.UserID === undefined) {
         return res.status(401).json({ error: 'User not authenticated' });
     }
