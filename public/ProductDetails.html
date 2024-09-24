@@ -69,6 +69,115 @@
     .Close-Cart{
         animation: CloseCart 0.5s ease-in-out forwards;
     }
+    #NotifContents::-webkit-scrollbar {
+    height: 3px;
+    width: 5px; 
+    border-radius: 10px;
+    }
+
+    #NotifContents::-webkit-scrollbar-thumb {
+    background-color: rgba(103, 103, 103, 0.5);
+    border-radius: 10px; 
+
+
+    }
+    #message-input{
+        background-color: #f7f8ea;
+        font-size: 16px;
+        
+    }
+    #chat-box::-webkit-scrollbar {
+    height: 3px;
+    width: 5px; 
+    border-radius: 10px;
+    }
+
+    #chat-box::-webkit-scrollbar-thumb {
+    background-color: rgba(103, 103, 103, 0.5); 
+    border-radius: 10px; 
+
+
+    }
+
+    #chat-box::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(46, 46, 46, 0.7); 
+    }
+
+    #chat-box::-webkit-scrollbar-track {
+    background: #f7f8ea; 
+    border-radius: 60px; 
+    }
+    #NotifContents::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(46, 46, 46, 0.7); 
+    }
+
+    #NotifContents::-webkit-scrollbar-track {
+    background: #f7f8ea;
+    border-radius: 60px; 
+    }
+    @keyframes spinFade {
+            0% {
+                transform: rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .spin-fade {
+            animation: spinFade 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        
+        @keyframes expandFromLogo {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .expand-from-logo {
+            animation: expandFromLogo 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            transform-origin: bottom right;
+        }
+        @keyframes collapseToLogo {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+        .collapse-to-logo {
+            animation: collapseToLogo 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            transform-origin: bottom right;
+        }
+        .content-hidden {
+            visibility: hidden;
+        }
+
+        /* Show content after expansion */
+        .content-visible {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.3s ease-in;
+        }
+    /* Custom CSS for Tailwind */
+    .search-bar.expanded {
+        width: 12rem; /* Width when expanded */
+        opacity: 1;
+        padding-left: 2.5rem; /* Space for the icon on the left */
+    }
+
+    #search-icon.expanded {
+        transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
+    }
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <body>
@@ -331,7 +440,25 @@
         </div>
         
     </div>
-
+    <img id="ChatLogo" src="img/ZappnottLogoOnly.png" alt="" class=" h-[4rem] fixed bottom-16 right-20 cursor-pointer z-40">
+    <div id="ChatContent" class="hidden fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
+        <div class="shadow-sm">
+            <div class="flex">
+                <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
+                <p id="ChatClose" class="absolute right-5 my-2 cursor-pointer font-Inter font-extrabold">X</p>
+            </div>
+            <hr class="border-1 border-[#D8BC8C80] w-[35rem]">
+            <div class="m-4">
+                <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
+                </div>
+                <form autocomplete="off" id="message-form" class="mt-4 flex">
+                    <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+                    <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
 </body>
 <script>
 
@@ -393,7 +520,7 @@ async function fetchUser() {
         const data = await response.json();
         console.log('User:', data);
         fetchUserInfo();
-        setInterval(fetchUnreadCount, 10); 
+        //setInterval(fetchUnreadCount, 10); 
         setInterval(Notif, 1000);
         } else {
         console.error('Failed to fetch user data.');
@@ -421,7 +548,7 @@ async function fetchUserInfo() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchUser();
-    fetchUnreadCount();
+    //fetchUnreadCount();
   });
 
 
@@ -523,27 +650,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
             
         });
     });
-    async function fetchUnreadCount() {
-        try {
-            const response = await fetch('/NotifBadge'); 
-            const data = await response.json();
-            const unreadCount = data.NotificationID;
-            //console.log(data);
-            const notifBadge = document.getElementById('notif-badge');
-            const notifPing = document.getElementById('notifBadge');
-            if (unreadCount > 0) {
-                notifBadge.style.display = 'inline-flex';
-                notifPing.style.display = 'inline-flex';
-                notifBadge.classList.remove('hidden');
-                notifPing.classList.remove('hidden');
-            } else {
-                notifBadge.style.display = 'none';
-                notifPing.style.display = 'none';
-            }
-        } catch (error) {
-            //console.error('Error fetching unread count:', error);
-        }
-    }
+    // async function fetchUnreadCount() {
+    //     try {
+    //         const response = await fetch('/NotifBadge'); 
+    //         const data = await response.json();
+    //         const unreadCount = data.NotificationID;
+    //         //console.log(data);
+    //         const notifBadge = document.getElementById('notif-badge');
+    //         const notifPing = document.getElementById('notifBadge');
+    //         if (unreadCount > 0) {
+    //             notifBadge.style.display = 'inline-flex';
+    //             notifPing.style.display = 'inline-flex';
+    //             notifBadge.classList.remove('hidden');
+    //             notifPing.classList.remove('hidden');
+    //         } else {
+    //             notifBadge.style.display = 'none';
+    //             notifPing.style.display = 'none';
+    //         }
+    //     } catch (error) {
+    //         //console.error('Error fetching unread count:', error);
+    //     }
+    // }
 
     function OrderOk(){
             document.getElementById('OrderPopup').classList.add('hidden');
@@ -868,5 +995,267 @@ PlaceOrderBtn.addEventListener('click', async function() {
     }
 
 });
+// Initialize a WebSocket connection
+const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
+//const socket = new WebSocket('ws://localhost:3000');
+// Handle the connection open event
+socket.addEventListener('open', (event) => {
+    console.log('Connected to WebSocket server');
+
+    // Optionally, send a message to the server (not necessary for notifications)
+    socket.send(JSON.stringify({ action: 'getNotifications' }));
+});
+
+
+    // Handle incoming messages from the WebSocket server
+socket.addEventListener('message', (event) => {
+    const data = JSON.parse(event.data);
+    
+    if (data.NotificationID !== undefined) {
+        console.log(`Unread notifications: ${data.NotificationID}`);
+
+        // Update the notification badge in your UI
+        const notifBadge = document.getElementById('notif-badge');
+        const notifPing = document.getElementById('notifBadge');
+
+        if (data.NotificationID > 0) {
+            notifBadge.style.display = 'inline-flex';
+            notifPing.style.display = 'inline-flex';
+            notifBadge.classList.remove('hidden');
+            notifPing.classList.remove('hidden');
+        } else {
+            notifBadge.style.display = 'none';
+            notifPing.style.display = 'none';
+        }
+    } else if (data.error) {
+        console.error(`Error: ${data.error}`);
+    }
+});
+
+// Handle the connection close event
+socket.addEventListener('close', () => {
+    console.log('Disconnected from WebSocket server');
+});
+
+// Handle any WebSocket errors
+socket.addEventListener('error', (error) => {
+    console.error('WebSocket error:', error);
+});
+
+//MESSAGE
+function renderMessages(messages) {
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML = ''; // Clear previous messages
+
+    const userID = 3; // Assuming you have this function to get the current user's ID
+    messages.forEach(msg => {
+        const messageElement = document.createElement('div');
+        messageElement.innerHTML = `
+            <div id="CC" class="flex items-start">
+                <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+                    <p id="Content" class="text-sm">${msg.message}</p>
+                </div>
+            </div>
+        `;
+
+        const ChatContainer = messageElement.querySelector('#CC');
+        const ChatBG = messageElement.querySelector('#Chats');
+
+        if (msg.SenderID === parseInt(userID)) {
+            ChatContainer.classList.add('justify-end');
+            ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+            ChatBG.classList.remove('bg-outline');
+        } else {
+            ChatBG.classList.add('bg-outline');
+        }
+
+        chatBox.appendChild(messageElement);
+    });
+
+    // Scroll to the bottom of the chat if there are new messages
+    if (messages.length > previousMessageCount) {
+        scrollToBottom();
+    }
+
+    previousMessageCount = messages.length;
+}
+
+function initializeWebSocket() {
+    // Event handler for when the WebSocket connection is opened
+    socket.onopen = () => {
+        console.log('Connected to WebSocket');
+
+        // Optionally, send a message to the server to request the latest messages
+        socket.send(JSON.stringify({ type: 'getMessages' }));
+    };
+
+    // Event handler for when a message is received from the server
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.messages) {
+            renderMessages(data.messages);
+        }
+    };
+
+    // Event handler for when the WebSocket connection is closed
+    socket.onclose = () => {
+        console.log('WebSocket connection closed. Reconnecting in 5 seconds...');
+        setTimeout(initializeWebSocket, 5000); // Attempt to reconnect after 5 seconds
+    };
+
+    // Event handler for WebSocket errors
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+}
+
+initializeWebSocket();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+//            fetchMessages();
+//            setInterval(fetchMessages, 2000);
+        });
+
+        // async function getCurrentUser() {
+        //     try {
+        //         const response = await fetch('/api/current_user');
+        //         if (response.ok) {
+        //             const user = await response.json();
+        //             return user.UserID;
+        //             //console.log("User ID" + user.UserID); 
+        //         } else {
+        //             window.location.href = '/SignIn.html'; 
+        //         }
+        //     } catch (error) {
+        //         console.error('Error fetching current user:', error);
+        //     }
+        // }
+        let previousMessageCount = 0;
+        function scrollToBottom() {
+            const chatBox = document.getElementById('chat-box');
+            if (chatBox) {
+                requestAnimationFrame(() => {
+                    chatBox.scrollTo({
+                        top: chatBox.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                });
+            } else {
+                console.error('chatBox element not found.');
+            }
+        }
+//     async function fetchMessages() {
+    
+//     const userID = await getCurrentUser();
+//     fetch('/api/messages')
+//     .then(response => response.json())
+//     .then(messages => {
+//         //console.log(messages);
+//         const chatBox = document.getElementById('chat-box');
+//         chatBox.innerHTML = '';
+//         const ID = parseInt(userID);
+//        //console.log(ID);
+//         messages.forEach(msg => {
+//             const messageElement = document.createElement('div');
+//             messageElement.innerHTML = `
+//                 <div id="CC" class="flex items-start">
+//                     <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+//                         <p id="Content" class="text-sm">${msg.message}</p>
+//                     </div>
+//                 </div>
+//             `;
+//             const ChatContainer = messageElement.querySelector('#CC');
+//             const ChatBG = messageElement.querySelector('#Chats');
+//                 //console.log(msg.SenderID);
+//             if ( msg.SenderID === ID) {
+//                 ChatContainer.classList.add('justify-end');
+//                 ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+//                 ChatBG.classList.remove('bg-outline');
+//             } else {
+//                 ChatBG.classList.add('bg-outline');
+//             }
+
+//             chatBox.appendChild(messageElement);
+//         });
+//         // console.log(previousMessageCount);
+//         // console.log(messages.length);
+//         if (messages.length > previousMessageCount) {
+//             scrollToBottom();
+//             console.log("Scroll");
+//         }
+
+//         previousMessageCount = messages.length;
+//     })
+//     .catch(error => {
+//         console.error('Network error:', error);
+//     });
+// }
+
+        document.getElementById('message-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const message = document.getElementById('message-input').value;
+            fetch('/Chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            }).then(() => {
+                document.getElementById('message-input').value = '';
+                fetchMessages();
+            });
+        });
+
+        //fetchMessages();
+        const logo = document.getElementById('ChatLogo');
+        const content = document.getElementById('ChatContent');
+        const closeButton = document.getElementById('ChatClose');
+
+        logo.addEventListener('click', () => {
+            
+            const logoRect = logo.getBoundingClientRect();
+
+            content.style.right = `${window.innerWidth - logoRect.right}px`;
+            content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
+            content.style.width = `${logoRect.width}px`;
+            content.style.height = `${logoRect.height}px`;
+
+            logo.classList.add('spin-fade');
+            
+
+            setTimeout(() => {
+                logo.classList.add('hidden'); 
+                content.classList.remove('hidden', 'content-hidden');
+                content.classList.add('expand-from-logo');
+                content.classList.remove('collapse-to-logo');
+
+                setTimeout(() => {
+                    content.style.width = '35rem';
+                    content.style.height = '25rem';
+
+                    setTimeout(() => {
+                        scrollToBottom();
+                        content.classList.remove('content-hidden');
+                        content.classList.add('content-visible');
+                    }, 700); 
+                }, 0);
+            }, 300);
+        });
+        closeButton.addEventListener('click', () => {
+            content.classList.remove('expand-from-logo', 'content-visible');
+            content.classList.add('collapse-to-logo');
+
+
+            setTimeout(() => {
+                content.classList.add('content-hidden');
+                content.classList.add('hidden');
+                content.style.width = 'initial';
+                content.style.height = 'initial';
+                
+
+                logo.classList.remove('hidden');
+                logo.classList.remove('spin-fade');
+            }, 400); 
+        });
 </script>
 </html>

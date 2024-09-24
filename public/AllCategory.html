@@ -891,25 +891,122 @@ async function Notif() {
     window.onscroll = function() {};
     }
 
-    async function fetchUnreadCount() {
-        try {
-            const response = await fetch('/NotifBadge'); 
-            const data = await response.json();
-            const unreadCount = data.NotificationID;
-            //console.log(data);
-            const notifBadge = document.getElementById('notif-badge');
-            const notifPing = document.getElementById('notifBadge');
-            if (unreadCount > 0) {
-                notifBadge.style.display = 'inline-flex';
-                notifPing.style.display = 'inline-flex';
-            } else {
-                notifBadge.style.display = 'none';
-                notifPing.style.display = 'none';
-            }
-        } catch (error) {
-            //console.error('Error fetching unread count:', error);
+// Initialize a WebSocket connection
+const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
+//const socket = new WebSocket('ws://localhost:3000');
+// Handle the connection open event
+socket.addEventListener('open', (event) => {
+    console.log('Connected to WebSocket server');
+
+    // Optionally, send a message to the server (not necessary for notifications)
+    socket.send(JSON.stringify({ action: 'getNotifications' }));
+});
+
+
+    // Handle incoming messages from the WebSocket server
+socket.addEventListener('message', (event) => {
+    const data = JSON.parse(event.data);
+    
+    if (data.NotificationID !== undefined) {
+        console.log(`Unread notifications: ${data.NotificationID}`);
+
+        // Update the notification badge in your UI
+        const notifBadge = document.getElementById('notif-badge');
+        const notifPing = document.getElementById('notifBadge');
+
+        if (data.NotificationID > 0) {
+            notifBadge.style.display = 'inline-flex';
+            notifPing.style.display = 'inline-flex';
+            notifBadge.classList.remove('hidden');
+            notifPing.classList.remove('hidden');
+        } else {
+            notifBadge.style.display = 'none';
+            notifPing.style.display = 'none';
         }
+    } else if (data.error) {
+        console.error(`Error: ${data.error}`);
     }
+});
+
+// Handle the connection close event
+socket.addEventListener('close', () => {
+    console.log('Disconnected from WebSocket server');
+});
+
+// Handle any WebSocket errors
+socket.addEventListener('error', (error) => {
+    console.error('WebSocket error:', error);
+});
+
+//MESSAGE
+function renderMessages(messages) {
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML = ''; // Clear previous messages
+
+    const userID = 3; // Assuming you have this function to get the current user's ID
+    messages.forEach(msg => {
+        const messageElement = document.createElement('div');
+        messageElement.innerHTML = `
+            <div id="CC" class="flex items-start">
+                <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+                    <p id="Content" class="text-sm">${msg.message}</p>
+                </div>
+            </div>
+        `;
+
+        const ChatContainer = messageElement.querySelector('#CC');
+        const ChatBG = messageElement.querySelector('#Chats');
+
+        if (msg.SenderID === parseInt(userID)) {
+            ChatContainer.classList.add('justify-end');
+            ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+            ChatBG.classList.remove('bg-outline');
+        } else {
+            ChatBG.classList.add('bg-outline');
+        }
+
+        chatBox.appendChild(messageElement);
+    });
+
+    // Scroll to the bottom of the chat if there are new messages
+    if (messages.length > previousMessageCount) {
+        scrollToBottom();
+    }
+
+    previousMessageCount = messages.length;
+}
+
+function initializeWebSocket() {
+    // Event handler for when the WebSocket connection is opened
+    socket.onopen = () => {
+        console.log('Connected to WebSocket');
+
+        // Optionally, send a message to the server to request the latest messages
+        socket.send(JSON.stringify({ type: 'getMessages' }));
+    };
+
+    // Event handler for when a message is received from the server
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.messages) {
+            renderMessages(data.messages);
+        }
+    };
+
+    // Event handler for when the WebSocket connection is closed
+    socket.onclose = () => {
+        console.log('WebSocket connection closed. Reconnecting in 5 seconds...');
+        setTimeout(initializeWebSocket, 5000); // Attempt to reconnect after 5 seconds
+    };
+
+    // Event handler for WebSocket errors
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+}
+
+initializeWebSocket();
     async function fetchUser() {
     try {
         const response = await fetch('/User');
@@ -917,7 +1014,7 @@ async function Notif() {
         const data = await response.json();
         console.log('User:', data);
         fetchUserInfo();
-        setInterval(fetchUnreadCount, 10); 
+        //setInterval(fetchUnreadCount, 10); 
         setInterval(Notif, 1000);
         } else {
         console.error('Failed to fetch user data.');
@@ -945,29 +1042,29 @@ async function fetchUserInfo() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchUser();
-    fetchUnreadCount();
+    //fetchUnreadCount();
   });
 
 //Chat
 document.addEventListener('DOMContentLoaded', () => {
-            fetchMessages();
-            setInterval(fetchMessages, 2000);
+            // fetchMessages();
+            // setInterval(fetchMessages, 2000);
         });
 
-        async function getCurrentUser() {
-            try {
-                const response = await fetch('/api/current_user');
-                if (response.ok) {
-                    const user = await response.json();
-                    return user.UserID;
-                    //console.log("User ID" + user.UserID); 
-                } else {
-                    window.location.href = '/SignIn.html'; 
-                }
-            } catch (error) {
-                console.error('Error fetching current user:', error);
-            }
-        }
+        // async function getCurrentUser() {
+        //     try {
+        //         const response = await fetch('/api/current_user');
+        //         if (response.ok) {
+        //             const user = await response.json();
+        //             return user.UserID;
+        //             //console.log("User ID" + user.UserID); 
+        //         } else {
+        //             window.location.href = '/SignIn.html'; 
+        //         }
+        //     } catch (error) {
+        //         console.error('Error fetching current user:', error);
+        //     }
+        // }
         let previousMessageCount = 0;
         function scrollToBottom() {
             const chatBox = document.getElementById('chat-box');
@@ -982,52 +1079,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('chatBox element not found.');
             }
         }
-    async function fetchMessages() {
+//     async function fetchMessages() {
     
-    const userID = await getCurrentUser();
-    fetch('/api/messages')
-    .then(response => response.json())
-    .then(messages => {
-        //console.log(messages);
-        const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML = '';
-        const ID = parseInt(userID);
-       //console.log(ID);
-        messages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `
-                <div id="CC" class="flex items-start">
-                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
-                        <p id="Content" class="text-sm">${msg.message}</p>
-                    </div>
-                </div>
-            `;
-            const ChatContainer = messageElement.querySelector('#CC');
-            const ChatBG = messageElement.querySelector('#Chats');
-                //console.log(msg.SenderID);
-            if ( msg.SenderID === ID) {
-                ChatContainer.classList.add('justify-end');
-                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
-                ChatBG.classList.remove('bg-outline');
-            } else {
-                ChatBG.classList.add('bg-outline');
-            }
+//     const userID = await getCurrentUser();
+//     fetch('/api/messages')
+//     .then(response => response.json())
+//     .then(messages => {
+//         //console.log(messages);
+//         const chatBox = document.getElementById('chat-box');
+//         chatBox.innerHTML = '';
+//         const ID = parseInt(userID);
+//        //console.log(ID);
+//         messages.forEach(msg => {
+//             const messageElement = document.createElement('div');
+//             messageElement.innerHTML = `
+//                 <div id="CC" class="flex items-start">
+//                     <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+//                         <p id="Content" class="text-sm">${msg.message}</p>
+//                     </div>
+//                 </div>
+//             `;
+//             const ChatContainer = messageElement.querySelector('#CC');
+//             const ChatBG = messageElement.querySelector('#Chats');
+//                 //console.log(msg.SenderID);
+//             if ( msg.SenderID === ID) {
+//                 ChatContainer.classList.add('justify-end');
+//                 ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+//                 ChatBG.classList.remove('bg-outline');
+//             } else {
+//                 ChatBG.classList.add('bg-outline');
+//             }
 
-            chatBox.appendChild(messageElement);
-        });
-        // console.log(previousMessageCount);
-        // console.log(messages.length);
-        if (messages.length > previousMessageCount) {
-            scrollToBottom();
-            console.log("Scroll");
-        }
+//             chatBox.appendChild(messageElement);
+//         });
+//         // console.log(previousMessageCount);
+//         // console.log(messages.length);
+//         if (messages.length > previousMessageCount) {
+//             scrollToBottom();
+//             console.log("Scroll");
+//         }
 
-        previousMessageCount = messages.length;
-    })
-    .catch(error => {
-        console.error('Network error:', error);
-    });
-}
+//         previousMessageCount = messages.length;
+//     })
+//     .catch(error => {
+//         console.error('Network error:', error);
+//     });
+// }
 
         document.getElementById('message-form').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -1042,7 +1139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        fetchMessages();
+        //fetchMessages();
         const logo = document.getElementById('ChatLogo');
         const content = document.getElementById('ChatContent');
         const closeButton = document.getElementById('ChatClose');
