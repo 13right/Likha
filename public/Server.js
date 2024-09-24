@@ -191,6 +191,50 @@ const getMessages = async (userID, ws) => {
     }
 };
 
+const getNotifications = async (userID, ws) => {
+    try {
+        const request = pool.request()
+            .input('UserID', sql.Int, userID);
+
+        const query = `
+            SELECT DISTINCT CONCAT('Your Order ' , tbl_Order.TransactionID , ' is ' , NewStatus) AS Content, 
+            CONVERT(varchar, NotificationDate, 0) AS NotificationDate, tbl_Product.ProductImage, NotificationID, tbl_notification.Status 
+            FROM tbl_notification 
+            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
+            INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
+            INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+            WHERE tbl_Order.UserID = @UserID 
+            AND tbl_Product.ProductID = (
+                SELECT MIN(tbl_Product.ProductID)
+                FROM tbl_OrderItem 
+                INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+                WHERE tbl_OrderItem.OrderID = tbl_Order.OrderID
+            ) 
+            ORDER BY NotificationID DESC;
+        `;
+
+        const result = await request.query(query);
+
+        const orderItems = result.recordset.map(item => {
+            const fileName = path.basename(item.ProductImage);
+            const imagePath = `UploadedImage/${fileName}`;
+            return {
+                Content: item.Content,
+                Date: item.NotificationDate,
+                productImage: imagePath,
+                Status: item.Status
+            };
+        });
+
+        // Send notifications to the client via WebSocket
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ notifications: orderItems }));
+        }
+    } catch (err) {
+        console.error('Database error:', err);
+    }
+};
+
 const notifyClients = (notifCount) => {
     clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
@@ -214,8 +258,12 @@ wss.on('connection', (ws) => {
     // Start checking messages every second for the connected user
     const messageInterval = setInterval(() => getMessages(userID, ws), 1000);
 
+    const notificationInterval = setInterval(() => getNotifications(userID, ws), 1000);
+
     // Immediately fetch messages for the user upon connection
     getMessages(userID, ws);
+    getNotifications(userID,ws);
+    checkNotifications(userID,ws);
 
     ws.on('message', (message) => {
         const data = JSON.parse(message);
@@ -223,6 +271,10 @@ wss.on('connection', (ws) => {
         // If the client requests a refresh of messages
         if (data.type === 'getMessages') {
             getMessages(userID, ws); // Fetch messages again if requested
+        }
+
+        if (data.type === 'getNotifications') {
+            getNotifications(userID, ws); // Fetch notifications again if requested
         }
     });
 
@@ -233,6 +285,7 @@ wss.on('connection', (ws) => {
         // Stop checking both notifications and messages when the client disconnects
         clearInterval(notifInterval); 
         clearInterval(messageInterval); 
+        clearInterval(notificationInterval);
     });
 });
 
