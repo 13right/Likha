@@ -360,7 +360,7 @@ socket.addEventListener('message', (event) => {
 
     // Handle unread notifications count
     if (data.NotificationID !== undefined) {
-        console.log(`Unread notifications: ${data.NotificationID}`);
+        //console.log(`Unread notifications: ${data.NotificationID}`);
         updateNotificationBadge(data.NotificationID);
     }
 
