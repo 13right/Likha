@@ -459,7 +459,7 @@ function renderMessages(messages) {
         const ChatContainer = messageElement.querySelector('#CC');
         const ChatBG = messageElement.querySelector('#Chats');
 
-        if (msg.SenderID === parseInt(UserID)) {
+        if (msg.SenderID === parseInt(userID)) {
             ChatContainer.classList.add('justify-end');
             ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
             ChatBG.classList.remove('bg-outline');
