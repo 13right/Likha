@@ -338,8 +338,8 @@ async function fetchUser() {
 }
 // Initialize a WebSocket connection
 //const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-//const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
-const socket = new WebSocket('wss://zappnott.shop/ws');
+const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
+//const socket = new WebSocket('wws://zappnott.shop/ws');
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
@@ -419,6 +419,27 @@ function renderNotifications(products) {
     });
 }
 let previousMessageCount = 0;
+let UserID; // Declare userID variable
+
+// Fetch user ID from the server
+function fetchUserID() {
+    return fetch('/getUserID')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        UserID = data; // Assign the fetched userID
+    })
+    .catch(error => {
+        console.error('Error fetching user ID:', error);
+    });
+}
+
+
+
 // Function to render messages
 function renderMessages(messages) {
     const chatBox = document.getElementById('chat-box');
@@ -438,7 +459,7 @@ function renderMessages(messages) {
         const ChatContainer = messageElement.querySelector('#CC');
         const ChatBG = messageElement.querySelector('#Chats');
 
-        if (msg.SenderID === parseInt(userID)) {
+        if (msg.SenderID === parseInt(UserID)) {
             ChatContainer.classList.add('justify-end');
             ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
             ChatBG.classList.remove('bg-outline');
@@ -456,6 +477,7 @@ function renderMessages(messages) {
 
     previousMessageCount = messages.length;
 }
+fetchUserID();
 
 // Function to update notification badge
 function updateNotificationBadge(count) {
