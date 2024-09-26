@@ -338,8 +338,8 @@ async function fetchUser() {
 }
 // Initialize a WebSocket connection
 //const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-//const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
-const socket = new WebSocket('wss://zappnott.shop/ws');
+const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
+//const socket = new WebSocket('wss://zappnott.shop/ws');
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
@@ -419,34 +419,22 @@ function renderNotifications(products) {
     });
 }
 let previousMessageCount = 0;
-let UserID; // Declare userID variable
+let UserID; 
 
-// Fetch user ID from the server
-function fetchUserID() {
-    return fetch('/getUserID')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        console.log(response.json());
-        return response.json();
-    })
-    .then(data => {
-        UserID = data; // Assign the fetched userID
-    })
-    .catch(error => {
-        console.error('Error fetching user ID:', error);
-    });
+async function GetID(){
+    const ID = await fetch('/getUserID');
+    if(ID.ok){
+        const result = await ID.json();
+        UserID = result;
+        console.log('hmm',UserID);
+    }
 }
+GetID();
 
-
-
-// Function to render messages
 function renderMessages(messages) {
     const chatBox = document.getElementById('chat-box');
-    chatBox.innerHTML = ''; // Clear previous messages
+    chatBox.innerHTML = '';
 
-    const userID = 3; // Replace with actual user ID
     messages.forEach(msg => {
         const messageElement = document.createElement('div');
         messageElement.innerHTML = `
@@ -461,6 +449,7 @@ function renderMessages(messages) {
         const ChatBG = messageElement.querySelector('#Chats');
 
         if (msg.SenderID === parseInt(UserID)) {
+            console.log('yeah',UserID);
             ChatContainer.classList.add('justify-end');
             ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
             ChatBG.classList.remove('bg-outline');
@@ -471,16 +460,15 @@ function renderMessages(messages) {
         chatBox.appendChild(messageElement);
     });
 
-    // Scroll to the bottom of the chat if there are new messages
+
     if (messages.length > previousMessageCount) {
         scrollToBottom();
     }
 
     previousMessageCount = messages.length;
 }
-fetchUserID();
 
-// Function to update notification badge
+
 function updateNotificationBadge(count) {
     const notifBadge = document.getElementById('notif-badge');
     const notifPing = document.getElementById('notifBadge');
@@ -504,7 +492,9 @@ async function fetchUserInfo() {
 
             const User = await result.json();
             const UserName = User.UserName;
+            UserID = User.UserID;
             document.getElementById('UsernameMenu').innerText = UserName;
+            console.log(UserID);
         }
     }
     catch(error){
