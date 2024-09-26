@@ -29,6 +29,35 @@
     </div>
     <div class="bg-Likha min-h-screen pt-[5rem] pb-[3rem]">
 
+        <div id="SideBar" class="bg-[#F8ECDC] min-h-screen w-[200px] z-50 fixed">
+            <div id="Open" class="bg-[#F8ECDC] w-[30px] h-[60px] absolute right-[-1.25rem] top-[25rem] rounded-xl items-center flex justify-center shadow-xl cursor-pointer">></div>
+            <div class="flex items-cente">
+                <div id="Logo" >
+                    <img src="img/ZappnottLogoOnly.png" alt="LOGO" class="h-[60px] w-[60px] ">
+                </div>
+                <div id="Brand" class="font-Inria font-semibold text-[32px] opacity-0">
+                    Zappnott
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+            </div>
+
+        </div>
 
         <div class="text-center mt-3">
             <H1 class="font-Montagu text-4xl font-bold">Orders</H1>
@@ -103,6 +132,29 @@
 
 </body>
 <script>
+const SideBar = document.getElementById('SideBar');
+const Open = document.getElementById('Open');
+const Logo = document.getElementById('Logo');
+const Brand = document.getElementById('Brand');
+
+Open.addEventListener('click', function(event){
+    SideBar.classList.add('transition-all', 'duration-500');
+    if(SideBar.classList.contains('w-[200px]')){
+        SideBar.classList.add('w-[500px]');
+        SideBar.classList.remove('w-[200px]');
+        Brand.classList.add('transition-opacity', 'duration-500', 'opacity-100');
+        Brand.classList.remove('opacity-0');
+        Open.innerText = '<';
+    }
+    else if(SideBar.classList.contains('w-[500px]')){
+        SideBar.classList.add('w-[200px]');
+        SideBar.classList.remove('w-[500px]');
+        Brand.classList.add('transition-opacity', 'duration-500', 'opacity-0');
+        Brand.classList.remove('opacity-100');
+        Open.innerText = '>';
+    }
+});
+
 
 fetch('/Orders')
     .then(response => response.json())

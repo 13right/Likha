@@ -518,7 +518,7 @@ fetch('/productsDress')
                         const productContainer = productElement.querySelector('#main-container');
                         const productName = productContainer.querySelector('p').innerText;
 
-                        sessionStorage.setItem('productName', productName);
+                        sessionStorage.setItem('product', productName);
 
                         window.location.href = 'ProductDetails.html';
                     })

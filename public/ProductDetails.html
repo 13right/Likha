@@ -466,9 +466,10 @@
             document.getElementById('CartPopup').classList.add('hidden');
         }
 
-    const product = sessionStorage.getItem('productName');
+    const product = sessionStorage.getItem('product');
     
-    fetch(`/productsDetails/${encodeURIComponent(product)}`)
+    if(product !== null){
+        fetch(`/productsDetails/${encodeURIComponent(product)}`)
     .then(response => {
         if (response.ok) {
             return response.json();
@@ -574,7 +575,12 @@
             });
     })
     .catch(error => console.error('Error fetching products:', error));
+    }
+    else{
+        window.location.href = 'AllCategory.html'
+    }
 
+  
 </script>
 <script src="Nav.js"></script>
 </html>

@@ -327,7 +327,7 @@ async function fetchUser() {
         const response = await fetch('/User');
         if (response.ok) {
         const data = await response.json();
-        console.log('User:', data);
+        //console.log('User:', data);
         fetchUserInfo();
         } else {
         console.error('Failed to fetch user data.');
@@ -426,7 +426,7 @@ async function GetID(){
     if(ID.ok){
         const result = await ID.json();
         UserID = result;
-        console.log('hmm',UserID);
+        //console.log('hmm',UserID);
     }
 }
 GetID();
@@ -449,7 +449,6 @@ function renderMessages(messages) {
         const ChatBG = messageElement.querySelector('#Chats');
 
         if (msg.SenderID === parseInt(UserID)) {
-            console.log('yeah',UserID);
             ChatContainer.classList.add('justify-end');
             ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
             ChatBG.classList.remove('bg-outline');
@@ -494,7 +493,7 @@ async function fetchUserInfo() {
             const UserName = User.UserName;
             UserID = User.UserID;
             document.getElementById('UsernameMenu').innerText = UserName;
-            console.log(UserID);
+            //console.log(UserID);
         }
     }
     catch(error){

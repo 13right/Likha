@@ -365,7 +365,31 @@
     </div>
     
     <script>
-        fetch('/Order')
+    function Status(Status) {
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set('Status', Status);
+        window.location.href = currentUrl.toString();
+    }
+    document.getElementById('ALL').addEventListener('click', () => {
+            Status('');
+            //scrollToShop();
+        });
+
+        document.getElementById('CONFIRMED').addEventListener('click', () => {
+            Status('Jewelry');
+            //scrollToShop(); 
+        });
+        document.getElementById('TPU').addEventListener('click', () => {
+            Status('Bag');
+            //scrollToShop(); 
+        });
+        document.getElementById('CANCELLED').addEventListener('click', () => {
+            Status('Dress');
+            //scrollToShop(); 
+        });
+    
+function fetchOrders(Status = ''){
+    fetch(`/Order?Status=${Status}`)
     .then(response => response.json())
     .then(Items => {
         console.log(Items);
@@ -515,6 +539,14 @@
 
         });
     });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const Status = urlParams.get('Status') || ''; 
+    fetchOrders(Status);
+});
+
     function expandSearchBar() {
     const searchBar = document.getElementById('search-bar');
     const searchIcon = document.getElementById('search-icon');

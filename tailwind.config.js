@@ -13,7 +13,8 @@ module.exports = {
       Montagu: ['Montagu Slab'],
       Inter:['Inter'],
       Montserrat: ['Montserrat'],
-      Sheppards: ['Mrs Sheppards']
+      Sheppards: ['Mrs Sheppards'],
+      Inria: ['Inria Serif']
     }
   },
   plugins: [],
