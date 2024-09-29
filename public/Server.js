@@ -24,7 +24,7 @@ const port = process.env.PORT || 3000;
 
 const upload = multer({ dest: 'uploads/' });
 
-app.use('/images', express.static(path.join(__dirname, 'UploadedImage')));
+//app.use('/images', express.static(path.join(__dirname, 'UploadedImage')));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -39,8 +39,9 @@ app.use(express.static(path.join(__dirname)));
 const wss = new WebSocket.Server({ server });
 
 cloudinary.config({
-    cloud_name: 'db5bsftqx',
-    // secure: true
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 
@@ -223,12 +224,10 @@ const getNotifications = async (userID, ws) => {
         const result = await request.query(query);
 
         const orderItems = result.recordset.map(item => {
-            const fileName = path.basename(item.ProductImage);
-            const imagePath = `UploadedImage/${fileName}`;
             return {
                 Content: item.Content,
                 Date: item.NotificationDate,
-                productImage: imagePath,
+                productImage: item.ProductImage,
                 Status: item.Status
             };
         });
@@ -436,8 +435,9 @@ app.delete('/DeleteProduct/:productName', async (req, res) => {
         request.input('@PN',sql.VarChar,productName);
 
         const query = `
-        DELETE FROM tbl_Product WHERE ProductName = ${productName}
+        DELETE FROM tbl_Product WHERE ProductName LIKE '${productName}'
         `;
+        console.log(query);
         const result = await request.query(query);
         res.status(200).send('Product Deleted');
     }
@@ -579,23 +579,24 @@ app.get('/UserInfo', async (req, res) => {
     }
 });
 
-
-  app.post('/upload', upload.single('image'), async (req, res) => {
+app.post('/upload', upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).send('No file uploaded');
         }
-        const uploadFolder = path.join(__dirname, 'UploadedImage');
 
-        if (!fs.existsSync(uploadFolder)) {
-            fs.mkdirSync(uploadFolder, { recursive: true });
-        }
+        // Upload the image to Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'img', // Optional: Specify a folder in Cloudinary
+            use_filename: true,
+            unique_filename: false
+        });
 
-        const imagePath = path.join(uploadFolder, req.file.originalname);
+        // After uploading to Cloudinary, remove the local file
+        fs.unlinkSync(req.file.path);
 
-        fs.renameSync(req.file.path, imagePath);
         const request = await pool.request()
-            .input('ImagePath', sql.VarChar, imagePath)
+            .input('ImagePath', sql.VarChar, result.secure_url) // Store Cloudinary URL in the database
             .input('Pname', sql.VarChar, req.body.productName)
             .input('Price', sql.Int, req.body.productPrice)
             .input('Des', sql.VarChar, req.body.productDes)
@@ -609,6 +610,38 @@ app.get('/UserInfo', async (req, res) => {
         res.status(500).send('Error uploading image');
     }
 });
+
+//LOcal storage
+
+//   app.post('/upload', upload.single('image'), async (req, res) => {
+//     try {
+//         if (!req.file) {
+//             return res.status(400).send('No file uploaded');
+//         }
+//         const uploadFolder = path.join(__dirname, 'UploadedImage');
+
+//         if (!fs.existsSync(uploadFolder)) {
+//             fs.mkdirSync(uploadFolder, { recursive: true });
+//         }
+
+//         const imagePath = path.join(uploadFolder, req.file.originalname);
+
+//         fs.renameSync(req.file.path, imagePath);    
+//         const request = await pool.request()
+//             .input('ImagePath', sql.VarChar, imagePath)
+//             .input('Pname', sql.VarChar, req.body.productName)
+//             .input('Price', sql.Int, req.body.productPrice)
+//             .input('Des', sql.VarChar, req.body.productDes)
+//             .input('Stock', sql.Int, req.body.Stock)
+//             .input('Cat', sql.Int, req.body.Cat)
+//             .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@ImagePath);");
+
+//         res.sendStatus(200);
+//     } catch (error) {
+//         console.error('Error uploading image:', error);
+//         res.status(500).send('Error uploading image');
+//     }
+// });
 
 
 // app.post('/upload', upload.single('image'), async (req, res) => {
@@ -942,16 +975,13 @@ app.get('/products', async (req, res) => {
             return res.status(404).send('Product not found');
         }
         const products = result.recordset.map(product => {
-            const fileName = path.basename(product.ProductImage);
-            const imagePath = `UploadedImage/${fileName}`;
-            console.log(imagePath);
             return {
                 productName: product.ProductName,
                 productPrice: product.Price,
                 description: product.Description,
                 stock: product.Stock,
                 categoryId: product.CategoryID,
-                imagePath: imagePath
+                imagePath: product.ProductImage
             };
             
         });
@@ -972,16 +1002,13 @@ app.get('/productsDetails/:product', async (req, res) => {
         const query = `SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE ProductName LIKE @productName`;
         const result = await request.query(query);
         const products = result.recordset.map(product => {
-            const fileName = path.basename(product.ProductImage);
-            const imagePath = `UploadedImage/${fileName}`;
-
             return {
                 productName: product.ProductName,
                 productPrice: product.Price,
                 description: product.Description,
                 stock: product.Stock,
                 categoryId: product.CategoryID,
-                imagePath: imagePath
+                imagePath: product.ProductImage
             };
         });
 
@@ -1003,17 +1030,13 @@ app.get('/productsJewelry', async (req, res) => {
         }
 
         const products = result.recordset.map(product => {
-            const fileName = path.basename(product.ProductImage);
-
-            const imagePath = `UploadedImage/${fileName}`;
-
             return {
                 productName: product.ProductName,
                 productPrice: product.Price,
                 description: product.Description,
                 stock: product.Stock,
                 categoryId: product.CategoryID,
-                imagePath: imagePath 
+                imagePath: product.ProductImage 
             };
         });
 
@@ -1033,16 +1056,13 @@ app.get('/productsBag', async (req, res) => {
             return res.status(404).send('Product not found');
         }
         const products = result.recordset.map(product => {
-            const fileName = path.basename(product.ProductImage);
-            const imagePath = `UploadedImage/${fileName}`;
-
             return {
                 productName: product.ProductName,
                 productPrice: product.Price,
                 description: product.Description,
                 stock: product.Stock,
                 categoryId: product.CategoryID,
-                imagePath: imagePath 
+                imagePath: product.ProductImage 
             };
         });
 
@@ -1062,16 +1082,13 @@ app.get('/productsDress', async (req, res) => {
             return res.status(404).send('Product not found');
         }
         const products = result.recordset.map(product => {
-            const fileName = path.basename(product.ProductImage);
-            const imagePath = `UploadedImage/${fileName}`;
-
             return {
                 productName: product.ProductName,
                 productPrice: product.Price,
                 description: product.Description,
                 stock: product.Stock,
                 categoryId: product.CategoryID,
-                imagePath: imagePath 
+                imagePath: product.ProductImage 
             };
         });
 
@@ -1210,13 +1227,11 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
         const result = await request.query(query);
 
         const orderItems = result.recordset.map(item => {
-        const fileName = path.basename(item.ProductImage);
-        const imagePath = `UploadedImage/${fileName}`;
             return {
                 productName: item.ProductName,
                 Quantity: item.Quantity,
                 Price: item.Price,
-                productImage: imagePath
+                productImage: product.ProductImage
             };
         });
 
@@ -1252,12 +1267,11 @@ app.get('/Notif', async (req, res) => {
         const result = await request.query(query);
        
         const orderItems = result.recordset.map(item => {
-        const fileName = path.basename(item.ProductImage);
-        const imagePath = `UploadedImage/${fileName}`;
+
             return {
                 Content: item.Content,
                 Date: item.NotificationDate,
-                productImage: imagePath,
+                productImage: item.ProductImage,
                 Status: item.Status
             };
         });
@@ -1335,15 +1349,11 @@ app.get('/Cart', async (req, res) => {
 
             const result = await request.query(query);
             const productsCart = result.recordset.map(productCart => {
-
-            const fileName = path.basename(productCart.ProductImage);
-
-            const imagePath = `UploadedImage/${fileName}`;
                 return {
                     productName: productCart.ProductName,
                     productPrice: productCart.Price,
                     productQuantity: productCart.Quantity,
-                    productImage: imagePath
+                    productImage: productCart.ProductImage
                 };
             });
             res.json(productsCart);
@@ -1435,13 +1445,12 @@ app.get('/CheckOut', async (req, res) => {
 
             // Map the results and push them into the results array
             results.push(...result.recordset.map(item => {
-                const fileName = path.basename(item.ProductImage);
-                const imagePath = `UploadedImage/${fileName}`;
+
                 return {
                     ProductName: item.ProductName,
                     Price: item.Price,
                     Quantity: item.Quantity,
-                    Image: imagePath
+                    Image: item.ProductImage
                 };
             }));
         }
