@@ -261,29 +261,29 @@ fetch('/Orders')
         });
     });
 
-    async function fetchUnreadCount() {
-        try {
-            const response = await fetch('/ChatNotif'); 
-            const data = await response.json();
-            const unreadCount = data.Notif;
-            console.log(unreadCount);
-            const notifBadge = document.getElementById('notif-badge');
-            if (unreadCount > 0) {
-                notifBadge.textContent = unreadCount;
-                notifBadge.style.display = 'inline-flex';
-            } else {
-                notifBadge.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Error fetching unread count:', error);
-        }
-    }
+    // async function fetchUnreadCount() {
+    //     try {
+    //         const response = await fetch('/ChatNotif'); 
+    //         const data = await response.json();
+    //         const unreadCount = data.Notif;
+    //         console.log(unreadCount);
+    //         const notifBadge = document.getElementById('notif-badge');
+    //         if (unreadCount > 0) {
+    //             notifBadge.textContent = unreadCount;
+    //             notifBadge.style.display = 'inline-flex';
+    //         } else {
+    //             notifBadge.style.display = 'none';
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching unread count:', error);
+    //     }
+    // }
 
 
-    document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+    // document.addEventListener('DOMContentLoaded', fetchUnreadCount);
 
 
-    setInterval(fetchUnreadCount, 2000); 
+    // setInterval(fetchUnreadCount, 2000); 
 
 </script>
 <script src="Refresh.js"></script>
