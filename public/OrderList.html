@@ -7,6 +7,34 @@
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
     <title>Orders</title>
 </head>
+<style>
+        @keyframes fadeInRight {
+    0% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-15%);
+    }
+    }
+    .animation-fadeInRight {
+    animation: fadeInRight 0.15s ease-in-out forwards;
+    }
+    @keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-40%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    }
+    .animation-fadeInLeft {
+    animation: fadeInLeft 0.5s ease-in-out forwards;
+    }
+</style>
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
@@ -17,7 +45,7 @@
             <ul class="my-6 md:my-0 ml-10">
                 <a href="Inbox.html" class="relative hover:text-outline duration-300">
                     CHAT
-                    <span id="notif-badge" class="absolute top-0 right-[-1] inline-flex items-center justify-center py-1 text-xs font-bold leading-none text-sign bg-outline rounded-full"></span>
+                    <!-- <span id="notif-badge" class="absolute top-0 right-[-1] inline-flex items-center justify-center py-1 text-xs font-bold leading-none text-sign bg-outline rounded-full"></span> -->
                 </a>
             </ul>
             
@@ -28,35 +56,43 @@
         </nav>
     </div>
     <div class="bg-Likha min-h-screen pt-[5rem] pb-[3rem]">
-
-        <div id="SideBar" class="bg-[#F8ECDC] min-h-screen w-[200px] z-50 fixed">
-            <div id="Open" class="bg-[#F8ECDC] w-[30px] h-[60px] absolute right-[-1.25rem] top-[25rem] rounded-xl items-center flex justify-center shadow-xl cursor-pointer">></div>
-            <div class="flex items-cente">
-                <div id="Logo" >
-                    <img src="img/ZappnottLogoOnly.png" alt="LOGO" class="h-[60px] w-[60px] ">
+        
+        <div id="SideBar" class="bg-[#F8ECDC] h-svh w-[80px] z-[1000] fixed flex flex-col">
+            <div id="Open" class="bg-[#F8ECDC] w-[30px] h-[60px] absolute right-[-1.25rem] top-[23rem] rounded-xl items-center flex justify-center shadow-xl cursor-pointer -z-50">></div>
+            <div class="relative h-[47.5rem] space-y-32">
+                <div class=" h-[30rem] w-auto mx-2 mt-[6rem] flex flex-col justify-between">
+                    <div class="cursor-pointer mx-1 h-[50px] w-auto flex items-center hover:bg-[#f7997ae2]  rounded-2xl duration-200">
+                        <img id="Logo" class="w-[60px] h-[55px]" src="img/dashboard.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Dashboard</h1>
+                    </div>
+                    <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="OrderList.html">
+                        <img class="w-[55px] h-[55px]" src="img/ordermenu.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Order</h1>
+                    </a>
+                    <div class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200">
+                        <img class="w-[55px] h-[55px]" src="img/request.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Request</h1>
+                    </div>
+                    <div class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200">
+                        <img class="w-[55px] h-[55px]" src="img/product.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Products</h1>   
+                    </div>
+                    <a class="relative h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2] rounded-2xl duration-200" href="Inbox.html">
+                            <img class="w-[55px] h-[55px]" src="img/mesage.png" alt=""></img>
+                            <span id="notif-badge" class="absolute top-0 left-9 w-3 h-3 inline-flex items-center justify-center text-[8px] font-bold text-[#FFFFFF] bg-[#FF0000] rounded-full"></span>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Message</h1>
+                    </a>
                 </div>
-                <div id="Brand" class="font-Inria font-semibold text-[32px] opacity-0">
-                    Zappnott
+                <div class="relative bottom-0 h-[50px] w-auto mx-1">
+                    <hr class=" w-auto border-1 border-outline mx-1">
+                    <div class="flex items-center cursor-auto" onclick="LogOut()">
+                        <img src="img//LogOuts.png" alt="" class="cursor-pointer h-[50px] w-[50px] mx-2" onclick="LogOut()">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">LogOut</h1>
+                    </div>
                 </div>
             </div>
-            <div>
-                <div>
-
-                </div>
-                <div>
-
-                </div>
-                <div>
-
-                </div>
-                <div>
-
-                </div>
-                <div>
-
-                </div>
-            </div>
-
+            
+            
         </div>
 
         <div class="text-center mt-3">
@@ -135,22 +171,21 @@
 const SideBar = document.getElementById('SideBar');
 const Open = document.getElementById('Open');
 const Logo = document.getElementById('Logo');
-const Brand = document.getElementById('Brand');
+const Brand = document.querySelectorAll('#Brand');
 
 Open.addEventListener('click', function(event){
     SideBar.classList.add('transition-all', 'duration-500');
-    if(SideBar.classList.contains('w-[200px]')){
-        SideBar.classList.add('w-[500px]');
-        SideBar.classList.remove('w-[200px]');
-        Brand.classList.add('transition-opacity', 'duration-500', 'opacity-100');
-        Brand.classList.remove('opacity-0');
+    if(SideBar.classList.contains('w-[80px]')){
+        Brand.forEach(brand =>{brand.classList.add('animation-fadeInLeft')});
+        SideBar.classList.add('w-[350px]');
+        SideBar.classList.remove('w-[80px]');
         Open.innerText = '<';
     }
-    else if(SideBar.classList.contains('w-[500px]')){
-        SideBar.classList.add('w-[200px]');
-        SideBar.classList.remove('w-[500px]');
-        Brand.classList.add('transition-opacity', 'duration-500', 'opacity-0');
-        Brand.classList.remove('opacity-100');
+    else if(SideBar.classList.contains('w-[350px]')){
+        Brand.forEach(brand =>{brand.classList.remove('animation-fadeInLeft')});
+        Brand.forEach(brand =>{brand.classList.add('animation-fadeInRight')});
+        SideBar.classList.add('w-[80px]');
+        SideBar.classList.remove('w-[350px]');
         Open.innerText = '>';
     }
 });
@@ -252,4 +287,5 @@ fetch('/Orders')
 
 </script>
 <script src="Refresh.js"></script>
+<script src="AuthorizationBE.js"></script>
 </html>

@@ -12,6 +12,7 @@ const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 const WebSocket = require('ws');
 const http = require('http');
+const cloudinary = require('cloudinary').v2;
 
 const app = express();
 const server = http.createServer(app);
@@ -36,6 +37,11 @@ app.use('/Build', express.static(path.join(__dirname, 'Build')));
 app.use(express.static(path.join(__dirname)));
 
 const wss = new WebSocket.Server({ server });
+
+cloudinary.config({
+    cloud_name: 'db5bsftqx',
+    // secure: true
+});
 
 
 
