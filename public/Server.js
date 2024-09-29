@@ -590,7 +590,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
             folder: 'img', // Optional: Specify a folder in Cloudinary
             use_filename: true,
             unique_filename: false,
-            transformation: [{ format: 'auto' }] 
+            transformation: [{ format: 'auto', quality: 'auto' }] 
         });
 
         // After uploading to Cloudinary, remove the local file
