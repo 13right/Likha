@@ -2979,6 +2979,10 @@ video {
   background-color: rgb(248 236 220 / var(--tw-bg-opacity));
 }
 
+.bg-\[url\(\'https\:\/\/res\.cloudinary\.com\/db5bsftqx\/image\/upload\/f_auto\/q_auto\/v1727603904\/BG_LIKHA_hichbj\.png\'\)\]{
+  background-image: url('https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/q_auto/v1727603904/BG_LIKHA_hichbj.png');
+}
+
 .bg-\[url\(\'img\/BG_LIKHA\.png\'\)\]{
   background-image: url('img/BG_LIKHA.png');
 }
