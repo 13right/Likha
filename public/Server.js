@@ -104,9 +104,14 @@ const config = {
     password: process.env.DB_PASSWORD,
     server: process.env.DB_SERVER,
     database: process.env.DB_DATABASE,
+    pool: {
+        max: 10, // Maximum number of connections in the pool
+        min: 0,  // Minimum number of connections in the pool
+        idleTimeoutMillis: 30000 // Close idle connections after 30 seconds
+    },
     options: {
-        encrypt: process.env.DB_ENCRYPT === 'true',
-        trustServerCertificate: true
+        encrypt: process.env.DB_ENCRYPT === 'true', // For Azure SQL
+        trustServerCertificate: false // Change to false if needed for production
     }
 };
 
