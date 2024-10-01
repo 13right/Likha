@@ -338,7 +338,8 @@ async function fetchUser() {
 }
 // Initialize a WebSocket connection
 //const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-const socket = new WebSocket('ws://localhost:3000'); // Replace with actual WebSocket URL
+const socket = new WebSocket('ws://localhost:3000');
+//const socket = new WebSocket('ws://192.168.0.250:3000'); // Replace with actual WebSocket URL
 //const socket = new WebSocket('wss://zappnott.shop/ws');
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
@@ -565,7 +566,7 @@ logo.addEventListener('click', async () => {
 
         setTimeout(() => {
             content.style.width = '35rem';
-            content.style.height = '25rem';
+            content.style.height = '27rem';
 
             setTimeout(() => {
                 scrollToBottom();

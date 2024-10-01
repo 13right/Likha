@@ -2848,6 +2848,11 @@ video {
   background-color: #96A378CC;
 }
 
+.bg-\[\#96A378\]{
+  --tw-bg-opacity: 1;
+  background-color: rgb(150 163 120 / var(--tw-bg-opacity));
+}
+
 .bg-\[\#B0BCA480\]{
   background-color: #B0BCA480;
 }

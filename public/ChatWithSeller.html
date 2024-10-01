@@ -14,13 +14,38 @@
         <div id="chat-box" class="border p-4 h-96 overflow-y-scroll bg-gray-50 rounded-lg">
             
         </div>
-        <form id="message-form" class="mt-4 flex">
+        <button id="CB" class="bg-Likha h-7 w-auto px-4 rounded-2xl my-2" onclick="SendBot()">ChatBot</button>
+        <button class="bg-Likha h-7 w-auto px-4 rounded-2xl my-2" onclick="Zapp()">Zappnott</button>
+        <form id="message-form" class="flex">
             <input type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
             <button type="submit" class="bg-blue-500 text-white p-2 rounded-r-lg">Send</button>
         </form>
     </div>
 
     <script>
+
+        function SendBot() {
+            const Chatbot = document.getElementById('CB').innerText;
+            fetch('/Chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'ChatBot' })
+            }).then(() => {
+                fetchMessages();
+            });
+        }
+        function Zapp(){
+            const Chatbot = document.getElementById('CB').innerText;
+            fetch('/Chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Zappnott' })
+            }).then(() => {
+                fetchMessages();
+            });
+        }
+
+        
 
         document.addEventListener('DOMContentLoaded', () => {
             

@@ -17,7 +17,6 @@ const cloudinary = require('cloudinary').v2;
 const app = express();
 const server = http.createServer(app);
 
-
 app.set('view engine', 'ejs');
 
 const port = process.env.PORT || 3000;
@@ -86,8 +85,6 @@ app.use(session({
     saveUninitialized: true
 
   }));
-
-
 
 
 //Local Machine sa baba

@@ -687,7 +687,7 @@ input[type="checkbox"] {
             </div>
         </div>
         <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" alt="" class=" h-[4rem] fixed bottom-16 right-20 cursor-pointer z-40">
-        <div id="ChatContent" class="hidden fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
+        <div id="ChatContent" class="hidden fixed rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
             <div class="shadow-sm">
                 <div class="flex">
                     <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
@@ -697,7 +697,9 @@ input[type="checkbox"] {
                 <div class="m-4">
                     <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
                     </div>
-                    <form autocomplete="off" id="message-form" class="mt-4 flex">
+                    <button id="CB" class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="SendBot()">ChatBot</button>
+                    <button class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="Zapp()">Zappnott</button>
+                    <form autocomplete="off" id="message-form" class="flex">
                         <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
                         <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
                     </form>
@@ -728,6 +730,28 @@ input[type="checkbox"] {
     </div>
     <script src="Rotatingtext.js"></script>
 </body>
+<script>
+        function SendBot() {
+            const Chatbot = document.getElementById('CB').innerText;
+            fetch('/Chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'ChatBot' })
+            }).then(() => {
+                fetchMessages();
+            });
+        }
+        function Zapp(){
+            const Chatbot = document.getElementById('CB').innerText;
+            fetch('/Chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Zappnott' })
+            }).then(() => {
+                fetchMessages();
+            });
+        }
+</script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <script src="SliderScript.js"></script>
 <script src="Nav.js"></script>
