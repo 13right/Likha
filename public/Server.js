@@ -105,7 +105,8 @@ const config = {
     server: process.env.DB_SERVER,
     database: process.env.DB_DATABASE,
     options: {
-        encrypt: process.env.DB_ENCRYPT === 'true' // Convert 'true' or 'false' to boolean
+        encrypt: process.env.DB_ENCRYPT === 'true',
+        trustServerCertificate: true
     }
 };
 
