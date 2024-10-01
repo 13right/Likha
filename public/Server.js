@@ -1229,7 +1229,7 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
                 productName: item.ProductName,
                 Quantity: item.Quantity,
                 Price: item.Price,
-                productImage: product.ProductImage
+                productImage: item.ProductImage
             };
         });
 
