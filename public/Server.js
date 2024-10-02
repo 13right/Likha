@@ -890,6 +890,22 @@ app.get('/Inbox', async (req, res) => {
     }
 });
 
+app.get('/get-materials', async (req, res) => {
+    const query = "SELECT MaterialName FROM tbl_Materials WHERE Stock = 2";
+    const db = await pool.request();
+    // Run the SQL query
+    db.query(query, (err, result) => {
+        if (err) {
+            console.error('Error running query:', err);
+            res.status(500).send({ error: 'Failed to retrieve materials' });
+        } else {
+            // Send the materials back as a JSON response
+            const materials = result.recordset;
+            res.json({ materials });
+        }
+    });
+});
+
 app.get('/ChatNotif', async (req, res) => {
     const user = req.session.user;
     const ID = parseInt(user.UserID);

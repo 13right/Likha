@@ -338,9 +338,9 @@ async function fetchUser() {
 }
 // Initialize a WebSocket connection
 //const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-//const socket = new WebSocket('ws://localhost:3000');
+const socket = new WebSocket('ws://localhost:3000');
 //const socket = new WebSocket('ws://192.168.0.250:3000'); // Replace with actual WebSocket URL
-const socket = new WebSocket('wss://zappnott.shop/ws');
+//const socket = new WebSocket('wss://zappnott.shop/ws');
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
@@ -432,34 +432,92 @@ async function GetID(){
 }
 GetID();
 
+function SendBot() {
+    const Chatbot = document.getElementById('CB').innerText;
+    fetch('/Chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'ChatBot' })
+    }).then(() => {
+        fetchMessages();
+    });
+}
+function Zapp(){
+    const Chatbot = document.getElementById('CB').innerText;
+    fetch('/Chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Zappnott' })
+    }).then(() => {
+        fetchMessages();
+    });
+}
+
 function renderMessages(messages) {
     const chatBox = document.getElementById('chat-box');
     chatBox.innerHTML = '';
 
     messages.forEach(msg => {
         const messageElement = document.createElement('div');
-        messageElement.innerHTML = `
-            <div id="CC" class="flex items-start">
-                <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
-                    <p id="Content" class="text-sm">${msg.message}</p>
+        
+        // Check if the message is a list of materials
+        const materials = msg.message.split(';'); // Split the string by comma
+        
+        // If the message contains multiple materials, render buttons for each
+        if (materials.length > 1) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('flex','flex-col', 'items-start', 'gap-2'); // Add some spacing between buttons
+            
+            materials.forEach(material => {
+                const button = document.createElement('button');
+                button.innerText = material.trim(); // Remove any extra whitespace
+                button.classList.add('rounded-lg', 'p-3', 'bg-outline', 'text-[#FFF]');
+                
+                button.onclick = () => {
+                    // Handle button click
+                    fetch('/Chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: material })
+                    }).then(() => {
+                        fetchMessages();
+                    });
+                    console.log('Material button clicked:', material);
+                };
+                
+                buttonContainer.appendChild(button);
+            });
+            
+            messageElement.appendChild(buttonContainer);
+        } else {
+            // Default rendering for single messages or non-material messages
+            messageElement.innerHTML = `
+                <div id="CC" class="flex items-start">
+                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
+                        <p id="Content" class="text-sm">${msg.message}</p>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }
 
+        // Logic for sender and receiver styling
         const ChatContainer = messageElement.querySelector('#CC');
         const ChatBG = messageElement.querySelector('#Chats');
 
         if (msg.SenderID === parseInt(UserID)) {
             ChatContainer.classList.add('justify-end');
-            ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
-            ChatBG.classList.remove('bg-outline');
+            if (materials.length <= 1) { // Change here to only style if not buttons
+                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
+                ChatBG.classList.remove('bg-outline');
+            }
         } else {
-            ChatBG.classList.add('bg-outline');
+            if (materials.length <= 1) { // Change here to only style if not buttons
+                ChatBG.classList.add('bg-outline');
+            }
         }
 
         chatBox.appendChild(messageElement);
     });
-
 
     if (messages.length > previousMessageCount) {
         scrollToBottom();
@@ -467,6 +525,8 @@ function renderMessages(messages) {
 
     previousMessageCount = messages.length;
 }
+
+
 
 
 function updateNotificationBadge(count) {

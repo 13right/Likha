@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <style>
 
+
+
 input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
@@ -731,26 +733,7 @@ input[type="checkbox"] {
     <script src="Rotatingtext.js"></script>
 </body>
 <script>
-        function SendBot() {
-            const Chatbot = document.getElementById('CB').innerText;
-            fetch('/Chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'ChatBot' })
-            }).then(() => {
-                fetchMessages();
-            });
-        }
-        function Zapp(){
-            const Chatbot = document.getElementById('CB').innerText;
-            fetch('/Chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Zappnott' })
-            }).then(() => {
-                fetchMessages();
-            });
-        }
+
 </script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <script src="SliderScript.js"></script>

@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: "server",
-    script: "LIKHA DRAFTS/public/server.js", // Adjust the path based on the actual location
+    script: "LIKHA DRAFTS/public/Server.js", // Adjust the path based on the actual location
     env: {
       NODE_ENV: "development",
       DB_USER: process.env.DB_USER,
