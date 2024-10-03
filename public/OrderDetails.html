@@ -93,17 +93,26 @@
                         <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
                             <div id="Ordered" class="flex items-center space-x-3 cursor-pointer">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                                    <div id="Order-Circle" class="w-[10px] h-[10px] bg-outline rounded-full"></div>
                                 </div>
                                 <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
                             </div>
                             <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div id="Confirmed" class="flex items-center space-x-3 cursor-pointer">
-                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div id="Con-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                            <div class="flex space-x-[4rem]">
+                                <div id="Confirmed" class="flex items-center space-x-3 cursor-pointer">
+                                    <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                        <div id="Con-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                    </div>
+                                    <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
                                 </div>
-                                <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
-                            </div>
+                                <div id="Cancel" class="flex items-center space-x-3 cursor-pointer">
+                                    <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                        <div id="Cancel-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                    </div>
+                                    <p class="font-Montserrat text-[#F07C54CC]">Cancel</p>
+                                </div>
+                            </div>    
+
                             <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
                             <div id="OrderPacked" class="flex items-center space-x-3 cursor-pointer">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
@@ -118,6 +127,14 @@
                                 </div>
                                 <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
                             </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Completed" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="Com-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Completed</p>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="outline outline-1 outline-outline bg-sign space-y-4 p-[1rem] pt-[1.5rem] rounded-2xl w-[396px] h-[212px]">
@@ -193,6 +210,40 @@
                     });
                     location.reload();
             });
+            document.getElementById('Completed').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Completed', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+            document.getElementById('Cancel').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Cancelled', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
 
             async function checkStat(){
                 const Status = Item.Status;
@@ -213,6 +264,20 @@
                     document.getElementById('OP-Circle').classList.remove('hidden');
                     document.getElementById('Ready-Circle').classList.remove('hidden');
                 }
+                else if(Status === 'Completed'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.remove('hidden');
+                    document.getElementById('Ready-Circle').classList.remove('hidden');
+                    document.getElementById('Com-Circle').classList.remove('hidden');
+                }
+                else if(Status === 'Cancelled'){
+                    document.getElementById('Con-Circle').classList.add('hidden');
+                    document.getElementById('OP-Circle').classList.add('hidden');
+                    document.getElementById('Ready-Circle').classList.add('hidden');
+                    document.getElementById('Com-Circle').classList.add('hidden');
+                    document.getElementById('Order-Circle').classList.add('hidden');
+                    document.getElementById('Cancel-Circle').classList.remove('hidden');
+                }
             }
 
             checkStat();
@@ -227,8 +292,8 @@
                         IElement.innerHTML = `
                         <div id="Product" class="w-[800px] relative h-[6rem] flex items-center p-2 my-1  mx-auto">
                             <div class="flex items-center">
-                                <img src="data:image/jpeg;base64,${orderItem.productImage}" alt="" class="w-[3.5rem]">
-                                <p class="font-Montagu font-semibold text-2xl ml-4">${orderItem.productName}</p>
+                                <img src="${orderItem.productImage}" alt="" class="w-[3.5rem]">
+                                <p class="font-Montagu font-semibold text-2xl ml-4 w-[20rem]">${orderItem.productName}</p>
                             </div>
                             <div class="flex item-center">
                                 <div class="absolute right-[11.25rem] text-center w-[7rem] top-[2rem]">

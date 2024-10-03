@@ -1146,22 +1146,33 @@ app.get('/User', async (req, res) => {
 app.get('/Order', async (req, res) => {
     const user = req.session.user;
     const ID = parseInt(user.UserID);
+    const Status = req.query.Status;
     try {
         const request = pool.request();
         request.input('UserID', sql.Int, ID);
-        const query = `SELECT OrderID, TransactionID, convert(varchar, Date, 0) AS Date, Status FROM tbl_Order WHERE UserID = @UserID ORDER BY OrderID DESC`;
+
+        let query = `SELECT OrderID, TransactionID, convert(varchar, Date, 0) AS Date, Status FROM tbl_Order WHERE UserID = @UserID`;
+
+        if (Status) {
+            query += ` AND Status = '${Status}'`;
+        }
+
+       query += ` ORDER BY OrderID DESC`;
+
+        console.log(query);
         const result = await request.query(query);
         const products = result.recordset;
-        
+
         res.json(products);
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
+
 //OrderList AdminView
 app.get('/Orders', async (req, res) => {
-           
+        
     try {
         const request = pool.request();
         const query = `SELECT TransactionID,Status, convert(varchar, Date, 0) AS Date, Name, TotalPrice
@@ -1319,12 +1330,11 @@ app.get('/Items/:productOrder', async (req, res) => {
         const result = await request.query(query);
 
         const orderItems = result.recordset.map(item => {
-            const base64Image = Buffer.from(item.ProductImage, 'binary').toString('base64');
             return {
                 productName: item.ProductName,
                 Quantity: item.Quantity,
                 Price: item.Price,
-                productImage: base64Image
+                productImage: item.ProductImage
             };
         });
 

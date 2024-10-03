@@ -182,7 +182,7 @@
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
             <div >
-                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
             </div>
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
@@ -232,17 +232,17 @@
                           
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#Shop" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="/3D" class="font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             CUSTOMIZATION
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="/3D" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="/3D" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
@@ -263,15 +263,14 @@
                 </div>
             
 
-                <a href="Profile.html" class="relative cursor-pointer inline-block p-[0.75rem]">
+                <div class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
                     <lord-icon
-                        src="https://cdn.lordicon.com/bgebyztw.json"
+                        src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
-                        stroke="bold"
-                        colors="primary:#000,secondary:#000"
-                        style="width:1.75rem;height:1.75rem;">
+                        colors="primary:#000000"
+                        style="width:1.75rem;height:1.75rem">
                     </lord-icon>
-                </a>
+                </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.75rem]">
                     <lord-icon
@@ -280,8 +279,8 @@
                         trigger="hover"
                         style="width:1.75rem;height:1.75rem;">
                     </lord-icon>
-                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] inline-flex items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full"></span>
-                    <span id="notifBadge" class="absolute top-3 right-[13px] inline-flex items-center justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
+                    <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
+                    <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
                 </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.5rem]">
@@ -301,9 +300,11 @@
     <div class="bg-Likha min-h-screen pt-[7rem]">
         <div id="main-container" class="flex flex-col space-y-12">
             <p class="font-Montagu font-extrabold text-4xl text-center">Orders</p>
-            <div class="flex justify-center space-x-[3.5rem]">
+            <div class="flex justify-evenly mx-24 space-x-[1rem]">
                 <button id="ALL" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">ALL</button>
+                <button id="ORDERED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">ORDERED</button>
                 <button id="CONFIRMED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CONFIRMED</button>
+                <button id="OP" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">ORDER PACKED</button>
                 <button id="TPU" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">TO PICK UP</button>
                 <button id="COMPLETED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">COMPLETED</button>
                 <button id="CANCELLED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CANCELLED</button>
@@ -362,39 +363,118 @@
                 
             </div>
         </div>
+        <div class="fixed hidden right-0 top-0 h-full w-[570px] bg-Likha z-[50] shadow-2xl p-6" id="Cartel"></div>
+            <div>
+                <div class="flex items-center justify-between">
+                    <h1 class="font-Montagu font-semibold text-[24px] ml-3 mb-4">Cart Product</h1>
+                    <img src="img/ekis.png" alt="" class="w-[20px] h-[20px] relative mb-5 mr-5 cursor-pointer" id="CloseCart">
+                </div>
+                <hr class="border-outline border-[1.5px] w-auto">
+    
+            </div>
+            <div id="Product-Cart" class="overflow-auto h-[70vh] Product-Cartt"></div>
+            <div class="my-3 flex relative">
+                <h2 class="relative left-6 font-Montserrat font-extrabold text-[16px]">Total: </h2>
+                <p class="absolute right-6 font-Montserrat font-semibold text-[16px]" id="totalPriceDisplay">₱ 0.00</p>
+            </div>
+            <hr class="border-1 border-outline w-auto ">
+            <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
+        </div>
+        <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
+            <div class="shadow-sm">
+                <p class="my-2 ml-2 font-Inter">Notification</p>
+                <hr class="border-1 border-[#D8BC8C80] w-[28.5rem] mb-1">
+            </div>
+            <div id="NotifContents" class="overflow-y-auto  h-[20rem]">
+                <div id="NotifContent" class="relative space-y-5 ">
+                
+                </div>
+            </div>
+        </div>
+        <img id="ChatLogo" src="img/ZappnottLogoOnly.png" alt="" class=" h-[4rem] fixed bottom-16 right-20 cursor-pointer z-40">
+        <div id="ChatContent" class="hidden fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
+            <div class="shadow-sm">
+                <div class="flex">
+                    <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
+                    <p id="ChatClose" class="absolute right-5 my-2 cursor-pointer font-Inter font-extrabold">X</p>
+                </div>
+                <hr class="border-1 border-[#D8BC8C80] w-[35rem]">
+                <div class="m-4">
+                    <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
+                    </div>
+                    <form autocomplete="off" id="message-form" class="mt-4 flex">
+                        <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+                        <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+        <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
+            <div class="flex flex-col items-center">
+                <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                    <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
+                </div>
+                <div class="font-Inter" id="UsernameMenu">
+                    
+                </div>
+            </div>
+            <div class="py-1 flex" ></div>
+                <div class="flex-col flex relative">
+                    <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                    <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
+                    <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                    <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
+                    <a href="AllCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</a>
+                </div>
+            </div>
+            
+        </div>
     </div>
     
     <script>
-    function Status(Status) {
-        const currentUrl = new URL(window.location);
-        currentUrl.searchParams.set('Status', Status);
-        window.location.href = currentUrl.toString();
-    }
-    document.getElementById('ALL').addEventListener('click', () => {
-            Status('');
+        document.getElementById('ALL').addEventListener('click', () => {
+            fetchOrders();
             //scrollToShop();
         });
-
+        document.getElementById('ORDERED').addEventListener('click', () => {
+            fetchOrders('Ordered');
+            //scrollToShop();
+        });
+        document.getElementById('OP').addEventListener('click', () => {
+            fetchOrders('Order Packed');
+            //scrollToShop();
+        });
         document.getElementById('CONFIRMED').addEventListener('click', () => {
-            Status('Jewelry');
+            fetchOrders('Confirmed');
             //scrollToShop(); 
         });
         document.getElementById('TPU').addEventListener('click', () => {
-            Status('Bag');
+            fetchOrders('Ready to Pick Up');
+            //scrollToShop(); 
+        });
+        document.getElementById('COMPLETED').addEventListener('click', () => {
+            fetchOrders('Completed');
             //scrollToShop(); 
         });
         document.getElementById('CANCELLED').addEventListener('click', () => {
-            Status('Dress');
+            fetchOrders('Cancelled');
             //scrollToShop(); 
         });
     
 function fetchOrders(Status = ''){
+    console.log(Status);
     fetch(`/Order?Status=${Status}`)
     .then(response => response.json())
     .then(Items => {
+        const ItemList = document.getElementById('Order-container');
+        ItemList.innerHTML = '';
+        if(Items.length === 0){
+            console.log('Wala laman pa');
+        }
+        else{
         console.log(Items);
         Items.forEach(Item => {
-            const ItemList = document.getElementById('Order-container');
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
             <div id="Order-${Item.OrderID}"class="ml-[1rem] pt-9 px-[2rem] bg-[#F07C541A] w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
@@ -407,6 +487,7 @@ function fetchOrders(Status = ''){
                         <button id="Cancel" class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
                     </div>
                     <div id="Cancelled" class="font-Montserrat font-semibold text-xl absolute text-[#DD0707] right-[1rem] hidden">Cancelled</div>
+                    <div id="Completed" class="font-Montserrat font-semibold text-xl absolute text-[#037E26] right-[1rem] hidden">Completed</div>
                 </div>
                 <hr class="w-[1180.16px] mt-[2rem] ml-3 text-[#F07C54]">
                 <div class="w-[75rem] h-auto my-4 flex">
@@ -451,7 +532,7 @@ function fetchOrders(Status = ''){
             const Cancel = ItemElement.querySelector('#Cancel');
             const StatDiv = ItemElement.querySelector('#StatusDiv');
             const Cancelled = ItemElement.querySelector('#Cancelled');
-
+            const Completed = ItemElement.querySelector('#Completed');
             async function checkStat(){
                 const Status = Item.Status;
 
@@ -477,8 +558,13 @@ function fetchOrders(Status = ''){
                     Cancel.classList.add('cursor-not-allowed');
                 }
                 else if(Status === 'Cancelled'){
-                    StatDiv.classList.add('opacity-50');
+                    StatDiv.classList.add('opacity-0');
                     Cancelled.classList.remove('hidden');
+                    Cancel.classList.add('hidden');
+                }
+                else if(Status === 'Completed'){
+                    StatDiv.classList.add('opacity-0');
+                    Completed.classList.remove('hidden');
                     Cancel.classList.add('hidden');
                 }
             }
@@ -524,7 +610,7 @@ function fetchOrders(Status = ''){
                         IElement.innerHTML = `
                         <div class="flex space-x-4 h-[13rem] w-[55rem] ml-[3rem]">
                             <img src="${orderItem.productImage}" class="w-[175px] h-[175px]">
-                            <div class="w-[13rem] h-[5rem] mt-[1rem] mr-[6rem]">
+                            <div class="w-[20rem] h-[5rem] mt-[1rem] mr-[6rem]">
                                 <p class="font-Montagu font-extrabold text-[24px]">${orderItem.productName}</p>
                                 <p>Quantity: ${orderItem.Quantity}</p>
                                 <p>Total Price: P ${orderItem.Price}</p>
@@ -538,13 +624,13 @@ function fetchOrders(Status = ''){
             
 
         });
+    }
     });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const Status = urlParams.get('Status') || ''; 
-    fetchOrders(Status);
+document.addEventListener('DOMContentLoaded', (event) => {
+    fetchOrders();
+    window.location.reload;
 });
 
     function expandSearchBar() {
@@ -556,23 +642,54 @@ window.addEventListener('DOMContentLoaded', () => {
     } 
     
     const ALL = document.getElementById('ALL');
+    const ORDERED = document.getElementById('ORDERED');
     const CONFIRMED = document.getElementById('CONFIRMED');
+    const OP = document.getElementById('OP');
     const TPU = document.getElementById('TPU');
     const COMPLETED = document.getElementById('COMPLETED');
     const CANCELLED = document.getElementById('CANCELLED');
-
+    
     ALL.addEventListener('click', function(event){
         if(!ALL.classList.contains('bg-[#F07C5480]')){
             ALL.classList.add('bg-[#F07C5480]');
+            ORDERED.classList.remove('bg-[#F07C5480]');
             COMPLETED.classList.remove('bg-[#F07C5480]');
+            OP.classList.remove('bg-[#F07C5480]');
             TPU.classList.remove('bg-[#F07C5480]');
             CONFIRMED.classList.remove('bg-[#F07C5480]');
             CANCELLED.classList.remove('bg-[#F07C5480]');
         }
     });
+
+    ORDERED.addEventListener('click', function(event){
+        if(!ORDERED.classList.contains('bg-[#F07C5480]')){
+            ORDERED.classList.add('bg-[#F07C5480]');
+            ALL.classList.remove('bg-[#F07C5480]');
+            COMPLETED.classList.remove('bg-[#F07C5480]');
+            OP.classList.remove('bg-[#F07C5480]');
+            TPU.classList.remove('bg-[#F07C5480]');
+            CONFIRMED.classList.remove('bg-[#F07C5480]');
+            CANCELLED.classList.remove('bg-[#F07C5480]');
+        }
+    });
+
+    OP.addEventListener('click', function(event){
+        if(!OP.classList.contains('bg-[#F07C5480]')){
+            OP.classList.add('bg-[#F07C5480]');
+            ORDERED.classList.remove('bg-[#F07C5480]');
+            COMPLETED.classList.remove('bg-[#F07C5480]');
+            ALL.classList.remove('bg-[#F07C5480]');
+            TPU.classList.remove('bg-[#F07C5480]');
+            CONFIRMED.classList.remove('bg-[#F07C5480]');
+            CANCELLED.classList.remove('bg-[#F07C5480]');
+        }
+    });
+
     CONFIRMED.addEventListener('click', function(event){
         if(!CONFIRMED.classList.contains('bg-[#F07C5480]')){
             CONFIRMED.classList.add('bg-[#F07C5480]');
+            ORDERED.classList.remove('bg-[#F07C5480]');
+            OP.classList.remove('bg-[#F07C5480]');
             ALL.classList.remove('bg-[#F07C5480]');
             TPU.classList.remove('bg-[#F07C5480]');
             COMPLETED.classList.remove('bg-[#F07C5480]');
@@ -583,6 +700,8 @@ window.addEventListener('DOMContentLoaded', () => {
         if(!TPU.classList.contains('bg-[#F07C5480]')){
             TPU.classList.add('bg-[#F07C5480]');
             ALL.classList.remove('bg-[#F07C5480]');
+            ORDERED.classList.remove('bg-[#F07C5480]');
+            OP.classList.remove('bg-[#F07C5480]');
             CONFIRMED.classList.remove('bg-[#F07C5480]');
             COMPLETED.classList.remove('bg-[#F07C5480]');
             CANCELLED.classList.remove('bg-[#F07C5480]');
@@ -593,6 +712,8 @@ window.addEventListener('DOMContentLoaded', () => {
             COMPLETED.classList.add('bg-[#F07C5480]');
             ALL.classList.remove('bg-[#F07C5480]');
             TPU.classList.remove('bg-[#F07C5480]');
+            ORDERED.classList.remove('bg-[#F07C5480]');
+            OP.classList.remove('bg-[#F07C5480]');
             CONFIRMED.classList.remove('bg-[#F07C5480]');
             CANCELLED.classList.remove('bg-[#F07C5480]');
         }
@@ -601,484 +722,15 @@ window.addEventListener('DOMContentLoaded', () => {
         if(!CANCELLED.classList.contains('bg-[#F07C5480]')){
             CANCELLED.classList.add('bg-[#F07C5480]');
             ALL.classList.remove('bg-[#F07C5480]');
+            ORDERED.classList.remove('bg-[#F07C5480]');
+            OP.classList.remove('bg-[#F07C5480]');
             TPU.classList.remove('bg-[#F07C5480]');
             COMPLETED.classList.remove('bg-[#F07C5480]');
             CONFIRMED.classList.remove('bg-[#F07C5480]');
         }
     });
-    
-    //Cart
-    async function fetchCart() {
-    const CartList = document.getElementById('Product-Cart');
-    CartList.innerHTML = '';
 
-    try {
-        const response = await fetch('/Cart');
-        if (!response.ok) {
-            if(response.status === 401){
-                window.location.href = '/SignIn.html';
-            }
-            else{
-                throw new Error('Network response was not ok');
-            }
-            
-        }
-        const productsCart = await response.json();
-
-        productsCart.forEach((productCart, index) => {
-            const CartElement = document.createElement('div');
-            CartElement.dataset.index = index;  
-            CartElement.innerHTML = `
-            <div class="mt-6">
-                <div class="flex items-center space-x-10 mb-6 ml-5">
-                    <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value=${productCart.productPrice}></input>
-                    <div>
-                        <img src="${productCart.productImage}" alt="Product Image" class="w-[118px] h-[145px]">
-                    </div>
-                    <div>
-                        <h1 class="font-Montagu font-semibold text-[24px]">${productCart.productName}</h1>
-                        <h2 class="font-Montserrat font-semibold text-[14px]">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
-                        <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3">
-                            <button class="MOcart">-</button>
-                            <input style="background-color: transparent;" id="Quantity" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" value=${productCart.productQuantity} min="1" max="100">
-                            <button class="AOcart">+</button>
-                        </div>
-                        
-                    </div>
-                </div>
-                <hr class="border-1 border-outline w-auto ">
-            </div>
-            `;
-            CartList.appendChild(CartElement);
-        });
-
-        const checkboxes = CartList.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateSum);
-        });
-
-        updateSum();
-
-    } catch (error) {
-        console.error('Error fetching products:', error);
-    }
-}
-function updateSum() {
-        const checkboxes = document.querySelectorAll('#Product-Cart input[type="checkbox"]');
-        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
-        let sum = 0;
-
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                sum += parseFloat(checkbox.value);
-            }
-        });
-        totalPriceDisplay.textContent = `₱${sum.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    }
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const cartToggle = document.getElementById('CartIcon');
-        const productCart = document.getElementById('Cartel');
-
-        cartToggle.addEventListener('click', () => {
-            fetchCart();
-            if (!productCart.classList.contains('hidden')) {
-                productCart.classList.add('hidden');
-            } else {
-                productCart.classList.remove('hidden');
-                productCart.classList.add('animation-Cart');
-                productCart.classList.remove('Close-Cart');
-            }
-        });
-    });
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const cartToggle = document.getElementById('CloseCart');
-        const productCart = document.getElementById('Cartel');
-
-        cartToggle.addEventListener('click', () => {
-            // event.preventDefault();
-            productCart.classList.add('Close-Cart');
-            productCart.addEventListener('animationend', () => {
-                productCart.classList.add('hidden');
-            }, { once: true });
-        });
-    });
-    document.addEventListener('click', function(event) {
-        const Increment = event.target.closest('.AOcart');
-        if (Increment) {
-            const CartElement = Increment.closest('div[data-index]');
-            const Quantity = CartElement.querySelector('#Quantity');
-            const currentValue = parseInt(Quantity.value);
-            const newValue = currentValue + 1;
-            Quantity.value = newValue;
-            //console.log(newValue);
-
-            const productName = CartElement.querySelector('h1').innerText;
-            //console.log(productName);
-
-            const Data = {
-                ProductN: productName,
-                Quantity:  newValue
-            }
-
-            fetch('/UpdateCart', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Data)
-                })
-                .then(response => response.json())
-                .then(data => {
-                console.log('Success update:', data);
-                fetchCart();
-                })
-                .catch((error) => {
-                     console.error('Error:', error);
-                });
-            
-        }
-    });
-
-    document.addEventListener('click', function(event) {
-        const Decrement = event.target.closest('.MOcart');
-        if (Decrement) {
-            const CartElement = Decrement.closest('div[data-index]');
-            const Quantity = CartElement.querySelector('#Quantity');
-            const currentValue = parseInt(Quantity.value);
-            if (currentValue > 1) {
-                const newValue = currentValue - 1;
-                Quantity.value = newValue;
-                console.log(newValue);
-                const productName = CartElement.querySelector('h1').innerText;
-                //console.log(productName + " ");
-
-            const Data = {
-                ProductN: productName,
-                Quantity:  newValue
-            }
-
-            fetch('/UpdateCart', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Data)
-                })
-                .then(response => response.json())
-                .then(data => {
-                console.log('Success update:', data);
-                fetchCart();
-                })
-                .catch((error) => {
-                     console.error('Error:', error);
-                });
-            }
-        }
-    });
-
-const PlaceOrderBtn = document.querySelector('#PlaceOrder');
-
-PlaceOrderBtn.addEventListener('click', async function() {
-    const checkboxes = document.querySelectorAll('#Product-Cart input[type="checkbox"]');
-    console.log(checkboxes);
-    const checkedValues = [];
-
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            const productElement = checkbox.closest('.flex');
-            const productName = productElement.querySelector('h1').innerText;
-            const productQuantity = productElement.querySelector('input[type="number"]').value;
-            //const productPrice = parseFloat(productElement.querySelector('h2').innerText);
-
-            checkedValues.push({
-                OrderProductName: productName,
-                OrderQuantity: productQuantity,
-                //OrderPrice: productPrice
-            });
-        }
-    });
-
-    if (checkedValues.length > 0) {
-
-        try {
-                const productName = checkedValues.map(checked => checked.OrderProductName);
-
-                sessionStorage.setItem('productName',JSON.stringify(productName));
-
-                window.location.href = 'Checkout.html';
-            } catch (error) {
-                console.error('Error:', error);
-
-            }
-    } else {
-        alert('Please select a product');
-    }
-
-});
-
-//Notif
-async function Notif() {
-    try {
-        const response = await fetch(`/Notif`);
-        const products = await response.json();
-        
-        const productList = document.getElementById('NotifContent');
-        productList.innerHTML = '';
-        
-        products.forEach(product => {
-            const productElement = document.createElement('div');
-            productElement.innerHTML = `
-                <div class="flex relative w-auto py-auto justify-between mr-6">
-                    <div class="justify-center flex pl-2">
-                        <div class="items-center flex">
-                            <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
-                        </div>
-                        <div class="justify-center flex flex-col pl-5">
-                            <h1 class="font-Inter text-sm">${product.Content}</h1>
-                            <h1 class="font-Inter text-sm">${product.Date}</h1>
-                        </div>
-                    </div>
-                    <div>
-                        <img src="${product.productImage}" alt="${product.productName}" class="w-[7rem] h-[7rem]">
-                    </div>
-                </div>
-            `;
-            productList.appendChild(productElement);
-
-            const notifdot = productElement.querySelector('.notifdot');
-            if (product.Status === 'unread') {
-                notifdot.classList.remove('hidden');
-            } else {
-                notifdot.classList.add('hidden');
-            }
-        });
-    } catch (error) {
-        console.error('Error fetching notifications:', error);
-    }
-}
-    function disableScroll() {
-
-    scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
-    scrollLeft =
-        window.pageXOffset || document.documentElement.scrollLeft;
-
-
-
-    window.onscroll = function() {
-    window.scrollTo(scrollLeft, scrollTop);
-    };
-    }
-    function enableScroll() {
-    window.onscroll = function() {};
-    }
-document.addEventListener('DOMContentLoaded', (event) => {
-        const NotifIcon = document.getElementById('NotifIcon');
-        const Notif = document.getElementById('Notif');
-        const container = document.getElementById('main-container');
-        const body = document.getElementById('body');
-
-        NotifIcon.addEventListener('click', () => {
-
-            if (!Notif.classList.contains('hidden')) {
-                Notif.classList.add('hidden');
-                container.classList.remove('pointer-events-none');
-                enableScroll();
-                fetch('/UpdateNotif', {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                UpdatedNotif: 'read'
-                            })
-                        })
-                            .then(response => {
-                                return response.json;
-                            })
-                            .catch(error => {
-                                console.error('Error updating status:', error);
-                            });
-            } else {
-                Notif.classList.remove('hidden');
-                container.classList.add('pointer-events-none');
-                disableScroll();
-                        
-            }
-        });
-    });
-    async function fetchUnreadCount() {
-        try {
-            const response = await fetch('/NotifBadge'); 
-            const data = await response.json();
-            const unreadCount = data.NotificationID;
-            //console.log(data);
-            const notifBadge = document.getElementById('notif-badge');
-            const notifPing = document.getElementById('notifBadge');
-            if (unreadCount > 0) {
-                notifBadge.style.display = 'inline-flex';
-                notifPing.style.display = 'inline-flex';
-            } else {
-                notifBadge.style.display = 'none';
-                notifPing.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Error fetching unread count:', error);
-        }
-    }
-
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
-
-setInterval(fetchUnreadCount,10); 
-
-setInterval(Notif, 1000);
-
-//Chat
-document.addEventListener('DOMContentLoaded', () => {
-            fetchMessages();
-            setInterval(fetchMessages, 2000);
-        });
-
-        async function getCurrentUser() {
-            try {
-                const response = await fetch('/api/current_user');
-                if (response.ok) {
-                    const user = await response.json();
-                    return user.UserID;
-                    //console.log("User ID" + user.UserID); 
-                } else {
-                    window.location.href = '/SignIn.html'; 
-                }
-            } catch (error) {
-                console.error('Error fetching current user:', error);
-            }
-        }
-        let previousMessageCount = 0;
-        function scrollToBottom() {
-            const chatBox = document.getElementById('chat-box');
-            if (chatBox) {
-                requestAnimationFrame(() => {
-                    chatBox.scrollTo({
-                        top: chatBox.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                });
-            } else {
-                console.error('chatBox element not found.');
-            }
-        }
-    async function fetchMessages() {
-    
-    const userID = await getCurrentUser();
-    fetch('/api/messages')
-    .then(response => response.json())
-    .then(messages => {
-        //console.log(messages);
-        const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML = '';
-        const ID = parseInt(userID);
-       //console.log(ID);
-        messages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `
-                <div id="CC" class="flex items-start">
-                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
-                        <p id="Content" class="text-sm">${msg.message}</p>
-                    </div>
-                </div>
-            `;
-            const ChatContainer = messageElement.querySelector('#CC');
-            const ChatBG = messageElement.querySelector('#Chats');
-                //console.log(msg.SenderID);
-            if ( msg.SenderID === ID) {
-                ChatContainer.classList.add('justify-end');
-                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
-                ChatBG.classList.remove('bg-outline');
-            } else {
-                ChatBG.classList.add('bg-outline');
-            }
-
-            chatBox.appendChild(messageElement);
-        });
-        // console.log(previousMessageCount);
-        // console.log(messages.length);
-        if (messages.length > previousMessageCount) {
-            scrollToBottom();
-            console.log("Scroll");
-        }
-
-        previousMessageCount = messages.length;
-    })
-    .catch(error => {
-        console.error('Network error:', error);
-    });
-}
-
-        document.getElementById('message-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const message = document.getElementById('message-input').value;
-            fetch('/Chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
-            }).then(() => {
-                document.getElementById('message-input').value = '';
-                fetchMessages();
-            });
-        });
-
-        fetchMessages();
-        const logo = document.getElementById('ChatLogo');
-        const content = document.getElementById('ChatContent');
-        const closeButton = document.getElementById('ChatClose');
-
-        logo.addEventListener('click', () => {
-            
-            const logoRect = logo.getBoundingClientRect();
-
-            content.style.right = `${window.innerWidth - logoRect.right}px`;
-            content.style.bottom = `${window.innerHeight - logoRect.bottom}px`;
-            content.style.width = `${logoRect.width}px`;
-            content.style.height = `${logoRect.height}px`;
-
-            logo.classList.add('spin-fade');
-            
-
-            setTimeout(() => {
-                logo.classList.add('hidden'); 
-                content.classList.remove('hidden', 'content-hidden');
-                content.classList.add('expand-from-logo');
-                content.classList.remove('collapse-to-logo');
-
-                setTimeout(() => {
-                    content.style.width = '35rem';
-                    content.style.height = '25rem';
-
-                    setTimeout(() => {
-                        scrollToBottom();
-                        content.classList.remove('content-hidden');
-                        content.classList.add('content-visible');
-                    }, 700); 
-                }, 0);
-            }, 300);
-        });
-        closeButton.addEventListener('click', () => {
-            content.classList.remove('expand-from-logo', 'content-visible');
-            content.classList.add('collapse-to-logo');
-
-
-            setTimeout(() => {
-                content.classList.add('content-hidden');
-                content.classList.add('hidden');
-                content.style.width = 'initial';
-                content.style.height = 'initial';
-                
-
-                logo.classList.remove('hidden');
-                logo.classList.remove('spin-fade');
-            }, 400); 
-        });
 </script>
-    
+<script src="Nav.js"></script>
 </body>
 </html>

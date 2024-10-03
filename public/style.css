@@ -1020,6 +1020,11 @@ video {
   margin-right: 1rem;
 }
 
+.mx-6{
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
 .mx-\[0\.65rem\]{
   margin-left: 0.65rem;
   margin-right: 0.65rem;
@@ -1083,6 +1088,16 @@ video {
 .my-\[5px\]{
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.mx-20{
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+
+.mx-24{
+  margin-left: 6rem;
+  margin-right: 6rem;
 }
 
 .-mr-1{
@@ -1921,10 +1936,6 @@ video {
   width: 13px;
 }
 
-.w-\[13rem\]{
-  width: 13rem;
-}
-
 .w-\[1496px\]{
   width: 1496px;
 }
@@ -2297,6 +2308,14 @@ video {
   width: 100%;
 }
 
+.w-\[1rem\]{
+  width: 1rem;
+}
+
+.w-\[5rem\]{
+  width: 5rem;
+}
+
 .min-w-min{
   min-width: -moz-min-content;
   min-width: min-content;
@@ -2557,12 +2576,6 @@ video {
   margin-left: calc(28.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-x-\[3\.5rem\] > :not([hidden]) ~ :not([hidden]){
-  --tw-space-x-reverse: 0;
-  margin-right: calc(3.5rem * var(--tw-space-x-reverse));
-  margin-left: calc(3.5rem * calc(1 - var(--tw-space-x-reverse)));
-}
-
 .space-x-\[4\.25rem\] > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(4.25rem * var(--tw-space-x-reverse));
@@ -2657,6 +2670,24 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(16rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(16rem * var(--tw-space-y-reverse));
+}
+
+.space-x-\[3\.5rem\] > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(3.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(3.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-x-\[2rem\] > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(2rem * var(--tw-space-x-reverse));
+  margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-x-\[1rem\] > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(1rem * var(--tw-space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .overflow-auto{
@@ -3541,6 +3572,11 @@ video {
 .text-sign{
   --tw-text-opacity: 1;
   color: rgb(248 236 220 / var(--tw-text-opacity));
+}
+
+.text-\[\#037E26\]{
+  --tw-text-opacity: 1;
+  color: rgb(3 126 38 / var(--tw-text-opacity));
 }
 
 .underline{
