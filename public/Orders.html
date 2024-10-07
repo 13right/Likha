@@ -385,10 +385,63 @@
             </div>
             
         </div>
+        <div id="Rating" class="fixed hidden z-30 items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-Likha w-[700px] h-[500px] rounded transition-all duration-300 drop-shadow-2xl">
+        <div class="flex justify-between">
+            <h1 class="font-Montagu ml-[7%] text-[40px] font-semibold my-[1rem]">Feedback</h1>
+            <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603913/ekis_f7urxc.png" alt="" class="w-[20px] h-[20px] relative mt-[2.5rem] mr-[3rem] cursor-pointer" id="CloseFeed">
+        </div>   
         
-    </div>
+        <hr class="border border-[#F07C54] mx-[47px]">
+            <form action="/rate" method="POST" class="flex flex-col items-center">
+                <input type="hidden" name="productID" id="product-id-input" />
+        
+                <div class="relative flex items-center my-[2rem] ">
+                    <!-- Star 1 -->
+                    <input type="radio" name="rating" id="S1" class="hidden" value="1">
+                    <label for="S1">
+                        <svg id="S1S" class="w-[4rem] h-[4rem] text-[#6B707B80] ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    </label>
+        
+                    <!-- Star 2 -->
+                    <input type="radio" name="rating" id="S2" class="hidden" value="2">
+                    <label for="S2">
+                        <svg id="S2S" class="w-[4rem] h-[4rem] text-[#6B707B80] ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    </label>
+        
+                    <!-- Star 3 -->
+                    <input type="radio" name="rating" id="S3" class="hidden" value="3">
+                    <label for="S3">
+                        <svg id="S3S" class="w-[4rem] h-[4rem] text-[#6B707B80] ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    </label>
+        
+                    <!-- Star 4 -->
+                    <input type="radio" name="rating" id="S4" class="hidden" value="4">
+                    <label for="S4">
+                        <svg id="S4S" class="w-[4rem] h-[4rem] text-[#6B707B80] ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    </label>
+        
+                    <!-- Star 5 -->
+                    <input type="radio" name="rating" id="S5" class="hidden" value="5">
+                    <label for="S5">
+                        <svg id="S5S" class="w-[4rem] h-[4rem] text-[#6B707B80] ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    </label>
+                </div>
+                <textarea name="comment" id="comment" class="w-[500px] h-[200px] bg-sign border-[2px] border-outline"></textarea>
+                <button class="text-[#FFFFFF] font-Inter bg-outline rounded-lg w-[225px] h-[40px] mt-4">SUBMIT</button>
+            </form>
+        </div>
     
-    <script>
+<script>
         document.getElementById('ALL').addEventListener('click', () => {
             fetchOrders();
             //scrollToShop();
@@ -443,7 +496,12 @@ function fetchOrders(Status = ''){
                         <button id="Cancel" class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
                     </div>
                     <div id="Cancelled" class="font-Montserrat font-semibold text-xl absolute text-[#DD0707] right-[1rem] hidden">Cancelled</div>
-                    <div id="Completed" class="font-Montserrat font-semibold text-xl absolute text-[#037E26] right-[1rem] hidden">Completed</div>
+                    <div id="Com" class="flex absolute hidden right-[1rem]">
+                        <div id="Rate-${Item.OrderID}" class="cursor-pointer text-[#EFD02C] font-Montserrat mr-[4px] relative font-semibold text-xl relative">Rate</div>
+                        <div class="border-l-[3px] border-[#000000] w-[7px] h-[25px] mx-[9.25px] relative"></div>
+                       <div id="Completed" class="font-Montserrat relative font-semibold text-xl absolute text-[#037E26]">Completed</div> 
+                    </div>
+                    
                 </div>
                 <hr class="w-[1180.16px] mt-[2rem] ml-3 text-[#F07C54]">
                 <div class="w-[75rem] h-auto my-4 flex">
@@ -480,7 +538,11 @@ function fetchOrders(Status = ''){
                 </div>
             </div>
             `;
+            
             ItemList.appendChild(ItemElement);
+
+            
+        
 
             const Confirmed = ItemElement.querySelector('#Con-Circle');
             const OP = ItemElement.querySelector('#OP-Circle');
@@ -488,7 +550,7 @@ function fetchOrders(Status = ''){
             const Cancel = ItemElement.querySelector('#Cancel');
             const StatDiv = ItemElement.querySelector('#StatusDiv');
             const Cancelled = ItemElement.querySelector('#Cancelled');
-            const Completed = ItemElement.querySelector('#Completed');
+            const Completed = ItemElement.querySelector('#Com');
             async function checkStat(){
                 const Status = Item.Status;
 
@@ -535,21 +597,21 @@ function fetchOrders(Status = ''){
                 const Cancel = { status: 'Cancelled', OrderID: Item.TransactionID};
                 if(Status === 'Ordered'){
                     fetch('/Cancel', {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(Cancel)
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('Success:', data);
-                                    
-                                })
-                                .catch((error) => {
-                                    console.error('Error:', error);
-                                });
-                                location.reload();
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(Cancel)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                            
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                        location.reload();
                     
                 }
             
@@ -574,15 +636,80 @@ function fetchOrders(Status = ''){
                         </div>
                         `;
                         orderItemsContainer.appendChild(IElement);
+                        
+
+                        const Rate = ItemElement.querySelector(`#Rate-${Item.OrderID}`);
+                        const svgElements = {
+                            S1: document.getElementById('S1S'),
+                            S2: document.getElementById('S2S'),
+                            S3: document.getElementById('S3S'),
+                            S4: document.getElementById('S4S'),
+                            S5: document.getElementById('S5S')
+                        };
+
+                        if (Rate) {
+                            Rate.addEventListener('click', (event) => {
+                                document.getElementById('Rating').classList.remove('hidden');
+                                document.getElementById('product-id-input').value = orderItem.ProductID;
+                                // Remove all existing listeners from radio buttons
+                                document.querySelectorAll('input[name="rating"]').forEach(radio => {
+                                    radio.removeEventListener('change', handleRatingChange);
+                                });
+
+                                // Add event listener for rating input change
+                                document.querySelectorAll('input[name="rating"]').forEach((radio) => {
+                                    radio.addEventListener('change', handleRatingChange);
+                                });
+                            });
+                        }
+
+                        // Function to handle the rating change
+                        function handleRatingChange() {
+                            //document.getElementById('rating-input').value = parseInt(this.value);
+                            // Reset all stars to grey
+                            Object.keys(svgElements).forEach((key) => {
+                                svgElements[key].classList.remove('text-[#FFD700]');
+                                svgElements[key].classList.add('text-[#6B707B80]');
+                            });
+
+                            // Add yellow color to the selected star and all preceding stars
+                            for (let i = 1; i <= this.value; i++) {
+                                svgElements['S' + i].classList.remove('text-[#6B707B80]');
+                                svgElements['S' + i].classList.add('text-[#FFD700]');
+                            }
+
+                            //console.log("Selected rating:",this.value, Item.OrderID);
+                        }
+
+                        // Event listener to close the rating modal and reset values
+                        document.getElementById('CloseFeed').addEventListener('click', () => {
+                            document.getElementById('Rating').classList.add('hidden');
+
+                            // Reset the rating to default (no stars selected)
+                            document.querySelectorAll('input[name="rating"]').forEach((radio) => {
+                                radio.checked = false;  // Uncheck all radio buttons
+                            });
+
+                            // Reset star colors to grey
+                            Object.keys(svgElements).forEach((key) => {
+                                svgElements[key].classList.remove('text-[#FFD700]');
+                                svgElements[key].classList.add('text-[#6B707B80]');
+                            });
+                            document.getElementById('comment').value = '';
+                            console.log("Rating modal closed, reset values.");
+                        });
+
+
+
+
                     });
                 })
-
-            
-
         });
     }
     });
 }
+
+
 
 document.addEventListener('DOMContentLoaded', (event) => {
     fetchOrders();

@@ -1170,6 +1170,52 @@ app.get('/Order', async (req, res) => {
     }
 });
 
+
+app.post('/rate', async (req, res) => {
+    const { rating, comment, productID} = req.body;
+    const userId = req.session.user.UserID;
+    console.log(rating);
+    try{
+        const request = pool.request();
+        request.input('UserID',sql.Int,userId);
+        request.input('Rating',sql.Int,rating);
+        request.input('Comment', sql.VarChar, comment);
+        request.input('ProdID',sql.Int,productID);
+        request.query('INSERT INTO tbl_Feedback (Rate,Comment,ProductID,UserID) VALUES (@Rating,@Comment,@ProdID,@UserID)');
+
+        res.redirect('Orders.html');
+    }
+    catch{
+        res.status(500).send({ message: "Error submitting feedback" });
+    }
+});
+
+app.get('/Feedback/:product', async (req, res) => {
+    const product = req.params.product;
+
+    try {
+        const result = await pool.request()
+            .input('Product', sql.VarChar, product)
+            .query(`SELECT Rate, Comment, UserName FROM tbl_Feedback 
+                     INNER JOIN tbl_User ON tbl_User.UserID = tbl_Feedback.UserID 
+                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`); // Use parameterized query
+
+        const products = result.recordset.map(feedback => {
+            return {
+                Rate: feedback.Rate,
+                Comment: feedback.Comment,
+                Username: feedback.UserName
+            };
+        });
+
+        res.json(products);
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+
 //OrderList AdminView
 app.get('/Orders', async (req, res) => {
         
@@ -1250,7 +1296,7 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
         request.input('OrderID', sql.VarChar, productOrder);
         
         const query = `
-            SELECT P.ProductImage, P.ProductName, OI.Quantity, OI.Price
+            SELECT OI.ProductID, P.ProductImage, P.ProductName, OI.Quantity, OI.Price
             FROM tbl_OrderItem OI
             INNER JOIN tbl_Product P ON OI.ProductID = P.ProductID
             WHERE OI.OrderID = @OrderID
@@ -1259,6 +1305,7 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
 
         const orderItems = result.recordset.map(item => {
             return {
+                ProductID: item.ProductID,
                 productName: item.ProductName,
                 Quantity: item.Quantity,
                 Price: item.Price,
