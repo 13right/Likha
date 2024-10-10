@@ -305,15 +305,10 @@
 
             <div class="bg-[#D8E2C7] w-full h-auto rounded-md pb-8">
                 <h1 class="font-Montserrat font-semibold text-[24px] relative left-[6rem] top-[1rem]">Customers Reviews</h1>
-                <div class="ml-[8rem] mt-[1rem] flex">
-                    <p class="font-Montserrat font-semibold text-[32px]">5.0</p>
-                    <div class="flex ml-6 items-center space-x-4">
-                        <img src="img/star.png" alt="" class="w-[30px] h-[30px]">
-                        <img src="img/star.png" alt="" class="w-[30px] h-[30px]">
-                        <img src="img/star.png" alt="" class="w-[30px] h-[30px]">
-                        <img src="img/star.png" alt="" class="w-[30px] h-[30px]">
-                        <img src="img/star.png" alt="" class="w-[30px] h-[30px]">
-                    </div>
+                <div class="ml-[8rem] mt-[1rem] flex items-center space-x-5">
+                    <p id="Ratings" class="font-Montserrat font-semibold text-[32px]">5.0</p>
+                    <div id="star-rating" class="flex items-center"></div>
+                    <div id="NumRev">(0 Review(s))</div>
                 </div>
                 <div class="w-[30rem] h-auto ml-[8rem] mt-[1rem] space-y-4">
                     <div id="Feedback-content">
@@ -405,6 +400,44 @@
 </body>
 <script>
 
+function generateStars(rating) {
+    const starContainer = document.getElementById("star-rating");
+    starContainer.innerHTML = ""; 
+
+    const fullStars = Math.floor(rating);
+    const halfStars = rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStars;
+
+    for (let i = 0; i < fullStars; i++) {
+        starContainer.innerHTML += `
+            <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
+                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+            </svg>
+        `;
+    }
+
+    if (halfStars) {
+        starContainer.innerHTML += `
+            <div class="relative w-[4rem] h-[4rem] ms-1">
+                <svg class="absolute top-0 left-0" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                </svg>
+                <svg class="absolute top-0 left-0" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20" style="clip-path: inset(0 0 0 50%);">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                </svg>
+            </div>
+        `;
+    }
+
+    for (let i = 0; i < emptyStars; i++) {
+        starContainer.innerHTML += `
+            <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20">
+                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+            </svg>
+        `;
+    }
+}
+
         function CartOk(){
             document.getElementById('CartPopup').classList.add('hidden');
         }
@@ -425,15 +458,19 @@
 
             products.forEach(product => {
                 const productElement = document.createElement('div');
+
                 productElement.innerHTML = `
                     <div class=" w-full h-[35rem] flex">
-                <div class="w-[551px] h-[547px] relative rounded-lg">
-                    <img src="${product.imagePath}" alt="" class="relative rounded-[25px] w-[551px] h-[547px] object-cover">
-                </div>
+                    <div class="w-[551px] h-[547px] relative rounded-lg">
+                        <img id="ProdImage" src="${product.imagePath}" alt="" class="relative rounded-[25px] w-[551px] h-[547px] object-fill">
+                    </div>
 
                 <div class="flex  w-[42rem] h-[547px] relative justify-center ">
                     <div class="w-[400px] h-[113px] relative">
-                        <h1 id="prodName" class="font-Montagu font-semibold text-[48px] relative">${product.productName}</h1>
+                        <div class="w-[32rem] h-[15rem]">
+                            <h1 id="prodName" class="font-Montagu font-semibold text-[48px] relative">${product.productName}</h1>
+                        </div>
+                        
                         <p class="font-Montserrat font-semibold text-[32px] ml-[2rem]"><span>₱ <span>${product.productPrice}</p>
                         <div class=" w-[290px] h-auto p-2 ml-[2rem]">
                             <div class="flex-col space-y-4">
@@ -448,9 +485,6 @@
                         </div>
                         <div class="flex items-center space-x-4">
                             <button class="bg-[#F07C54] w-[245.42px] h-[61px] rounded-lg px-4 py-2 bg-green-500 text-[#fff] font-Montserrat ml-8" id="AddToCart">Add to cart</button>
-                            <div class="h-[40px] w-[40px] outline outline-2 outline-outline rounded-md">
-                                <img src="img/heart.png" alt="">
-                            </div>
                         </div>
                         
                     </div>
@@ -514,7 +548,6 @@
                             });
                         });
 
-
             });
     })
     .catch(error => console.error('Error fetching products:', error));
@@ -522,6 +555,8 @@
     else{
         window.location.href = 'AllCategory.html'
     }
+
+
 
     async function loadFeedback() {
     fetch(`/Feedback/${encodeURIComponent(product)}`)
@@ -531,11 +566,14 @@
             }
             throw new Error('Network response was not ok.');
         })
-        .then(products => {
+        .then(data => {
+            const { feedback, averageRating, NumRev } = data; // Destructure the feedback and averageRating from the response
+
             const productList = document.getElementById('Feedback-content');
             productList.innerHTML = '';
 
-            products.forEach(feedback => {
+            // Display feedback list
+            feedback.forEach(feedbackItem => {
                 const productElement = document.createElement('div');
                 productElement.innerHTML = `
                     <div class="flex">
@@ -543,18 +581,24 @@
                             <img src="img/d07e1291f7b11ef14eb46a9c8b8408aa.jpeg" alt="" class="object-cover h-[50px] w-[50px] rounded-full">
                         </div>
                         <div class="ml-[1rem] flex items-center space-x-5">
-                            <h1 class="font-Inter font-bold text-[14px] text-[#F07C54]">${feedback.Username}</h1>
+                            <h1 class="font-Inter font-bold text-[14px] text-[#F07C54]">${feedbackItem.Username}</h1>
                             <div class="flex space-x-2">
-                                ${'<img src="img/star.png" alt="" class="w-[13px]">'.repeat(feedback.Rate)}
+                                ${'<img src="img/star.png" alt="" class="w-[13px]">'.repeat(feedbackItem.Rate)}
                             </div>
                         </div>
                     </div>
                     <div class="ml-[4.5rem]">
-                        <p class="font-Montserrat font-normal text-[14px]">${feedback.Comment}</p>
+                        <p class="font-Montserrat font-normal text-[14px]">${feedbackItem.Comment}</p>
                     </div>
                 `;
                 productList.appendChild(productElement);
             });
+
+            // Display the average rating
+            document.getElementById('NumRev').innerText = `${NumRev.Reviews} review(s)`;
+            document.getElementById('Ratings').innerText = averageRating;
+            generateStars(averageRating); // Display the average rating using the generateStars function
+
         })
         .catch(error => console.error('Error fetching products:', error));
 }

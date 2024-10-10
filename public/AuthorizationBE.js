@@ -45,7 +45,7 @@ function submitForm() {
                 nameValue = document.getElementById("Usernametxt").value = "";
                 numValue = document.getElementById("Numbertxt").value = "";
                 Password = document.getElementById("Passwordtxt").value = "";
-                window.location.href = "SignIn.html"
+                document.getElementById('SignUpMB').classList.remove('hidden');
             } else {
                 alert("Error: " + xhr.status);
             }
@@ -70,9 +70,8 @@ function LogIn() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
-                alert("Login successful");
                 localStorage.setItem("userRole", "customer");
-                window.location.href = "Index.html";
+                document.getElementById('SignInMB').classList.remove('hidden');
             } else if (xhr.status === 401) {
                 alert("Invalid username or password");
                 document.getElementById('Passwordtxt').value = '';

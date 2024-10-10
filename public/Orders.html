@@ -392,7 +392,7 @@
         </div>   
         
         <hr class="border border-[#F07C54] mx-[47px]">
-            <form action="/rate" method="POST" class="flex flex-col items-center">
+            <form id="RatingForm" method="POST" class="flex flex-col items-center">
                 <input type="hidden" name="productID" id="product-id-input" />
         
                 <div class="relative flex items-center my-[2rem] ">
@@ -437,10 +437,14 @@
                     </label>
                 </div>
                 <textarea name="comment" id="comment" class="w-[500px] h-[200px] bg-sign border-[2px] border-outline"></textarea>
-                <button class="text-[#FFFFFF] font-Inter bg-outline rounded-lg w-[225px] h-[40px] mt-4">SUBMIT</button>
+                <button type="submit" class="text-[#FFFFFF] font-Inter bg-outline rounded-lg w-[225px] h-[40px] mt-4">SUBMIT</button>
             </form>
         </div>
-    
+        <div id="RatingThanks" class="hidden fixed flex flex-col z-30 items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-Likha w-[700px] h-[500px] rounded transition-all duration-300 drop-shadow-2xl">
+            <img class="w-[340px] h-[310px] mt-6" src="https://res.cloudinary.com/db5bsftqx/image/upload/v1728389534/b1518ce37cee9d861b76adfaefa997c3_ionqjq.png" alt="">
+            <p class="w-[448px] h-auto text-center">Your feedback help us improve, appreciate the time you took to send us feedback.</p>
+            <button id="CloseThanks" class="mt-6 w-[225px] h-[40px] bg-outline rounded-2xl text-[#FFFFFF] font-Inter font-extrabold  ">DONE</button>
+        </div>
 <script>
         document.getElementById('ALL').addEventListener('click', () => {
             fetchOrders();
@@ -709,7 +713,40 @@ function fetchOrders(Status = ''){
     });
 }
 
+document.getElementById('RatingForm').addEventListener('submit', function(event) {
+    event.preventDefault(); 
 
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/rate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('Rating').classList.add('hidden');
+            document.getElementById('RatingThanks').classList.remove('hidden');
+        } else {
+            console.error('Error submitting the rating');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+// Close the Feedback div when the close button is clicked
+document.getElementById('CloseFeed').addEventListener('click', function() {
+    document.getElementById('Rating').classList.add('hidden');
+});
+
+document.getElementById('CloseThanks').addEventListener('click', function() {
+    document.getElementById('RatingThanks').classList.add('hidden');
+});
 
 document.addEventListener('DOMContentLoaded', (event) => {
     fetchOrders();

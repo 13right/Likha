@@ -137,6 +137,12 @@
             <div class="flex justify-center md:justify-center flex-1 mb-[2rem]">
                 <img src="img/ZappnottLogo.png" class="w-[14rem] md:w-[18rem] ml-4"> 
             </div>
+            <div id="SignUpMB" class="bg-[#F8ECDC] w-[410px] h-[220px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center rounded-lg shadow-xl hidden">
+                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/v1727603906/Checked_ol98y2.png" alt="" class="w-[100px] h-[100px]">
+                <h1 class="font-Inter font-extrabold text-[#6B707B] text-center">Your Account has been Created<br>
+                    <span class="font-Montserrat font-bold text-[20px] text-[#000000]">Sucessfully!</span></h1>
+                <button class="bg-[#F07C54] w-[50px] h-[30px] rounded-full font-Inter font-extrabold text-[#FFFFFF] mt-2" onclick="OK()">OK</button>
+            </div>
             <div class="flex-1">
                 <div class=" flex flex-col items-center pt-3 m-3 bg-sign h-[28rem] w-full md:h-[32rem] md:ml-[6rem] md:pt-9 border-4 border-solid border-outline rounded-3xl md:w-[32rem] md:mb-[6rem]">
                     <H5 class="font-libre text-3xl font-semibold mb-6 md:mb-9">Sign Up</H5>
@@ -243,6 +249,10 @@
             if(window.innerWidth < 768){
             e.name === 'menu' ? (e.name = "close",list.classList.add('top-[80px]'),list.classList.add('opacity-100')) : (e.name = "menu",list.classList.remove('top-[80px]'),list.classList.remove('opacity-100'))
             }
+        }
+        function OK(){
+            document.getElementById('SignUpMB').classList.add('hidden');
+            window.location.href = "SignIn.html";
         }
         
     </script>

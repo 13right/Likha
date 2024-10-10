@@ -582,6 +582,55 @@ app.get('/UserInfo', async (req, res) => {
     }
 });
 
+
+
+app.get('/SearchBar/:inputValue', async (req, res) => {
+    const Input = req.params.inputValue;
+
+    const productQuery = `
+        SELECT TOP 4 ProductName 
+        FROM tbl_Product 
+        INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
+        WHERE ProductName LIKE '%' + @Input + '%' 
+        OR tbl_Category.CategoryName LIKE '%' + @Input + '%'
+    `;
+
+    const categoryQuery = `
+        SELECT TOP 1 CategoryName 
+        FROM tbl_Category 
+        WHERE CategoryName LIKE '%' + @Input + '%'
+    `;
+
+    try {
+        const request = pool.request();
+        request.input('Input', sql.VarChar, Input);
+
+        // Execute the product query
+        const productResult = await request.query(productQuery);
+        const products = productResult.recordset.map(product => {
+            return {
+                productName: product.ProductName
+            };
+        });
+
+        // Execute the category query
+        const categoryResult = await request.query(categoryQuery);
+        const categories = categoryResult.recordset.map(category => {
+            return {
+                categoryName: category.CategoryName
+            };
+        });
+
+        // Combine results into a single response
+        res.json({ products, categories });
+    } catch (error) {
+        console.error('Error executing query:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+
 app.post('/upload', upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
@@ -1067,6 +1116,34 @@ app.get('/productsJewelry', async (req, res) => {
     }
 });
 
+app.get('/SearchProd/:inputValue', async (req, res) => {
+    const Input = req.params.inputValue;
+    try{
+        const request = pool.request();
+        request.input('Input', sql.VarChar, Input);
+        const query = `SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, tbl_Product.CategoryID, ProductImage FROM tbl_Product
+        INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
+        WHERE  tbl_Product.ProductName LIKE '%' + @Input + '%' 
+        OR tbl_Category.CategoryName LIKE '%' + @Input + '%'`;
+        const result = await request.query(query);
+        const products = result.recordset.map(product => {
+            return {
+                productName: product.ProductName,
+                productPrice: product.Price,
+                description: product.Description,
+                stock: product.Stock,
+                categoryId: product.CategoryID,
+                imagePath: product.ProductImage
+            };
+        });
+
+        res.json(products);
+    }catch(err){
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 app.get('/productsBag', async (req, res) => {
     try {
         const result = await pool.request()
@@ -1194,17 +1271,52 @@ app.get('/Feedback/:product', async (req, res) => {
     const product = req.params.product;
 
     try {
-        const result = await pool.request()
+        const feedbackResult = await pool.request()
             .input('Product', sql.VarChar, product)
             .query(`SELECT Rate, Comment, UserName FROM tbl_Feedback 
                      INNER JOIN tbl_User ON tbl_User.UserID = tbl_Feedback.UserID 
-                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`); // Use parameterized query
+                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`);
 
-        const products = result.recordset.map(feedback => {
+        const avgRatingResult = await pool.request()
+            .input('Product', sql.VarChar, product)
+            .query(`SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating FROM tbl_Feedback 
+                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`);
+
+        const NumRev = await pool.request()
+        .input('Product', sql.VarChar, product)
+        .query(`SELECT COUNT(Rate) AS Reviews FROM tbl_Feedback 
+                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`);             
+        const products = feedbackResult.recordset.map(feedback => {
             return {
                 Rate: feedback.Rate,
                 Comment: feedback.Comment,
                 Username: feedback.UserName
+            };
+        });
+
+        const avgRating = avgRatingResult.recordset.length > 0 ? avgRatingResult.recordset[0].AvgRating : null;
+
+        console.log(NumRev);
+        res.json({ feedback: products, averageRating: avgRating, NumRev: NumRev.recordset[0] });
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+
+app.get('/FeedbackAvg/:product', async (req, res) => {
+    const product = req.params.product;
+
+    try {
+        const result = await pool.request()
+            .input('Product', sql.VarChar, product)
+            .query(`SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2))as Avg FROM tbl_Feedback
+                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`); // Use parameterized query
+
+        const products = result.recordset.map(feedback => {
+            return {
+                Avg: feedback.Avg
             };
         });
 
@@ -1214,7 +1326,6 @@ app.get('/Feedback/:product', async (req, res) => {
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
-
 
 //OrderList AdminView
 app.get('/Orders', async (req, res) => {

@@ -21,25 +21,177 @@ document.getElementById('LogOut').addEventListener('click', () => {
     });
 });
 
+document.getElementById('search-bar').addEventListener('input', function (event) {
+    const inputValue = event.target.value;
+
+    if (inputValue === '') {
+        document.getElementById('SearchCon').classList.add('hidden');
+    } else {
+        document.getElementById('SearchCon').classList.remove('hidden');
+        
+        fetch(`/SearchBar/${encodeURIComponent(inputValue)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const productList = document.getElementById('SearchCon');
+                productList.innerHTML = '';
+
+                data.categories.forEach(category => {
+                    const categoryElement = document.createElement('div');
+                    categoryElement.innerHTML = `
+                        <div class="m-5 rounded-2xl p-1 cursor-pointer hover:bg-sign">${category.categoryName}</div>
+                    `;
+                    categoryElement.addEventListener('click', () => {
+
+                        window.location.href = `/SearchProduct.html?query=${encodeURIComponent(category.categoryName)}`;
+
+                        fetch(`/SearchProd/${encodeURIComponent(category.categoryName)}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                                
+                            })
+                            .then(data => {
+                                console.log('Fetched products by category:', data);
+                            })
+                            .catch(error => console.error('Error fetching products by category:', error));
+                            document.getElementById('search-bar').value = '';
+                    });
+                    productList.appendChild(categoryElement);
+                    
+                });
+
+                data.products.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.innerHTML = `
+                        <div class="m-5 rounded-2xl p-1 hover:bg-sign cursor-pointer">${product.productName}</div>
+                    `;
+                    productElement.addEventListener('click', () => {
+                        window.location.href = `/SearchProduct.html?query=${encodeURIComponent(product.productName)}`;
+
+
+                        fetch(`/SearchProd/${encodeURIComponent(product.productName)}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Fetched products:', data);
+
+                            })
+                            .catch(error => console.error('Error fetching products:', error));
+                            document.getElementById('search-bar').value = '';
+                    });
+                    productList.appendChild(productElement);
+                });
+            })
+            .catch(error => console.error('Error fetching products:', error));
+    }
+});
+
+
+document.getElementById('search-bar').addEventListener('keydown', function (event) {
+    const inputValue = event.target.value;
+
+    if (event.key === 'Enter' && inputValue !== '') {
+
+        window.location.href = `/SearchProduct.html?query=${encodeURIComponent(inputValue)}`;
+
+        fetch(`/SearchProd/${encodeURIComponent(inputValue)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Fetched products:', data);
+
+            })
+            .catch(error => console.error('Error fetching products:', error));
+            document.getElementById('search-bar').value = '';
+    }
+});
+
+
+
 document.addEventListener('DOMContentLoaded', (event) => {
     const ProfileIcon = document.getElementById('ProfileIcon');
     const ProfileMenu = document.getElementById('ProfileMenu');
+    const NotifIcon = document.getElementById('NotifIcon');
+    const Notif = document.getElementById('Notif');
+    const container = document.getElementById('main-container');
+    //const body = document.getElementById('body');
 
-    ProfileIcon.addEventListener('click', async () => {
-       
-        const user = await fetch ('/User');
+    const closeAllMenus = () => {
+        ProfileMenu.classList.add('hidden');
+        Notif.classList.add('hidden');
+        container.classList.remove('pointer-events-none');
+        enableScroll();
+    };
 
-        if(user.ok){
-            if (!ProfileMenu.classList.contains('hidden')) {
-            ProfileMenu.classList.add('hidden');
-            } else {
+
+    ProfileIcon.addEventListener('click', async (event) => {
+        event.stopPropagation(); 
+        const user = await fetch('/User');
+
+        if (user.ok) {
+            if (ProfileMenu.classList.contains('hidden')) {
+                closeAllMenus(); 
                 ProfileMenu.classList.remove('hidden');
+            } else {
+                ProfileMenu.classList.add('hidden');
             }
-        }
-        else{
+        } else {
             window.location.href = 'SignIn.html';
         }
-           
+    });
+
+
+    NotifIcon.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        const user = await fetch('/User');
+
+        if (user.ok) {
+            if (Notif.classList.contains('hidden')) {
+                closeAllMenus(); 
+                Notif.classList.remove('hidden');
+                container.classList.add('pointer-events-none');
+                disableScroll();
+            } else {
+                Notif.classList.add('hidden');
+                container.classList.remove('pointer-events-none');
+                enableScroll();
+
+                fetch('/UpdateNotif', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        UpdatedNotif: 'read'
+                    })
+                })
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Error updating status:', error);
+                });
+            }
+        } else {
+            window.location.href = 'SignIn.html';
+        }
+    });
+
+    window.addEventListener('click', () => {
+        closeAllMenus();
     });
 });
 
@@ -76,12 +228,12 @@ async function fetchCart() {
             <div class="mt-6">
                 <div class="flex items-center space-x-10 mb-6 ml-5">
                     <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value=${productCart.productPrice}></input>
-                    <div>
-                        <img src="${productCart.productImage}" alt="Product Image" class="w-[118px] h-[145px]">
+                    <div class="w-[120px] h-[120px]">
+                        <img src="${productCart.productImage}" alt="Product Image" class="w-[120px] h-[120px] object-fill rounded-lg">
                     </div>
-                    <div>
+                    <div class="h-auto w-[20rem]">
                         <h1 class="font-Montagu font-semibold text-[24px]">${productCart.productName}</h1>
-                        <h2 class="font-Montserrat font-semibold text-[14px]">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                        <h2 class="font-Montserrat font-semibold text-[14px] mt-2">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
                         <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3">
                             <button class="MOcart">-</button>
                             <input style="background-color: transparent;" id="Quantity" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" value=${productCart.productQuantity} min="1" max="100">
@@ -280,48 +432,7 @@ function disableScroll() {
     function enableScroll() {
     window.onscroll = function() {};
     }
-document.addEventListener('DOMContentLoaded', (event) => {
-        const NotifIcon = document.getElementById('NotifIcon');
-        const Notif = document.getElementById('Notif');
-        const container = document.getElementById('main-container');
-        const body = document.getElementById('body');
 
-        NotifIcon.addEventListener('click', async () => {
-
-        const user = await fetch ('/User');
-
-        if(user.ok){
-            if (!Notif.classList.contains('hidden')) {
-            Notif.classList.add('hidden');
-            container.classList.remove('pointer-events-none');
-            enableScroll();
-            fetch('/UpdateNotif', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            UpdatedNotif: 'read'
-                        })
-                    })
-                        .then(response => {
-                            return response.json;
-                        })
-                        .catch(error => {
-                            console.error('Error updating status:', error);
-                        });
-            } else {
-                Notif.classList.remove('hidden');
-                container.classList.add('pointer-events-none');
-                disableScroll();        
-            }
-        }
-        else{
-            window.location.href = 'SignIn.html';
-        }
-        
-    });
-});
 async function fetchUser() {
     try {
         const response = await fetch('/User');

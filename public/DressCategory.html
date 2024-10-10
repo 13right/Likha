@@ -174,6 +174,13 @@
     #search-icon.expanded {
         transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
     }
+    .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    overflow: hidden;
+}
+
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <body>
@@ -502,7 +509,7 @@ fetch('/productsDress')
                         <div class="relative w-[328px] h-[500px] bg-sign outline outline-1 outline-outline flex justify-center rounded-md overflow-hidden transform hover:scale-105 cursor-pointer transition ease-in-out duration-300 group mx-[0.65rem] mb-6">
                             <img src="${product.imagePath}" alt="" class="object-fill h-full w-full rounded-md">
                             <div class="h-[124px] w-[289.19px] bg-[#FFFFFF80] absolute bottom-4 rounded-md z-10 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
-                                <p class="font-Montagu font-semibold text-[20px] mt-3">${product.productName}</p>
+                                <p class="font-Montagu font-semibold text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
                                 <div class="flex absolute bottom-2  w-[17rem] items-center">
                                     <h1 class="font-Montserrat relative bottom-0 font-semibold">₱ ${product.productPrice}</h1>
                                     <img src="img/CART.png" alt="" class="absolute right-0 cursor-pointer w-[50px] h-[50px]">
