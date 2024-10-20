@@ -528,7 +528,7 @@ function renderNotifications(products) {
         `;
         productElement.addEventListener('click', () => {
             // Update the window location with the URL hash
-            window.location.href = `http://localhost:3000/Orders.html#Order-${product.OrderID}`;
+            window.location.href = `Orders.html#Order-${product.OrderID}`;
         });
         productList.appendChild(productElement);
 
