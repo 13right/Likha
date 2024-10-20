@@ -208,7 +208,7 @@ const getNotifications = async (userID, ws) => {
             .input('UserID', sql.Int, userID);
 
         const query = `
-            SELECT DISTINCT CONCAT('Your Order ' , tbl_Order.TransactionID , ' is ' , NewStatus) AS Content, 
+            SELECT DISTINCT CONCAT('Your Order ' , tbl_Order.TransactionID , ' is ' , NewStatus) AS Content, tbl_Order.OrderID, 
             CONVERT(varchar, NotificationDate, 0) AS NotificationDate, tbl_Product.ProductImage, NotificationID, tbl_notification.Status 
             FROM tbl_notification 
             INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
@@ -228,6 +228,7 @@ const getNotifications = async (userID, ws) => {
 
         const orderItems = result.recordset.map(item => {
             return {
+                OrderID: item.OrderID,
                 Content: item.Content,
                 Date: item.NotificationDate,
                 productImage: item.ProductImage,
@@ -324,31 +325,44 @@ wss.on('connection', async (ws, req) => {
 
 
 //Update
-app.put('/updateProduct/:productName', async (req, res) => {
-    const { productName } = req.params;
-    const { updatedName, updatedPrice } = req.body;
+app.put('/updateProduct/:product', upload.single('image'), async (req, res) => {
+    const { product } = req.params;
+    const { newProductName, productPrice } = req.body;
+    
+    let result = { secure_url: null }; // Ensure result is declared
 
     try {
+        if (req.file && req.file.path) {
+            result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'img',
+                use_filename: true,
+                unique_filename: false,
+                transformation: [{ format: 'auto', quality: 'auto' }]
+            });
+
+            fs.unlinkSync(req.file.path);
+        }
 
         const request = pool.request();
-
-        request.input('ProductName',sql.VarChar,productName);
-        request.input('NewName',sql.VarChar,updatedName);
-        request.input('UpdatedPrice',sql.Int,updatedPrice);
+        request.input('Image', sql.VarChar, result.secure_url);
+        request.input('ProductName', sql.VarChar, product);
+        request.input('NewName', sql.VarChar, newProductName);
+        request.input('UpdatedPrice', sql.Int, productPrice);
 
         const query = `
             UPDATE tbl_Product
-            SET ProductName = @NewName, Price = @UpdatedPrice
+            SET ProductName = @NewName, Price = @UpdatedPrice, ProductImage = COALESCE(@Image,ProductImage)
             WHERE ProductName = @ProductName
         `;
 
-       const result = await request.query(query);
-        res.status(200).send('Product Updated')
+        await request.query(query);
+        res.status(200).send('Product Updated');
     } catch (err) {
         console.error('Database Error:', err);
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
+
 
 //Add To Cart
 
@@ -633,30 +647,28 @@ app.get('/SearchBar/:inputValue', async (req, res) => {
 
 app.post('/upload', upload.single('image'), async (req, res) => {
     try {
+        console.log(req.file.path);
         if (!req.file) {
             return res.status(400).send('No file uploaded');
         }
 
-        // Upload the image to Cloudinary
         const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'img', // Optional: Specify a folder in Cloudinary
+            folder: 'img',
             use_filename: true,
             unique_filename: false,
             transformation: [{ format: 'auto', quality: 'auto' }] 
         });
 
-        // After uploading to Cloudinary, remove the local file
         fs.unlinkSync(req.file.path);
 
         const request = await pool.request()
-            .input('ImagePath', sql.VarChar, result.secure_url) // Store Cloudinary URL in the database
+            .input('ImagePath', sql.VarChar, result.secure_url)
             .input('Pname', sql.VarChar, req.body.productName)
             .input('Price', sql.Int, req.body.productPrice)
             .input('Des', sql.VarChar, req.body.productDes)
             .input('Stock', sql.Int, req.body.Stock)
             .input('Cat', sql.Int, req.body.Cat)
             .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@ImagePath);");
-
         res.sendStatus(200);
     } catch (error) {
         console.error('Error uploading image:', error);
@@ -1038,13 +1050,15 @@ app.get('/api/messages/Admin', async (req, res) => {
 app.get('/products', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product");
+            .query("SELECT COUNT(Rate) AS Count, CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
         }
         const products = result.recordset.map(product => {
             return {
+                Count: product.Count,
+                Avg: product.AvgRating,
                 productName: product.ProductName,
                 productPrice: product.Price,
                 description: product.Description,
@@ -1078,6 +1092,32 @@ app.get('/productsDetails/:product', async (req, res) => {
                 stock: product.Stock,
                 categoryId: product.CategoryID,
                 imagePath: product.ProductImage
+            };
+        });
+
+        res.json(products);
+    }catch(err){
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+app.get('/Edit/:product', async (req, res) => {
+    const product = req.params.product;
+    try{
+        const request = pool.request();
+        request.input('productName', sql.VarChar, product);
+        const query = `SELECT ProductName,Price, Description,Stock, CategoryID, ProductImage, Discount FROM tbl_Product WHERE ProductName = @productName`;
+        const result = await request.query(query);
+        const products = result.recordset.map(product => {
+            return {
+                productName: product.ProductName,
+                productPrice: product.Price,
+                description: product.Description,
+                stock: product.Stock,
+                categoryID: product.CategoryID,
+                imagePath: product.ProductImage,
+                discount: product.Discount
             };
         });
 
@@ -1327,6 +1367,83 @@ app.get('/FeedbackAvg/:product', async (req, res) => {
     }
 });
 
+app.get('/Counts', async (req, res) => {
+    try {
+      const result = await pool.request().query(`
+        SELECT 
+          COUNT(Status) AS [All],
+          SUM(CASE WHEN Status = 'Confirmed' THEN 1 ELSE 0 END) AS Confirmed,
+          SUM(CASE WHEN Status = 'Order Packed' THEN 1 ELSE 0 END) AS OrderPacked,
+          SUM(CASE WHEN Status = 'Ready to Pick Up' THEN 1 ELSE 0 END) AS ReadyToPickUp
+        FROM tbl_Order
+      `);
+  
+      res.json(result.recordset[0]);
+    } catch (error) {
+      console.error('Error fetching order statistics:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  app.get('/SoldOut', async (req, res) => {
+    try {
+
+  
+      const result = await pool.request()
+      .query(`
+        SELECT ProductName FROM tbl_Product WHERE Stock = 1;
+        SELECT MaterialName FROM tbl_Materials WHERE Stock = 2;
+      `);
+  
+      const productsOutOfStock = result.recordsets[0]; 
+      const materialsOutOfStock = result.recordsets[1]; 
+  
+      res.json({ productsOutOfStock, materialsOutOfStock });
+    } catch (error) {
+      console.error('Error fetching out-of-stock items:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  app.get('/BestSeller', async (req, res) => {
+    try {
+      const result = await pool.request()
+      .query(`
+            SELECT TOP 5 ProductName, SUM(Quantity) AS Total FROM tbl_OrderItem
+            INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+            GROUP BY tbl_Product.ProductName, Quantity
+            ORDER BY Total DESC
+      `);
+  
+      const BestSeller = result.recordsets[0]; 
+  
+      res.json({ BestSeller });
+    } catch (error) {
+      console.error('Error fetching out-of-stock items:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  app.get('/RecentOrder', async (req, res) => {
+    try {
+      const result = await pool.request()
+      .query(`
+            SELECT TransactionID, ProductName, CategoryName, Quantity, tbl_OrderItem.Price, [Status] FROM tbl_Order
+            INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
+            INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+            INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
+            WHERE CONVERT(VARCHAR,Date,1) = CONVERT(VARCHAR,GETDATE(),1)
+      `);
+  
+      const RecentOrder = result.recordsets[0]; 
+  
+      res.json({ RecentOrder });
+    } catch (error) {
+      console.error('Error fetching out-of-stock items:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
 //OrderList AdminView
 app.get('/Orders', async (req, res) => {
         
@@ -1516,7 +1633,8 @@ app.get('/Cart', async (req, res) => {
         .input('UserID', sql.Int, ID);
         const query = `
             SELECT 
-                tbl_Product.ProductName, 
+                tbl_Product.ProductName,
+                tbl_Product.Stock, 
                 tbl_Cart.Price, 
                 tbl_Cart.Quantity, 
                 tbl_Product.ProductImage 
@@ -1538,6 +1656,7 @@ app.get('/Cart', async (req, res) => {
             const result = await request.query(query);
             const productsCart = result.recordset.map(productCart => {
                 return {
+                    Stock: productCart.Stock,
                     productName: productCart.ProductName,
                     productPrice: productCart.Price,
                     productQuantity: productCart.Quantity,
@@ -1559,7 +1678,7 @@ app.post('/PlaceOrder', async (req, res) => {
         const user = req.session.user;
             const ID = parseInt(user.UserID);
             console.log(orders)
-            const order =  pool.request()
+            const order =  await pool.request()
                 .input('ID',sql.Int,ID)
                 .query('INSERT INTO tbl_Order ([Date], UserID, Status) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT)');
         for (const order of orders) {
@@ -1583,10 +1702,14 @@ app.post('/PlaceOrder', async (req, res) => {
 
                         INSERT INTO tbl_OrderItem (Quantity, Price, ProductID, OrderID)
                         VALUES (@quantity, @Total, @ProdID, @NewOrderID);
-                        
+                                            
                         UPDATE tbl_Order
                         SET TotalPrice = (SELECT SUM(Price) FROM tbl_OrderItem WHERE OrderID = @NewOrderID)
                         WHERE OrderID = @NewOrderID
+
+                        UPDATE tbl_Product
+                        SET Stock = Stock - @quantity
+                        WHERE ProductID = @ProdID
 
                         DELETE tbl_cart FROM tbl_Cart INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_Cart.ProductID WHERE ProductName LIKE @productName AND Quantity = @quantity;
                     END

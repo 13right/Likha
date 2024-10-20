@@ -234,9 +234,9 @@ async function fetchCart() {
                     <div class="h-auto w-[20rem]">
                         <h1 class="font-Montagu font-semibold text-[24px]">${productCart.productName}</h1>
                         <h2 class="font-Montserrat font-semibold text-[14px] mt-2">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
-                        <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3">
+                        <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3 px-5">
                             <button class="MOcart">-</button>
-                            <input style="background-color: transparent;" id="Quantity" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" value=${productCart.productQuantity} min="1" max="100">
+                            <input style="background-color: transparent;" id="Quantity" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" onKeyDown="return false" value=${productCart.productQuantity} min="1" max=${productCart.Stock}>
                             <button class="AOcart">+</button>
                         </div>
                         
@@ -246,6 +246,7 @@ async function fetchCart() {
             </div>
             `;
             CartList.appendChild(CartElement);
+
         });
 
         const checkboxes = CartList.querySelectorAll('input[type="checkbox"]');
@@ -309,33 +310,40 @@ function updateSum() {
             const CartElement = Increment.closest('div[data-index]');
             const Quantity = CartElement.querySelector('#Quantity');
             const currentValue = parseInt(Quantity.value);
-            const newValue = currentValue + 1;
-            Quantity.value = newValue;
-            //console.log(newValue);
+            const MaxValue = parseInt(Quantity.getAttribute('max'));
+            if(currentValue < MaxValue){
+                const newValue = currentValue + 1;
+                Quantity.value = newValue;
+                //console.log(newValue);
 
-            const productName = CartElement.querySelector('h1').innerText;
-            //console.log(productName);
+                const productName = CartElement.querySelector('h1').innerText;
+                //console.log(productName);
 
-            const Data = {
-                ProductN: productName,
-                Quantity:  newValue
+                const Data = {
+                    ProductN: productName,
+                    Quantity:  newValue
+                }
+
+                fetch('/UpdateCart', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Data)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                    console.log('Success update:', data);
+                    fetchCart();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+            else{
+                console.log('Maximum limit reached');
             }
 
-            fetch('/UpdateCart', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Data)
-                })
-                .then(response => response.json())
-                .then(data => {
-                console.log('Success update:', data);
-                fetchCart();
-                })
-                .catch((error) => {
-                     console.error('Error:', error);
-                });
             
         }
     });
@@ -423,8 +431,6 @@ function disableScroll() {
     scrollLeft =
         window.pageXOffset || document.documentElement.scrollLeft;
     
-    
-    
     window.onscroll = function() {
     window.scrollTo(scrollLeft, scrollTop);
     };
@@ -505,7 +511,7 @@ function renderNotifications(products) {
     products.forEach(product => {
         const productElement = document.createElement('div');
         productElement.innerHTML = `
-            <div class="flex relative w-auto py-auto justify-between mr-6">
+            <div class="flex relative w-auto py-auto justify-between mr-6 cursor-pointer">
                 <div class="justify-center flex pl-2">
                     <div class="items-center flex">
                         <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
@@ -520,6 +526,10 @@ function renderNotifications(products) {
                 </div>
             </div>
         `;
+        productElement.addEventListener('click', () => {
+            // Update the window location with the URL hash
+            window.location.href = `http://localhost:3000/Orders.html#Order-${product.OrderID}`;
+        });
         productList.appendChild(productElement);
 
         const notifdot = productElement.querySelector('.notifdot');

@@ -478,9 +478,9 @@ function generateStars(rating) {
                                 <h3 class="font-Montserrat font-normal text-[14px]">Size: </h3>
                             </div>
                         </div>
-                        <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg ml-[5.5rem] mt-[2rem] mb-5">
+                        <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg ml-[5.5rem] mt-[2rem] mb-5 px-5">
                             <button id="mo" class="font-bold">-</button>
-                            <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" type="number" value="1" min="1" max="100">
+                            <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" type="number" value="1" min="1" max="1">
                             <button id="ao" class="font-bold">+</button>
                         </div>
                         <div class="flex items-center space-x-4">
@@ -493,26 +493,42 @@ function generateStars(rating) {
             </div>
                 `;
                 productList.appendChild(productElement);
-                document.addEventListener('click',function(event){
-                            const Increment = event.target.closest('#ao');
-                            if(Increment){
-                                const Quantity = productElement.querySelector('#number');
-                                const currentValue = parseInt(Quantity.value);
-                                const newValue = currentValue + 1;
-                                Quantity.value = newValue;
-                            }
-                        });
-                        document.addEventListener('click',function(event){
-                            const Decrement = event.target.closest('#mo');
-                            if(Decrement){
-                                const Quantity = productElement.querySelector('#number');
-                                const currentValue = parseInt(Quantity.value);
-                                if(currentValue > 1){
-                                const newValue = currentValue - 1;
-                                Quantity.value = newValue;
-                                }
-                            }
-                        });
+
+                document.addEventListener('click', function (event) {
+                    const quantityInput = document.querySelector('#number'); // Get the input element
+                    let currentValue = parseInt(quantityInput.value);
+
+                    // Check if the increment button was clicked
+                    if (event.target.closest('#ao') && currentValue < product.stock) {
+                        quantityInput.value = currentValue + 1;
+                    }
+
+                    // Check if the decrement button was clicked
+                    if (event.target.closest('#mo') && currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+
+                // document.addEventListener('click',function(event){
+                //             const Increment = event.target.closest('#ao');
+                //             if(Increment){
+                //                 const Quantity = productElement.querySelector('#number');
+                //                 const currentValue = parseInt(Quantity.value);
+                //                 const newValue = currentValue + 1;
+                //                 Quantity.value = newValue;
+                //             }
+                //         });
+                //         document.addEventListener('click',function(event){
+                //             const Decrement = event.target.closest('#mo');
+                //             if(Decrement){
+                //                 const Quantity = productElement.querySelector('#number');
+                //                 const currentValue = parseInt(Quantity.value);
+                //                 if(currentValue > 1){
+                //                 const newValue = currentValue - 1;
+                //                 Quantity.value = newValue;
+                //                 }
+                //             }
+                //         });
                           
                         const Add = productElement.querySelector('#AddToCart');
                         Add.addEventListener('click', function() {

@@ -55,16 +55,16 @@
             </div>
         </nav>
     </div>
-    <div class="bg-Likha min-h-screen pt-[5rem] pb-[3rem">
+    <div class="bg-Likha min-h-screen pt-[5rem] pb-[3rem]">
         
         <div id="SideBar" class="bg-[#F8ECDC] h-svh w-[80px] z-[1000] fixed flex flex-col">
             <div id="Open" class="bg-[#F8ECDC] w-[30px] h-[60px] absolute right-[-1.25rem] top-[23rem] rounded-xl items-center flex justify-center shadow-xl cursor-pointer -z-50">></div>
             <div class="relative h-[47.5rem] space-y-32">
                 <div class=" h-[30rem] w-auto mx-2 mt-[6rem] flex flex-col justify-between">
-                    <div class="cursor-pointer mx-1 h-[50px] w-auto flex items-center hover:bg-[#f7997ae2]  rounded-2xl duration-200">
+                    <a href="DashboardAd.html" class="cursor-pointer mx-1 h-[50px] w-auto flex items-center hover:bg-[#f7997ae2]  rounded-2xl duration-200">
                         <img id="Logo" class="w-[60px] h-[55px]" src="img/dashboard.png" alt="">
                         <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Dashboard</h1>
-                    </div>
+                    </a>
                     <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="OrderList.html">
                         <img class="w-[55px] h-[55px]" src="img/ordermenu.png" alt="">
                         <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Order</h1>
@@ -87,19 +87,61 @@
                     <hr class=" w-auto border-1 border-outline mx-1">
                     <div class="flex items-center cursor-auto" onclick="LogOut()">
                         <img src="img//LogOuts.png" alt="" class="cursor-pointer h-[50px] w-[50px] mx-2" onclick="LogOut()">
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">LogOut</h1>
+                        <h1 id="Brand" class="font-Montserrat  text-[20px] font-semibold opacity-0">LogOut</h1>
                     </div>
                 </div>
             </div>
             
-        </div>
-        <div class="mt-[5rem] absolute left-1/2 transform -translate-x-1/2  ">
+        </div>  
+        <div class="mt-[2rem] absolute left-1/2 transform -translate-x-1/2  ">
             <H6 class="text-6xl font-libre font-extrabold">Products</H6>
         </div>
-        <div class="flex-col space-y-[16rem] mt-[15rem]">
-            <div id="product-list" class="flex space-x-9 flex-wrap justify-center"></div>
+        <a href="AddProduct.html" class=" bg-sign border-4 border-outline h-[42px] w-[174.4px] rounded-2xl absolute right-9 mt-[10rem] flex item-center justify-center py-1 font-Montserrat font-semibold text-[16px] text-[#00000080]" id="Add">+ Add Product</a>
+        <div class="flex-col space-y-[16rem] mt-[15rem] items-center">
+            <div id="product-list" class="flex flex-wrap justify-normal ml-[7rem]"></div>
         </div>
+        <!-- <div class="w-[60rem] h-[30rem] bg-sign outline outline-outline outline-1 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 inset-0 items-center justify-center hidden" id="additionalDiv">
+            <form id="uploadForm" enctype="multipart/form-data" class="flex items-center mx-28 mt-24 space-x-32">
+                <div>
+                    <label for="file-upload" class="flex items-center p-3 cursor-pointer bg-[#D8BC8C80] w-[20rem] h-[17rem] rounded-xl">
+                        <img id="previewImage" src="img/+.png" alt="" class="mx-auto">
+                    </label>
+                    <input id="file-upload" type="file" class="hidden" name="image" onchange="previewFile()">
+                </div>
+                
+                <div class="flex-col space-y-3">
+                    <input type="text" name="productName" id="productName" class="outline outline-1 outline-outline w-[282px] h-[45px] p-3 rounded-lg" placeholder="Product Name">
+                    <input type="number" name="productPrice" id="productPrice" placeholder="Product Price" class="outline outline-1 outline-outline w-[200px] h-[40px] p-3 rounded-lg">
+                    <br>
+                    <label class="font-Montagu" for="Cat">Category:</label>
+                    <select class="rounded-lg font-Montagu outline outline-1 p-1 ml-[1rem] outline-outline" name="Cat" id="Cat">
+                        <option value="1">Bag</option>
+                        <option value="2">Dress</option>
+                        <option value="3">Jewelry</option>
+                    </select>
+                    <input type="text" name="productDes" id="productDes" class="outline outline-1 outline-outline w-[300px] h-[55px] p-3 rounded-lg" placeholder="Product Description">
+                    <label class="font-Montagu" for="Stock">Stock/s:</label> 
+                    <input style="box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);" type="number" name="Stock" id="Stock"class="outline outline-3 outline-outline w-[87px] h-[40px] p-3 rounded-lg ml-[1rem] drop-shadow-xl">
+                    <button class="bg-outline font-Montagu w-[156px] h-[25px] rounded-lg font-semibold text-[#fff]">ADD</button>
+                </div>
+            </form>
+            <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] cursor-pointer outline outline-outline outline-1 absolute right-3 top-3 z-10 flex items-center" onclick="CloseAdd()">
+                <img src="img/x.png" class="w-auto mx-auto" id="CloseAdd">
+            </div>
+        </div> -->
+        <div id="DeleteWarn" class="fixed flex flex-col items-center z-[1001] bg-[#F8ECDC] w-[551.25px] h-[418px] rounded shadow-lg left-1/2 top-1/2  transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 hidden">
+            <img src="https://res.cloudinary.com/db5bsftqx/image/upload/c_crop,w_400,h_400,ar_1:1/v1728544193/b9e885cb8d36f5f8a664a46b2e9cfc34_mjy1cn.png" alt="" class="h-[250px] aspect-square mt-4">
+            <h1 class="font-Inter font-semibold text-[20px]">Remove Product?</h1>
+            <div class="flex space-x-8 mt-6">
+                <button id="DelYes" class="w-[152px] h-[50px] bg-outline rounded-full font-Inter font-extrabold text-[#FFFFFF]">
+                    YES
+                </button>
+                <button id="DelNo" class="w-[152px] h-[50px] bg-outline rounded-full font-Inter font-extrabold text-[#FFFFFF]">
+                    NO
+                </button>
+            </div>
 
+        </div>
     </div>
 </body>
 <script>
@@ -125,42 +167,9 @@ Open.addEventListener('click', function(event){
     }
 });
 
-function generateStars(rating) {
-    const starContainer = document.getElementById("star-rating");
-    starContainer.innerHTML = ""; 
-
-    const fullStars = Math.floor(rating);
-    const halfStars = rating % 1 >= 0.5 ? 1 : 0;
-    const emptyStars = 5 - fullStars - halfStars;
-
-    for (let i = 0; i < fullStars; i++) {
-        starContainer.innerHTML += `
-            <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
-                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-            </svg>
-        `;
-    }
-
-    if (halfStars) {
-        starContainer.innerHTML += `
-            <div class="relative w-[4rem] h-[4rem] ms-1">
-                <svg class="absolute top-0 left-0" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                </svg>
-                <svg class="absolute top-0 left-0" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20" style="clip-path: inset(0 0 0 50%);">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                </svg>
-            </div>
-        `;
-    }
-
-    for (let i = 0; i < emptyStars; i++) {
-        starContainer.innerHTML += `
-            <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20">
-                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-            </svg>
-        `;
-    }
+function CloseAdd(){
+    var editForm = document.getElementById("additionalDiv");
+        editForm.classList.add("hidden");
 }
 
 fetch('/products')
@@ -170,56 +179,21 @@ fetch('/products')
             const productList = document.getElementById('product-list');
             const productElement = document.createElement('div');
             productElement.innerHTML = `
-                <div class="flex bg-[#F9FAFB] w-[302px] h-[420px] group outline outline-outline outline-1 rounded-md justify-center relative mb-[2rem]" id="product-container">
-                    <img src="${product.imagePath}" alt="${product.productName}" class="w-[302px] h-[300px] object-fill">
+                <div class="flex bg-[#F9FAFB] w-[302px] h-[465px] outline outline-outline outline-1 rounded-md justify-center relative mb-[2rem] mr-[2.5rem]" id="product-container">
+                    <img src="${product.imagePath}" alt="${product.productName}" class="w-[302px] h-[300px] object-fill rounded-t-md">
                     <button class="font-Inter flex item-center justify-center absolute right-4 mt-3 bg-[#FFFFFF] h-[40px] w-[40px] rounded-full" id="Delete"><img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1728544193/b9e885cb8d36f5f8a664a46b2e9cfc34_mjy1cn.png"></button>
                     <div class="flex flex-col z-1">  
-                        <div class="bottom-0 absolute  text-center flex-cols inset-x-0 p-4 items-center h-[8rem] w-auto">
-                            <h2 class="font-Montagu text-[17px] font-semibold">${product.productName}</h2>
-                             <div class="ml-[8rem] mt-[1rem] flex items-center space-x-5">
-                                <p id="Ratings" class="font-Montserrat font-semibold text-[32px]">5.0</p>
-                                <div id="star-rating" class="flex items-center"></div>
-                                <div>(20 Reviews)</div>
+                        <div class="bottom-0 absolute flex-cols inset-x-0 p-4 h-[11rem] w-auto">
+                            <h2 class="font-Montagu text-[17px] font-semibold leading-tight h-full max-h-14 overflow-none text-wrap">${product.productName}</h2>
+                            <div class="flex items-center space-x-3 relative h-[1rem] bottom-0">
+                                <div id="star-rating" class="flex items-center w-[10rem] h-[20rem] relative leading-tight"></div>
+                                <div class="font-Montserrat font-semibold text-[12px]">(${product.Count} Review(s))</div>
                             </div>
-                            <p>Price: ${product.productPrice}</p>
+                            <p class="font-Montserrat font-semibold text-[14px] my-3"> ₱${product.productPrice}</p>
+                            <button class="relative font-Inter left-1/2 -translate-x-1/2 h-[30px] w-[150.91px] rounded-lg text-[#fff] flex item-center p-1 justify-center bg-outline" id="Edit"><img src="img/Edit.png" class="h-6 mr-2">Edit</button>
                         </div>
                     </div>
 
-                    <div class="absolute flex inset-x-0 p-4 opacity-0 w-[318px] h-[500px] flex-col pt-[10rem] rounded-xl space-y-9 group-hover:opacity-100 transition-opacity duration-300 delay-300 bg-[#00000033] z-19">
-                        <button class="font-Inter text-[#fff] flex item-center justify-center" id="Add"><img src="img/Add.png" class="h-7 mr-2">Add</button>
-                        <button class="font-Inter text-[#fff] flex item-center justify-center" id="Edit"><img src="img/Edit.png" class="h-6 mr-2">Edit</button>
-                        
-                    </div>
-
-                    <div class="w-[60rem] h-[30rem] bg-sign outline outline-outline outline-1 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 inset-0 items-center justify-center hidden" id="additionalDiv">
-                        <form id="uploadForm" enctype="multipart/form-data" class="flex items-center mx-28 mt-24 space-x-32">
-                            <div>
-                                <label for="file-upload" class="flex items-center p-3 cursor-pointer bg-[#D8BC8C80] w-[20rem] h-[17rem] rounded-xl">
-                                    <img id="previewImage" src="img/+.png" alt="" class="mx-auto">
-                                </label>
-                                <input id="file-upload" type="file" class="hidden" name="image" onchange="previewFile()">
-                            </div>
-                            
-                            <div class="flex-col space-y-3">
-                                <input type="text" name="productName" id="productName" class="outline outline-1 outline-outline w-[282px] h-[45px] p-3 rounded-lg" placeholder="Product Name">
-                                <input type="number" name="productPrice" id="productPrice" placeholder="Product Price" class="outline outline-1 outline-outline w-[200px] h-[40px] p-3 rounded-lg">
-                                <br>
-                                <label class="font-Montagu" for="Cat">Category:</label>
-                                <select class="rounded-lg font-Montagu outline outline-1 p-1 ml-[1rem] outline-outline" name="Cat" id="Cat">
-                                    <option value="1">Bag</option>
-                                    <option value="2">Dress</option>
-                                    <option value="3">Jewelry</option>
-                                </select>
-                                <input type="text" name="productDes" id="productDes" class="outline outline-1 outline-outline w-[300px] h-[55px] p-3 rounded-lg" placeholder="Product Description">
-                                <label class="font-Montagu" for="Stock">Stock/s:</label> 
-                                <input style="box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);" type="number" name="Stock" id="Stock"class="outline outline-3 outline-outline w-[87px] h-[40px] p-3 rounded-lg ml-[1rem] drop-shadow-xl">
-                                <button class="bg-outline font-Montagu w-[156px] h-[25px] rounded-lg font-semibold text-[#fff]">ADD</button>
-                            </div>
-                        </form>
-                        <div class="bg-[#FFFFFF] w-[62px] h-[62px] rounded-[100%] cursor-pointer outline outline-outline outline-1 absolute right-3 top-3 z-10 flex items-center" onclick="CloseAdd()">
-                            <img src="img/x.png" class="w-auto mx-auto" id="CloseAdd">
-                        </div>
-                    </div>
                     <div class="w-[60rem] h-[30rem] bg-sign outline outline-outline outline-1 rounded-xl fixed top-[28rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 items-center justify-center hidden" id="editForm">
                         <form id="uploadForm" enctype="multipart/form-data" class="flex items-center mx-28 mt-24 space-x-32">
                             <div class="flex items-center bg-[#D8BC8C80] pl-9 w-[30rem] h-[17rem] rounded-xl">
@@ -239,6 +213,48 @@ fetch('/products')
                 </div>
             `;
             productList.appendChild(productElement);
+            const starContainer = productElement.querySelector('#star-rating');
+            async function generateStars(rating) {
+               
+                starContainer.innerHTML = ""; 
+
+                const fullStars = Math.floor(rating);
+                const halfStars = rating % 1 >= 0.5 ? 1 : 0;
+                const emptyStars = 5 - fullStars - halfStars;
+
+                for (let i = 0; i < fullStars; i++) {
+                    starContainer.innerHTML += `
+                        <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    `;
+                }
+
+                if (halfStars) {
+                    starContainer.innerHTML += `
+                        <div class="relative w-[4rem] h-[4rem] ms-1 ">
+                           <div>
+                             <svg class="absolute top-[1.2rem] left-0" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
+                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                            </svg>
+                            <svg class="absolute top-[1.2rem] left-0" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20" style="clip-path: inset(0 0 0 50%);">
+                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                            </svg>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                for (let i = 0; i < emptyStars; i++) {
+                    starContainer.innerHTML += `
+                        <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    `;
+                }
+            }
+
+            generateStars(product.Avg);
             
             const CloseEditButton = productElement.querySelector('#CloseEdit');
             CloseEditButton.addEventListener('click', function() {
@@ -248,67 +264,78 @@ fetch('/products')
 
             document.addEventListener('click', function(event) {
                 const editButton = event.target.closest('#Edit');
-                if (editButton) {
-                    const productContainer = editButton.closest('#product-container');
-                    const productName = productContainer.querySelector('h2').innerText;
-                    const productPrice = productContainer.querySelector('p').innerText.replace('Price: ', '');
-                    const productImage = productContainer.querySelector('img').src;
+                const productContainer = editButton.closest('#product-container');
+                const productName = productContainer.querySelector('h2').innerText;
+                //console.log(productName);
+                sessionStorage.setItem('editProduct', productName);
+                window.location.href = 'EditProduct.html';
+                // if (editButton) {
+                //     const productContainer = editButton.closest('#product-container');
+                //     const productName = productContainer.querySelector('h2').innerText;
+                //     const productPrice = productContainer.querySelector('p').innerText.replace('Price: ', '');
+                //     const productImage = productContainer.querySelector('img').src;
 
-                    const editedProductNameInput = productContainer.querySelector('#editedProductName');
-                    const editedProductPriceInput = productContainer.querySelector('#editedProductPrice');
-                    const editedProductImage = productContainer.querySelector('#editedProductImage');
-                    editedProductNameInput.value = productName;
-                    editedProductPriceInput.value = productPrice;
-                    editedProductImage.src = productImage;
+                //     const editedProductNameInput = productContainer.querySelector('#editedProductName');
+                //     const editedProductPriceInput = productContainer.querySelector('#editedProductPrice');
+                //     const editedProductImage = productContainer.querySelector('#editedProductImage');
+                //     editedProductNameInput.value = productName;
+                //     editedProductPriceInput.value = productPrice;
+                //     editedProductImage.src = productImage;
 
-                    const saveButton = productContainer.querySelector('#saveEdit');
-                    saveButton.addEventListener('click', function() {
-                        const updatedName = editedProductNameInput.value;
-                        const updatedPrice = editedProductPriceInput.value;
+                //     const saveButton = productContainer.querySelector('#saveEdit');
+                //     saveButton.addEventListener('click', function() {
+                //         const updatedName = editedProductNameInput.value;
+                //         const updatedPrice = editedProductPriceInput.value;
 
-                        fetch(`/updateProduct/${encodeURIComponent(productName)}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                updatedName: updatedName,
-                                updatedPrice: updatedPrice
-                            })
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    console.log('Product updated successfully');
-                                } else {
-                                    console.error('Failed to update product');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error updating product:', error);
-                            });
-                    });
+                //         fetch(`/updateProduct/${encodeURIComponent(productName)}`, {
+                //             method: 'PUT',
+                //             headers: {
+                //                 'Content-Type': 'application/json'
+                //             },
+                //             body: JSON.stringify({
+                //                 updatedName: updatedName,
+                //                 updatedPrice: updatedPrice
+                //             })
+                //         })
+                //             .then(response => {
+                //                 if (response.ok) {
+                //                     console.log('Product updated successfully');
+                //                 } else {
+                //                     console.error('Failed to update product');
+                //                 }
+                //             })
+                //             .catch(error => {
+                //                 console.error('Error updating product:', error);
+                //             });
+                //     });
 
-                    const editForm = productContainer.querySelector('#editForm');
-                    editForm.classList.remove('hidden');
-                }
+                //     const editForm = productContainer.querySelector('#editForm');
+                //     editForm.classList.remove('hidden');
+                // }
             });
 
             // Delete
 
             document.addEventListener('click', function(event) {
+                const DeleteWarn = document.getElementById('DeleteWarn');
+                const yes = document.getElementById('DelYes');
+                const no = document.getElementById('DelNo');
                 const DeleteButton = event.target.closest('#Delete');
                 if (DeleteButton) {
-                    const productContainer = DeleteButton.closest('#product-container');
+                    DeleteWarn.classList.remove('hidden');
+                    
+                    yes.addEventListener('click',function(event){
+                        const productContainer = DeleteButton.closest('#product-container');
 
-                    const productName = productContainer.querySelector('h2').innerText;
+                        const productName = productContainer.querySelector('h2').innerText;
 
-                    fetch(`/DeleteProduct/${encodeURIComponent(productName)}`, {
-                        method: 'DELETE'
-                    })
+                        fetch(`/DeleteProduct/${encodeURIComponent(productName)}`, {
+                            method: 'DELETE'
+                        })
                         .then(response => {
                             if (response.ok) {
                                 console.log('Product deleted successfully');
-                                window.location.href = "AdminHome.html"
+                                window.location.href = "AdminProducts.html"
                             } else {
                                 console.error('Failed to delete product');
                             }
@@ -316,35 +343,38 @@ fetch('/products')
                         .catch(error => {
                             console.error('Error deleting product:', error);
                         });
-                    // }
+                    })
+                    no.addEventListener('click',function(event){
+                        DeleteWarn.classList.add('hidden');
+                    })
                 }
             });
 
-            const addButton = productElement.querySelector('#Add');
-            addButton.addEventListener('click', function() {
-                document.getElementById('additionalDiv').classList.remove('hidden');
-            });
-            const Form = productElement.querySelector('#uploadForm')
-            Form.addEventListener('submit', async function(event) {
-                event.preventDefault();
-
-                const formData = new FormData(this);
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const messageElement = document.getElementById('message');
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    console.log("Error uploading");
-                }
-            });
+            
         });
     })
     .catch(error => console.error('Error fetching products:', error));
 
+const addButton = document.getElementById('Add');
+    addButton.addEventListener('click', function() {
+        document.getElementById('additionalDiv').classList.remove('hidden');
+    });
+    const Form = document.querySelector('#uploadForm')
+    Form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            console.log("Error uploading");
+        }
+    });
 function previewFile() {
     var preview = document.getElementById('previewImage');
     var file = document.querySelector('input[type=file]').files[0];

@@ -545,9 +545,15 @@ function fetchOrders(Status = ''){
             
             ItemList.appendChild(ItemElement);
 
-            
-        
-
+            setTimeout(() => {
+                const hash = window.location.hash;
+                if (hash) {
+                    const targetElement = document.getElementById(hash.substring(1)); 
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+                    }
+                }
+            }, 100);
             const Confirmed = ItemElement.querySelector('#Con-Circle');
             const OP = ItemElement.querySelector('#OP-Circle');
             const Ready = ItemElement.querySelector('#Ready-Circle');

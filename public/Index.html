@@ -60,7 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <style>
 
-
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 input[type="checkbox"] {
       appearance: none;
@@ -127,8 +131,6 @@ input[type="checkbox"] {
     #NotifContents::-webkit-scrollbar-thumb {
     background-color: rgba(103, 103, 103, 0.5);
     border-radius: 10px; 
-
-
     }
     #message-input{
         background-color: #f7f8ea;
@@ -480,7 +482,7 @@ input[type="checkbox"] {
             </div>
             <div class="flex items-center flex-col justify-center mt-4">
                 <div class="font-Montagu text-[#96A378] font-bold text-[64px] rotating-text relative mr-[8rem]">
-                    <p>Shop to Impress, Create To </p>
+                    <p>Shop to Impress, Create to </p>
                     <p>
                         <span class="word w-1">
                             Wear
@@ -725,7 +727,12 @@ input[type="checkbox"] {
     <script src="Rotatingtext.js"></script>
 </body>
 <script>
-
+window.addEventListener("blur",()=>{
+    document.title = "Hala balik ka na pls";
+});
+window.addEventListener("focus",()=>{
+    document.title = "Welcome to Zappnott";
+});
 </script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <script src="SliderScript.js"></script>
