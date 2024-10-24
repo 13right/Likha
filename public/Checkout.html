@@ -263,7 +263,7 @@
                                 <a href="JewelryCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Jewelry</a>
                               </div>
                             </div>
-                          </div>
+                        </div>
                           
                           
                     </li>
@@ -369,15 +369,30 @@
                             </div>
                         </div>
                     </div>
-                    <h1 class="font-Montserrat font-semibold text-[20px] ml-8 my-3">Pick Up Schedule</h1>
-                    <div class="w-[708px] h-[205px] bg-[#f07b5433] rounded items-center justify-center flex flex-col space-y-4">
-                        <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="font-Montserrat font-semibold text-[20px] ml-8 my-3">Pick Up Schedule</h1>
+                        <p class="text-[12px] w-[434px] font-Inter font-semibold text-[#00000080]">(Our working days is 10 days. Choose a date when you want to pick up your order)</p>
+                    </div>
+                    <div class="w-[708px] h-[205px] bg-[#f07b5433] rounded items-center flex flex-col ">
+                        <div class="relative space-y-1 mt-3">
                             <h1 class="font-Inter font-semibold text-[16px] text-[#00000080]">Date</h1>
-                            <div class="w-[580px] h-[40px] outline outline-2 outline-outline">
-
+                            <div id="PickUp" class="w-[580px] h-[40px] outline outline-2 outline-outline flex items-center pl-6  relative cursor-pointer">
+                                <h1 id="Indicator" class="font-Inter text-[#00000080]">
+                                    Select pick up date
+                                </h1>
+                                
+                                <svg class="-mr-1 h-5 w-5 text-gray-400 absolute right-8" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div id="dropdown" class="w-[500px] h-auto absolute bg-Likha left-1/2 -translate-x-1/2 hidden space-y-1 mt-1">
+                                <div id="date1" class="p-2 hover:bg-gray-200 cursor-pointer"></div>
+                                <div id="date2" class="p-2 hover:bg-gray-200 cursor-pointer"></div>
+                                <div id="date3" class="p-2 hover:bg-gray-200 cursor-pointer"></div>
                             </div>
                         </div>
-                        <div>
+                        
+                        <div class="hidden">
                             <h1 class="font-Inter font-semibold text-[16px] text-[#00000080]">Notes</h1>
                             <div class="w-[580px] h-[40px] outline outline-2 outline-outline">
 
@@ -530,6 +545,53 @@
     
 </body>
 <script>
+// Get the current date
+const currentDate = new Date();
+
+// Add 10 days
+const futureDate = new Date(currentDate);
+futureDate.setDate(currentDate.getDate() + 10);
+
+// Get the next three days from the future date
+const nextThreeDays = [];
+for (let i = 1; i <= 3; i++) {
+    const nextDate = new Date(futureDate);
+    nextDate.setDate(futureDate.getDate() + i);
+    nextThreeDays.push(nextDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+}
+
+// Populate the divs with the dates
+document.getElementById('date1').innerText = nextThreeDays[0];
+document.getElementById('date2').innerText = nextThreeDays[1];
+document.getElementById('date3').innerText = nextThreeDays[2];
+
+// Handle dropdown visibility
+const pickUpDiv = document.getElementById('PickUp');
+const indi = document.getElementById('Indicator');
+const dropdown = document.getElementById('dropdown');
+
+pickUpDiv.addEventListener('click', () => {
+    dropdown.classList.toggle('hidden');
+});
+
+// Handle date selection
+document.getElementById('date1').addEventListener('click', () => {
+    indi.innerText = nextThreeDays[0];
+    dropdown.classList.add('hidden');
+});
+
+document.getElementById('date2').addEventListener('click', () => {
+    indi.innerText = nextThreeDays[1];
+    dropdown.classList.add('hidden');
+});
+
+document.getElementById('date3').addEventListener('click', () => {
+    indi.innerText = nextThreeDays[2];
+    dropdown.classList.add('hidden');
+});
+
+
+
 async function fetchUser() {
     try{
         const result = await fetch('/UserInfo');
@@ -698,7 +760,8 @@ PlaceOrder.addEventListener('click',async function () {
                                     const OrderData = JSON.parse(sessionStorage.getItem('productData'));
                                     const RequestData = {
                                         OrderData,
-                                        retrieve: retrieve
+                                        retrieve: retrieve,
+                                        PickUp: indi.innerText
                                     };
                                     console.log('final',RequestData);   
                                     fetch('/PlaceOrder', {

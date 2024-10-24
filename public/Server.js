@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(cors());
-
+app.use(bodyParser.raw({ type: 'application/octet-stream', limit: '100mb' }));
 app.get('/3D', (req, res) => {
     res.sendFile(path.join(__dirname, '3D.html'));
 });
@@ -257,9 +257,23 @@ const notifyClients = (notifCount) => {
     });
 };
 
-app.post('/api/data', (req, res) => {
+app.post('/api/data/Unity', (req, res) => {
     console.log('Received data:', req.body);
     res.send({ message: 'Data received!', receivedData: req.body });
+});
+
+app.post('/upload-screenshot/Unity', (req, res) => {
+    const screenshotBuffer = req.body;
+
+    // Save the received screenshot as a file (screenshot.png)
+    fs.writeFile('screenshot.png', screenshotBuffer, (err) => {
+        if (err) {
+            console.error('Error saving screenshot:', err);
+            return res.status(500).send({ message: 'Failed to save screenshot.' });
+        }
+        console.log('Screenshot saved successfully!');
+        res.send({ message: 'Screenshot received and saved!' });
+    });
 });
 
 app.get('/getUserID', (req, res) => {
@@ -283,22 +297,19 @@ wss.on('connection', async (ws, req) => {
     try {
         const response = await axios.get('http://localhost:3000/getUserID', {
             headers: {
-                Cookie: req.headers.cookie // Pass the cookie from WebSocket request
+                Cookie: req.headers.cookie
             }
         });
 
         const userID = response.data.userID;
         console.log(`UserID: ${userID}`);
 
-        // Start checking notifications every second for the connected user
         const notifInterval = setInterval(() => checkNotifications(userID), 1000);
 
-        // Start checking messages every second for the connected user
         const messageInterval = setInterval(() => getMessages(userID, ws), 1000);
 
         const notificationInterval = setInterval(() => getNotifications(userID, ws), 1000);
 
-        // Immediately fetch messages for the user upon connection
         getMessages(userID, ws);
         getNotifications(userID, ws);
         checkNotifications(userID, ws);
@@ -306,13 +317,12 @@ wss.on('connection', async (ws, req) => {
         ws.on('message', (message) => {
             const data = JSON.parse(message);
 
-            // If the client requests a refresh of messages
             if (data.type === 'getMessages') {
-                getMessages(userID, ws); // Fetch messages again if requested
+                getMessages(userID, ws);
             }
 
             if (data.type === 'getNotifications') {
-                getNotifications(userID, ws); // Fetch notifications again if requested
+                getNotifications(userID, ws);
             }
         });
 
@@ -320,7 +330,6 @@ wss.on('connection', async (ws, req) => {
             console.log('Client disconnected');
             clients = clients.filter(client => client !== ws);
             
-            // Stop checking both notifications and messages when the client disconnects
             clearInterval(notifInterval); 
             clearInterval(messageInterval); 
             clearInterval(notificationInterval);
@@ -328,7 +337,7 @@ wss.on('connection', async (ws, req) => {
 
     } catch (error) {
         console.log('Error fetching userID:', error);
-        ws.close();  // Close WebSocket connection if userID retrieval fails
+        ws.close(); 
     }
 });
 
@@ -1541,6 +1550,30 @@ app.get('/Counts', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+// app.post('/reset-otp', async (req, res) => {
+//     const { Email } = req.body;
+
+//     try {
+//         // Reset the OTP and expiration time in the database
+//         await pool.request()
+//             .input('Email', sql.VarChar, Email)
+//             .query('UPDATE tbl_User SET OTP = NULL, otpExpiration = NULL WHERE Email = @Email');
+
+//         const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//         const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+//         await pool.request()
+//             .input('Email', sql.VarChar, Email)
+//             .input('OTP', sql.VarChar, otp)
+//             .input('otpExpiration', sql.DateTime, expirationTime)
+//             .query('UPDATE tbl_User SET OTP = @OTP, otpExpiration = @otpExpiration WHERE Email = @Email');
+
+//         return res.status(200).json({ message: 'OTP reset successfully and new OTP generated.' });
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
   app.post('/verify-otp', async (req, res) => {
     const { Email, otp } = req.body;
     console.log(Email,otp);
@@ -1548,14 +1581,15 @@ app.get('/Counts', async (req, res) => {
         // Retrieve the OTP and expiration time associated with the user's email
         const result = await pool.request()
             .input('Email', sql.VarChar, Email)
-            .query('SELECT OTP, OtpExpiration FROM tbl_User WHERE Email = @Email');
+            .query('SELECT OTP, OtpExpiration,UserID FROM tbl_User WHERE Email = @Email');
         if (result.recordset.length === 0) {
             return res.status(404).json({ message: 'Email not found' });
         }
         const storedOtp = result.recordset[0].OTP;
+        const userId = result.recordset[0].UserID;
         const expirationTime = result.recordset[0].OtpExpiration;
         const currentTime = new Date();
-        console.log('Compare:',storedOtp, otp)
+        console.log('Compare:',storedOtp, otp,userId)
         // Check if OTP is expired
         if (currentTime > expirationTime) {
             return res.status(400).json({ message: 'OTP has expired' });
@@ -1566,7 +1600,8 @@ app.get('/Counts', async (req, res) => {
             await pool.request()
                 .input('Email', sql.VarChar, Email)
                 .query('UPDATE tbl_User SET OTP = NULL, otpExpiration = NULL WHERE Email = @Email');
-            return res.status(200).json({ message: 'OTP verified successfully' });
+
+            return res.status(200).json({ message: 'OTP verified successfully' , userId});
         } else {
             // OTP does not match
             return res.status(400).json({ message: 'Invalid OTP' });
@@ -1576,6 +1611,24 @@ app.get('/Counts', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+
+app.put('/NewPassword', async (req, res) => {
+    const { NewPass, UserID } = req.body; // Use NewPass to match the frontend
+
+    try {
+        await pool.request()
+            .input('NewPass', sql.VarChar, NewPass) // Ensure the parameter is NewPass
+            .input('UserID', sql.Int, UserID)
+            .query('UPDATE tbl_User SET Password = @NewPass WHERE UserID = @UserID');
+
+        res.status(200).json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
   app.get('/RecentOrder', async (req, res) => {
     try {
@@ -1825,7 +1878,7 @@ app.get('/Cart', async (req, res) => {
 });
 //PlaceOrder
 app.post('/PlaceOrder', async (req, res) => {
-    const {OrderData, retrieve}  = req.body;
+    const {OrderData, retrieve,PickUp}  = req.body;
 
     try {
 
@@ -1835,7 +1888,8 @@ app.post('/PlaceOrder', async (req, res) => {
             const order =  await pool.request()
                 .input('ID',sql.Int,ID)
                 .input('Link',sql.VarChar,retrieve)
-                .query('INSERT INTO tbl_Order ([Date], UserID, Status,PaymentLink) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT,@Link)');
+                .input('PickUp',sql.VarChar,PickUp)
+                .query('INSERT INTO tbl_Order ([Date], UserID, Status,PaymentLink,PickUp) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT,@Link,@PickUp)');
         for (const order of OrderData) {
             
             const request = await pool.request()
