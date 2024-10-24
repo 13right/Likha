@@ -75,7 +75,7 @@
                     </div>
                     <div class="space-y-1">
                         <label class="text-[#6B707B80] font-Inter font-extrabold text-[15px]" for="productDes">Description</label>
-                        <textarea  id="productDes" class="outline outline-[3px] outline-outline w-[671px] h-[109px] bg-[#F7F8EA] p-3 rounded-lg"></textarea>
+                        <textarea name="productDes" id="productDes" class="outline outline-[3px] outline-outline w-[671px] h-[109px] bg-[#F7F8EA] p-3 rounded-lg"></textarea>
                     </div>
                 </div>
                 <div class="bg-[#F07C541A] h-[277px] w-[749px] rounded-xl shadow-md pl-6 pt-4 space-y-4">
@@ -167,6 +167,7 @@
 <script>
 
     const product = sessionStorage.getItem('editProduct');
+    const productsOutOfStock = sessionStorage.getItem('OoS');
     if(product !== null){
         fetch(`/Edit/${encodeURIComponent(product)}`)
         .then(response => response.json())
@@ -180,6 +181,28 @@
             document.getElementById('previewImage').src = data[0].imagePath;
         })
         .catch(error => console.error('Error fetching product:', error));
+        sessionStorage.removeItem('editProduct');
+    }
+    else if(productsOutOfStock !==null){
+        fetch(`/Edit/${encodeURIComponent(productsOutOfStock)}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('newProductName').value = data[0].productName;
+            document.getElementById('productDes').value = data[0].description;
+            document.getElementById('Cat').value = data[0].categoryID;
+            document.getElementById('productPrice').value = data[0].productPrice;
+            document.getElementById('productDiscount').value = data[0].discount;
+            document.getElementById('Stock').value = data[0].stock;
+            document.getElementById('previewImage').src = data[0].imagePath;
+        })
+        .catch(error => console.error('Error fetching product:', error));
+
+        const stockInput = document.getElementById('Stock');
+        if (stockInput) {
+            stockInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            stockInput.classList.add('highlight');
+        }
+        sessionStorage.removeItem('OoS');
     }
 
     const Form = document.querySelector('#uploadForm')
@@ -196,7 +219,7 @@
     console.log(formData.get('image'));
     document.getElementById('Loader').classList.remove('hidden');
     document.getElementById('Overlay').classList.remove('hidden');
-    const response = await fetch(`/updateProduct/${encodeURIComponent(product)}`, {
+    const response = await fetch(`/updateProduct/${encodeURIComponent(product || productsOutOfStock)}`, {
         method: 'PUT',
         body: formData
     });
@@ -230,4 +253,17 @@
     window.location.href = 'AdminProducts.html';
 }
 </script>
+<style>
+    .highlight {
+        animation: shake 0.5s ease;
+    }
+    
+    @keyframes shake {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.05); }
+        50% { transform: scale(1); }
+        75% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    </style>    
 </html>

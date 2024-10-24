@@ -172,7 +172,7 @@ function CloseAdd(){
         editForm.classList.add("hidden");
 }
 
-fetch('/products')
+fetch('/AdminProducts')
     .then(response => response.json())
     .then(products => {
         products.forEach(product => {

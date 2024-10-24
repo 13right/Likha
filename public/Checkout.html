@@ -677,7 +677,8 @@ PlaceOrder.addEventListener('click',async function () {
                                 if (paymentStatus === 'paid') {
                                     loader.classList.add('hidden');
                                     overlay.classList.add('hidden');
-
+                                    const retrieve = paymentStatusData.data[0].attributes.payments[0].data.id;
+                                    //console.log(retrieve);
                                     const ordersString = sessionStorage.getItem('productName');
                                     if (!ordersString) {
                                         throw new Error('No orders found in session storage.');
@@ -693,13 +694,20 @@ PlaceOrder.addEventListener('click',async function () {
                                         throw new Error('Failed to parse orders from session storage.');
                                     }
                                     console.log(JSON.parse(sessionStorage.getItem('productData')));
+
+                                    const OrderData = JSON.parse(sessionStorage.getItem('productData'));
+                                    const RequestData = {
+                                        OrderData,
+                                        retrieve: retrieve
+                                    };
+                                    console.log('final',RequestData);   
                                     fetch('/PlaceOrder', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json'
                                         },
                                         
-                                        body: JSON.stringify(JSON.parse(sessionStorage.getItem('productData')))
+                                        body: JSON.stringify(RequestData)
                                     })
                                     .then(response => {
                                         if (!response.ok) {

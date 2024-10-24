@@ -10,6 +10,25 @@
     <script src="UserPage.js"></script>
 </head>
 <style>
+
+    .highlight {
+        animation: shake 0.4s forwards ease-in-out;
+    }
+
+    @keyframes shake {
+    0% { transform: scale(1); }
+    10% { transform: scale(1.01); }
+    20% { transform: scale(1.02); } 
+    30% { transform: scale(1.03); } /* Increase to 1.05 sooner */
+    40% { transform: scale(1.04); }
+    50% { transform: scale(1.05); }  /* A slight decrease back */
+    60% { transform: scale(1.04); }
+    70% { transform: scale(1.03); }  /* Increase back to 1.05 */
+    80% { transform: scale(1.02); }
+    90% { transform: scale(1.01); }  /* Slight decrease again */
+    100% { transform: scale(1); }    /* Return to original */
+    }  
+
         input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
@@ -550,7 +569,10 @@ function fetchOrders(Status = ''){
                 if (hash) {
                     const targetElement = document.getElementById(hash.substring(1)); 
                     if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(function() {
+                            targetElement.classList.add('highlight');
+                        }, 500); 
                     }
                 }
             }, 100);

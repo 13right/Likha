@@ -369,7 +369,7 @@
         </div>
         <div class="py-1 flex" ></div>
             <div class="flex-col flex relative">
-                <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                <a href="Profile.html" class=" pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
                 <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
                 <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
                 <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
@@ -379,7 +379,7 @@
         
     </div>
     <img id="ChatLogo" src="img/ZappnottLogoOnly.png" alt="" class=" h-[4rem] fixed bottom-16 right-20 cursor-pointer z-40">
-    <div id="ChatContent" class="hidden fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
+    <div id="ChatContent" class="hidden  fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
         <div class="shadow-sm">
             <div class="flex">
                 <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
@@ -461,8 +461,11 @@ function generateStars(rating) {
 
                 productElement.innerHTML = `
                     <div class=" w-full h-[35rem] flex">
-                    <div class="w-[551px] h-[547px] relative rounded-lg">
+                    <div class="w-[551px] h-[547px] relative rounded-lg flex">
                         <img id="ProdImage" src="${product.imagePath}" alt="" class="relative rounded-[25px] w-[551px] h-[547px] object-fill">
+                        <div class="hidden w-[551px] h-[547px] bg-[#333333] bg-opacity-50 absolute rounded-lg" id="OutofStock">
+                            <div class="w-[100px] h-[100px] bg-[#000000] bg-opacity-70 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-100 rounded-full flex items-center justify-center text-[#FFFFFF]">Out of Stock</div>
+                        </div> 
                     </div>
 
                 <div class="flex  w-[42rem] h-[547px] relative justify-center ">
@@ -480,7 +483,7 @@ function generateStars(rating) {
                         </div>
                         <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg ml-[5.5rem] mt-[2rem] mb-5 px-5">
                             <button id="mo" class="font-bold">-</button>
-                            <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" type="number" value="1" min="1" max="1">
+                            <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" onKeyDown="return false" type="number" value="1" min="1" max="1">
                             <button id="ao" class="font-bold">+</button>
                         </div>
                         <div class="flex items-center space-x-4">
@@ -493,6 +496,14 @@ function generateStars(rating) {
             </div>
                 `;
                 productList.appendChild(productElement);
+
+                if(product.stock == 0){
+                    console.log('0 Stock')
+                    document.getElementById('AddToCart').disabled = true;
+                    document.getElementById('AddToCart').classList.remove('cursor-pointer');
+                    document.getElementById('AddToCart').classList.add('cursor-not-allowed');
+                    document.getElementById('OutofStock').classList.remove('hidden');
+                }
 
                 document.addEventListener('click', function (event) {
                     const quantityInput = document.querySelector('#number'); // Get the input element

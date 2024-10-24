@@ -249,12 +249,17 @@ OrderList.addEventListener('click' , function(event){
         data.productsOutOfStock.forEach(list => {
             const ListElement = document.createElement('div');
             ListElement.innerHTML = `
-                <div class="w-[280px] h-auto min-h-[72px] rounded-lg bg-Likha border-b-[5px] border-[#96A378] p-2">
+                <div class="w-[280px] h-auto min-h-[72px] rounded-lg bg-Likha border-b-[5px] border-[#96A378] p-2 cursor-pointer">
                     <h6 class="font-Inter">${list.ProductName}
                     </h6>
                 </div>
             `;
             List.appendChild(ListElement);
+            ListElement.addEventListener('click', function(event){
+                const Product = ListElement.querySelector('h6').innerText;
+                sessionStorage.setItem('OoS', Product);
+                window.location.href = 'EditProduct.html';
+            })
         });
         data.materialsOutOfStock.forEach(item => {
         const materialElement = document.createElement('div');

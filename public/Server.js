@@ -13,10 +13,11 @@ const redis = require('redis');
 const WebSocket = require('ws');
 const http = require('http');
 const cloudinary = require('cloudinary').v2;
-
+const nodemailer = require('nodemailer');
 const app = express();
 const server = http.createServer(app);
-
+const bodyParser = require('body-parser');
+const cors = require('cors');
 app.set('view engine', 'ejs');
 
 const port = process.env.PORT || 3000;
@@ -26,6 +27,9 @@ const upload = multer({ dest: 'uploads/' });
 //app.use('/images', express.static(path.join(__dirname, 'UploadedImage')));
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/3D', (req, res) => {
     res.sendFile(path.join(__dirname, '3D.html'));
@@ -253,6 +257,11 @@ const notifyClients = (notifCount) => {
     });
 };
 
+app.post('/api/data', (req, res) => {
+    console.log('Received data:', req.body);
+    res.send({ message: 'Data received!', receivedData: req.body });
+});
+
 app.get('/getUserID', (req, res) => {
     try{
         if (req.session && req.session.user) {
@@ -327,7 +336,7 @@ wss.on('connection', async (ws, req) => {
 //Update
 app.put('/updateProduct/:product', upload.single('image'), async (req, res) => {
     const { product } = req.params;
-    const { newProductName, productPrice } = req.body;
+    const { newProductName, productPrice, productDes, productDiscount, Stock, Cat } = req.body;
     
     let result = { secure_url: null }; // Ensure result is declared
 
@@ -348,10 +357,17 @@ app.put('/updateProduct/:product', upload.single('image'), async (req, res) => {
         request.input('ProductName', sql.VarChar, product);
         request.input('NewName', sql.VarChar, newProductName);
         request.input('UpdatedPrice', sql.Int, productPrice);
+        request.input('ProductDes', sql.VarChar, productDes);
+        request.input('ProductDiscount', sql.Int, productDiscount);
+        request.input('Stock', sql.Int, Stock);
+        request.input('Cat', sql.Int, Cat);
 
         const query = `
             UPDATE tbl_Product
-            SET ProductName = @NewName, Price = @UpdatedPrice, ProductImage = COALESCE(@Image,ProductImage)
+            SET ProductName = @NewName, Price = @UpdatedPrice,
+            ProductImage = COALESCE(@Image,ProductImage),
+            Stock = @Stock,CategoryID = @Cat,Description = @ProductDes,
+            Discount = @ProductDiscount
             WHERE ProductName = @ProductName
         `;
 
@@ -1046,11 +1062,39 @@ app.get('/api/messages/Admin', async (req, res) => {
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
+app.get('/AdminProducts', async (req, res) => {
+    try {
+        const result = await pool.request()
+            .query("SELECT COUNT(Rate) AS Count, CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Product not found');
+        }
+        const products = result.recordset.map(product => {
+            return {
+                Count: product.Count,
+                Avg: product.AvgRating,
+                productName: product.ProductName,
+                productPrice: product.Price,
+                description: product.Description,
+                stock: product.Stock,
+                categoryId: product.CategoryID,
+                imagePath: product.ProductImage
+            };
+            
+        });
+
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).send('Error fetching product');
+    }
+});
 
 app.get('/products', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT COUNT(Rate) AS Count, CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
+            .query("SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID WHERE tbl_Product.Stock > 0 GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1094,7 +1138,6 @@ app.get('/productsDetails/:product', async (req, res) => {
                 imagePath: product.ProductImage
             };
         });
-
         res.json(products);
     }catch(err){
         console.error('Database error:', err);
@@ -1132,7 +1175,7 @@ app.get('/productsJewelry', async (req, res) => {
     try {
 
         const result = await pool.request()
-            .query("SELECT ProductName, FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3");
+            .query("SELECT ProductName, FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3 AND Stock > 0");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1187,7 +1230,7 @@ app.get('/SearchProd/:inputValue', async (req, res) => {
 app.get('/productsBag', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1");
+            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1 AND Stock > 0");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1213,7 +1256,7 @@ app.get('/productsBag', async (req, res) => {
 app.get('/productsDress', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2");
+            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2 AND Stock > 0");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1391,8 +1434,8 @@ app.get('/Counts', async (req, res) => {
   
       const result = await pool.request()
       .query(`
-        SELECT ProductName FROM tbl_Product WHERE Stock = 1;
-        SELECT MaterialName FROM tbl_Materials WHERE Stock = 2;
+        SELECT ProductName FROM tbl_Product WHERE Stock = 0;
+        SELECT MaterialName FROM tbl_Materials WHERE Stock = 0;
       `);
   
       const productsOutOfStock = result.recordsets[0]; 
@@ -1409,10 +1452,10 @@ app.get('/Counts', async (req, res) => {
     try {
       const result = await pool.request()
       .query(`
-            SELECT TOP 5 ProductName, SUM(Quantity) AS Total FROM tbl_OrderItem
+            SELECT TOP 5 ProductName, tbl_OrderItem.ProductID, SUM(Quantity) AS TOTAL FROM tbl_OrderItem
             INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
-            GROUP BY tbl_Product.ProductName, Quantity
-            ORDER BY Total DESC
+            GROUP BY tbl_OrderItem.ProductID, tbl_Product.ProductName
+            ORDER BY TOTAL DESC
       `);
   
       const BestSeller = result.recordsets[0]; 
@@ -1423,6 +1466,116 @@ app.get('/Counts', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
+
+//   app.post('/forgot-password',async (req,res) =>{
+//         const {Email} = req.body;
+//         console.log(Email);
+//         try{
+//             const result = await pool.request()
+//             .input('Email',sql.VarChar,Email)
+//             .query('SELECT UserID FROM tbl_User WHERE Email = @Email');
+
+//             if (result.recordset.length === 0) {
+//                 return res.status(404).json({ message: 'Phone number not found' });
+//             }
+    
+//             const userId = result.recordset[0].UserID;
+//             const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+            
+
+//             console.log(userId, ' ',otp);
+//             //res.status(200).json({ message: 'OTP sent successfully' });
+//         }
+//         catch(error){
+//             console.error('Error:', error);
+//             res.status(500).send('Internal Server Error');
+//         }
+//   });
+  app.post('/forgot-password', async (req, res) => {
+    const { Email } = req.body;
+    console.log(Email);
+    try {
+        const result = await pool.request()
+            .input('Email', sql.VarChar, Email)
+            .query('SELECT UserID FROM tbl_User WHERE Email = @Email');
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: 'Email not found' });
+        }
+        const userId = result.recordset[0].UserID;
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+        // Store OTP and its expiration time in the database
+        await pool.request()
+            .input('UserID', sql.Int, userId)
+            .input('OTP', sql.VarChar, otp)
+            .input('otpExpiration', sql.DateTime, expirationTime)
+            .query('UPDATE tbl_User SET OTP = @OTP, OtpExpiration = @otpExpiration WHERE UserID = @UserID');
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+                }
+            });
+
+            const mailOptions = {
+                from: 'likhaproto@gmail.com', // Your email
+                to: Email, // Recipient's email from the request
+                subject: 'Your OTP Code',
+                text: `Your OTP code is: ${otp}`,
+                html: `<h2>Your OTP code is: ${otp}</h2>`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    return res.status(500).json({ message: 'Failed to send OTP' });
+                }
+                //console.log('Email sent:', info.response);
+                // Optionally, store the OTP in your database for verification
+                res.status(200).json({ message: 'OTP sent successfully' });
+            });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+  app.post('/verify-otp', async (req, res) => {
+    const { Email, otp } = req.body;
+    console.log(Email,otp);
+    try {
+        // Retrieve the OTP and expiration time associated with the user's email
+        const result = await pool.request()
+            .input('Email', sql.VarChar, Email)
+            .query('SELECT OTP, OtpExpiration FROM tbl_User WHERE Email = @Email');
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: 'Email not found' });
+        }
+        const storedOtp = result.recordset[0].OTP;
+        const expirationTime = result.recordset[0].OtpExpiration;
+        const currentTime = new Date();
+        console.log('Compare:',storedOtp, otp)
+        // Check if OTP is expired
+        if (currentTime > expirationTime) {
+            return res.status(400).json({ message: 'OTP has expired' });
+        }
+        // Compare stored OTP with user input
+        if (parseInt(storedOtp) == parseInt(otp)) {
+            // OTP is correct, clear the OTP and proceed
+            await pool.request()
+                .input('Email', sql.VarChar, Email)
+                .query('UPDATE tbl_User SET OTP = NULL, otpExpiration = NULL WHERE Email = @Email');
+            return res.status(200).json({ message: 'OTP verified successfully' });
+        } else {
+            // OTP does not match
+            return res.status(400).json({ message: 'Invalid OTP' });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
   app.get('/RecentOrder', async (req, res) => {
     try {
@@ -1450,7 +1603,7 @@ app.get('/Orders', async (req, res) => {
     try {
         const request = pool.request();
         const query = `SELECT TransactionID,Status, convert(varchar, Date, 0) AS Date, Name, TotalPrice
-                       FROM tbl_Order INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID;`;
+                       FROM tbl_Order INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID ORDER BY OrderID DESC;`;
         const result = await request.query(query);
         const products = result.recordset.map(product => {
             return {
@@ -1475,7 +1628,7 @@ app.get('/OrderDetails', async (req, res) => {
         const request = pool.request();
         request.input('Transac', sql.VarChar, transactionId);
         //console.log(transactionId);
-        const query = `SELECT TransactionID,Email,MobileNum, convert(varchar, Date, 0) AS Date, Status, TotalPrice, Name
+        const query = `SELECT PaymentLink,TransactionID,Email,MobileNum, convert(varchar, Date, 0) AS Date, Status, TotalPrice, Name
                        FROM tbl_Order
                        INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID
                        WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), tbl_Order.OrderID), 4) = @Transac;`;
@@ -1483,6 +1636,7 @@ app.get('/OrderDetails', async (req, res) => {
         const products = result.recordset.map(product => {
 
             return {
+                PaymentLink: product.PaymentLink,
                 OrderedDate: product.Date,
                 productOrder: product.TransactionID,
                 CustomerName: product.Name,
@@ -1671,17 +1825,18 @@ app.get('/Cart', async (req, res) => {
 });
 //PlaceOrder
 app.post('/PlaceOrder', async (req, res) => {
-    const orders  = req.body;
+    const {OrderData, retrieve}  = req.body;
 
     try {
 
         const user = req.session.user;
             const ID = parseInt(user.UserID);
-            console.log(orders)
+            console.log(OrderData)
             const order =  await pool.request()
                 .input('ID',sql.Int,ID)
-                .query('INSERT INTO tbl_Order ([Date], UserID, Status) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT)');
-        for (const order of orders) {
+                .input('Link',sql.VarChar,retrieve)
+                .query('INSERT INTO tbl_Order ([Date], UserID, Status,PaymentLink) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT,@Link)');
+        for (const order of OrderData) {
             
             const request = await pool.request()
                 .input('productName', sql.NVarChar(255), order.name)
