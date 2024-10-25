@@ -63,30 +63,30 @@
                 <div class=" h-[30rem] w-auto mx-2 mt-[6rem] flex flex-col justify-between">
                     <a href="DashboardAd.html" class="cursor-pointer mx-1 h-[50px] w-auto flex items-center hover:bg-[#f7997ae2]  rounded-2xl duration-200">
                         <img id="Logo" class="w-[60px] h-[55px]" src="img/dashboard.png" alt="">
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Dashboard</h1>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Dashboard</h1>
                     </a>
                     <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="OrderList.html">
                         <img class="w-[55px] h-[55px]" src="img/ordermenu.png" alt="">
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Order</h1>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Order</h1>
                     </a>
                     <div class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200">
                         <img class="w-[55px] h-[55px]" src="img/request.png" alt="">
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Request</h1>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Request</h1>
                     </div>
                     <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="AdminProducts.html">
                         <img class="w-[55px] h-[55px]" src="img/product.png" alt="">
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Products</h1>   
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Products</h1>   
                     </a>
                     <a class="relative h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2] rounded-2xl duration-200" href="Inbox.html">
                             <img class="w-[55px] h-[55px]" src="img/mesage.png" alt=""></img>
                             <span id="notif-badge" class="absolute top-0 left-9 w-3 h-3 inline-flex items-center justify-center text-[8px] font-bold text-[#FFFFFF] bg-[#FF0000] rounded-full"></span>
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Message</h1>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Message</h1>
                     </a>
                 </div>
                 <div class="relative bottom-0 h-[50px] w-auto mx-1">
                     <hr class=" w-auto border-1 border-outline mx-1">
                     <div class="flex items-center cursor-auto" onclick="LogOut()">
-                        <img src="img//LogOuts.png" alt="" class="cursor-pointer h-[50px] w-[50px] mx-2" onclick="LogOut()">
+                        <img src="img//LogOuts.png" alt="" class="cursor-pointer h-[50px] w-[50px] mx-2">
                         <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">LogOut</h1>
                     </div>
                 </div>
@@ -135,12 +135,13 @@
         </div>
 
         <div class="mx-[6rem] mt-[3rem] relative w-auto h-auto rounded-lg bg-sign outline outline-[3px] outline-outline p-7">
-            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-evenly space-x-6">
+            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-between  pr-[8rem] pl-[4rem]">
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Order ID</h1>
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Date</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Order Date</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Pick Up Date</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Customer Name</h1>
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Total</h1>
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Status</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080] mr-[4.5rem]">Total</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080] relative">Status</h1>
             </div>
             <div id="OrderList" ></div>
         </div>
@@ -176,6 +177,7 @@ const Brand = document.querySelectorAll('#Brand');
 Open.addEventListener('click', function(event){
     SideBar.classList.add('transition-all', 'duration-500');
     if(SideBar.classList.contains('w-[80px]')){
+        Brand.forEach(brand =>{brand.classList.remove('hidden')});
         Brand.forEach(brand =>{brand.classList.add('animation-fadeInLeft')});
         SideBar.classList.add('w-[350px]');
         SideBar.classList.remove('w-[80px]');
@@ -200,13 +202,16 @@ fetch('/Orders')
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
             <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg">
-                <div id="ProdCon" class="w-[10rem] text-center item-center h-[2rem] absolute left-[5.5rem]">
-                <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.productOrder}</h2>
+                <div id="ProdCon" class="w-[10rem] text-center item-center h-[2rem] absolute left-[1.25rem]">
+                    <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.productOrder}</h2>
                 </div>
-                <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[19rem]">
+                <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[12.5rem]">
                     <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.OrderedDate}</h2>
                 </div>
-                <div class="w-[15rem] text-center item-center h-[2rem] absolute right-[30.5rem]">
+                <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[24.25rem]">
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.PickUp}</h2>
+                </div>
+                <div class="w-[15rem] text-center item-center h-[2rem] absolute right-[26.5rem]">
                     <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.ProductName}</h2>
                 </div>
                 <div class="w-[10rem] text-center item-center h-[2rem] absolute right-[17.75rem]">

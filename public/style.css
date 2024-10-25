@@ -729,8 +729,8 @@ video {
   left: 41.5rem;
 }
 
-.left-\[5\.5rem\]{
-  left: 5.5rem;
+.left-\[4rem\]{
+  left: 4rem;
 }
 
 .left-\[50\%\]{
@@ -991,6 +991,66 @@ video {
 
 .top-\[8rem\]{
   top: 8rem;
+}
+
+.left-\[3\.5rem\]{
+  left: 3.5rem;
+}
+
+.left-\[2\.75rem\]{
+  left: 2.75rem;
+}
+
+.right-\[25\.5rem\]{
+  right: 25.5rem;
+}
+
+.right-\[27\.5rem\]{
+  right: 27.5rem;
+}
+
+.right-\[26\.5rem\]{
+  right: 26.5rem;
+}
+
+.left-\[26rem\]{
+  left: 26rem;
+}
+
+.left-\[15rem\]{
+  left: 15rem;
+}
+
+.left-\[1\.75rem\]{
+  left: 1.75rem;
+}
+
+.left-\[1rem\]{
+  left: 1rem;
+}
+
+.left-\[1\.5rem\]{
+  left: 1.5rem;
+}
+
+.left-\[1\.25rem\]{
+  left: 1.25rem;
+}
+
+.left-\[12\.5rem\]{
+  left: 12.5rem;
+}
+
+.left-\[23rem\]{
+  left: 23rem;
+}
+
+.left-\[24\.5rem\]{
+  left: 24.5rem;
+}
+
+.left-\[24\.25rem\]{
+  left: 24.25rem;
 }
 
 .-z-50{
@@ -1513,6 +1573,34 @@ video {
   margin-top: 7rem;
 }
 
+.ml-auto{
+  margin-left: auto;
+}
+
+.mr-10{
+  margin-right: 2.5rem;
+}
+
+.mr-\[10rem\]{
+  margin-right: 10rem;
+}
+
+.mr-\[7rem\]{
+  margin-right: 7rem;
+}
+
+.mr-\[5\.5rem\]{
+  margin-right: 5.5rem;
+}
+
+.mr-\[4rem\]{
+  margin-right: 4rem;
+}
+
+.mr-\[4\.5rem\]{
+  margin-right: 4.5rem;
+}
+
 .line-clamp-2{
   overflow: hidden;
   display: -webkit-box;
@@ -2004,6 +2092,10 @@ video {
   height: 100svh;
 }
 
+.h-4{
+  height: 1rem;
+}
+
 .max-h-14{
   max-height: 3.5rem;
 }
@@ -2412,6 +2504,10 @@ video {
   width: 430px;
 }
 
+.w-\[434px\]{
+  width: 434px;
+}
+
 .w-\[448px\]{
   width: 448px;
 }
@@ -2604,8 +2700,12 @@ video {
   width: 100%;
 }
 
-.w-\[434px\]{
-  width: 434px;
+.w-8{
+  width: 2rem;
+}
+
+.w-4{
+  width: 1rem;
 }
 
 .min-w-min{
@@ -2635,6 +2735,18 @@ video {
 
 .flex-grow{
   flex-grow: 1;
+}
+
+.flex-grow-\[3\]{
+  flex-grow: 3;
+}
+
+.flex-grow-\[1\]{
+  flex-grow: 1;
+}
+
+.flex-grow-\[0\]{
+  flex-grow: 0;
 }
 
 .grow{
@@ -3382,6 +3494,16 @@ video {
   background-image: url('img/BG_LIKHA.png');
 }
 
+.bg-gradient-to-t{
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+
+.from-\[\#333333\]{
+  --tw-gradient-from: #333333 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(51 51 51 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .bg-auto{
   background-size: auto;
 }
@@ -3712,6 +3834,18 @@ video {
 
 .pt-\[9rem\]{
   padding-top: 9rem;
+}
+
+.pr-\[6rem\]{
+  padding-right: 6rem;
+}
+
+.pr-\[7rem\]{
+  padding-right: 7rem;
+}
+
+.pr-\[8rem\]{
+  padding-right: 8rem;
 }
 
 .text-left{

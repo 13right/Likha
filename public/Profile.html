@@ -248,7 +248,7 @@
             </div>
             <div class="flex fixed p-3 top-1 right-1 md:right-16">
                 <div class="relative flex items-center">
-                    <input type="text" id="search-bar" class="search-bar w-0 h-8 opacity-0 transition-all duration-500 ease-in-out px-4 py-2 rounded-full border border-gray-300 focus:opacity-100 focus:w-48" placeholder="Search">
+                    <input type="text" id="search-bar" class="search-bar w-0 h-8 opacity-0 transition-all duration-500 ease-in-out px-4 py-2 rounded-full border border-gray-300 focus:opacity-100 focus:w-48" placeholder="Search" autocomplete="off">
 
                     <lord-icon
                         id="search-icon"
@@ -258,6 +258,9 @@
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
                         style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
                     </lord-icon>
+                    <div id="SearchCon" class="bg-Likha h-auto w-[15rem] absolute top-12 rounded-3xl hidden shadow-2xl">
+                        
+                    </div>
                 </div>
             
 
@@ -298,8 +301,12 @@
         <div id="main-container" class="relative min-w-min h-[40rem] top-[8rem]">
             <div class=" w-[1250px] h-[40rem] mx-auto relative">
                 <div class="w-[25rem] h-auto space-x-10 flex mb-16 ml-[3rem]">
-                    <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
-                        <img src="img/profilepic.jpeg" class="w-[80px] h-[80px] rounded-full" alt="">
+                    <div id="ProfileContain" class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline relative group">
+                        <img id="ProfilePic" src="img/profileblank.png" class="w-[80px] h-[80px] rounded-full absolute" alt="">
+                        <div id="EditProf" class="absolute flex items-center justify-center  w-[80px] h-[80px] rounded-full bg-gradient-to-t from-[#333333] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                            <h6 class="font-Inter text-Likha absolute bottom-2 text-[12px]">Edit</h6>
+                        </div>
+                        <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="insertProfileImage()" />
                     </div>
                     <div class="flex flex-col items-center justify-center">
                         <h1 id="Name" class="font-Inter font-semibold text-[15px] text-center" >
@@ -308,7 +315,7 @@
                         <h2 id="UsernameDisplay" class="font-Inter font-normal text-[14px] text-center">
                             
                         </h2>
-                        <u class=" cursor-pointer font-Inter font-normal text-[12px] text-[#00000080]"> 
+                        <u id="DeleteAcc" class="cursor-pointer font-Inter font-normal text-[12px] text-[#00000080]"> 
                             Delete Account
                         </u>
                     </div>
@@ -327,23 +334,23 @@
                                 </div>
                             </div>
                             <div >
-                                <h1 class="ml-4">Confirm Password</h1>
+                                <h1 class="ml-4">New Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="ConPass" value="">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="NewPass" value="">
                                 </div>
                                 
                             </div>
                         </div>
                         <div class="h-[15rem] w-[30rem] flex flex-col items-center mt-[4.75rem]">
                             <div>
-                                <h1 class="ml-4">New Password</h1>
+                                <h1 class="ml-4">Confirm Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="NewPass" value="">
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="ConPass" value="">
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    
                     <div id="ProfileEdit" class=" w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center">
                         <div class="h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
                             <div class="relative">
@@ -436,7 +443,7 @@
         <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
             <div class="flex flex-col items-center">
                 <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
-                    <img src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
+                    <img id="ProfilePicMenu" src="img/profilepic.jpeg" alt="" class="w-[80px] h-[80px] rounded-full">
                 </div>
                 <div class="font-Inter" id="UsernameMenu">
                     
@@ -453,10 +460,145 @@
             </div>
             
         </div>
+        <div id="DeleteAccModal" class="fixed top-1/2 z-30 items-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform transition-all duration-300">
+            <div class="">
+                <img src="img/DeleteOrange.png" class="w-[100px] ml-[34%]" alt="">
+                <div class="relative left-1/2 -translate-x-1/2 flex flex-col space-y-1 items-center w-[19rem] text-center">
+                    <span>Are you sure you want to delete this account?</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-around mt-5">
+                <button id="Yes" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8">YES</button>
+                <button id="No"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
+            </div>
+
+        </div> 
     </div>
     
 </body>
 <script>
+    const Modal = document.getElementById('DeleteAccModal');
+    const Yes = document.getElementById('Yes');
+    const No = document.getElementById('No');
+    document.getElementById('DeleteAcc').addEventListener('click', async () => {
+        Modal.classList.remove('hidden');
+        No.addEventListener('click', async () => {
+        Modal.classList.add('hidden');
+        });
+        Yes.addEventListener('click', async() => {
+            fetch('/DeleteAcc', {
+                method: 'PUT'
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Account deleted successfully');
+                    fetch('/LogOut', {
+                        method: 'POST',
+                        credentials: 'include',
+                    })
+                    .then(response => {
+                        console.log('Response Status:', response.status);
+                        return response.json().then(data => ({ status: response.status, body: data }));
+                    })
+                    .then(({ status, body }) => {
+                        if (status === 200) {
+                            alert('Logout successful');
+                            window.location.href = 'SignIn.html';
+                        } else {
+                            alert('Error logging out: ' + body);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error logging outt'+ error);
+                    });
+                    window.location.href = "Index.html"
+                } else {
+                    console.error('Failed to delete Account');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting Account:', error);
+            });
+        });
+    });
+    document.getElementById('Change').addEventListener('click', async () => {
+    const oldPassword = document.getElementById('OldPass').value;
+    const newPassword = document.getElementById('NewPass').value;
+    const confirmPassword = document.getElementById('ConPass').value;
+
+    if (oldPassword && newPassword && confirmPassword) {
+        if (newPassword === confirmPassword) {
+            try {
+                const response = await fetch('/ChangePass', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        oldPassword: oldPassword,
+                        newPassword: newPassword,
+                    }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Password change failed: ' + data.message);
+                }
+            } catch (error) {
+                alert('An error occurred: ' + error.message);
+            }
+        } else {
+            alert('New Password and Confirm Password do not match. Please try again.');
+        }
+    } else {
+        alert('Please fill in all the fields before proceeding.');
+    }
+});
+
+    async function insertProfileImage() {
+            const userId = 'YOUR_USER_ID'; // Replace with the actual user ID
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('userId', userId); // Append user ID to form data
+
+            // Make a PUT request to update the image URL in the database
+            try {
+                const response = await fetch('/updateProfileImage', {
+                    method: 'PUT',
+                    body: formData, // Send FormData directly
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.text(); // Use text() if expecting a simple response
+                console.log('Profile image updated successfully:', result);
+
+                // Update the profile image in the UI
+                const updatedImageUrl = URL.createObjectURL(file);
+                document.getElementById('ProfilePic').src = updatedImageUrl; // Show the uploaded image
+            } catch (error) {
+                console.error('Error updating profile image in database:', error);
+            }
+        }
+document.getElementById('EditProf').addEventListener('click', () => {
+    const fileInput = document.getElementById('fileInput');
+    fileInput.click();
+});
 document.addEventListener('DOMContentLoaded', function() {
         const saveButton = document.getElementById('Save');
         const nameInput = document.getElementById('NameInput');
@@ -574,6 +716,10 @@ async function fetchUser() {
             document.getElementById('NameInput').value = User.Name;
             document.getElementById('Email').value = User.Email;
             document.getElementById('UsernameDisplay').innerText = UserName;
+            if(User.ProfilePic){
+                document.getElementById('ProfilePic').src = User.ProfilePic;
+            }
+            
         }
     }
     catch(error){

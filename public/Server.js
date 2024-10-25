@@ -236,7 +236,8 @@ const getNotifications = async (userID, ws) => {
                 Content: item.Content,
                 Date: item.NotificationDate,
                 productImage: item.ProductImage,
-                Status: item.Status
+                Status: item.Status,
+                NotificationID: item.NotificationID
             };
         });
 
@@ -341,6 +342,42 @@ wss.on('connection', async (ws, req) => {
     }
 });
 
+app.put('/updateProfileImage', upload.single('image'), async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID); // Assuming the user ID is sent in the request body
+    let result = { secure_url: null }; // To store the uploaded image URL
+
+    try {
+        if (req.file && req.file.path) {
+            // Upload the image to Cloudinary
+            result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'img', // Cloudinary folder where images are stored
+                use_filename: true,
+                unique_filename: false,
+                transformation: [{ format: 'auto', quality: 'auto' }]
+            });
+
+            // Remove the file from the local server after upload
+            fs.unlinkSync(req.file.path);
+        }
+
+        const request = pool.request();
+        request.input('UserId', sql.Int, ID); // Input for user ID
+        request.input('Image', sql.VarChar, result.secure_url); // Image URL
+
+        const query = `
+            UPDATE tbl_User
+            SET ProfilePic = @Image
+            WHERE UserID = @UserId
+        `;
+
+        await request.query(query);
+        res.status(200).send('Profile image updated successfully');
+    } catch (err) {
+        console.error('Database Error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
 
 //Update
 app.put('/updateProduct/:product', upload.single('image'), async (req, res) => {
@@ -489,6 +526,70 @@ app.delete('/DeleteProduct/:productName', async (req, res) => {
     }
 });
 
+app.delete('/CartDel', async (req,res) => {
+    const {id} = req.body;
+    try{
+        const request = pool.request();
+
+        request.input('ID',sql.Int,id);
+
+        const query = `
+        DELETE FROM tbl_Cart WHERE CartID = @ID
+        `;
+        console.log(query);
+        const result = await request.query(query);
+        res.status(200).send('Product Deleted');
+    }
+    catch(err){
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+app.put('/ChangePass', async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    const { oldPassword, newPassword } = req.body;
+
+    try {
+        const result = await pool.request()
+            .input('ID', sql.Int, ID)
+            .input('NewPass', sql.VarChar, newPassword)
+            .input('OldPass', sql.VarChar, oldPassword)
+            .query('UPDATE tbl_User SET Password = @NewPass WHERE UserID = @ID AND Password = @OldPass');
+        
+        // Check if any rows were affected (password was updated)
+        if (result.rowsAffected[0] > 0) {
+            res.status(200).send({ message: 'Password Changed' });
+        } else {
+            res.status(400).json({ message: 'Old password is incorrect.' });
+        }
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+
+app.put('/DeleteAcc', async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    try{
+        const request = await pool.request();
+        request.input('ID',sql.Int,ID);
+        const query = `
+        UPDATE tbl_User SET Status = 'InActive' WHERE UserID = @ID
+        `;
+        console.log(query);
+        const result = await request.query(query);
+        res.status(200).send('Product Deleted');
+    }
+    catch(err){
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 //SignUp
 app.post('/SignUp', async (req, res) => {
     const { name, num, Password } = req.body;
@@ -516,7 +617,7 @@ app.post('/LogIn', async (req, res) => {
     try {
         const request = await pool.request()
         .input('username', sql.NVarChar, username)
-        .query('SELECT * FROM tbl_User WHERE UserName = @username');
+        .query(`SELECT * FROM tbl_User WHERE UserName = @username AND Status = 'Active'`);
 
         const user = request.recordset[0];
 
@@ -1655,7 +1756,7 @@ app.get('/Orders', async (req, res) => {
         
     try {
         const request = pool.request();
-        const query = `SELECT TransactionID,Status, convert(varchar, Date, 0) AS Date, Name, TotalPrice
+        const query = `SELECT TransactionID,tbl_Order.Status, convert(varchar, Date, 0) AS Date,convert(varchar, PickUp, 0) AS PickUp, Name, TotalPrice
                        FROM tbl_Order INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID ORDER BY OrderID DESC;`;
         const result = await request.query(query);
         const products = result.recordset.map(product => {
@@ -1664,8 +1765,8 @@ app.get('/Orders', async (req, res) => {
                 productOrder: product.TransactionID,
                 ProductName: product.Name,
                 ProductTotal: product.TotalPrice,
-                Status: product.Status
-
+                Status: product.Status,
+                PickUp: product.PickUp
             };
         });
         res.json(products);
@@ -1839,7 +1940,8 @@ app.get('/Cart', async (req, res) => {
         const request = pool.request()
         .input('UserID', sql.Int, ID);
         const query = `
-            SELECT 
+            SELECT
+                tbl_Cart.CartID, 
                 tbl_Product.ProductName,
                 tbl_Product.Stock, 
                 tbl_Cart.Price, 
@@ -1867,7 +1969,8 @@ app.get('/Cart', async (req, res) => {
                     productName: productCart.ProductName,
                     productPrice: productCart.Price,
                     productQuantity: productCart.Quantity,
-                    productImage: productCart.ProductImage
+                    productImage: productCart.ProductImage,
+                    CartID: productCart.CartID
                 };
             });
             res.json(productsCart);
@@ -2039,6 +2142,32 @@ app.get('/NotifBadge', async (req, res) => {
 
 
 app.put('/UpdateNotif', async (req, res) => {
+    const { UpdatedNotif, OrderId,NotifID } = req.body;
+    console.log('Runnning sya boss', UpdatedNotif, ' ',OrderId);
+    const user = req.session.user;
+
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const ID = parseInt(user.UserID);
+    try {
+        //console.log(UpdatedNotif);
+        const request = pool.request()
+        .input('UserID', sql.Int, ID)
+        .input('Status',sql.VarChar,UpdatedNotif)
+        .input('OrderID',sql.Int,OrderId)
+        .input('NotifID',sql.Int,NotifID)
+        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID WHERE (tbl_notification.Status = 'unread' OR tbl_notification.Status = 'Seen') AND tbl_Order.UserID = @UserID AND tbl_notification.OrderID = @OrderID AND tbl_notification.NotificationID = @NotifID");
+
+        res.status(200).json();
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+app.put('/UpdateNotif/Seen', async (req, res) => {
     const { UpdatedNotif } = req.body;
     //console.log(UpdatedNotif);
     const user = req.session.user;

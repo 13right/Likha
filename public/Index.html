@@ -408,7 +408,7 @@ input[type="checkbox"] {
             </div>
             <div class="flex fixed p-3 top-1 right-1 md:right-16">
                 <div class="relative flex items-center">
-                    <input type="text" id="search-bar" class="search-bar w-0 h-8 opacity-0 transition-all duration-500 ease-in-out px-4 py-2 rounded-full border border-gray-300 focus:opacity-100 focus:w-48" placeholder="Search">
+                    <input type="text" id="search-bar" class="search-bar w-0 h-8 opacity-0 transition-all duration-500 ease-in-out px-4 py-2 rounded-full border border-gray-300 focus:opacity-100 focus:w-48" placeholder="Search" autocomplete="off">
 
                     <lord-icon
                         id="search-icon"
@@ -418,7 +418,7 @@ input[type="checkbox"] {
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
                         style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
                     </lord-icon>
-                    <div id="SearchCon" class="bg-Likha h-auto w-[15rem] absolute top-12 rounded-3xl hidden">
+                    <div id="SearchCon" class="bg-Likha h-auto w-[15rem] absolute top-12 rounded-3xl hidden shadow-2xl">
                         
                     </div>
                 </div>
@@ -706,7 +706,7 @@ input[type="checkbox"] {
         <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
             <div class="flex flex-col items-center">
                 <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603934/profilepic_a2oexz.jpg" alt="" class="w-[80px] h-[80px] rounded-full">
+                    <img id="ProfilePicMenu" src="img/profileblank.png" alt="" class="w-[80px] h-[80px] rounded-full">
                 </div>
                 <div id="UsernameMenu" class="font-Inter">
                     jennierubyjane

@@ -84,37 +84,32 @@
             <div id="Open" class="bg-[#F8ECDC] w-[30px] h-[60px] absolute right-[-1.25rem] top-[23rem] rounded-xl items-center flex justify-center shadow-xl cursor-pointer -z-50">></div>
             <div class="relative h-[47.5rem] space-y-32">
                 <div class=" h-[30rem] w-auto mx-2 mt-[6rem] flex flex-col justify-between">
-                    <div id="Dashboard">
-                        <div id="Container" class="mx-1 h-[50px] w-auto flex items-center">
-                            <img id="Logo" class="w-[60px] h-[55px] cursor-pointer hover:bg-[#f7997ae2] rounded-2xl duration-200" src="img/dashboard.png" alt="">
-                            <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Dashboard</h1>
-                        </div>
-                    </div>
-                    <div id="OrderList">
-                        <div id="Container" class="h-[50px] w-auto mx-1 flex items-center" href="OrderList.html">
-                            <img class="w-[55px] h-[55px] cursor-pointer hover:bg-[#f7997ae2] rounded-2xl duration-200" src="img/ordermenu.png" alt="">
-                            <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Order</h1>
-                        </div>
-                    </div>
-
-                    <div id="Container" class=" h-[50px] w-auto mx-1 flex items-center">
+                    <a href="DashboardAd.html" class="cursor-pointer mx-1 h-[50px] w-auto flex items-center hover:bg-[#f7997ae2]  rounded-2xl duration-200">
+                        <img id="Logo" class="w-[60px] h-[55px]" src="img/dashboard.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Dashboard</h1>
+                    </a>
+                    <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="OrderList.html">
+                        <img class="w-[55px] h-[55px]" src="img/ordermenu.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Order</h1>
+                    </a>
+                    <div class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200">
                         <img class="w-[55px] h-[55px]" src="img/request.png" alt="">
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Request</h1>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Request</h1>
                     </div>
-                    <div id="Container" class=" h-[50px] w-auto mx-1 flex items-center">
-                        <img class="w-[55px] h-[55px] cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" src="img/product.png" alt="">
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Products</h1>   
-                    </div>
-                    <a id="Container" class="relative h-[50px] w-auto mx-1 flex items-center" href="Inbox.html">
-                            <img class="w-[55px] h-[55px] cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" src="img/mesage.png" alt=""></img>
+                    <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="AdminProducts.html">
+                        <img class="w-[55px] h-[55px]" src="img/product.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Products</h1>   
+                    </a>
+                    <a class="relative h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2] rounded-2xl duration-200" href="Inbox.html">
+                            <img class="w-[55px] h-[55px]" src="img/mesage.png" alt=""></img>
                             <span id="notif-badge" class="absolute top-0 left-9 w-3 h-3 inline-flex items-center justify-center text-[8px] font-bold text-[#FFFFFF] bg-[#FF0000] rounded-full"></span>
-                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">Message</h1>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Message</h1>
                     </a>
                 </div>
                 <div class="relative bottom-0 h-[50px] w-auto mx-1">
                     <hr class=" w-auto border-1 border-outline mx-1">
                     <div class="flex items-center cursor-auto" onclick="LogOut()">
-                        <img src="img//LogOuts.png" alt="" class="cursor-pointer h-[50px] w-[50px] mx-2" onclick="LogOut()">
+                        <img src="img//LogOuts.png" alt="" class="cursor-pointer h-[50px] w-[50px] mx-2">
                         <h1 id="Brand" class="font-Montserrat  text-[20px] font-semibold opacity-0">LogOut</h1>
                     </div>
                 </div>
@@ -203,7 +198,6 @@
 </body>
 <script>
 const SideBar = document.getElementById('SideBar');
-const OrderList = document.getElementById('OrderList');
 const Open = document.getElementById('Open');
 const Logo = document.getElementById('Logo');
 const Container = document.querySelectorAll('#Container');
@@ -212,10 +206,10 @@ const Brand = document.querySelectorAll('#Brand');
 Open.addEventListener('click', function(event){
     SideBar.classList.add('transition-all', 'duration-500');
     if(SideBar.classList.contains('w-[80px]')){
+        Brand.forEach(brand =>{brand.classList.remove('hidden')});
         Brand.forEach(brand =>{brand.classList.add('animation-fadeInLeft')});
         SideBar.classList.add('w-[350px]');
         SideBar.classList.remove('w-[80px]');
-        Container.classList .add('cursor-pointer','hover:bg-[#f7997ae2]','rounded-2xl','duration-200');
         Open.innerText = '<';
     }
     else if(SideBar.classList.contains('w-[350px]')){
@@ -223,12 +217,8 @@ Open.addEventListener('click', function(event){
         Brand.forEach(brand =>{brand.classList.add('animation-fadeInRight')});
         SideBar.classList.add('w-[80px]');
         SideBar.classList.remove('w-[350px]');
-        Container.classList.remove('cursor-pointer','hover:bg-[#f7997ae2]','rounded-2xl','duration-200');
         Open.innerText = '>';
     }
-});
-OrderList.addEventListener('click' , function(event){
-    window.location.href = 'OrderList.html'
 });
 
     fetch('/Counts')

@@ -166,24 +166,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 Notif.classList.remove('hidden');
                 container.classList.add('pointer-events-none');
                 disableScroll();
-            } else {
-                Notif.classList.add('hidden');
-                container.classList.remove('pointer-events-none');
-                enableScroll();
-
-                fetch('/UpdateNotif', {
+                fetch('/UpdateNotif/Seen', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        UpdatedNotif: 'read'
+                        UpdatedNotif: 'Seen'
                     })
                 })
                 .then(response => response.json())
                 .catch(error => {
                     console.error('Error updating status:', error);
                 });
+            } else {
+                Notif.classList.add('hidden');
+                container.classList.remove('pointer-events-none');
+                enableScroll();
             }
         } else {
             window.location.href = 'SignIn.html';
@@ -226,7 +225,7 @@ async function fetchCart() {
             CartElement.dataset.index = index;  
             CartElement.innerHTML = `
             <div class="mt-6">
-                <div class="flex items-center space-x-10 mb-6 ml-5">
+                <div class="flex items-center space-x-10 mb-6 ml-5 relative">
                     <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value=${productCart.productPrice}></input>
                     <div class="w-[120px] h-[120px]">
                         <img src="${productCart.productImage}" alt="Product Image" class="w-[120px] h-[120px] object-fill rounded-lg">
@@ -241,11 +240,57 @@ async function fetchCart() {
                         </div>
                         
                     </div>
+                    <img id="RemoveCart" src="img/ekis.png" alt="" class="absolute w-4 h-4 right-8 top-0 cursor-pointer">
                 </div>
                 <hr class="border-1 border-outline w-auto ">
+                        <div id="DeleteModal" class="fixed top-1/2 z-30 items-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform transition-all duration-300">
+                            <div class="">
+                                <img src="img/DeleteOrange.png" class="w-[100px] ml-[34%]" alt="">
+                                <div class="relative left-1/2 -translate-x-1/2 flex flex-col space-y-1 items-center w-[19rem] text-center">
+                                    <span>Remove Product?</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-around mt-5">
+                                <button id="Yes" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8">YES</button>
+                                <button id="No"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
+                            </div>
+
+                        </div> 
             </div>
             `;
             CartList.appendChild(CartElement);
+            CartElement.querySelector('#RemoveCart').addEventListener('click', async () =>{
+                CartElement.querySelector('#DeleteModal').classList.remove('hidden');
+                CartElement.querySelector('#No').addEventListener('click',async () => {
+                    CartElement.querySelector('#DeleteModal').classList.add('hidden');
+                });
+                CartElement.querySelector('#Yes').addEventListener('click',async () => {
+                    const cartID = productCart.CartID;
+                    try {
+                        const response = await fetch(`/CartDel`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                id: cartID, // Include the cart ID in the request body
+                                // Add any additional data you need to send
+                            }),
+                        });
+        
+                        if (response.ok) {
+                            console.log(`Item with ID ${cartID} removed from the cart.`);
+                            CartElement.querySelector('#DeleteModal').classList.add('hidden');
+                            CartElement.remove(); // Remove the item from the UI
+                        } else {
+                            console.error('Failed to delete item:', response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
             if(productCart.Stock == 0){
                 CartElement.classList.add('hidden');
             }
@@ -458,9 +503,9 @@ async function fetchUser() {
 }
 // Initialize a WebSocket connection
 //const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-const socket = new WebSocket('ws://localhost:3000');
+//const socket = new WebSocket('ws://localhost:3000');
 //const socket = new WebSocket('ws://192.168.0.250:3000'); // Replace with actual WebSocket URL
-//const socket = new WebSocket('wss://zappnott.shop/ws');
+const socket = new WebSocket('wss://zappnott.shop/ws');
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
@@ -529,20 +574,44 @@ function renderNotifications(products) {
                 </div>
             </div>
         `;
-        productElement.addEventListener('click', () => {
-            // Update the window location with the URL hash
-            window.location.href = `Orders.html#Order-${product.OrderID}`;
+        productElement.addEventListener('click', async () => {
+            try {
+                await updateNotificationStatus(product.OrderID,product.NotificationID);
+                window.location.href = `Orders.html#Order-${product.OrderID}`;
+            } catch (error) {
+                console.error('Error updating notification status:', error);
+            }
         });
         productList.appendChild(productElement);
 
         const notifdot = productElement.querySelector('.notifdot');
-        if (product.Status === 'unread') {
+        if (product.Status === 'unread'|| product.Status === 'Seen') {
             notifdot.classList.remove('hidden');
         } else {
             notifdot.classList.add('hidden');
         }
     });
 }
+
+async function updateNotificationStatus(orderId,NotifID) {
+    const response = await fetch('/UpdateNotif', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            UpdatedNotif: 'read',
+            OrderId: orderId,
+            NotifID: NotifID
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+}
+
 let previousMessageCount = 0;
 let UserID; 
 
@@ -657,6 +726,7 @@ function updateNotificationBadge(count) {
     const notifBadge = document.getElementById('notif-badge');
     const notifPing = document.getElementById('notifBadge');
 
+
     if (count > 0) {
         notifBadge.style.display = 'inline-flex';
         notifPing.style.display = 'inline-flex';
@@ -679,6 +749,13 @@ async function fetchUserInfo() {
             UserID = User.UserID;
             document.getElementById('UsernameMenu').innerText = UserName;
             //console.log(UserID);
+            if(User.ProfilePic){
+                console.log('Meron sya ayaw lang lumabas');
+                document.getElementById('ProfilePicMenu').src = User.ProfilePic;
+            }
+            else{
+                console.log('null pic');
+            }
         }
     }
     catch(error){
