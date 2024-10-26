@@ -30,11 +30,12 @@ function submitForm() {
     var nameValue = document.getElementById("Usernametxt").value;
     var numValue = document.getElementById("Numbertxt").value;
     var Password = document.getElementById("Passwordtxt").value;
-
+    var Email = document.getElementById("Emailtxt").value;
    var formData = {
         name: nameValue,
         num: numValue,
-        Password: Password
+        Password: Password,
+        Email: Email
    };
    console.log(formData);
 

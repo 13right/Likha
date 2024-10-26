@@ -233,14 +233,24 @@ async function fetchCart() {
             CartElement.dataset.index = index;  
             CartElement.innerHTML = `
             <div class="mt-6">
-                <div class="flex items-center space-x-10 mb-6 ml-5 relative">
+                <div class="flex items-center space-x-10 mb-6 ml-5 relative ">
                     <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value=${productCart.productPrice}></input>
-                    <div class="w-[120px] h-[120px]">
+                    <div id="CartPhoto" class="w-[120px] h-[120px] relative flex cursor-pointer">
                         <img src="${productCart.productImage}" alt="Product Image" class="w-[120px] h-[120px] object-fill rounded-lg">
+                        <div class="hidden w-[106px] h-[120px] bg-[#333333] bg-opacity-50 absolute rounded-lg" id="OutofStockCart">
+                            <div class="w-[50px] h-[50px] bg-[#000000] bg-opacity-70 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-100 rounded-full flex items-center justify-center">
+                                <p class="font-Inter text-[8px] text-[#ffff]">
+                                Out of Stock
+                                </p>
+                            </div>
+                        </div> 
                     </div>
                     <div class="h-auto w-[20rem]">
-                        <h1 class="font-Montagu font-semibold text-[24px]">${productCart.productName}</h1>
-                        <h2 class="font-Montserrat font-semibold text-[14px] mt-2">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                        <div id="NameAndPrice" class="cursor-pointer">
+                            <h1 class="font-Montagu font-semibold text-[24px]">${productCart.productName}</h1>
+                            <h2 class="font-Montserrat font-semibold text-[14px] mt-2">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                        </div>                    
+
                         <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3 px-5">
                             <button class="MOcart">-</button>
                             <input style="background-color: transparent;" id="Quantity" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" onKeyDown="return false" value=${productCart.productQuantity} min="1" max=${productCart.Stock}>
@@ -248,7 +258,7 @@ async function fetchCart() {
                         </div>
                         
                     </div>
-                    <img id="RemoveCart" src="img/ekis.png" alt="" class="absolute w-4 h-4 right-8 top-0 cursor-pointer">
+                    <img id="RemoveCart" src="img/ekis.png" alt="" class="absolute w-4 h-4 right-8 top-[-5px] cursor-pointer">
                 </div>
                 <hr class="border-1 border-outline w-auto ">
                         <div id="DeleteModal" class="fixed top-1/2 z-30 items-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform transition-all duration-300">
@@ -268,6 +278,17 @@ async function fetchCart() {
             </div>
             `;
             CartList.appendChild(CartElement);
+            CartElement.querySelector('#CartPhoto').addEventListener('click', async () => {
+                sessionStorage.setItem('product', productCart.productName);
+                window.location.href = 'ProductDetails.html';
+            });
+            
+            CartElement.querySelector('#NameAndPrice').addEventListener('click', async () => {
+                sessionStorage.setItem('product', productCart.productName);
+                window.location.href = 'ProductDetails.html';
+            });
+
+
             CartElement.querySelector('#RemoveCart').addEventListener('click', async () =>{
                 CartElement.querySelector('#DeleteModal').classList.remove('hidden');
                 CartElement.querySelector('#No').addEventListener('click',async () => {
@@ -300,7 +321,8 @@ async function fetchCart() {
                 });
             });
             if(productCart.Stock == 0){
-                CartElement.classList.add('hidden');
+                CartElement.querySelector('#OutofStockCart').classList.remove('hidden');
+                CartElement.querySelector('input[type="checkbox"]').disabled = true;
             }
            
         });

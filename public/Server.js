@@ -592,14 +592,15 @@ app.put('/DeleteAcc', async (req, res) => {
 
 //SignUp
 app.post('/SignUp', async (req, res) => {
-    const { name, num, Password } = req.body;
+    const { name, num, Password, Email } = req.body;
 
     try {
         const request = pool.request()
         .input('name', sql.NVarChar, name)
         .input('number', sql.NVarChar, num)
-        .input('Password',sql.NVarChar,Password);
-        const query = `INSERT INTO tbl_User (UserName,MobileNum,Password,Type) VALUES (@name, @number,@Password,'Customer');`;
+        .input('Password',sql.NVarChar,Password)
+        .input('Email',sql.VarChar,Email);
+        const query = `INSERT INTO tbl_User (UserName,MobileNum,Email,Password,Type,Status) VALUES (@name, @number,@Email,@Password,'Customer','Active');`;
         const result = await request.query(query);
             
         res.status(200).json({messages: 'Sign Up Successful'});
