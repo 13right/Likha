@@ -1782,7 +1782,7 @@ app.get('/OrderDetails', async (req, res) => {
         const request = pool.request();
         request.input('Transac', sql.VarChar, transactionId);
         //console.log(transactionId);
-        const query = `SELECT PaymentLink,TransactionID,Email,MobileNum, convert(varchar, Date, 0) AS Date, Status, TotalPrice, Name
+        const query = `SELECT PaymentLink,TransactionID,Email,MobileNum, convert(varchar, Date, 0) AS Date, tbl_Order.Status, TotalPrice, Name
                        FROM tbl_Order
                        INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID
                        WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), tbl_Order.OrderID), 4) = @Transac;`;

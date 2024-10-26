@@ -473,10 +473,23 @@
                 <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
                 <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
                 <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
-                <a href="AllCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</a>
+                <div class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</div>
             </div>
         </div>
-        
+        <div id="LogOutModal" class="fixed top-1/2 z-30 flex flex-col items-center justify-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg transform hidden transition-all duration-300">
+            <div class="flex flex-col items-center justify-center">
+                <img src="img/LogOutModal.png" class="w-[80px]" alt="">
+                <div class="flex flex-col space-y-1 items-center w-[19rem] text-center">
+                    <span>Are you sure you want to Log Out?</span>
+                </div>
+            </div>
+            
+            <div class="flex space-x-8 mt-5">
+                <button id="LYes" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8">YES</button>
+                <button id="LNo"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
+            </div>
+
+        </div> 
     </div>
 </body>
 <script>

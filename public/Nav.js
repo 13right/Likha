@@ -1,24 +1,32 @@
 document.getElementById('LogOut').addEventListener('click', () => {
-    fetch('/LogOut', {
-        method: 'POST',
-        credentials: 'include',
-    })
-    .then(response => {
-        console.log('Response Status:', response.status);
-        return response.json().then(data => ({ status: response.status, body: data }));
-    })
-    .then(({ status, body }) => {
-        if (status === 200) {
-            alert('Logout successful');
-            window.location.href = 'SignIn.html';
-        } else {
-            alert('Error logging out: ' + body);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error logging outt'+ error);
+    document.getElementById('LogOutModal').classList.remove('hidden');
+    document.getElementById('LYes').addEventListener('click', async() =>{
+        fetch('/LogOut', {
+            method: 'POST',
+            credentials: 'include',
+        })
+        .then(response => {
+            console.log('Response Status:', response.status);
+            return response.json().then(data => ({ status: response.status, body: data }));
+        })
+        .then(({ status, body }) => {
+            if (status === 200) {
+                alert('Logout successful');
+                window.location.href = 'SignIn.html';
+            } else {
+                alert('Error logging out: ' + body);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            //alert('Error logging outt'+ error);
+        });
     });
+    document.getElementById('LNo').addEventListener('click', async() => {
+        document.getElementById('LogOutModal').classList.add('hidden');
+    });
+
+
 });
 
 document.getElementById('search-bar').addEventListener('input', function (event) {
