@@ -18,7 +18,7 @@ const app = express();
 const server = http.createServer(app);
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 app.set('view engine', 'ejs');
 
 const port = process.env.PORT || 3000;
