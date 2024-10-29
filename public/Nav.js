@@ -1,3 +1,17 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if there's a hash in the URL (e.g., #About or #footer)
+    if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            // Scroll to the element with a smooth effect
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+});
+
+
 document.getElementById('LogOut').addEventListener('click', () => {
     document.getElementById('LogOutModal').classList.remove('hidden');
     document.getElementById('LYes').addEventListener('click', async() =>{
@@ -11,7 +25,6 @@ document.getElementById('LogOut').addEventListener('click', () => {
         })
         .then(({ status, body }) => {
             if (status === 200) {
-                alert('Logout successful');
                 window.location.href = 'SignIn.html';
             } else {
                 alert('Error logging out: ' + body);
@@ -288,6 +301,10 @@ async function fetchCart() {
                 window.location.href = 'ProductDetails.html';
             });
 
+            if(productCart.Archive === 'Yes'){
+                //console.log('Naka hidden', productCart.productName, ' ',productsCart.isArchive)
+                CartElement.classList.add('hidden');
+            }
 
             CartElement.querySelector('#RemoveCart').addEventListener('click', async () =>{
                 CartElement.querySelector('#DeleteModal').classList.remove('hidden');
@@ -533,9 +550,9 @@ async function fetchUser() {
 }
 // Initialize a WebSocket connection
 //const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-//const socket = new WebSocket('ws://localhost:3000');
+const socket = new WebSocket('ws://localhost:3000');
 //const socket = new WebSocket('ws://192.168.0.250:3000'); // Replace with actual WebSocket URL
-const socket = new WebSocket('wss://zappnott.shop/ws');
+//const socket = new WebSocket('wss://zappnott.shop/ws');
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
@@ -683,21 +700,18 @@ function renderMessages(messages) {
     messages.forEach(msg => {
         const messageElement = document.createElement('div');
         
-        // Check if the message is a list of materials
-        const materials = msg.message.split(';'); // Split the string by comma
+        const materials = msg.message.split(';'); 
         
-        // If the message contains multiple materials, render buttons for each
         if (materials.length > 1) {
             const buttonContainer = document.createElement('div');
-            buttonContainer.classList.add('flex','flex-col', 'items-start', 'gap-2'); // Add some spacing between buttons
+            buttonContainer.classList.add('flex','flex-col', 'items-start', 'gap-2');
             
             materials.forEach(material => {
                 const button = document.createElement('button');
-                button.innerText = material.trim(); // Remove any extra whitespace
+                button.innerText = material.trim();
                 button.classList.add('rounded-lg', 'p-3', 'bg-outline', 'text-[#FFF]');
                 
                 button.onclick = () => {
-                    // Handle button click
                     fetch('/Chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -713,7 +727,6 @@ function renderMessages(messages) {
             
             messageElement.appendChild(buttonContainer);
         } else {
-            // Default rendering for single messages or non-material messages
             messageElement.innerHTML = `
                 <div id="CC" class="flex items-start">
                     <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
@@ -723,21 +736,22 @@ function renderMessages(messages) {
             `;
         }
 
-        // Logic for sender and receiver styling
         const ChatContainer = messageElement.querySelector('#CC');
         const ChatBG = messageElement.querySelector('#Chats');
 
         if (msg.SenderID === parseInt(UserID)) {
             ChatContainer.classList.add('justify-end');
-            if (materials.length <= 1) { // Change here to only style if not buttons
+            if (materials.length <= 1) { 
                 ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
                 ChatBG.classList.remove('bg-outline');
             }
         } else {
-            if (materials.length <= 1) { // Change here to only style if not buttons
+            if (materials.length <= 1) { 
                 ChatBG.classList.add('bg-outline');
             }
         }
+        ChatBadge();
+        
 
         chatBox.appendChild(messageElement);
     });
@@ -750,6 +764,37 @@ function renderMessages(messages) {
 }
 
 
+async function ChatBadge(){
+    const ChatBadge = document.getElementById('Chat-Badge');
+
+    try {
+        const response = await fetch('/ChatNotifCustomer', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const notifCount = data.Notif;
+        //console.log(notifCount);
+        //ChatBadge.textContent = notifCount > 0 ? notifCount : '';
+        
+        // if(notifCount > 0){
+        //     ChatBadge.classList.remove('hidden');
+        // }
+        // else{
+        //     ChatBadge.classList.add('hidden');
+        // }
+        
+    } catch (error) {
+        console.error('Error fetching chat notifications:', error);
+    }
+}
 
 
 function updateNotificationBadge(count) {
@@ -838,6 +883,34 @@ logo.addEventListener('click', async () => {
     else{
         window.location.href = 'SignIn.html';
     }
+
+    try {
+        const response = await fetch('/ReadMessage', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const message = await response.text();
+            //alert(message);
+        }
+        else if(response.status === 401){
+            window.location.href = 'SignIn.html';
+        } else {
+            const errorData = await response.json();
+            console.error('Error:', errorData);
+            alert('Failed to mark messages as read');
+        }
+    } catch (error) {
+        console.error('Request error:', error);
+        alert('An error occurred while marking messages as read');
+    }
+    document.getElementById('Chat-Badge').classList.add('hidden');
+
+    
 
     const logoRect = logo.getBoundingClientRect();
 

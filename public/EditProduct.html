@@ -7,6 +7,34 @@
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
     <title>Edit Products</title>
 </head>
+<style>
+        @keyframes fadeInRight {
+    0% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-15%);
+    }
+    }
+    .animation-fadeInRight {
+    animation: fadeInRight 0.15s ease-in-out forwards;
+    }
+    @keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-40%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    }
+    .animation-fadeInLeft {
+    animation: fadeInLeft 0.5s ease-in-out forwards;
+    }
+</style>
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
         <nav class="md:flex md:items-center">   
@@ -165,7 +193,54 @@
     </div>
 </body>
 <script>
+    async function fetchUnreadCount() {
+        try {
+            const response = await fetch('/ChatNotif'); 
+            const data = await response.json();
+            const unreadCount = data.Notif;
+            console.log(unreadCount);
+            const notifBadge = document.getElementById('notif-badge');
+            if (unreadCount > 0) {
+                notifBadge.textContent = unreadCount;
+                notifBadge.style.display = 'inline-flex';
+            } else {
+                notifBadge.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error fetching unread count:', error);
+        }
+    }
 
+
+    document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+
+
+    setInterval(fetchUnreadCount, 2000); 
+
+
+const SideBar = document.getElementById('SideBar');
+const Open = document.getElementById('Open');
+const Logo = document.getElementById('Logo');
+const Container = document.querySelectorAll('#Container');
+const Brand = document.querySelectorAll('#Brand');
+
+Open.addEventListener('click', function(event){
+    SideBar.classList.add('transition-all', 'duration-500');
+    if(SideBar.classList.contains('w-[80px]')){
+        Brand.forEach(brand =>{brand.classList.remove('hidden')});
+        Brand.forEach(brand =>{brand.classList.add('animation-fadeInLeft')});
+        SideBar.classList.add('w-[350px]');
+        SideBar.classList.remove('w-[80px]');
+        Open.innerText = '<';
+    }
+    else if(SideBar.classList.contains('w-[350px]')){
+        Brand.forEach(brand =>{brand.classList.remove('animation-fadeInLeft')});
+        Brand.forEach(brand =>{brand.classList.add('animation-fadeInRight')});
+        SideBar.classList.add('w-[80px]');
+        SideBar.classList.remove('w-[350px]');
+        Open.innerText = '>';
+    }
+});
     const product = sessionStorage.getItem('editProduct');
     const productsOutOfStock = sessionStorage.getItem('OoS');
     if(product !== null){
@@ -216,6 +291,7 @@
     const Stock = document.getElementById('Stock').value;
     const Image = document.getElementById('previewImage').src;
     const formData = new FormData(this);
+    console.log(formData);
     console.log(formData.get('image'));
     document.getElementById('Loader').classList.remove('hidden');
     document.getElementById('Overlay').classList.remove('hidden');

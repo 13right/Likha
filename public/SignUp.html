@@ -137,24 +137,31 @@
             <div class="flex justify-center md:justify-center flex-1 mb-[2rem]">
                 <img src="img/ZappnottLogo.png" class="w-[14rem] md:w-[18rem] ml-4"> 
             </div>
-            <div id="SignUpMB" class="bg-[#F8ECDC] w-[410px] h-[220px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center rounded-lg shadow-xl hidden">
+            <div id="SignUpMB" class="bg-[#F8ECDC] w-[410px] h-[220px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center rounded-lg shadow-xl hidden z-50">
                 <img src="https://res.cloudinary.com/db5bsftqx/image/upload/v1727603906/Checked_ol98y2.png" alt="" class="w-[100px] h-[100px]">
                 <h1 class="font-Inter font-extrabold text-[#6B707B] text-center">Your Account has been Created<br>
                     <span class="font-Montserrat font-bold text-[20px] text-[#000000]">Sucessfully!</span></h1>
                 <button class="bg-[#F07C54] w-[50px] h-[30px] rounded-full font-Inter font-extrabold text-[#FFFFFF] mt-2" onclick="OK()">OK</button>
             </div>
             <div class="flex-1">
-                <div class=" flex flex-col items-center pt-3 m-3 bg-sign h-[rem] w-full md:h-[36rem] md:ml-[6rem] md:pt-9 border-4 border-solid border-outline rounded-3xl md:w-[32rem] md:mb-[6rem]">
+                <div class=" flex flex-col items-center pt-3 m-3 bg-sign h-[rem] w-full md:h-[36rem] md:ml-[6rem] md:pt-9 border-4 border-solid border-outline rounded-3xl md:w-[32rem] md:mb-[6rem] relative">
                     <H5 class="font-libre text-3xl font-semibold mb-6 md:mb-9">Sign Up</H5>
+                    <!-- <div id="Incomplete" class="bg-[#FEE2E2] border border-[#F87171] text-[#C62828] space-x-1 h-[2.5rem] px-4 py-3 rounded flex items-center absolute top-[4.5rem] w-[18rem] opacity-100" role="alert">
+                        <strong class="font-bold ">Invalid</strong>
+                        <span class="block sm:inline">Please fill in all fields.</span>
+                        <span id="CloseAlert" class="absolute top-0 bottom-0 right-0 px-3 py-2">
+                          <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                        </span>
+                    </div> -->
                     <form action="" class="ml-2 mr-2" onsubmit="event.preventDefault(); submitForm();" action="/SignUp" method="post">
                         <label for="Usernametxt" class="text-[#6e7075] font-bold">Username</label><br>
-                        <input type="text" name="" id="Usernametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]"><br>
+                        <input type="text" name="" id="Usernametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]" required><br>
                         <label for="Emailtxt" class="text-[#6e7075] font-bold">Email</label><br>
-                        <input type="email" name="" id="Emailtxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]"><br>
+                        <input type="email" name="" id="Emailtxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]" required><br>
                         <label for="Numbertxt" class="text-[#6e7075] font-bold">Number</label><br>
-                        <input type="number" name="" id="Numbertxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]"><br>
+                        <input type="number" maxlength="11" name="" id="Numbertxt" value="09" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]" required oninput="validatePhoneNumber(this)"><br>
                         <label for="Passwordtxt" class="text-[#6e7075] font-bold">Password</label><br>
-                        <input type="password" name="" id="Passwordtxt" class="p-2 h-[2rem] w-full outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] "><br>
+                        <input type="password" name="" id="Passwordtxt" class="p-2 h-[2rem] w-full outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] " required><br>
                         <br><br>
                         <button class="bg-outline w-[18rem] font-bold py-2 px-4 rounded-full text-Likha" type="submit">
                             SIGN UP
@@ -256,7 +263,17 @@
             document.getElementById('SignUpMB').classList.add('hidden');
             window.location.href = "SignIn.html";
         }
-        
+        function validatePhoneNumber(input) {
+            input.value = input.value.replace(/\D/g, '');
+
+            if (input.value.length > 11) {
+                input.value = input.value.slice(0, 11);
+            }
+
+            if (!input.value.startsWith("09") && input.value.length > 0) {
+                input.value = "09" + input.value.slice(2);
+            }
+        }
     </script>
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
     <script src="AuthorizationBE.js"></script>

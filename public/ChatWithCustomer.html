@@ -55,7 +55,7 @@
 
             </div>
             <form id="message-form" class="mt-4 flex">
-                <input type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+                <input type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message..." autocomplete="off">
                 <button type="submit" class="bg-blue-500 text-white p-2 rounded-r-lg">Send</button>
             </form>
         </div>
@@ -86,49 +86,50 @@ async function fetchMessages() {
     const CustomerName = sessionStorage.getItem('CustomerName');
     const userID = await getCurrentUser();
     document.getElementById('Name').innerText = CustomerName;
-    fetch(`/api/messages/Admin?Name=${(CustomerName)}`)
-    .then(response => response.json())
-    .then(messages => {
-        //console.log(messages);
-        const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML = ''; 
-        const ID = userID.UserID;
-       console.log(ID);
-        messages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `
-                <div id="CC" class="flex items-start">
-                    <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs">
-                        <p id="Content" class="text-sm">${msg.message}</p>
-                    </div>
-                </div>
-            `;
-            const ChatContainer = messageElement.querySelector('#CC');
-            const ChatBG = messageElement.querySelector('#Chats');
-                console.log(msg.SenderID);
-            if ( msg.SenderID === ID) {
-                ChatContainer.classList.add('justify-end');
-                ChatBG.classList.add('bg-[#6cc4f4]', 'text-[#FFF]');
-                ChatBG.classList.remove('bg-outline');
-            } else {
-                ChatBG.classList.add('bg-outline');
-            }
 
-            chatBox.appendChild(messageElement);
+    try {
+        const response = await fetch(`/api/messages/Admin?Name=${encodeURIComponent(CustomerName)}`);
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const messages = await response.json();
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML = '';
+        const ID = userID.UserID;
+
+        messages.forEach(msg => {
+            const Materials = msg.message.split(';').map(material => material.trim()).filter(Boolean);
+            const isSender = msg.SenderID === ID;
+
+            Materials.forEach(material => {
+                const messageElement = document.createElement('div');
+
+                messageElement.innerHTML = `
+                    <div id="CC" class="flex items-start ${isSender ? 'justify-end' : ''}">
+                        <div id="Chats" class="rounded-lg my-[5px] p-3 max-w-xs ${isSender ? 'bg-[#6cc4f4] text-[#FFF]' : 'bg-outline'}">
+                            <p id="Content" class="text-sm">${material}</p>
+                        </div>
+                    </div>
+                `;
+
+                chatBox.appendChild(messageElement);
+            });
         });
-        // console.log(previousMessageCount);
-        // console.log(messages.length);
+
         if (messages.length > previousMessageCount) {
             scrollToBottom();
             console.log("Scroll");
         }
 
         previousMessageCount = messages.length;
-    })
-    .catch(error => {
-        console.error('Network error:', error);
-    });
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+    }
 }
+
+
 
 fetchMessages();
 setInterval(fetchMessages,2000);

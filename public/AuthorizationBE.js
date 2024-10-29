@@ -31,6 +31,11 @@ function submitForm() {
     var numValue = document.getElementById("Numbertxt").value;
     var Password = document.getElementById("Passwordtxt").value;
     var Email = document.getElementById("Emailtxt").value;
+
+    if(numValue.length !== 11){
+        alert("Phone number must be exactly 11 digits.");
+        return;
+    }
    var formData = {
         name: nameValue,
         num: numValue,
@@ -47,7 +52,10 @@ function submitForm() {
                 numValue = document.getElementById("Numbertxt").value = "";
                 Password = document.getElementById("Passwordtxt").value = "";
                 document.getElementById('SignUpMB').classList.remove('hidden');
-            } else {
+            }else if(xhr.status === 500) {
+                alert('Error! Username is already exist. Please Try Again');
+            }
+            else {
                 alert("Error: " + xhr.status);
             }
         }
@@ -72,9 +80,11 @@ function LogIn() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 localStorage.setItem("userRole", "customer");
-                document.getElementById('SignInMB').classList.remove('hidden');
+                //document.getElementById('SignInMB').classList.remove('hidden');
+                window.location.href = 'Index.html';
             } else if (xhr.status === 401) {
-                alert("Invalid username or password");
+                //alert("Invalid username or password");
+                document.getElementById('Invalid').classList.add('fade-in');
                 document.getElementById('Passwordtxt').value = '';
             }  else if (xhr.status === 250) {
                 alert("Admin");

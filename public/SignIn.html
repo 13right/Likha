@@ -6,6 +6,21 @@
     <link rel="stylesheet" href="./style.css">
     <title>Likha For Zappnott</title>
 </head>
+<style>
+    .fade-in {
+    animation: fadeIn 0.2s ease-in-out forwards; /* Adjust the duration as needed */
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0; /* Start with 0% opacity */
+        }
+        100% {
+            opacity: 1; /* End with 100% opacity */
+        }
+    }
+
+</style>
 <body class="overflow-auto">
     <div class="bg-Likha h-[5rem] w-full shadow-md  p-2.5 fixed">
         <nav class="md:flex md:items-center">   
@@ -136,8 +151,15 @@
                 <button class="bg-[#F07C54] w-[50px] h-[30px] rounded-full font-Inter font-extrabold text-[#FFFFFF] mt-4" onclick="OK()">OK</button>
             </div>
             <div class="flex-1">
-                <div class=" flex flex-col items-center pt-3 m-3 bg-sign h-[25rem] w-full md:h-[28rem] md:ml-[6rem] md:pt-9 border-4 border-solid border-outline rounded-3xl md:w-[32rem] md:mb-[6rem]">
+                <div class=" flex flex-col items-center pt-3 m-3 bg-sign h-[25rem] w-full md:h-[28rem] md:ml-[6rem] md:pt-9 border-4 border-solid border-outline rounded-3xl md:w-[32rem] md:mb-[6rem] relative">
                     <H5 class="font-libre text-3xl font-semibold mb-6 md:mb-9">Sign In</H5>
+                    <div id="Invalid" class="bg-[#FEE2E2] border border-[#F87171] text-[#C62828] space-x-1 h-[2.5rem] px-4 py-3 rounded flex items-center absolute top-[4.5rem] w-[18rem] opacity-0" role="alert">
+                        <strong class="font-bold ">Invalid</strong>
+                        <span class="block sm:inline">Username or Password</span>
+                        <span id="CloseAlert" class="absolute top-0 bottom-0 right-0 px-3 py-2">
+                          <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                        </span>
+                    </div>
                     <form class="ml-2 mr-2" onsubmit="event.preventDefault(); LogIn();" action="/LogIn" method="post">
                         <label for="Usernametxt" class="text-[#6e7075] font-bold" >Username</label><br>
                         <input type="text" name="" id="Usernametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]" autocomplete="off"><br>
@@ -233,6 +255,9 @@
     </div>
     
     <script>
+        document.getElementById('CloseAlert').addEventListener('click',async () =>{
+            document.getElementById('Invalid').classList.remove('fade-in');
+        });
         function OK(){
             document.getElementById('SignInMB').classList.add('hidden');
             window.location.href = "Index.html";
@@ -243,6 +268,7 @@
             e.name === 'menu' ? (e.name = "close",list.classList.add('top-[80px]'),list.classList.add('opacity-100')) : (e.name = "menu",list.classList.remove('top-[80px]'),list.classList.remove('opacity-100'))
             }
         }
+
     </script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
     <script src="AuthorizationBE.js"></script>

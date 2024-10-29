@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+    <title>Orders</title>
+</head>
+<style>
+    @keyframes fadeInRight {
+    0% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-15%);
+    }
+    }
+    .animation-fadeInRight {
+    animation: fadeInRight 0.15s ease-in-out forwards;
+    }
+    @keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-40%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    }
+    .animation-fadeInLeft {
+    animation: fadeInLeft 0.5s ease-in-out forwards;
+    }
+</style>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
+        <nav class="md:flex md:items-center">   
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+            </div>
+
+            <ul class="my-6 md:my-0 ml-10">
+                <a href="Inbox.html" class="relative hover:text-outline duration-300">
+                    CHAT
+                    <!-- <span id="notif-badge" class="absolute top-0 right-[-1] inline-flex items-center justify-center py-1 text-xs font-bold leading-none text-sign bg-outline rounded-full"></span> -->
+                </a>
+            </ul>
+            
+            
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <img id="Profile" class="cursor-pointer h-[3rem] w-[3rem]" src="img/PROFILE.png"  alt="">
+            </div>
+        </nav>
+    </div>
+    <div class="bg-Likha min-h-screen pt-[5rem] pb-[3rem]">
+        
+        <div id="SideBar" class="bg-[#F8ECDC] h-svh w-[80px] z-[1000] fixed flex flex-col">
+            <div id="Open" class="bg-[#F8ECDC] w-[30px] h-[60px] absolute right-[-1.25rem] top-[23rem] rounded-xl items-center flex justify-center shadow-xl cursor-pointer -z-50">></div>
+            <div class="relative h-[47.5rem] space-y-32">
+                <div class=" h-[30rem] w-auto mx-2 mt-[6rem] flex flex-col justify-between">
+                    <a href="DashboardAd.html" class="cursor-pointer mx-1 h-[50px] w-auto flex items-center hover:bg-[#f7997ae2]  rounded-2xl duration-200">
+                        <img id="Logo" class="w-[60px] h-[55px]" src="img/dashboard.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Dashboard</h1>
+                    </a>
+                    <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="OrderList.html">
+                        <img class="w-[55px] h-[55px]" src="img/ordermenu.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Order</h1>
+                    </a>
+                    <div class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200">
+                        <img class="w-[55px] h-[55px]" src="img/request.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Request</h1>
+                    </div>
+                    <a class=" h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2]  rounded-2xl duration-200" href="AdminProducts.html">
+                        <img class="w-[55px] h-[55px]" src="img/product.png" alt="">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Products</h1>   
+                    </a>
+                    <a class="relative h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2] rounded-2xl duration-200" href="Materials.html">
+                        <img class="w-[55px] h-[55px]" src="img/materialslogo.png" alt=""></img>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Materials</h1>
+                    </a>
+                    <a class="relative h-[50px] w-auto mx-1 flex items-center cursor-pointer hover:bg-[#f7997ae2] rounded-2xl duration-200" href="Inbox.html">
+                            <img class="w-[55px] h-[55px]" src="img/mesage.png" alt=""></img>
+                            <span id="notif-badge" class="absolute top-0 left-9 w-3 h-3 inline-flex items-center justify-center text-[8px] font-bold text-[#FFFFFF] bg-[#FF0000] rounded-full"></span>
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold hidden">Message</h1>
+                    </a>
+                </div>
+                <div class="relative bottom-0 h-[50px] w-auto mx-1">
+                    <hr class=" w-auto border-1 border-outline mx-1">
+                    <div class="flex items-center cursor-auto" onclick="LogOut()">
+                        <img src="img//LogOuts.png" alt="" class="cursor-pointer h-[50px] w-[50px] mx-2">
+                        <h1 id="Brand" class="font-Montserrat text-[20px] font-semibold opacity-0">LogOut</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <H1 class="font-Montagu text-4xl font-bold">Materials</H1>
+        </div>
+
+        <div class="mt-[3rem] ml-[14rem] flex items-center space-x-8">
+            <div class="items-center relative w-[853px] pt-[1.35rem] px-[1rem] h-[90px] bg-sign outline outline-2 outline-outline rounded-lg">
+                <input type="text" id="SearchBar" class="p-2 w-[822px] h-[50px] rounded-lg bg-Likha focus:outline-none focus:ring-1 focus:ring-outline">
+                <img src="img/SEARCH BAR.png" class="w-[50px] absolute right-4 top-[1.35rem] " alt="">
+            </div>
+            <div class="cursor-pointer relative flex px-6 space-x-9 items-center w-[174.4px] h-[60px] bg-sign outline outline-2 outline-outline rounded-lg">
+                <div class="space-y-2 relative ">
+                    <hr class="w-[38.23px] border-[3px] border-[#00000080] relative">
+                    <hr class="w-[27.31px] border-[3px] border-[#00000080] relative left-[5px]">
+                    <hr class="w-[10.92px] border-[3px] border-[#00000080] relative left-[13px]">
+                </div>
+                <div>
+                    <p class="font-Montserrat font-semibold text-[#00000080]">Filter</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mx-[6rem] mt-[3rem] relative w-auto h-auto rounded-lg bg-sign outline outline-[3px] outline-outline p-7">
+            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-between  pr-[19rem] pl-[4rem]">
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Name</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Price</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Stock/s</h1>
+            </div>
+            <div id="MaterialList" ></div>
+        </div>
+
+
+        <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
+            <a href="OrderList.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Order</p>
+            </a>
+            
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Landing</p>
+            </a>
+            <a href="AdminHome.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Home Page</p>
+            </a>
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">3D Customization</p>
+            </a>
+            <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+                <p class="font-Montserrat font-semibold">Log Out</p>
+            </a>
+        </div>
+    </div>
+
+</body>
+<script>
+
+async function fetchUnreadCount() {
+        try {
+            const response = await fetch('/ChatNotif'); 
+            const data = await response.json();
+            const unreadCount = data.Notif;
+            console.log(unreadCount);
+            const notifBadge = document.getElementById('notif-badge');
+            if (unreadCount > 0) {
+                notifBadge.textContent = unreadCount;
+                notifBadge.style.display = 'inline-flex';
+            } else {
+                notifBadge.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error fetching unread count:', error);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+
+
+    setInterval(fetchUnreadCount, 2000); 
+
+
+const SideBar = document.getElementById('SideBar');
+const Open = document.getElementById('Open');
+const Logo = document.getElementById('Logo');
+const Brand = document.querySelectorAll('#Brand');
+
+Open.addEventListener('click', function(event){
+    SideBar.classList.add('transition-all', 'duration-500');
+    if(SideBar.classList.contains('w-[80px]')){
+        Brand.forEach(brand =>{brand.classList.remove('hidden')});
+        Brand.forEach(brand =>{brand.classList.add('animation-fadeInLeft')});
+        SideBar.classList.add('w-[350px]');
+        SideBar.classList.remove('w-[80px]');
+        Open.innerText = '<';
+    }
+    else if(SideBar.classList.contains('w-[350px]')){
+        Brand.forEach(brand =>{brand.classList.remove('animation-fadeInLeft')});
+        Brand.forEach(brand =>{brand.classList.add('animation-fadeInRight')});
+        SideBar.classList.add('w-[80px]');
+        SideBar.classList.remove('w-[350px]');
+        Open.innerText = '>';
+    }
+});
+
+fetch('/Materials')
+    .then(response => response.json())
+    .then(Items => {
+        console.log(Items);
+        Items.forEach(Item => {
+            const ItemList = document.getElementById('MaterialList');
+            const ItemElement = document.createElement('div');
+            ItemElement.innerHTML = `
+            <div class="mt-5 relative items-center flex w-auto h-[50px] pl-2 bg-Likha rounded-lg justify-between pr-[16rem]">
+                <div id="ProdCon" class="w-[10rem] text-center item-center h-[2rem] left-[1.25rem]">
+                    <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.Name}</h2>
+                </div>
+                <div class="w-[10rem] text-center item-center h-[2rem]  left-[12.5rem]">
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Price}</h2>
+                </div>
+                <div class="w-[10rem] text-center item-center h-[2rem]  left-[24.25rem]">
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Stock}</h2>
+                </div>
+                <button class="absolute right-6 font-Inter h-[30px] w-[150.91px] rounded-lg text-[#fff] flex item-center p-1 justify-center bg-outline" id="Edit"><img src="img/Edit.png" class="h-6 mr-2">Edit</button>
+                
+            </div>
+            `;
+            ItemList.appendChild(ItemElement);
+            ItemElement.querySelector('#Edit').addEventListener('click',async()=>{
+                sessionStorage.setItem('MaterialID',Item.MaterialID);
+                window.location.href = 'EditMaterial.html';
+            })
+        });
+    });
+</script>
+<script src="Refresh.js"></script>
+<script src="AuthorizationBE.js"></script>
+<script src="AdminPage.js"></script>
+</html>

@@ -235,12 +235,12 @@
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="Index.html#About" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="Index.html#footer" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
@@ -301,8 +301,8 @@
         <div id="main-container" class="relative min-w-min h-[40rem] top-[8rem]">
             <div class=" w-[1250px] h-[40rem] mx-auto relative">
                 <div class="w-[25rem] h-auto space-x-10 flex mb-16 ml-[3rem]">
-                    <div id="ProfileContain" class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline relative group">
-                        <img id="ProfilePic" src="img/profileblank.png" class="w-[80px] h-[80px] rounded-full absolute" alt="">
+                    <div id="ProfileContain" class="w-[120px] h-[120px] bg-outline rounded-full outline outline-1 outline-outline relative group">
+                        <img id="ProfilePic" src="img/profileblank.png" class="w-[120px] h-[120px] rounded-full absolute object-cover" alt="">
                         <div id="EditProf" class="absolute flex items-center justify-center  w-[80px] h-[80px] rounded-full bg-gradient-to-t from-[#333333] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
                             <h6 class="font-Inter text-Likha absolute bottom-2 text-[12px]">Edit</h6>
                         </div>
@@ -421,7 +421,15 @@
                 </div>
             </div>
         </div>
-        <img id="ChatLogo" src="img/ZappnottLogoOnly.png" alt="" class=" h-[4rem] fixed bottom-16 right-20 cursor-pointer z-40">
+        <div class="fixed bottom-16 right-20">
+            <div class="relative">
+              <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
+                   alt="Chat Logo" 
+                   class="h-[4rem] cursor-pointer z-40">
+              <span id="Chat-Badge" class="absolute top-3 right-3 w-3 h-3 bg-outline text-white text-xs font-bold rounded-full px-1 z-50 transform translate-x-1/2 -translate-y-1/2 hidden">
+              </span>
+            </div>
+        </div>
         <div id="ChatContent" class="hidden fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
             <div class="shadow-sm">
                 <div class="flex">
@@ -486,6 +494,38 @@
                 <button id="No"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
             </div>
 
+        </div> 
+        <div id="Old" class="fixed hidden top-1/2 z-30 flex flex-col items-center justify-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg  transform transition-all duration-300">
+            <div class="space-y-3 flex flex-col items-center">
+                <img src="img/error.png" class="w-[50px]" alt="">
+                <div class="relative left-1/2 -translate-x-1/2 flex flex-col space-y-1 items-center w-[19rem] text-center">
+                    <span class="font-Inter font-extrabold text-[15px] text-[#6B707B]">The old password is incorrect. Please try again.</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-around mt-5">
+                <button id="OLDOK" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8 font-Inter font-extrabold">OK</button>
+            </div>
+
+        </div> 
+        <div id="ConfirmPass" class="fixed hidden top-1/2 z-30 flex flex-col items-center justify-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg  transform transition-all duration-300">
+            <div class="space-y-3 flex flex-col items-center">
+                <img src="img/error.png" class="w-[50px]" alt="">
+                <div class="relative left-1/2 -translate-x-1/2 flex flex-col space-y-1 items-center w-[19rem] text-center">
+                    <span class="font-Inter font-extrabold text-[15px] text-[#6B707B]">Passwords do not match. Please try again.</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-around mt-5">
+                <button id="CONOK" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8 font-Inter font-extrabold">OK</button>
+            </div>
+
+        </div>
+        <div id="ChangeModal" class="bg-[#F8ECDC] w-[500px] h-[287px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center hidden rounded-lg shadow-xl">
+            <img src="img/password.png" alt="" class="w-[100px] h-[100px] mb-6">
+            <h1 class="font-Inter font-extrabold text-[#6B707B] text-center text-[16px]">Your Password Has Been Changed</h1>
+            <h1 class="font-Montserrat font-bold text-[#000000] text-[20px]">Sucessfully!</h1>
+            <button class="bg-[#F07C54] w-[50px] h-[30px] rounded-full font-Inter font-extrabold text-[#FFFFFF] mt-4" onclick="ChangeOK()">OK</button>
         </div> 
     </div>
     
@@ -557,21 +597,31 @@
 
                 const data = await response.json();
                 if (response.ok) {
-                    window.location.reload();
-                } else {
-                    alert('Password change failed: ' + data.message);
+                    document.getElementById('ChangeModal').classList.remove('hidden');
+                    
+                } else{
+                    document.getElementById('Old').classList.remove('hidden');
                 }
             } catch (error) {
                 alert('An error occurred: ' + error.message);
             }
         } else {
-            alert('New Password and Confirm Password do not match. Please try again.');
+           document.getElementById('ConfirmPass').classList.remove('hidden');
         }
     } else {
         alert('Please fill in all the fields before proceeding.');
     }
 });
-
+function ChangeOK(){
+    document.getElementById('ChangeModal').classList.add('hidden');
+    window.location.reload();
+};
+document.getElementById('OLDOK').addEventListener('click', async() =>{
+    document.getElementById('Old').classList.add('hidden');
+});
+document.getElementById('CONOK').addEventListener('click', async() =>{
+    document.getElementById('ConfirmPass').classList.add('hidden');
+});
     async function insertProfileImage() {
             const userId = 'YOUR_USER_ID'; // Replace with the actual user ID
             const fileInput = document.getElementById('fileInput');

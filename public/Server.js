@@ -18,6 +18,7 @@ const app = express();
 const server = http.createServer(app);
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 app.set('view engine', 'ejs');
 
 const port = process.env.PORT || 3000;
@@ -187,9 +188,11 @@ const checkNotifications = async (userID) => {
 
 const getMessages = async (userID, ws) => {
     const query = `
+    BEGIN
         SELECT * FROM tbl_message 
         WHERE (SenderID = @sender_id AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
         OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = @sender_id)
+    END
     `;
 
     try {
@@ -258,9 +261,44 @@ const notifyClients = (notifCount) => {
     });
 };
 
-app.post('/api/data/Unity', (req, res) => {
+function getColorName(rgba) {
+    const { r, g, b, a } = rgba;
+
+    const colorMapping = {
+        '0,0,0,1': 'black',      
+        '1,1,1,1': 'white',  
+        '1,0,0,1': 'red',  
+        '0,1,0,1': 'green',     
+        '0,0,1,1': 'blue'
+
+    };
+
+    const rgbaKey = `${r},${g},${b},${a}`;
+    return colorMapping[rgbaKey] || 'unknown';
+}
+
+app.post('/api/data/Unity', async (req, res) => {
     console.log('Received data:', req.body);
-    res.send({ message: 'Data received!', receivedData: req.body });
+   const color = req.body.objectsUI[0].color;
+   console.log(color);
+   const ColorName = getColorName(color);
+    //res.send({ message: 'Data received!', receivedData: req.body });
+    const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
+    const request = pool.request();
+        request.input('Name', sql.VarChar, dressName);
+        request.input('Bust', sql.Decimal, bust);
+        request.input('Price',sql.Int,price);
+        request.input('Color',sql.VarChar,ColorName);
+        request.input('Waist',sql.Decimal,waist);
+        request.input('hips',sql.Decimal,hip);
+        request.input('Height',sql.Decimal,height);
+
+        const query = `
+            INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
+        `;
+
+        await request.query(query);
+        res.status(200).send('Profile image updated successfully');
 });
 
 app.post('/upload-screenshot/Unity', (req, res) => {
@@ -425,6 +463,35 @@ app.put('/updateProduct/:product', upload.single('image'), async (req, res) => {
     }
 });
 
+app.put('/updateMaterial/:Material', async (req, res) => {
+    const { Material } = req.params;
+    const { MaterialName, MaterialDes, Price, Stock } = req.body;
+    try {
+        const request = pool.request();
+        //request.input('Image', sql.VarChar, result.secure_url);
+        request.input('MaterialID', sql.VarChar, Material);
+        request.input('NewName', sql.VarChar, MaterialName);
+        request.input('UpdatedPrice', sql.Int, Price);
+        request.input('ProductDes', sql.VarChar, MaterialDes);
+        //request.input('ProductDiscount', sql.Int, productDiscount);
+        request.input('Stock', sql.Int, Stock);
+        //request.input('Cat', sql.Int, Cat);
+
+        const query = `
+            UPDATE tbl_Materials
+            SET MaterialName = @NewName, Price = @UpdatedPrice,
+            Stock = @Stock,Description = @ProductDes
+            WHERE MaterialID = @MaterialID
+        `;
+
+        await request.query(query);
+        res.status(200).send('Product Updated');
+    } catch (err) {
+        console.error('Database Error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 
 //Add To Cart
 
@@ -504,9 +571,8 @@ app.put('/UpdateCart', async (req, res) => {
     }
 });
 
-
 //Delete
-app.delete('/DeleteProduct/:productName', async (req, res) => {
+app.put('/DeleteProduct/:productName', async (req, res) => {
     const productName = req.params.productName;
     try{
         const request = pool.request();
@@ -514,11 +580,41 @@ app.delete('/DeleteProduct/:productName', async (req, res) => {
         request.input('@PN',sql.VarChar,productName);
 
         const query = `
-        DELETE FROM tbl_Product WHERE ProductName LIKE '${productName}'
+        UPDATE tbl_Product SET isArchive = 'Yes' WHERE ProductName LIKE '${productName}'
         `;
         console.log(query);
         const result = await request.query(query);
         res.status(200).send('Product Deleted');
+    }
+    catch(err){
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+app.put('/ReadMessage', async (req, res) => {
+    const user = req.session.user;
+
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json({ error: 'User not authenticated' });
+    }
+    const ID = parseInt(user.UserID);
+
+
+    try{
+        const request = pool.request();
+
+        request.input('sender_id',sql.Int,ID);
+
+        const query = `
+                UPDATE tbl_message
+                SET Status = 'Read'
+                WHERE SenderID  = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = @sender_id
+                AND Status = 'Unread'
+        `;
+        console.log(query);
+        const result = await request.query(query);
+        res.status(200).send('Message Read');
     }
     catch(err){
         console.error('Database error:', err);
@@ -554,21 +650,34 @@ app.put('/ChangePass', async (req, res) => {
     try {
         const result = await pool.request()
             .input('ID', sql.Int, ID)
-            .input('NewPass', sql.VarChar, newPassword)
-            .input('OldPass', sql.VarChar, oldPassword)
-            .query('UPDATE tbl_User SET Password = @NewPass WHERE UserID = @ID AND Password = @OldPass');
-        
-        // Check if any rows were affected (password was updated)
-        if (result.rowsAffected[0] > 0) {
-            res.status(200).send({ message: 'Password Changed' });
+            .query('SELECT Password FROM tbl_User WHERE UserID = @ID');
+
+        const userRecord = result.recordset[0];
+
+        if (userRecord) {
+            const match = await bcrypt.compare(oldPassword, userRecord.Password);
+            
+            if (match) {
+                const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+                
+                await pool.request()
+                    .input('ID', sql.Int, ID)
+                    .input('NewPass', sql.VarChar, hashedNewPassword)
+                    .query('UPDATE tbl_User SET Password = @NewPass WHERE UserID = @ID');
+
+                res.status(200).send({ message: 'Password Changed' });
+            } else {
+                res.status(400).json({ message: 'Old password is incorrect.' });
+            }
         } else {
-            res.status(400).json({ message: 'Old password is incorrect.' });
+            res.status(404).json({ message: 'User not found.' });
         }
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
+
 
 
 app.put('/DeleteAcc', async (req, res) => {
@@ -591,19 +700,27 @@ app.put('/DeleteAcc', async (req, res) => {
 });
 
 //SignUp
+const saltRounds = 10;
+
 app.post('/SignUp', async (req, res) => {
     const { name, num, Password, Email } = req.body;
 
     try {
+        const hashedPassword = await bcrypt.hash(Password, saltRounds);
+
         const request = pool.request()
-        .input('name', sql.NVarChar, name)
-        .input('number', sql.NVarChar, num)
-        .input('Password',sql.NVarChar,Password)
-        .input('Email',sql.VarChar,Email);
-        const query = `INSERT INTO tbl_User (UserName,MobileNum,Email,Password,Type,Status) VALUES (@name, @number,@Email,@Password,'Customer','Active');`;
-        const result = await request.query(query);
+            .input('name', sql.NVarChar, name)
+            .input('number', sql.NVarChar, num)
+            .input('Password', sql.NVarChar, hashedPassword)
+            .input('Email', sql.VarChar, Email);
             
-        res.status(200).json({messages: 'Sign Up Successful'});
+        const query = `
+        INSERT INTO tbl_User (UserName, MobileNum, Email, Password, Type, Status)
+        VALUES (@name, @number, @Email, @Password, 'Customer', 'Active');`;
+        
+        await request.query(query);
+
+        res.status(200).json({ message: 'Sign Up Successful' });
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
@@ -617,26 +734,30 @@ app.post('/LogIn', async (req, res) => {
 
     try {
         const request = await pool.request()
-        .input('username', sql.NVarChar, username)
-        .query(`SELECT * FROM tbl_User WHERE UserName = @username AND Status = 'Active'`);
+            .input('username', sql.NVarChar, username)
+            .query(`SELECT * FROM tbl_User WHERE UserName = @username AND Status = 'Active'`);
 
         const user = request.recordset[0];
 
-        if (user && user.Password === password) { 
-            //console.log(req.session);
-            req.session.user = user;
-            //console.log(req.session.user.UserID);
-            if (user.Type === "Admin") {
-                res.status(250).send('Admin');
+        if (user) {
+            // Compare the entered password with the stored hashed password
+            const match = await bcrypt.compare(password, user.Password);
+            if (match) {
+                req.session.user = user; // Store user session data
+                if (user.Type === "Admin") {
+                    res.status(250).send('Admin'); // Send response for admin
+                } else {
+                    res.status(200).send('Login successful'); // Send response for regular user
+                }
             } else {
-                res.status(200).send('Login successful');
+                res.status(401).send('Invalid username or password'); // Incorrect password
             }
         } else {
-            res.status(401).send('Invalid username or password');
+            res.status(401).send('Invalid username or password'); // Username not found
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error logging in');
+        res.status(500).send('Error logging in'); // General error
     }
 });
 
@@ -732,8 +853,8 @@ app.get('/SearchBar/:inputValue', async (req, res) => {
         SELECT TOP 4 ProductName 
         FROM tbl_Product 
         INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
-        WHERE ProductName LIKE '%' + @Input + '%' 
-        OR tbl_Category.CategoryName LIKE '%' + @Input + '%'
+        WHERE (ProductName LIKE '%' + @Input + '%' 
+        OR tbl_Category.CategoryName LIKE '%' + @Input + '%') AND tbl_Product.isArchive = 'No'
     `;
 
     const categoryQuery = `
@@ -795,7 +916,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
             .input('Des', sql.VarChar, req.body.productDes)
             .input('Stock', sql.Int, req.body.Stock)
             .input('Cat', sql.Int, req.body.Cat)
-            .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@ImagePath);");
+            .query("INSERT INTO tbl_Product (ProductName,Price,Description,Stock,CategoryID,ProductImage, isArchive) VALUES (@Pname,@Price,@Des,@Stock,@Cat,@ImagePath,'No');");
         res.sendStatus(200);
     } catch (error) {
         console.error('Error uploading image:', error);
@@ -1095,24 +1216,45 @@ app.get('/get-materials', async (req, res) => {
 });
 
 app.get('/ChatNotif', async (req, res) => {
-    const user = req.session.user;
-    const ID = parseInt(user.UserID);
+
     const query = `
         SELECT COUNT(*) AS Notif FROM tbl_message WHERE ReceiverID = @Admin AND Status = 'Unread'
     `;
     try {
+        const user = req.session.user;
+        const ID = parseInt(user.UserID);
         const result = await pool.request()
             .input('Admin',sql.Int,ID)
             .query(query);
         const notif = result.recordset[0].Notif;
         res.json({ Notif: notif });
     } catch (err) {
-        console.error('Database error:', err);
+        //console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
 
-//Resume later
+app.get('/ChatNotifCustomer', async (req, res) => {
+
+    const query = `
+        SELECT COUNT(Status) AS Unread FROM tbl_message
+        WHERE ReceiverID = @User AND Status = 'Unread'
+    `;
+    try {
+        const user = req.session.user;
+        const ID = parseInt(user.UserID);
+        const result = await pool.request()
+            .input('User',sql.Int,ID)
+            .query(query);
+        const notif = result.recordset[0].Unread;
+        //console.log(notif);
+        res.json({ Notif: notif });
+    } catch (err) {
+        //console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 app.get('/api/messages', async (req, res) => {
     const user = req.session.user;
 
@@ -1122,9 +1264,19 @@ app.get('/api/messages', async (req, res) => {
 
     const ID = parseInt(user.UserID);
     const query = `
-        SELECT * FROM tbl_message 
-        WHERE (SenderID = @sender_id AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
-        OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = @sender_id)
+        BEGIN
+            SELECT * 
+            FROM tbl_message  
+            WHERE (SenderID = @sender_id AND ReceiverID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin')) 
+            OR (SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') AND ReceiverID = @sender_id);
+
+            UPDATE tbl_message
+            SET Status = 'Read'
+            WHERE SenderID = (SELECT UserID FROM tbl_User WHERE Type = 'Admin') 
+            AND ReceiverID = @sender_id
+            AND Status = 'Unread';
+        END
+
     `;
 
     try {
@@ -1138,6 +1290,7 @@ app.get('/api/messages', async (req, res) => {
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
+
 
 app.get('/api/messages/Admin', async (req, res) => {
     const user = req.session.user;
@@ -1176,7 +1329,7 @@ app.get('/api/messages/Admin', async (req, res) => {
 app.get('/AdminProducts', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT COUNT(Rate) AS Count, CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
+            .query("SELECT COUNT(Rate) AS Count,CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID WHERE tbl_Product.isArchive = 'No' GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1190,7 +1343,8 @@ app.get('/AdminProducts', async (req, res) => {
                 description: product.Description,
                 stock: product.Stock,
                 categoryId: product.CategoryID,
-                imagePath: product.ProductImage
+                imagePath: product.ProductImage,
+                isArchive: product.isArchive
             };
             
         });
@@ -1205,7 +1359,7 @@ app.get('/AdminProducts', async (req, res) => {
 app.get('/products', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID WHERE tbl_Product.Stock > 0 GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
+            .query("SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID WHERE tbl_Product.Stock > 0 AND isArchive = 'No' GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1282,11 +1436,34 @@ app.get('/Edit/:product', async (req, res) => {
     }
 });
 
+app.get('/Edit-Material/:Material', async (req, res) => {
+    const ID = req.params.Material;
+    try{
+        const request = pool.request();
+        request.input('ID', sql.Int, ID);
+        const query = `SELECT MaterialName,Price, Description,Stock FROM tbl_Materials WHERE MaterialID = @ID`;
+        const result = await request.query(query);
+        const products = result.recordset.map(product => {
+            return {
+                Name: product.MaterialName,
+                Price: product.Price,
+                Description: product.Description,
+                Stock: product.Stock
+            };
+        });
+
+        res.json(products);
+    }catch(err){
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 app.get('/productsJewelry', async (req, res) => {
     try {
 
         const result = await pool.request()
-            .query("SELECT ProductName, FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3 AND Stock > 0");
+            .query("SELECT ProductName, FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3 AND Stock > 0 AND isArchive = 'No'");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1317,8 +1494,8 @@ app.get('/SearchProd/:inputValue', async (req, res) => {
         request.input('Input', sql.VarChar, Input);
         const query = `SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, tbl_Product.CategoryID, ProductImage FROM tbl_Product
         INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
-        WHERE  tbl_Product.ProductName LIKE '%' + @Input + '%' 
-        OR tbl_Category.CategoryName LIKE '%' + @Input + '%'`;
+        WHERE  (tbl_Product.ProductName LIKE '%' + @Input + '%' 
+        OR tbl_Category.CategoryName LIKE '%' + @Input + '%') AND tbl_Product.isArchive = 'No' `;
         const result = await request.query(query);
         const products = result.recordset.map(product => {
             return {
@@ -1341,7 +1518,7 @@ app.get('/SearchProd/:inputValue', async (req, res) => {
 app.get('/productsBag', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1 AND Stock > 0");
+            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1 AND Stock > 0 AND isArchive = 'No'");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1367,7 +1544,7 @@ app.get('/productsBag', async (req, res) => {
 app.get('/productsDress', async (req, res) => {
     try {
         const result = await pool.request()
-            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2 AND Stock > 0");
+            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2 AND Stock > 0 AND isArchive = 'No'");
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1467,7 +1644,7 @@ app.get('/Feedback/:product', async (req, res) => {
     try {
         const feedbackResult = await pool.request()
             .input('Product', sql.VarChar, product)
-            .query(`SELECT Rate, Comment, UserName FROM tbl_Feedback 
+            .query(`SELECT Rate, Comment, UserName,ProfilePic FROM tbl_Feedback 
                      INNER JOIN tbl_User ON tbl_User.UserID = tbl_Feedback.UserID 
                      WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`);
 
@@ -1482,6 +1659,7 @@ app.get('/Feedback/:product', async (req, res) => {
                      WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`);             
         const products = feedbackResult.recordset.map(feedback => {
             return {
+                Profile: feedback.ProfilePic,
                 Rate: feedback.Rate,
                 Comment: feedback.Comment,
                 Username: feedback.UserName
@@ -1777,6 +1955,27 @@ app.get('/Orders', async (req, res) => {
     }
 });
 
+app.get('/Materials', async (req, res) => {
+        
+    try {
+        const request = pool.request();
+        const query = `SELECT * FROM tbl_Materials`;
+        const result = await request.query(query);
+        const products = result.recordset.map(product => {
+            return {
+                Name: product.MaterialName,
+                Price: product.Price,
+                Stock: product.Stock,
+                MaterialID: product.MaterialID
+            };
+        });
+        res.json(products);
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 app.get('/OrderDetails', async (req, res) => {
     const transactionId = req.query.transac;
     try {
@@ -1833,7 +2032,7 @@ app.get('/OrderItem/:productOrder', async (req, res) => {
         request.input('OrderID', sql.VarChar, productOrder);
         
         const query = `
-            SELECT OI.ProductID, P.ProductImage, P.ProductName, OI.Quantity, OI.Price
+            SELECT OI.ProductID, P.ProductImage, P.ProductName, OI.Quantity, FORMAT(CAST(OI.Price AS DECIMAL(10, 2)), 'N2')  as Price
             FROM tbl_OrderItem OI
             INNER JOIN tbl_Product P ON OI.ProductID = P.ProductID
             WHERE OI.OrderID = @OrderID
@@ -1942,7 +2141,8 @@ app.get('/Cart', async (req, res) => {
         .input('UserID', sql.Int, ID);
         const query = `
             SELECT
-                tbl_Cart.CartID, 
+                tbl_Cart.CartID,
+                tbl_Product.isArchive, 
                 tbl_Product.ProductName,
                 tbl_Product.Stock, 
                 tbl_Cart.Price, 
@@ -1971,7 +2171,8 @@ app.get('/Cart', async (req, res) => {
                     productPrice: productCart.Price,
                     productQuantity: productCart.Quantity,
                     productImage: productCart.ProductImage,
-                    CartID: productCart.CartID
+                    CartID: productCart.CartID,
+                    Archive: productCart.isArchive
                 };
             });
             res.json(productsCart);
@@ -1983,7 +2184,6 @@ app.get('/Cart', async (req, res) => {
 //PlaceOrder
 app.post('/PlaceOrder', async (req, res) => {
     const {OrderData, retrieve,PickUp}  = req.body;
-
     try {
 
         const user = req.session.user;
@@ -1993,7 +2193,7 @@ app.post('/PlaceOrder', async (req, res) => {
                 .input('ID',sql.Int,ID)
                 .input('Link',sql.VarChar,retrieve)
                 .input('PickUp',sql.VarChar,PickUp)
-                .query('INSERT INTO tbl_Order ([Date], UserID, Status,PaymentLink,PickUp) VALUES (convert(varchar, getdate(), 0), @ID,DEFAULT,@Link,@PickUp)');
+                .query('INSERT INTO tbl_Order ([Date], UserID, Status,PaymentLink,PickUp) VALUES (convert(varchar,getdate(), 0), @ID,DEFAULT,@Link,@PickUp)');
         for (const order of OrderData) {
             
             const request = await pool.request()

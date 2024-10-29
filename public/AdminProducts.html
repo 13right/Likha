@@ -145,6 +145,30 @@
     </div>
 </body>
 <script>
+        async function fetchUnreadCount() {
+        try {
+            const response = await fetch('/ChatNotif'); 
+            const data = await response.json();
+            const unreadCount = data.Notif;
+            console.log(unreadCount);
+            const notifBadge = document.getElementById('notif-badge');
+            if (unreadCount > 0) {
+                notifBadge.textContent = unreadCount;
+                notifBadge.style.display = 'inline-flex';
+            } else {
+                notifBadge.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error fetching unread count:', error);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+
+
+    setInterval(fetchUnreadCount, 2000); 
+
 const SideBar = document.getElementById('SideBar');
 const Open = document.getElementById('Open');
 const Logo = document.getElementById('Logo');
@@ -331,7 +355,7 @@ fetch('/AdminProducts')
                         const productName = productContainer.querySelector('h2').innerText;
 
                         fetch(`/DeleteProduct/${encodeURIComponent(productName)}`, {
-                            method: 'DELETE'
+                            method: 'PUT'
                         })
                         .then(response => {
                             if (response.ok) {
@@ -393,4 +417,5 @@ function previewFile() {
 }
 
 </script>
+<script src="AuthorizationBE.js"></script>
 </html>
