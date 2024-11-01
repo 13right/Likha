@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.raw({ type: 'application/octet-stream', limit: '100mb' }));
 app.get('/3D', (req, res) => {
-    res.sendFile(path.join(__dirname, '3D.html'));
+    res.sendFile(path.join(__dirname, 'TEST.html'));
 });
 
 app.use('/Build', express.static(path.join(__dirname, 'Build')));
@@ -300,6 +300,7 @@ app.post('/api/data/Unity', async (req, res) => {
         await request.query(query);
         res.status(200).send('Profile image updated successfully');
 });
+
 
 app.post('/upload-screenshot/Unity', (req, res) => {
     const screenshotBuffer = req.body;

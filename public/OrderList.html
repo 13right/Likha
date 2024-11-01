@@ -215,6 +215,7 @@ Open.addEventListener('click', function(event){
     }
     else if(SideBar.classList.contains('w-[350px]')){
         Brand.forEach(brand =>{brand.classList.remove('animation-fadeInLeft')});
+        Brand.forEach(brand =>{brand.classList.add('hidden')});
         Brand.forEach(brand =>{brand.classList.add('animation-fadeInRight')});
         SideBar.classList.add('w-[80px]');
         SideBar.classList.remove('w-[350px]');
