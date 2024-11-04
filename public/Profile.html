@@ -303,7 +303,7 @@
                 <div class="w-[25rem] h-auto space-x-10 flex mb-16 ml-[3rem]">
                     <div id="ProfileContain" class="w-[120px] h-[120px] bg-outline rounded-full outline outline-1 outline-outline relative group">
                         <img id="ProfilePic" src="img/profileblank.png" class="w-[120px] h-[120px] rounded-full absolute object-cover" alt="">
-                        <div id="EditProf" class="absolute flex items-center justify-center  w-[80px] h-[80px] rounded-full bg-gradient-to-t from-[#333333] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                        <div id="EditProf" class="absolute flex items-center justify-center w-[120px] h-[120px] rounded-full bg-gradient-to-t from-[#333333] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
                             <h6 class="font-Inter text-Likha absolute bottom-2 text-[12px]">Edit</h6>
                         </div>
                         <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="insertProfileImage()" />
@@ -356,14 +356,14 @@
                             <div class="relative">
                                 <h1 class="ml-4">Name</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" id="NameInput" value="JENNIE KIM" disabled>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" oninput="restrictInput(this)" type="text" id="NameInput" value="JENNIE KIM" disabled>
                                     <span id="EditName" class="absolute right-2 cursor-pointer focus:bg-hehe">edit</span>
                                 </div>
                             </div>
                             <div >
                                 <h1 class="ml-4">Username</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" id="Username" value="jennierubyjane" disabled>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" oninput="restrictInput(this)" type="text" id="Username" value="jennierubyjane" disabled>
                                 <span id="EditUsername" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                                 
@@ -373,14 +373,14 @@
                             <div>
                                 <h1 class="ml-4">Mobile No.</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text"  id="Mobile" value="+63 9033526492" disabled>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="number"  id="Mobile" value="+63 9033526492" disabled>
                                     <span id="EditMobile" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                             </div>
                             <div>
                                 <h1 class="ml-4">Email</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="text" id="Email" value="jennierubyjane.kim@email.com" disabled>
+                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="email" id="Email" value="jennierubyjane.kim@email.com" disabled>
                                     <span id="EditEmail" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                             </div>
@@ -531,6 +531,11 @@
     
 </body>
 <script>
+function restrictInput(input) {
+    // Remove non-alphabet characters except space
+    input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+}
+
     const Modal = document.getElementById('DeleteAccModal');
     const Yes = document.getElementById('Yes');
     const No = document.getElementById('No');

@@ -550,9 +550,9 @@ async function fetchUser() {
 }
 // Initialize a WebSocket connection
 //const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
-//const socket = new WebSocket('ws://localhost:3000');
+const socket = new WebSocket('ws://localhost:3000');
 //const socket = new WebSocket('ws://192.168.0.250:3000'); // Replace with actual WebSocket URL
-const socket = new WebSocket('wss://zappnott.shop/ws');
+//const socket = new WebSocket('wss://zappnott.shop/ws');
 // Handle the connection open event
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
@@ -693,6 +693,7 @@ function Zapp(){
     });
 }
 
+
 function renderMessages(messages) {
     const chatBox = document.getElementById('chat-box');
     chatBox.innerHTML = '';
@@ -750,7 +751,7 @@ function renderMessages(messages) {
                 ChatBG.classList.add('bg-outline');
             }
         }
-        ChatBadge();
+        //ChatBadge();
         
 
         chatBox.appendChild(messageElement);
@@ -764,37 +765,37 @@ function renderMessages(messages) {
 }
 
 
-async function ChatBadge(){
-    const ChatBadge = document.getElementById('Chat-Badge');
+// async function ChatBadge(){
+//     const ChatBadge = document.getElementById('Chat-Badge');
 
-    try {
-        const response = await fetch('/ChatNotifCustomer', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+//     try {
+//         const response = await fetch('/ChatNotifCustomer', {
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         }
 
-        const data = await response.json();
-        const notifCount = data.Notif;
-        //console.log(notifCount);
-        //ChatBadge.textContent = notifCount > 0 ? notifCount : '';
+//         const data = await response.json();
+//         const notifCount = data.Notif;
+//         //console.log(notifCount);
+//         //ChatBadge.textContent = notifCount > 0 ? notifCount : '';
         
-        // if(notifCount > 0){
-        //     ChatBadge.classList.remove('hidden');
-        // }
-        // else{
-        //     ChatBadge.classList.add('hidden');
-        // }
+//         // if(notifCount > 0){
+//         //     ChatBadge.classList.remove('hidden');
+//         // }
+//         // else{
+//         //     ChatBadge.classList.add('hidden');
+//         // }
         
-    } catch (error) {
-        console.error('Error fetching chat notifications:', error);
-    }
-}
+//     } catch (error) {
+//         console.error('Error fetching chat notifications:', error);
+//     }
+// }
 
 
 function updateNotificationBadge(count) {

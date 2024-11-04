@@ -499,7 +499,19 @@
                 <button id="LNo"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
             </div>
 
-        </div> 
+        </div>
+        <div id="CartPopup" class="fixed top-[20rem] z-30 items-center right-[37%] bg-[#F8ECDC] outline outline-4 outline-outline w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform translate-y-4 transition-all duration-300">
+            <div class="">
+                <img src="img/Carts.png" class="w-[100px] ml-[34%]" alt="">
+                <div class="flex flex-col space-y-1 items-center">
+                    <span>Added to Cart</span>
+                    <span>Sucessfully!</span>
+                </div>
+            </div>
+            
+            
+            <button id="ok" onclick="CartOk()" class="ml-[38%] mt-3 bg-outline  text-[#FFF] rounded-3xl w-20">OK</button>
+        </div>  
     </div>
 </body>
 <script>
@@ -536,7 +548,7 @@ fetch('/productsBag')
                                 <p class="font-Montagu font-semibold text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
                                 <div class="flex absolute bottom-2  w-[17rem] items-center">
                                     <h1 class="font-Montserrat relative bottom-0 font-semibold">₱ ${product.productPrice}</h1>
-                                    <img src="img/CART.png" alt="" class="absolute right-0 cursor-pointer w-[50px] h-[50px]">
+                                    <img id="Cart-Icon" src="img/CART.png" alt="" class="absolute right-0 cursor-pointer w-[50px] h-[50px]">
                                 </div> 
                             </div>
                          </div> 
@@ -552,7 +564,38 @@ fetch('/productsBag')
                         sessionStorage.setItem('product', productName);
 
                         window.location.href = 'ProductDetails.html';
-                    })
+                    });
+                    productElement.querySelector('#Cart-Icon').addEventListener('click', function() {
+                        event.stopPropagation();
+                        const productContainer = productElement.querySelector('#main-container');
+                        const ProductName = productContainer.querySelector('p').innerText;
+                        const Quantity = 1;
+                        const Data ={
+                            ProductName: ProductName,
+                            Quantity: Quantity
+                        };
+                        console.log('running to hehe', Data)
+
+                        fetch('/AddToCartIcon',{
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(Data)
+                        })
+                        .then(response => response.json().then(data => {
+                            if (response.ok) {
+                                console.log('Success:', data);
+                                document.getElementById('CartPopup').classList.remove('hidden');
+                            }
+                            else if(response.status === 401){
+                                window.location.href = 'SignIn.html';
+                            }
+                        }))
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    });
             });
         }
 
@@ -579,6 +622,9 @@ fetch('/productsBag')
         renderPagination();
     })
     .catch(error => console.error('Error fetching products:', error));  
+    function CartOk(){
+        document.getElementById('CartPopup').classList.add('hidden');
+    }
 </script>
 <script src="Nav.js"></script>
 </html>

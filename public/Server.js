@@ -383,26 +383,24 @@ wss.on('connection', async (ws, req) => {
 
 app.put('/updateProfileImage', upload.single('image'), async (req, res) => {
     const user = req.session.user;
-    const ID = parseInt(user.UserID); // Assuming the user ID is sent in the request body
-    let result = { secure_url: null }; // To store the uploaded image URL
+    const ID = parseInt(user.UserID);
+    let result = { secure_url: null }; 
 
     try {
         if (req.file && req.file.path) {
-            // Upload the image to Cloudinary
             result = await cloudinary.uploader.upload(req.file.path, {
-                folder: 'img', // Cloudinary folder where images are stored
+                folder: 'img',
                 use_filename: true,
                 unique_filename: false,
                 transformation: [{ format: 'auto', quality: 'auto' }]
             });
 
-            // Remove the file from the local server after upload
             fs.unlinkSync(req.file.path);
         }
 
         const request = pool.request();
-        request.input('UserId', sql.Int, ID); // Input for user ID
-        request.input('Image', sql.VarChar, result.secure_url); // Image URL
+        request.input('UserId', sql.Int, ID);
+        request.input('Image', sql.VarChar, result.secure_url);
 
         const query = `
             UPDATE tbl_User
@@ -423,7 +421,7 @@ app.put('/updateProduct/:product', upload.single('image'), async (req, res) => {
     const { product } = req.params;
     const { newProductName, productPrice, productDes, productDiscount, Stock, Cat } = req.body;
     
-    let result = { secure_url: null }; // Ensure result is declared
+    let result = { secure_url: null };
 
     try {
         if (req.file && req.file.path) {
@@ -497,6 +495,50 @@ app.put('/updateMaterial/:Material', async (req, res) => {
 //Add To Cart
 
 app.post('/AddToCart', async (req, res) => {
+    const { ProductName, Quantity } = req.body;
+    const quan = parseInt(Quantity);
+    const user = req.session.user;
+    console.log(user);
+    if (!user || user.UserID === undefined) {
+        return res.status(401).json({ error: 'User not authenticated' });
+    }
+    const ID = parseInt(user.UserID);
+
+    try {
+        const request = pool.request();
+
+        request.input('PN', sql.VarChar, ProductName);
+        request.input('Quan', sql.Int, quan);
+        request.input('ID', sql.Int, ID);
+
+        const query = `
+        BEGIN
+            DECLARE @ProdID INT, @Price INT, @Total INT;
+
+            SELECT @Price = Price FROM tbl_Product WHERE ProductName = @PN;
+            SET @Total = @Price * @Quan;
+            SELECT @ProdID = ProductID FROM tbl_Product WHERE ProductName = @PN;
+
+            IF EXISTS (SELECT 1 FROM tbl_Cart WHERE ProductID = @ProdID AND UserID = @ID)
+                UPDATE tbl_Cart
+                SET Quantity = Quantity + @Quan, Price = Price * (Quantity + @Quan)
+                WHERE ProductID = @ProdID;
+            ELSE
+                INSERT INTO tbl_Cart (Quantity, Price, UserID, ProductID)
+                VALUES (@Quan, @Total, @ID, @ProdID);
+        END
+        `;
+
+        const result = await request.query(query);
+        res.status(200).json({ message: 'Added to Cart successfully' });
+
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err.message });
+    }
+});
+
+app.post('/AddToCartIcon', async (req, res) => {
     const { ProductName, Quantity } = req.body;
     const quan = parseInt(Quantity);
     const user = req.session.user;

@@ -569,14 +569,11 @@
     
 </body>
 <script>
-// Get the current date
 const currentDate = new Date();
 
-// Add 10 days
 const futureDate = new Date(currentDate);
 futureDate.setDate(currentDate.getDate() + 10);
 
-// Get the next three days from the future date
 const nextThreeDays = [];
 for (let i = 1; i <= 3; i++) {
     const nextDate = new Date(futureDate);
@@ -584,12 +581,10 @@ for (let i = 1; i <= 3; i++) {
     nextThreeDays.push(nextDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
 }
 
-// Populate the divs with the dates
 document.getElementById('date1').innerText = nextThreeDays[0];
 document.getElementById('date2').innerText = nextThreeDays[1];
 document.getElementById('date3').innerText = nextThreeDays[2];
 
-// Handle dropdown visibility
 const pickUpDiv = document.getElementById('PickUp');
 const indi = document.getElementById('Indicator');
 const dropdown = document.getElementById('dropdown');
@@ -598,7 +593,6 @@ pickUpDiv.addEventListener('click', () => {
     dropdown.classList.toggle('hidden');
 });
 
-// Handle date selection
 document.getElementById('date1').addEventListener('click', () => {
     indi.innerText = nextThreeDays[0];
     dropdown.classList.add('hidden');
@@ -688,9 +682,11 @@ fetch(`/CheckOut?orders=${encodeURIComponent(JSON.stringify(orders))}`)
 
     return total.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });;
 }
+//HEY
 const PlaceOrder = document.querySelector('#PlaceO');
 PlaceOrder.addEventListener('click',async function () {
-
+    const Indicator = document.getElementById('Indicator').innerText;
+    if(Indicator !== 'Select pick up date'){
         let cancelRequested = false; 
         try{
             const priceElement = document.getElementById('TotalPrice');
@@ -836,6 +832,10 @@ PlaceOrder.addEventListener('click',async function () {
                 loader.classList.add('hidden'); 
                 overlay.classList.add('hidden'); 
         }
+    }
+    else{
+        alert('Please select pickup date')
+    }
 });
 function OrderOk(){
     document.getElementById('OrderPopup').classList.add('hidden');
