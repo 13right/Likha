@@ -308,11 +308,20 @@
     </div>
     <div class="bg-Likha min-h-screen ">
         <div id="main-container">
-            <div class="bg-Likha max-w-auto h-auto flex flex-col items-center pt-[6rem] space-y-32">
+            <div class="bg-Likha max-w-auto h-auto flex flex-col items-center pt-[6rem] space-y-2">
                 <div>
                     <H6 class="text-6xl font-Montagu font-extrabold text-[#96A378]">Shop</H6>
+
                 </div>
-                <div class="flex-col mt-14">
+                <div class="flex-col mt-14 relative">
+                    <div class="flex items-center justify-end mt-14 space-x-2 mb-10 mr-16">
+                        <p class="font-Montserrat text-[#00000080] font-semibold text-[16px]">Sort by:</p>
+                        <select class="border-2 border-[#F07C54] bg-[#F07C541A] w-[179S.4px] h-[60px] text-[16px] text-[#00000080] font-semibold py-1 px-3 rounded-lg focus:outline-none focus:border-orange-400">
+                            <option selected disabled>Select</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                        </select>
+                    </div>
                     <div id="loading" class="relative flex justify-center space-x-9">
                         <div class="w-[318px] shadow-lg relative rounded-xl h-[500px] bg-[#E2E2D0] animate-pulse">
                             <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
