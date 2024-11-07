@@ -23,22 +23,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleIntersect = (entries, observer) => {
         entries.forEach(entry => {
             console.log('Entry:', entry.target.id); // Log the ID of the intersecting element
+            const isNotPhone = window.innerWidth >= 768; // Checks if it's not a phone (i.e., tablet or larger)
             if (entry.isIntersecting) {
-                if (entry.target === Left) {
-                    console.log('Left is in view');
-                    Left.classList.add('animation-fadeInLeft');
-                } else if (entry.target === Right) {
-                    console.log('Right is in view');
-                    Right.classList.add('animation-fadeInRight');
-                } else if (entry.target === AboutUs) {
-                    console.log('About is in view');
-                    AboutUs.classList.add('animation-Pop');
-                } else if (entry.target === target) {
-                    console.log('Target is in view');
-                    target.classList.add('fade-in-blur');
-                } else if (entry.target === P) {
-                    console.log('P is in view');
-                    P.classList.add('animtaion-Down');
+                if (isNotPhone) {
+                    if (entry.target === Left) {
+                        console.log('Left is in view');
+                        Left.classList.add('animation-fadeInLeft');
+                    } else if (entry.target === Right) {
+                        console.log('Right is in view');
+                        Right.classList.add('animation-fadeInRight');
+                    } else if (entry.target === AboutUs) {
+                        console.log('About is in view');
+                        AboutUs.classList.add('animation-Pop');
+                    } else if (entry.target === target) {
+                        console.log('Target is in view');
+                        target.classList.add('fade-in-blur');
+                    } else if (entry.target === P) {
+                        console.log('P is in view');
+                        P.classList.add('animtaion-Down');
+                    }
                 }
 
                 // Optionally stop observing after it becomes visible
