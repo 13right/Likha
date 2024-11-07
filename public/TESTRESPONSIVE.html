@@ -22,23 +22,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const handleIntersect = (entries, observer) => {
         entries.forEach(entry => {
-            console.log('Entry:', entry.target.id); // Log the ID of the intersecting element
+            console.log('Entry:', entry.target.id); 
+            const isNotPhone = window.innerWidth >= 768; // Checks if it's not a phone (i.e., tablet or larger)
             if (entry.isIntersecting) {
-                if (entry.target === Left) {
-                    console.log('Left is in view');
-                    Left.classList.add('animation-fadeInLeft');
-                } else if (entry.target === Right) {
-                    console.log('Right is in view');
-                    Right.classList.add('animation-fadeInRight');
-                } else if (entry.target === AboutUs) {
-                    console.log('About is in view');
-                    AboutUs.classList.add('animation-Pop');
-                } else if (entry.target === target) {
-                    console.log('Target is in view');
-                    target.classList.add('fade-in-blur');
-                } else if (entry.target === P) {
-                    console.log('P is in view');
-                    P.classList.add('animtaion-Down');
+                if (isNotPhone) {
+                    if (entry.target === Left) {
+                        console.log('Left is in view');
+                        Left.classList.add('animation-fadeInLeft');
+                    } else if (entry.target === Right) {
+                        console.log('Right is in view');
+                        Right.classList.add('animation-fadeInRight');
+                    } else if (entry.target === AboutUs) {
+                        console.log('About is in view');
+                        AboutUs.classList.add('animation-Pop');
+                    } else if (entry.target === target) {
+                        console.log('Target is in view');
+                        target.classList.add('fade-in-blur');
+                    } else if (entry.target === P) {
+                        console.log('P is in view');
+                        P.classList.add('animtaion-Down');
+                    }
                 }
 
                 // Optionally stop observing after it becomes visible
@@ -46,21 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.log(`${entry.target.id} is not in view`);
             }
+
+
         });
     };
 
     // Create a new Intersection Observer instance
-    const observer = new IntersectionObserver(handleIntersect, {
-        threshold: 0.1 // Adjust as needed
-    });
+        const observer = new IntersectionObserver(handleIntersect, {
+            threshold: 0.1 // Adjust as needed
+        });
 
-    // Observe the target elements
-    observer.observe(target);
-    observer.observe(Left);
-    observer.observe(Right);
-    observer.observe(AboutUs);
-    observer.observe(P);
-});
+        // Observe the target elements
+        observer.observe(target);
+        observer.observe(Left);
+        observer.observe(Right);
+        observer.observe(AboutUs);
+        observer.observe(P);
+    });
 
 </script>
 <style>
@@ -231,6 +236,7 @@ input[type="checkbox"] {
         opacity: 1;
         padding-left: 2.5rem; /* Space for the icon on the left */
     }
+
     @media (max-width: 768px) {
         .search-bar.expanded {
             width: 8rem; 
@@ -247,6 +253,7 @@ input[type="checkbox"] {
     #search-icon.expanded {
         transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
     }
+
     @media (max-width: 768px) {
         #search-icon.expanded {
         transform: translateX(-5.5rem); /* Move the icon to the left inside the search bar */
@@ -256,7 +263,8 @@ input[type="checkbox"] {
         #search-icon.expanded {
         transform: translateX(-4.5rem); /* Move the icon to the left inside the search bar */
     }
-}
+    }
+
     .rotating-text p {
     display: inline-flex;
     margin: 0;
@@ -360,13 +368,18 @@ input[type="checkbox"] {
     .animation-Pop {
     animation: Pop 1s ease-in-out;
     }
+    /* Default styling for lord-icon */
+    lord-icon {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
 
     /* Media query for smaller screens (e.g., mobile devices) */
     @media (max-width: 768px) {
-    lord-icon {
-        width: 1.5rem;  /* Smaller size for mobile */
-        height: 1.5rem; /* Smaller size for mobile */
-    }
+        lord-icon {
+            width: 1.5rem;  /* Smaller size for mobile */
+            height: 1.5rem; /* Smaller size for mobile */
+        }
     }
 
     /* Media query for very small screens (e.g., phones in portrait mode) */
@@ -381,7 +394,7 @@ input[type="checkbox"] {
         width: 1.5rem;  /* Smaller size for 375px screen width */
         height: 1.5rem; /* Smaller size for 375px screen width */
     }
-    }
+}
 
 </style>
 <body>
@@ -713,6 +726,12 @@ window.addEventListener("blur",()=>{
 window.addEventListener("focus",()=>{
     document.title = "Welcome to Zappnott";
 });
+function Menu(e){
+            let list = document.querySelector('ul');
+            if(window.innerWidth < 768){
+            e.name === 'menu' ? (e.name = "close",list.classList.add('top-[80px]'),list.classList.add('opacity-100')) : (e.name = "menu",list.classList.remove('top-[80px]'),list.classList.remove('opacity-100'))
+            }
+        }
 </script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <script src="SliderScript.js"></script>
