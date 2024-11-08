@@ -282,7 +282,7 @@ app.post('/api/data/Unity', async (req, res) => {
    //const color = req.body.objectsUI[0].color;
    //console.log(color);
    //const ColorName = getColorName(color);
-   // res.send({ message: 'Data received!', receivedData: req.body });
+   res.send({ message: 'Data received!', receivedData: req.body });
     //const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
     // const request = pool.request();
     //     request.input('Name', sql.VarChar, dressName);
@@ -298,7 +298,7 @@ app.post('/api/data/Unity', async (req, res) => {
     //     `;
 
     //     await request.query(query);
-       // res.status(200).send('Profile image updated successfully');
+       res.status(200).send('Profile image updated successfully');
 });
 
 
