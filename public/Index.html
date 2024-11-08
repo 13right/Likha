@@ -259,7 +259,7 @@ input[type="checkbox"] {
         #search-icon.expanded {
         transform: translateX(-4.5rem); /* Move the icon to the left inside the search bar */
     }
-}
+    }
     .rotating-text p {
     display: inline-flex;
     margin: 0;
@@ -705,6 +705,95 @@ input[type="checkbox"] {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="fixed hidden right-0 top-0 h-full w-[570px] bg-Likha z-[50] shadow-2xl p-6" id="Cartel">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <h1 class="font-Montagu font-semibold text-[24px] ml-3 mb-4">Cart Product</h1>
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603913/ekis_f7urxc.png" alt="" class="w-[20px] h-[20px] relative mb-5 mr-5 cursor-pointer" id="CloseCart">
+                    </div>
+                    <hr class="border-outline border-[1.5px] w-auto">
+        
+                </div>
+                <div id="Product-Cart" class="overflow-auto h-[70vh] Product-Cartt"></div>
+                <div class="my-3 flex relative">
+                    <h2 class="relative left-6 font-Montserrat font-extrabold text-[16px]">Total: </h2>
+                    <p class="absolute right-6 font-Montserrat font-semibold text-[16px]" id="totalPriceDisplay">₱ 0.00</p>
+                </div>
+                <hr class="border-1 border-outline w-auto ">
+                <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
+            </div>
+            <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
+                <div class="shadow-sm">
+                    <p class="my-2 ml-2 font-Inter">Notification</p>
+                    <hr class="border-1 border-[#D8BC8C80] w-[28.5rem] mb-1">
+                </div>
+                <div id="NotifContents" class="overflow-y-auto  h-[20rem]">
+                    <div id="NotifContent" class="relative space-y-5 ">
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="fixed bottom-16 right-4 md:right-20">
+                <div class="relative">
+                  <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
+                       alt="Chat Logo" 
+                       class=" h-[3rem] md:h-[4rem] cursor-pointer z-40">
+                  <span id="Chat-Badge" class="absolute top-3 right-3 w-3 h-3 bg-outline text-white text-xs font-bold rounded-full px-1 z-50 transform translate-x-1/2 -translate-y-1/2 hidden">
+                  </span>
+                </div>
+            </div>
+            <div id="ChatContent" class="hidden fixed rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
+                <div class="shadow-sm">
+                    <div class="flex">
+                        <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
+                        <p id="ChatClose" class="absolute right-5 my-2 cursor-pointer font-Inter font-extrabold">X</p>
+                    </div>
+                    <hr class="border-1 border-[#D8BC8C80] w-[35rem]">
+                    <div class="m-4">
+                        <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
+                        </div>
+                        <button id="CB" class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="SendBot()">ChatBot</button>
+                        <button class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="Zapp()">Zappnott</button>
+                        <form autocomplete="off" id="message-form" class="flex">
+                            <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+                            <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                        <img id="ProfilePicMenu" src="img/profileblank.png" alt="" class="w-[80px] h-[80px] rounded-full object-cover">
+                    </div>
+                    <div id="UsernameMenu" class="font-Inter">
+                        jennierubyjane
+                    </div>
+                </div>
+                <div class="py-1 flex" ></div>
+                    <div class="flex-col flex relative">
+                        <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                        <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
+                        <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                        <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
+                        <div class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</div>
+                    </div>
+                </div>
+                <div id="LogOutModal" class="fixed top-1/2 z-30 flex flex-col items-center justify-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg transform hidden transition-all duration-300">
+                    <div class="flex flex-col items-center justify-center">
+                        <img src="img/LogOutModal.png" class="w-[80px]" alt="">
+                        <div class="flex flex-col space-y-1 items-center w-[19rem] text-center">
+                            <span>Are you sure you want to Log Out?</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-8 mt-5">
+                        <button id="LYes" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8">YES</button>
+                        <button id="LNo"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
+                    </div>
+        
+                </div> 
         </div>
     </div>
     <script src="Rotatingtext.js"></script>

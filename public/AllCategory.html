@@ -170,9 +170,31 @@
         opacity: 1;
         padding-left: 2.5rem; /* Space for the icon on the left */
     }
+    @media (max-width: 768px) {
+        .search-bar.expanded {
+            width: 8rem; 
+            padding-left: 1.5rem;
+        }
+    }
+    @media (max-width: 375px) {
+        .search-bar.expanded {
+            width: 7rem; 
+            padding-left: 1.5rem;
+        }
+    }
 
     #search-icon.expanded {
         transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
+    }
+    @media (max-width: 768px) {
+        #search-icon.expanded {
+        transform: translateX(-5.5rem); /* Move the icon to the left inside the search bar */
+    }
+    }
+    @media (max-width: 375px) {
+        #search-icon.expanded {
+        transform: translateX(-4.5rem); /* Move the icon to the left inside the search bar */
+    }
     }
     .line-clamp-2 {
     display: -webkit-box;
@@ -180,14 +202,33 @@
     -webkit-line-clamp: 2; /* Limit to 2 lines */
     overflow: hidden;
     }
+    @media (max-width: 768px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for mobile */
+        height: 1.5rem; /* Smaller size for mobile */
+    }
+    }
 
+    /* Media query for very small screens (e.g., phones in portrait mode) */
+    @media (max-width: 480px) {
+        lord-icon {
+            width: 1.25rem;  /* Even smaller size for very small screens */
+            height: 1.25rem; /* Even smaller size for very small screens */
+        }
+    }
+    @media (max-width: 375px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for 375px screen width */
+        height: 1.5rem; /* Smaller size for 375px screen width */
+    }
+    }
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50" >
         <nav class="md:flex md:items-center">   
             <div >
-                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/q_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[1rem] cursor-pointer md:cursor-default md:ml-[2rem]" onclick="Menu(this)" name = "menu" id="menubutton">
             </div>
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
@@ -224,7 +265,7 @@
                                 });
                               </script>
                               
-                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 translate-x-44 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden md:translate-x-0" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                               <div class="py-1" role="none">
                                 <a href="AllCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">All</a>
                                 <a href="DressCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Dress</a>
@@ -242,16 +283,15 @@
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="Index.html#About" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#footer" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
-                    
                 </ul>
             </div>
             <div class="flex fixed p-3 top-1 right-1 md:right-16">
@@ -264,7 +304,7 @@
                         src="https://cdn.lordicon.com/kkvxgpti.json"
                         trigger="hover"
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
-                        style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
+                        style="margin-right: 0.75rem;">
                     </lord-icon>
                     <div id="SearchCon" class="bg-Likha h-auto w-[15rem] absolute top-12 rounded-3xl hidden shadow-2xl">
                         
@@ -272,21 +312,21 @@
                 </div>
             
 
-                <a class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
+                <div class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
                     <lord-icon
                         src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
                         colors="primary:#000000"
-                        style="width:1.75rem;height:1.75rem">
+                        style="">
                     </lord-icon>
-                </a>
+                </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.75rem]">
                     <lord-icon
                         id="NotifIcon"
                         src="https://cdn.lordicon.com/vspbqszr.json"
                         trigger="hover"
-                        style="width:1.75rem;height:1.75rem;">
+                        style="">
                     </lord-icon>
                     <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
                     <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
@@ -299,7 +339,7 @@
                         trigger="hover"
                         stroke="bold"
                         colors="primary:#121331,secondary:#121331"
-                        style="width:2rem;height:2rem;">
+                        style="">
                     </lord-icon>
                 </div>
             </div>

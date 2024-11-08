@@ -279,26 +279,26 @@ function getColorName(rgba) {
 
 app.post('/api/data/Unity', async (req, res) => {
     console.log('Received data:', req.body);
-   const color = req.body.objectsUI[0].color;
-   console.log(color);
-   const ColorName = getColorName(color);
-    //res.send({ message: 'Data received!', receivedData: req.body });
-    const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
-    const request = pool.request();
-        request.input('Name', sql.VarChar, dressName);
-        request.input('Bust', sql.Decimal, bust);
-        request.input('Price',sql.Int,price);
-        request.input('Color',sql.VarChar,ColorName);
-        request.input('Waist',sql.Decimal,waist);
-        request.input('hips',sql.Decimal,hip);
-        request.input('Height',sql.Decimal,height);
+   //const color = req.body.objectsUI[0].color;
+   //console.log(color);
+   //const ColorName = getColorName(color);
+   // res.send({ message: 'Data received!', receivedData: req.body });
+    //const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
+    // const request = pool.request();
+    //     request.input('Name', sql.VarChar, dressName);
+    //     request.input('Bust', sql.Decimal, bust);
+    //     request.input('Price',sql.Int,price);
+    //     //Wrequest.input('Color',sql.VarChar,ColorName);
+    //     request.input('Waist',sql.Decimal,waist);
+    //     request.input('hips',sql.Decimal,hip);
+    //     request.input('Height',sql.Decimal,height);
 
-        const query = `
-            INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
-        `;
+    //     const query = `
+    //         INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
+    //     `;
 
-        await request.query(query);
-        res.status(200).send('Profile image updated successfully');
+    //     await request.query(query);
+       // res.status(200).send('Profile image updated successfully');
 });
 
 
