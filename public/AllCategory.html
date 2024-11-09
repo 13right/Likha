@@ -350,13 +350,13 @@
         <div id="main-container">
             <div class="bg-Likha max-w-auto h-auto flex flex-col items-center pt-[6rem] space-y-2">
                 <div>
-                    <H6 class="text-6xl font-Montagu font-extrabold text-[#96A378]">Shop</H6>
+                    <H6 class=" text-4xl md:text-6xl font-Montagu font-extrabold text-[#96A378]">Shop</H6>
 
                 </div>
-                <div class="flex-col mt-14 relative">
-                    <div class="flex items-center justify-end mt-14 space-x-2 mb-10 mr-16">
+                <div class=" mt-4 md:mt-14 relative">
+                    <div class="flex items-center justify-end mt-6 md:mt-14 space-x-2 mb-10 mr-3 md:mr-16">
                         <p class="font-Montserrat text-[#00000080] font-semibold text-[16px]">Sort by:</p>
-                        <select class="border-2 border-[#F07C54] bg-[#F07C541A] w-[179S.4px] h-[60px] text-[16px] text-[#00000080] font-semibold py-1 px-3 rounded-lg focus:outline-none focus:border-orange-400">
+                        <select class="border-2 border-[#F07C54] bg-[#F07C541A] w-[100px] h-[30px] md:w-[179.4px] md:h-[60px] text-[16px] text-[#00000080] font-semibold py-1 px-3 rounded-lg focus:outline-none focus:border-orange-400">
                             <option selected disabled>Select</option>
                             <option>Price: Low to High</option>
                             <option>Price: High to Low</option>
@@ -376,7 +376,7 @@
                             <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
                         </div>
                     </div>
-                    <div id="Product" class="flex flex-wrap justify-start mx-10 hidden"></div>
+                    <div id="Product" class="flex flex-wrap justify-center md:justify-start md:mx-10 hidden"></div>
                     <div id="Page" class="flex justify-center mb-14"></div>
                     
                 </div>
@@ -483,7 +483,7 @@
                 </div>
             </div>
         </div>
-        <div class="fixed bottom-16 right-20">
+        <div class="fixed bottom-16 right-3 md:right-20">
             <div class="relative">
               <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
                    alt="Chat Logo" 
@@ -584,11 +584,11 @@ fetch('/products')
                 const productElement = document.createElement('div');
                 productElement.innerHTML = `
                     <div id="main-container"> 
-                        <div class="relative w-[328px] h-[500px] bg-sign outline outline-1 outline-outline flex justify-center rounded-md overflow-hidden transform hover:scale-105 cursor-pointer transition ease-in-out duration-300 group mx-[0.65rem] mb-6">
+                        <div class="relative w-[150px] h-[220px] md:w-[328px] md:h-[500px] bg-sign outline outline-1 outline-outline flex justify-center rounded-md overflow-hidden transform hover:scale-105 cursor-pointer transition ease-in-out duration-300 group mx-3 md:mx-[0.65rem] mb-6">
                             <img src="${product.imagePath}" alt="" class="object-fill h-full w-full rounded-md">
-                            <div class="h-[124px] w-[289.19px] bg-[#FFFFFF80] absolute bottom-4 rounded-md z-10 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
+                            <div class="w-[120px] md:h-[124px] md:w-[289.19px] bg-[#FFFFFF80] absolute bottom-4 rounded-md z-10 px-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ">
                                 <div class="relative w-auto h-[5rem]">
-                                    <p class=" relative font-Montagu font-semibold text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
+                                    <p class=" relative font-Montagu font-semibold text-[15px] md:text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
                                 </div>
                                 
                                 <div class="flex absolute bottom-2  w-[17rem] items-center">

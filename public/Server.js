@@ -121,6 +121,7 @@ const config = {
     }
 };
 
+
 // MSCloud
 // const config = {
 //     user: 'Likha_Admin',
@@ -307,8 +308,8 @@ app.post('/Request/Necklace', async (req, res) => {
    //console.log(color);
    //const ColorName = getColorName(color);
    res.send({ message: 'Necklace Data received!', receivedData: req.body });
-    //const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
-    // const request = pool.request();
+    //     const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
+    //     const request = pool.request();
     //     request.input('Name', sql.VarChar, dressName);
     //     request.input('Bust', sql.Decimal, bust);
     //     request.input('Price',sql.Int,price);
@@ -332,7 +333,7 @@ app.get('/NeckLaceMaterials', async (req, res) => {
     try {
         const request = pool.request();
         const result = await request.query(query);
-        res.json(result);
+        res.json(result.recordset);
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
