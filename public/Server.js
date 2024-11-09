@@ -19,6 +19,7 @@ const server = http.createServer(app);
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const { Result } = require('tedious/lib/token/helpers');
 app.set('view engine', 'ejs');
 
 const port = process.env.PORT || 3000;
@@ -277,12 +278,12 @@ function getColorName(rgba) {
     return colorMapping[rgbaKey] || 'unknown';
 }
 
-app.post('/api/data/Unity', async (req, res) => {
+app.post('/Request/Dress', async (req, res) => {
     console.log('Received data:', req.body);
    //const color = req.body.objectsUI[0].color;
    //console.log(color);
    //const ColorName = getColorName(color);
-   res.send({ message: 'Data received!', receivedData: req.body });
+   res.send({ message: 'Dress Data received!', receivedData: req.body });
     //const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
     // const request = pool.request();
     //     request.input('Name', sql.VarChar, dressName);
@@ -298,7 +299,44 @@ app.post('/api/data/Unity', async (req, res) => {
     //     `;
 
     //     await request.query(query);
-       res.status(200).send('Profile image updated successfully');
+    res.status(200).send('Dress data uploaded successfully');
+});
+app.post('/Request/Necklace', async (req, res) => {
+    console.log('Received data:', req.body);
+   //const color = req.body.objectsUI[0].color;
+   //console.log(color);
+   //const ColorName = getColorName(color);
+   res.send({ message: 'Necklace Data received!', receivedData: req.body });
+    //const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
+    // const request = pool.request();
+    //     request.input('Name', sql.VarChar, dressName);
+    //     request.input('Bust', sql.Decimal, bust);
+    //     request.input('Price',sql.Int,price);
+    //     //Wrequest.input('Color',sql.VarChar,ColorName);
+    //     request.input('Waist',sql.Decimal,waist);
+    //     request.input('hips',sql.Decimal,hip);
+    //     request.input('Height',sql.Decimal,height);
+
+    //     const query = `
+    //         INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
+    //     `;
+
+    //     await request.query(query);
+       res.status(200).send('Necklace data uploaded successfully');
+});
+
+//DITO
+app.get('/NeckLaceMaterials', async (req, res) => {
+    const query = `SELECT MaterialName, Stock, Price FROM tbl_Materials`;
+    
+    try {
+        const request = pool.request();
+        const result = await request.query(query);
+        res.json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 });
 
 
