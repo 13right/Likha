@@ -333,12 +333,19 @@ app.get('/NeckLaceMaterials', async (req, res) => {
     try {
         const request = pool.request();
         const result = await request.query(query);
-        res.json(result.recordset);
+
+        const formattedResult = result.recordset.reduce((acc, { MaterialName, Stock, Price }) => {
+            acc[MaterialName] = { Stock, Price };
+            return acc;
+        }, {});
+        
+        res.json(formattedResult);
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
     }
 });
+
 
 
 app.post('/upload-screenshot/Unity', (req, res) => {
