@@ -282,47 +282,63 @@ function getColorName(rgba) {
 app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     console.log('Received data:', req.body);
     let fileUrl = null;
-
-    console.log('Received data:', req.body);
-    const jsonData = JSON.parse(req.body.data);
-    //console.log("JSON Data:", jsonData.necklace);
-    if (req.file && req.file.path) {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "img",
-        use_filename: true,
-        unique_filename: false,
-        transformation: [{ format: "auto", quality: "auto" }],
-    });
-        fileUrl = result.secure_url;
-        fs.unlinkSync(req.file.path);
-        }
-        res.status(200).json({
-            message: "Dress data uploaded successfully",
-            fileUrl: fileUrl,
-            jsonData: jsonData
-            });
+    try{
+        console.log('Received data:', req.body);
+        const jsonData = JSON.parse(req.body.data);
+        //console.log("JSON Data:", jsonData.necklace);
+        if (req.file && req.file.path) {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "img",
+            use_filename: true,
+            unique_filename: false,
+            transformation: [{ format: "auto", quality: "auto" }],
+        });
+            fileUrl = result.secure_url;
+            fs.unlinkSync(req.file.path);
+            }
+            res.status(200).json({
+                message: "Dress data uploaded successfully",
+                fileUrl: fileUrl,
+                jsonData: jsonData
+                });
+    }
+    catch (err) {
+        console.error("Error inserting data into database:", err);
+        res.status(500).json({
+            message: "Error inserting data into database",
+            error: err.message
+        });
+    }
 });
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
     let fileUrl = null;
-
+    try{
+        const jsonData = JSON.parse(req.body.data);
+        console.log("JSON Data:", jsonData);
+        if (req.file && req.file.path) {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "img",
+            use_filename: true,
+            unique_filename: false,
+            transformation: [{ format: "auto", quality: "auto" }],
+        });
+            fileUrl = result.secure_url;
+            fs.unlinkSync(req.file.path);
+            }
+            res.status(200).json({
+                message: "Necklace data uploaded successfully",
+                fileUrl: fileUrl,
+                jsonData: jsonData
+                });
+    }
     //console.log('Received data:', req.body);
-    const jsonData = JSON.parse(req.body.data);
-    console.log("JSON Data:", jsonData);
-    if (req.file && req.file.path) {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "img",
-        use_filename: true,
-        unique_filename: false,
-        transformation: [{ format: "auto", quality: "auto" }],
-    });
-        fileUrl = result.secure_url;
-        fs.unlinkSync(req.file.path);
-        }
-        res.status(200).json({
-            message: "Necklace data uploaded successfully",
-            fileUrl: fileUrl,
-            jsonData: jsonData
-            });
+    catch (err) {
+        console.error("Error inserting data into database:", err);
+        res.status(500).json({
+            message: "Error inserting data into database",
+            error: err.message
+        });
+    }
             
         
    //const color = req.body.objectsUI[0].color;
@@ -350,25 +366,34 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
     //console.log('Received data:', req.body);
     let fileUrl = null;
+    try{
+        console.log('Received data:', req.body);
+        const jsonData = JSON.parse(req.body.data);
+        console.log("JSON Data:", jsonData);
+        if (req.file && req.file.path) {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "img",
+            use_filename: true,
+            unique_filename: false,
+            transformation: [{ format: "auto", quality: "auto" }],
+        });
+            fileUrl = result.secure_url;
+            fs.unlinkSync(req.file.path);
+            }
+            res.status(200).json({
+                message: "Ring data uploaded successfully",
+                fileUrl: fileUrl,
+                jsonData: jsonData
+                });
+    }
+    catch (err) {
+        console.error("Error:", err);
+        res.status(500).json({
+            message: "Error",
+            error: err.message
+        });
+    }
 
-    console.log('Received data:', req.body);
-    const jsonData = JSON.parse(req.body.data);
-    console.log("JSON Data:", jsonData);
-    if (req.file && req.file.path) {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "img",
-        use_filename: true,
-        unique_filename: false,
-        transformation: [{ format: "auto", quality: "auto" }],
-    });
-        fileUrl = result.secure_url;
-        fs.unlinkSync(req.file.path);
-        }
-        res.status(200).json({
-            message: "Ring data uploaded successfully",
-            fileUrl: fileUrl,
-            jsonData: jsonData
-            });
    //const color = req.body.objectsUI[0].color;
    //console.log(color);
    //const ColorName = getColorName(color);
