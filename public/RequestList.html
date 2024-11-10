@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
-    <title>Orders</title>
+    <title>Requests</title>
 </head>
 <style>
     @keyframes fadeInRight {
@@ -100,21 +100,17 @@
         </div>
 
         <div class="text-center mt-3">
-            <H1 class="font-Montagu text-4xl font-bold">Orders</H1>
+            <H1 class="font-Montagu text-4xl font-bold">3D Requests</H1>
         </div>
         <div class="mt-9 flex mx-[10rem] justify-around">
             <div class="cursor-pointer w-[272.45px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
-                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">All Orders</p>
-                <img src="img/All Orders.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">All Request</p>
+                <img src="img/AllReq.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
             </div>
             <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
-                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Confirmed Orders</p>
-                <img src="img/Confirmed Order.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Confirmed Request</p>
+                <img src="img/ConfirmedReq.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
             </div>
-            <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
-                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Pending Orders</p>
-                <img src="img/Pending.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
-            </div> 
             <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
                 <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Ready to Pick Up</p>
                 <img src="img/Ready to Pick Up.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
@@ -139,19 +135,18 @@
         </div>
 
         <div class="mx-[6rem] mt-[3rem] relative w-auto h-auto rounded-lg bg-sign outline outline-[3px] outline-outline p-7">
-            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-between  pr-[8rem] pl-[4rem]">
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Order ID</h1>
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Order Date</h1>
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Pick Up Date</h1>
+            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-between pr-[20rem] pl-[4rem]">
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Request ID</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Date</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Customer Name</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080] mr-[4.5rem]">Total</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080] relative">Status</h1>
             </div>
-            <div id="OrderList" ></div>
+            <div id="RequestList" ></div>
         </div>
 
 
-        <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
+        <!-- <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
             <a href="OrderList.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
                 <p class="font-Montserrat font-semibold">Order</p>
             </a>
@@ -168,7 +163,7 @@
             <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
                 <p class="font-Montserrat font-semibold">Log Out</p>
             </a>
-        </div>
+        </div> -->
     </div>
 
 </body>

@@ -326,6 +326,30 @@ app.post('/Request/Necklace', async (req, res) => {
        res.status(200).send('Necklace data uploaded successfully');
 });
 
+app.post('/Request/Ring', async (req, res) => {
+    console.log('Received data:', req.body);
+   //const color = req.body.objectsUI[0].color;
+   //console.log(color);
+   //const ColorName = getColorName(color);
+   res.send({ message: 'Necklace Data received!', receivedData: req.body });
+    //     const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
+    //     const request = pool.request();
+    //     request.input('Name', sql.VarChar, dressName);
+    //     request.input('Bust', sql.Decimal, bust);
+    //     request.input('Price',sql.Int,price);
+    //     //Wrequest.input('Color',sql.VarChar,ColorName);
+    //     request.input('Waist',sql.Decimal,waist);
+    //     request.input('hips',sql.Decimal,hip);
+    //     request.input('Height',sql.Decimal,height);
+
+    //     const query = `
+    //         INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
+    //     `;
+
+    //     await request.query(query);
+       res.status(200).send('Necklace data uploaded successfully');
+});
+
 //DITO
 app.get('/NeckLaceMaterials', async (req, res) => {
     const query = `SELECT MaterialName, Stock, Price FROM tbl_Materials`;
@@ -351,7 +375,6 @@ app.get('/NeckLaceMaterials', async (req, res) => {
 app.post('/upload-screenshot/Unity', (req, res) => {
     const screenshotBuffer = req.body;
 
-    // Save the received screenshot as a file (screenshot.png)
     fs.writeFile('screenshot.png', screenshotBuffer, (err) => {
         if (err) {
             console.error('Error saving screenshot:', err);
@@ -1446,9 +1469,16 @@ app.get('/AdminProducts', async (req, res) => {
 });
 
 app.get('/products', async (req, res) => {
+    const order = req.query.order || 'default';
+    let orderByClause = '';
+    if (order === 'LH') {
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+    } else if (order === 'HL') {
+        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+    }
     try {
         const result = await pool.request()
-            .query("SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID WHERE tbl_Product.Stock > 0 AND isArchive = 'No' GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage");
+            .query(`SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2)) AS AvgRating,ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as PriceDecimal, Description, Stock, CategoryID, ProductImage FROM tbl_Product LEFT JOIN tbl_FeedBack ON tbl_Product.ProductID = tbl_Feedback.ProductID WHERE tbl_Product.Stock > 0 AND isArchive = 'No' GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage ${orderByClause}`);
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -1458,7 +1488,7 @@ app.get('/products', async (req, res) => {
                 Count: product.Count,
                 Avg: product.AvgRating,
                 productName: product.ProductName,
-                productPrice: product.Price,
+                productPrice: product.PriceDecimal,
                 description: product.Description,
                 stock: product.Stock,
                 categoryId: product.CategoryID,
