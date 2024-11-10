@@ -281,10 +281,30 @@ function getColorName(rgba) {
 
 app.post('/Request/Dress', async (req, res) => {
     console.log('Received data:', req.body);
+    let fileUrl = null;
+
+    console.log('Received data:', req.body);
+    const jsonData = JSON.parse(req.body.data);
+    console.log("JSON Data:", jsonData);
+    if (req.file && req.file.path) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "img",
+        use_filename: true,
+        unique_filename: false,
+        transformation: [{ format: "auto", quality: "auto" }],
+    });
+        fileUrl = result.secure_url;
+        fs.unlinkSync(req.file.path);
+        }
+        res.status(200).json({
+            message: "Dress data uploaded successfully",
+            fileUrl: fileUrl,
+            jsonData: jsonData
+            });
    //const color = req.body.objectsUI[0].color;
    //console.log(color);
    //const ColorName = getColorName(color);
-   res.send({ message: 'Dress Data received!', receivedData: req.body });
+   //res.send({ message: 'Dress Data received!', receivedData: req.body });
     //const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
     // const request = pool.request();
     //     request.input('Name', sql.VarChar, dressName);
@@ -300,14 +320,35 @@ app.post('/Request/Dress', async (req, res) => {
     //     `;
 
     //     await request.query(query);
-    res.status(200).send('Dress data uploaded successfully');
+    //res.status(200).send('Dress data uploaded successfully');
 });
-app.post('/Request/Necklace', async (req, res) => {
-    console.log('Received data:', req.body);
+app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
+    let fileUrl = null;
+
+    //console.log('Received data:', req.body);
+    const jsonData = JSON.parse(req.body.data);
+    console.log("JSON Data:", jsonData);
+    if (req.file && req.file.path) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "img",
+        use_filename: true,
+        unique_filename: false,
+        transformation: [{ format: "auto", quality: "auto" }],
+    });
+        fileUrl = result.secure_url;
+        fs.unlinkSync(req.file.path);
+        }
+        res.status(200).json({
+            message: "Necklace data uploaded successfully",
+            fileUrl: fileUrl,
+            jsonData: jsonData
+            });
+            
+        
    //const color = req.body.objectsUI[0].color;
    //console.log(color);
    //const ColorName = getColorName(color);
-   res.send({ message: 'Necklace Data received!', receivedData: req.body });
+   //res.send({ message: 'Necklace Data received!', receivedData: req.body });
     //     const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
     //     const request = pool.request();
     //     request.input('Name', sql.VarChar, dressName);
@@ -323,15 +364,35 @@ app.post('/Request/Necklace', async (req, res) => {
     //     `;
 
     //     await request.query(query);
-       res.status(200).send('Necklace data uploaded successfully');
+       //res.status(200).send('Necklace data uploaded successfully');
 });
 
 app.post('/Request/Ring', async (req, res) => {
+    //console.log('Received data:', req.body);
+    let fileUrl = null;
+
     console.log('Received data:', req.body);
+    const jsonData = JSON.parse(req.body.data);
+    console.log("JSON Data:", jsonData);
+    if (req.file && req.file.path) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "img",
+        use_filename: true,
+        unique_filename: false,
+        transformation: [{ format: "auto", quality: "auto" }],
+    });
+        fileUrl = result.secure_url;
+        fs.unlinkSync(req.file.path);
+        }
+        res.status(200).json({
+            message: "Ring data uploaded successfully",
+            fileUrl: fileUrl,
+            jsonData: jsonData
+            });
    //const color = req.body.objectsUI[0].color;
    //console.log(color);
    //const ColorName = getColorName(color);
-   res.send({ message: 'Ring Data received!', receivedData: req.body });
+   //res.send({ message: 'Ring Data received!', receivedData: req.body });
     //     const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
     //     const request = pool.request();
     //     request.input('Name', sql.VarChar, dressName);
@@ -347,7 +408,7 @@ app.post('/Request/Ring', async (req, res) => {
     //     `;
 
     //     await request.query(query);
-       res.status(200).send('Necklace data uploaded successfully');
+       //res.status(200).send('Necklace data uploaded successfully');
 });
 
 //DITO
@@ -386,7 +447,7 @@ app.post('/upload-screenshot/Unity', (req, res) => {
 });
 
 
-app.post("/upload/Unity", upload.single("file"), async (req, res) => {
+app.post("/upload/Unity", upload.single('image'), async (req, res) => {
     let fileUrl = null;
   
     try {
