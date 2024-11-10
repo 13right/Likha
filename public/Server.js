@@ -311,8 +311,9 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     }
 });
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
-    const { data } = req.body;  // Assuming data comes from the request body
-    const jsonData = JSON.parse(data);
+    //const { data } = req.body;  // Assuming data comes from the request body
+
+    const jsonData = JSON.parse(req.body.data);
    // const user = req.session.user;
     
     // Check if userID is null and redirect to sign-in if necessary
