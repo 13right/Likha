@@ -717,6 +717,10 @@ video {
   left: 2.5rem;
 }
 
+.left-\[22\.5rem\]{
+  left: 22.5rem;
+}
+
 .left-\[24\.25rem\]{
   left: 24.25rem;
 }
@@ -857,6 +861,10 @@ video {
   right: 17.75rem;
 }
 
+.right-\[18\.5rem\]{
+  right: 18.5rem;
+}
+
 .right-\[1rem\]{
   right: 1rem;
 }
@@ -865,12 +873,20 @@ video {
   right: 26.5rem;
 }
 
+.right-\[30\.75rem\]{
+  right: 30.75rem;
+}
+
 .right-\[37\%\]{
   right: 37%;
 }
 
 .right-\[3rem\]{
   right: 3rem;
+}
+
+.right-\[7rem\]{
+  right: 7rem;
 }
 
 .right-\[8rem\]{

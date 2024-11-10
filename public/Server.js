@@ -311,57 +311,85 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     }
 });
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
+    const { data } = req.body;  // Assuming data comes from the request body
+    const jsonData = JSON.parse(data);
+    const user = req.session.user;
+    
+    // Check if userID is null and redirect to sign-in if necessary
+    if (!user || !user.UserID) {
+        return res.status(200).json({
+            success: false,
+            message: "Unauthorized. Please sign in.",
+            redirectTo: "/SignIn.html"
+        });
+    }
+
+    const userID = parseInt(user.UserID);
     let fileUrl = null;
-    try{
-        const jsonData = JSON.parse(req.body.data);
-        console.log("JSON Data:", jsonData);
+
+    try {
         if (req.file && req.file.path) {
             const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "img",
-            use_filename: true,
-            unique_filename: false,
-            transformation: [{ format: "auto", quality: "auto" }],
-        });
+                folder: "img",
+                use_filename: true,
+                unique_filename: false,
+                transformation: [{ format: "auto", quality: "auto" }],
+            });
+
             fileUrl = result.secure_url;
-            fs.unlinkSync(req.file.path);
-            }
-            res.status(200).json({
-                message: "Necklace data uploaded successfully",
-                fileUrl: fileUrl,
-                jsonData: jsonData
-                });
-    }
-    //console.log('Received data:', req.body);
-    catch (err) {
-        console.error("Error:", err);
+            fs.unlinkSync(req.file.path);  // Clean up the file after uploading
+        }
+
+        const request = pool.request();
+
+        // Insert the data into tbl_CustomNecklace
+        const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
+            .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
+            .input('size', sql.Int, jsonData.necklace.length)
+            .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
+            .input('UserID', sql.Int, userID)
+            .query(`
+                INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID,Status)
+                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), @UserID,'Requested');
+            `);
+
+        // Insert data into tbl_NecklaceMaterials
+        for (const material of jsonData.necklace.materials) {
+            // Dynamically create unique parameter names for each iteration
+            const materialNameParam = `MName_${material.name}`;
+            const quantityParam = `quantity_${material.name}`;
+
+            await request.input(materialNameParam, sql.VarChar, material.name)
+                .input(quantityParam, sql.Int, material.quantity)
+                .query(`
+                    DECLARE @NewRNL INT;
+                    SET @NewRNL = (SELECT TOP 1 ID FROM tbl_CustomNecklace ORDER BY ID DESC);
+
+                    INSERT INTO tbl_NecklaceMaterials (MaterialID, NecklaceID, Quantity)
+                    VALUES (
+                        (SELECT MaterialID FROM tbl_Materials WHERE MaterialName LIKE @${materialNameParam}),
+                        @NewRNL, @${quantityParam}
+                    );
+                `);
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Necklace data uploaded successfully",
+            fileUrl: fileUrl,
+            jsonData: jsonData
+        });
+
+    } catch (err) {
+        console.error("Error inserting data into database:", err);
         res.status(500).json({
-            message: "Error",
+            message: "Error inserting data into database",
             error: err.message
         });
     }
-            
-        
-   //const color = req.body.objectsUI[0].color;
-   //console.log(color);
-   //const ColorName = getColorName(color);
-   //res.send({ message: 'Necklace Data received!', receivedData: req.body });
-    //     const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
-    //     const request = pool.request();
-    //     request.input('Name', sql.VarChar, dressName);
-    //     request.input('Bust', sql.Decimal, bust);
-    //     request.input('Price',sql.Int,price);
-    //     //Wrequest.input('Color',sql.VarChar,ColorName);
-    //     request.input('Waist',sql.Decimal,waist);
-    //     request.input('hips',sql.Decimal,hip);
-    //     request.input('Height',sql.Decimal,height);
-
-    //     const query = `
-    //         INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
-    //     `;
-
-    //     await request.query(query);
-       //res.status(200).send('Necklace data uploaded successfully');
 });
+
+
 
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
     //console.log('Received data:', req.body);
@@ -416,6 +444,31 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
        //res.status(200).send('Necklace data uploaded successfully');
 });
 
+app.get('/Request', async (req, res) => {
+    try {
+        const pool = await sql.connect(config); // Assuming config is set for your DB
+
+        // Execute all three queries
+        const necklaceQuery = await pool.request().query('SELECT NecklaceID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, Name,tbl_CustomNecklace.Status FROM tbl_CustomNecklace INNER JOIN tbl_User ON tbl_CustomNecklace.UserID = tbl_User.UserID');
+        const ringQuery = await pool.request().query('SELECT RingID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, Name,tbl_CustomRing.Status FROM tbl_CustomRing INNER JOIN tbl_User ON tbl_CustomRing.UserID = tbl_User.UserID');
+        const dressQuery = await pool.request().query('SELECT DressID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, tbl_User.Name,tbl_CustomDress.Status FROM tbl_CustomDress INNER JOIN tbl_User ON tbl_CustomDress.UserID = tbl_User.UserID');
+
+        // Combine all results into one array
+        const combinedResults = [
+            ...necklaceQuery.recordset.map(item => ({ ...item, ProductType: 'Necklace' })),
+            ...ringQuery.recordset.map(item => ({ ...item, ProductType: 'Ring' })),
+            ...dressQuery.recordset.map(item => ({ ...item, ProductType: 'Dress' }))
+        ];
+
+        // Send the combined results as a JSON response
+        res.json(combinedResults);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
+
 //DITO
 app.get('/NeckLaceMaterials', async (req, res) => {
     const query = `SELECT MaterialName, Stock, Price FROM tbl_Materials`;
@@ -438,17 +491,31 @@ app.get('/NeckLaceMaterials', async (req, res) => {
 
 
 
-app.post('/upload-screenshot/Unity', (req, res) => {
-    const screenshotBuffer = req.body;
+app.post('/upload-screenshot/Unity',upload.single('image'), async(req, res) => {
+    let fileUrl = null;
+  
+    try { 
+      if (req.file && req.file.path) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "img",
+          use_filename: true,
+          unique_filename: false,
+          transformation: [{ format: "auto", quality: "auto" }],
+        });
+  
+        fileUrl = result.secure_url;
 
-    fs.writeFile('screenshot.png', screenshotBuffer, (err) => {
-        if (err) {
-            console.error('Error saving screenshot:', err);
-            return res.status(500).send({ message: 'Failed to save screenshot.' });
-        }
-        console.log('Screenshot saved successfully!');
-        res.send({ message: 'Screenshot received and saved!' });
-    });
+        fs.unlinkSync(req.file.path);
+      }
+  
+      res.status(200).json({
+        message: "Upload successful",
+        fileUrl: fileUrl
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ error: "Upload failed", details: error.message });
+    }
 });
 
 
