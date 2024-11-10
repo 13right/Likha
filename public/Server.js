@@ -313,18 +313,18 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
     const { data } = req.body;  // Assuming data comes from the request body
     const jsonData = JSON.parse(data);
-    const user = req.session.user;
+   // const user = req.session.user;
     
     // Check if userID is null and redirect to sign-in if necessary
-    if (!user || !user.UserID) {
-        return res.status(200).json({
-            success: false,
-            message: "Unauthorized. Please sign in.",
-            redirectTo: "/SignIn.html"
-        });
-    }
+    // if (!user || !user.UserID) {
+    //     return res.status(200).json({
+    //         success: false,
+    //         message: "Unauthorized. Please sign in.",
+    //         redirectTo: "/SignIn.html"
+    //     });
+    // }
 
-    const userID = parseInt(user.UserID);
+    //const userID = parseInt(user.UserID);
     let fileUrl = null;
 
     try {
