@@ -303,9 +303,9 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
                 });
     }
     catch (err) {
-        console.error("Error inserting data into database:", err);
+        console.error("Error:", err);
         res.status(500).json({
-            message: "Error inserting data into database",
+            message: "Error",
             error: err.message
         });
     }
@@ -333,9 +333,9 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
     }
     //console.log('Received data:', req.body);
     catch (err) {
-        console.error("Error inserting data into database:", err);
+        console.error("Error:", err);
         res.status(500).json({
-            message: "Error inserting data into database",
+            message: "Error",
             error: err.message
         });
     }
