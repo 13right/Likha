@@ -341,38 +341,38 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
             fs.unlinkSync(req.file.path);  // Clean up the file after uploading
         }
 
-        const request = pool.request();
+        // const request = pool.request();
 
-        // Insert the data into tbl_CustomNecklace
-        const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
-            .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
-            .input('size', sql.Int, jsonData.necklace.length)
-            .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
-            .input('UserID', sql.Int, userID)
-            .query(`
-                INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID,Status)
-                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), @UserID,'Requested');
-            `);
+        // // Insert the data into tbl_CustomNecklace
+        // const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
+        //     .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
+        //     .input('size', sql.Int, jsonData.necklace.length)
+        //     .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
+        //     .input('UserID', sql.Int, userID)
+        //     .query(`
+        //         INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID,Status)
+        //         VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), @UserID,'Requested');
+        //     `);
 
-        // Insert data into tbl_NecklaceMaterials
-        for (const material of jsonData.necklace.materials) {
-            // Dynamically create unique parameter names for each iteration
-            const materialNameParam = `MName_${material.name}`;
-            const quantityParam = `quantity_${material.name}`;
+        // // Insert data into tbl_NecklaceMaterials
+        // for (const material of jsonData.necklace.materials) {
+        //     // Dynamically create unique parameter names for each iteration
+        //     const materialNameParam = `MName_${material.name}`;
+        //     const quantityParam = `quantity_${material.name}`;
 
-            await request.input(materialNameParam, sql.VarChar, material.name)
-                .input(quantityParam, sql.Int, material.quantity)
-                .query(`
-                    DECLARE @NewRNL INT;
-                    SET @NewRNL = (SELECT TOP 1 ID FROM tbl_CustomNecklace ORDER BY ID DESC);
+        //     await request.input(materialNameParam, sql.VarChar, material.name)
+        //         .input(quantityParam, sql.Int, material.quantity)
+        //         .query(`
+        //             DECLARE @NewRNL INT;
+        //             SET @NewRNL = (SELECT TOP 1 ID FROM tbl_CustomNecklace ORDER BY ID DESC);
 
-                    INSERT INTO tbl_NecklaceMaterials (MaterialID, NecklaceID, Quantity)
-                    VALUES (
-                        (SELECT MaterialID FROM tbl_Materials WHERE MaterialName LIKE @${materialNameParam}),
-                        @NewRNL, @${quantityParam}
-                    );
-                `);
-        }
+        //             INSERT INTO tbl_NecklaceMaterials (MaterialID, NecklaceID, Quantity)
+        //             VALUES (
+        //                 (SELECT MaterialID FROM tbl_Materials WHERE MaterialName LIKE @${materialNameParam}),
+        //                 @NewRNL, @${quantityParam}
+        //             );
+        //         `);
+        // }
 
         res.status(200).json({
             success: true,
