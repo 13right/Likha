@@ -331,7 +331,7 @@ app.post('/Request/Ring', async (req, res) => {
    //const color = req.body.objectsUI[0].color;
    //console.log(color);
    //const ColorName = getColorName(color);
-   res.send({ message: 'Necklace Data received!', receivedData: req.body });
+   res.send({ message: 'Ring Data received!', receivedData: req.body });
     //     const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
     //     const request = pool.request();
     //     request.input('Name', sql.VarChar, dressName);
