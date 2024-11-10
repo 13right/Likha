@@ -385,6 +385,39 @@ app.post('/upload-screenshot/Unity', (req, res) => {
     });
 });
 
+
+app.post("/upload/Unity", upload.single("file"), async (req, res) => {
+    let fileUrl = null;
+  
+    try {
+      const jsonData = JSON.parse(req.body.data);
+      console.log("JSON Data:", jsonData);
+  
+      if (req.file && req.file.path) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "img",
+          use_filename: true,
+          unique_filename: false,
+          transformation: [{ format: "auto", quality: "auto" }],
+        });
+  
+        fileUrl = result.secure_url;
+
+        fs.unlinkSync(req.file.path);
+      }
+  
+      res.status(200).json({
+        message: "Upload successful",
+        fileUrl: fileUrl,
+        jsonData: jsonData,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ error: "Upload failed", details: error.message });
+    }
+  });
+
+
 app.get('/getUserID', (req, res) => {
     try{
         if (req.session && req.session.user) {

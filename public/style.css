@@ -1482,6 +1482,10 @@ video {
   margin-top: 2.25rem;
 }
 
+.mt-\[1\.5rem\]{
+  margin-top: 1.5rem;
+}
+
 .mt-\[10rem\]{
   margin-top: 10rem;
 }
@@ -1524,10 +1528,6 @@ video {
 
 .mt-\[7rem\]{
   margin-top: 7rem;
-}
-
-.mt-\[1\.5rem\]{
-  margin-top: 1.5rem;
 }
 
 .line-clamp-2{
@@ -1801,6 +1801,10 @@ video {
   height: 25rem;
 }
 
+.h-\[270px\]{
+  height: 270px;
+}
+
 .h-\[277px\]{
   height: 277px;
 }
@@ -2031,10 +2035,6 @@ video {
 
 .h-svh{
   height: 100svh;
-}
-
-.h-\[270px\]{
-  height: 270px;
 }
 
 .max-h-14{
@@ -2655,10 +2655,6 @@ video {
 
 .w-screen{
   width: 100vw;
-}
-
-.w-\[805px\]{
-  width: 805px;
 }
 
 .min-w-min{
