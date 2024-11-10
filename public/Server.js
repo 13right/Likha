@@ -279,13 +279,13 @@ function getColorName(rgba) {
     return colorMapping[rgbaKey] || 'unknown';
 }
 
-app.post('/Request/Dress', async (req, res) => {
+app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     console.log('Received data:', req.body);
     let fileUrl = null;
 
     console.log('Received data:', req.body);
     const jsonData = JSON.parse(req.body.data);
-    console.log("JSON Data:", jsonData);
+    //console.log("JSON Data:", jsonData.necklace);
     if (req.file && req.file.path) {
         const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "img",
@@ -301,26 +301,6 @@ app.post('/Request/Dress', async (req, res) => {
             fileUrl: fileUrl,
             jsonData: jsonData
             });
-   //const color = req.body.objectsUI[0].color;
-   //console.log(color);
-   //const ColorName = getColorName(color);
-   //res.send({ message: 'Dress Data received!', receivedData: req.body });
-    //const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
-    // const request = pool.request();
-    //     request.input('Name', sql.VarChar, dressName);
-    //     request.input('Bust', sql.Decimal, bust);
-    //     request.input('Price',sql.Int,price);
-    //     //Wrequest.input('Color',sql.VarChar,ColorName);
-    //     request.input('Waist',sql.Decimal,waist);
-    //     request.input('hips',sql.Decimal,hip);
-    //     request.input('Height',sql.Decimal,height);
-
-    //     const query = `
-    //         INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
-    //     `;
-
-    //     await request.query(query);
-    //res.status(200).send('Dress data uploaded successfully');
 });
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
     let fileUrl = null;
@@ -367,7 +347,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
        //res.status(200).send('Necklace data uploaded successfully');
 });
 
-app.post('/Request/Ring', async (req, res) => {
+app.post('/Request/Ring', upload.single('image'),async (req, res) => {
     //console.log('Received data:', req.body);
     let fileUrl = null;
 
