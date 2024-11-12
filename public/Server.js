@@ -314,7 +314,6 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
     //const { data } = req.body;  // Assuming data comes from the request body
 
     const jsonData = JSON.parse(req.body.data);
-<<<<<<< HEAD
    const user = req.session.user;
     
     // Check if userID is null and redirect to sign-in if necessary
@@ -327,20 +326,6 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
     }
 
     const userID = parseInt(user.UserID);
-=======
-   // const user = req.session.user;
-    
-    // Check if userID is null and redirect to sign-in if necessary
-    // if (!user || !user.UserID) {
-    //     return res.status(200).json({
-    //         success: false,
-    //         message: "Unauthorized. Please sign in.",
-    //         redirectTo: "/SignIn.html"
-    //     });
-    // }
-
-    //const userID = parseInt(user.UserID);
->>>>>>> f85cef408aa0b741cb989ca459cf60174872fb2c
     let fileUrl = null;
 
     try {
@@ -358,10 +343,6 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
         const request = pool.request();
 
-<<<<<<< HEAD
-=======
-        // Insert the data into tbl_CustomNecklace
->>>>>>> f85cef408aa0b741cb989ca459cf60174872fb2c
         const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
             .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
             .input('size', sql.Int, jsonData.necklace.length)
