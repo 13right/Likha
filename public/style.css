@@ -717,6 +717,10 @@ video {
   left: 2.5rem;
 }
 
+.left-\[22\.5rem\]{
+  left: 22.5rem;
+}
+
 .left-\[24\.25rem\]{
   left: 24.25rem;
 }
@@ -857,6 +861,10 @@ video {
   right: 17.75rem;
 }
 
+.right-\[18\.5rem\]{
+  right: 18.5rem;
+}
+
 .right-\[1rem\]{
   right: 1rem;
 }
@@ -865,12 +873,20 @@ video {
   right: 26.5rem;
 }
 
+.right-\[30\.75rem\]{
+  right: 30.75rem;
+}
+
 .right-\[37\%\]{
   right: 37%;
 }
 
 .right-\[3rem\]{
   right: 3rem;
+}
+
+.right-\[7rem\]{
+  right: 7rem;
 }
 
 .right-\[8rem\]{
@@ -1482,6 +1498,10 @@ video {
   margin-top: 2.25rem;
 }
 
+.mt-\[1\.5rem\]{
+  margin-top: 1.5rem;
+}
+
 .mt-\[10rem\]{
   margin-top: 10rem;
 }
@@ -1795,6 +1815,10 @@ video {
 
 .h-\[25rem\]{
   height: 25rem;
+}
+
+.h-\[270px\]{
+  height: 270px;
 }
 
 .h-\[277px\]{
@@ -2485,10 +2509,6 @@ video {
   width: 500px;
 }
 
-.w-\[501px\]{
-  width: 501px;
-}
-
 .w-\[508px\]{
   width: 508px;
 }
@@ -2800,10 +2820,6 @@ video {
 
 .flex-wrap{
   flex-wrap: wrap;
-}
-
-.flex-nowrap{
-  flex-wrap: nowrap;
 }
 
 .items-start{
@@ -3444,6 +3460,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-hehe{
+  --tw-bg-opacity: 1;
+  background-color: rgb(146 254 194 / var(--tw-bg-opacity));
+}
+
 .bg-outline{
   --tw-bg-opacity: 1;
   background-color: rgb(241 125 85 / var(--tw-bg-opacity));
@@ -3452,11 +3473,6 @@ video {
 .bg-sign{
   --tw-bg-opacity: 1;
   background-color: rgb(248 236 220 / var(--tw-bg-opacity));
-}
-
-.bg-hehe{
-  --tw-bg-opacity: 1;
-  background-color: rgb(146 254 194 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-50{
@@ -3637,11 +3653,6 @@ video {
   padding-bottom: 1rem;
 }
 
-.px-\[\]{
-  padding-left: ;
-  padding-right: ;
-}
-
 .pb-1{
   padding-bottom: 0.25rem;
 }
@@ -3740,6 +3751,10 @@ video {
 
 .pr-\[19rem\]{
   padding-right: 19rem;
+}
+
+.pr-\[20rem\]{
+  padding-right: 20rem;
 }
 
 .pr-\[2rem\]{
@@ -4688,14 +4703,6 @@ video {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .md\:flex-col{
-    flex-direction: column;
-  }
-
-  .md\:flex-wrap{
-    flex-wrap: wrap;
-  }
-
   .md\:flex-nowrap{
     flex-wrap: nowrap;
   }
@@ -4771,6 +4778,11 @@ video {
     padding-right: 1rem;
   }
 
+  .md\:px-\[8rem\]{
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+
   .md\:py-0{
     padding-top: 0px;
     padding-bottom: 0px;
@@ -4779,11 +4791,6 @@ video {
   .md\:py-2{
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-  }
-
-  .md\:px-\[8rem\]{
-    padding-left: 8rem;
-    padding-right: 8rem;
   }
 
   .md\:pl-0{

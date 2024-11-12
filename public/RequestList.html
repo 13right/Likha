@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
-    <title>Orders</title>
+    <title>Requests</title>
 </head>
 <style>
     @keyframes fadeInRight {
@@ -100,21 +100,17 @@
         </div>
 
         <div class="text-center mt-3">
-            <H1 class="font-Montagu text-4xl font-bold">Orders</H1>
+            <H1 class="font-Montagu text-4xl font-bold">3D Requests</H1>
         </div>
         <div class="mt-9 flex mx-[10rem] justify-around">
             <div class="cursor-pointer w-[272.45px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
-                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">All Orders</p>
-                <img src="img/All Orders.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">All Request</p>
+                <img src="img/AllReq.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
             </div>
             <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
-                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Confirmed Orders</p>
-                <img src="img/Confirmed Order.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
+                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Confirmed Request</p>
+                <img src="img/ConfirmedReq.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
             </div>
-            <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
-                <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Pending Orders</p>
-                <img src="img/Pending.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
-            </div> 
             <div class="cursor-pointer w-[275.76px] rounded-2xl h-[68.2px] bg-sign outline-[3px] outline outline-outline">
                 <p class="font-Montserrat text-sm text-center text-[#00000080] font-semibold">Ready to Pick Up</p>
                 <img src="img/Ready to Pick Up.png" class="w-[3rem] absolute top-[11.5rem] ml-3" alt="">
@@ -139,19 +135,18 @@
         </div>
 
         <div class="mx-[6rem] mt-[3rem] relative w-auto h-auto rounded-lg bg-sign outline outline-[3px] outline-outline p-7">
-            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-between  pr-[8rem] pl-[4rem]">
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Order ID</h1>
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Order Date</h1>
-                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Pick Up Date</h1>
+            <div class="items-center flex w-auto h-[50px] bg-Likha rounded-lg justify-between pr-[20rem] pl-[4rem]">
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Request ID</h1>
+                <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Date</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080]">Customer Name</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080] mr-[4.5rem]">Total</h1>
                 <h1 class="font-Montserrat font-semibold text-[16px] text-[#00000080] relative">Status</h1>
             </div>
-            <div id="OrderList" ></div>
+            <div id="RequestList" ></div>
         </div>
 
 
-        <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
+        <!-- <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
             <a href="OrderList.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
                 <p class="font-Montserrat font-semibold">Order</p>
             </a>
@@ -168,7 +163,7 @@
             <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
                 <p class="font-Montserrat font-semibold">Log Out</p>
             </a>
-        </div>
+        </div> -->
     </div>
 
 </body>
@@ -224,37 +219,33 @@ Open.addEventListener('click', function(event){
 });
 
 
-fetch('/Orders')
+fetch('/Request')
     .then(response => response.json())
     .then(Items => {
-        console.log(Items);
+        console.log(Items); // Log Items to see the response structure
         Items.forEach(Item => {
-            const ItemList = document.getElementById('OrderList');
+            const ItemList = document.getElementById('RequestList');
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
             <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg">
                 <div id="ProdCon" class="w-[10rem] text-center item-center h-[2rem] absolute left-[1.25rem]">
-                    <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.productOrder}</h2>
+                    <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.ProductID}</h2>
                 </div>
                 <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[12.5rem]">
-                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.OrderedDate}</h2>
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Date}</h2>
                 </div>
-                <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[24.25rem]">
-                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.PickUp}</h2>
+                <div class="w-[15rem] text-center item-center h-[2rem] absolute left-[22.5rem]">
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Name || 'N/A'}</h2>
                 </div>
-                <div class="w-[15rem] text-center item-center h-[2rem] absolute right-[26.5rem]">
-                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.ProductName}</h2>
+                <div class="w-[10rem] text-center item-center h-[2rem] absolute right-[30.75rem]">
+                    <h2 class="relative font-Montserrat mx-auto font-semibold text-[14px]">${Item.TotalPrice}</h2>
                 </div>
-                <div class="w-[10rem] text-center item-center h-[2rem] absolute right-[17.75rem]">
-                    <h2 class="relative font-Montserrat mx-auto font-semibold text-[14px]">${Item.ProductTotal}</h2>
+                <div id="Status" class="absolute flex items-center justify-center right-[18.5rem] w-[90px] h-[25px] rounded-2xl">
+                    <p class="relative font-Montserrat font-semibold text-center text-xs truncate">${Item.Status}</p>
                 </div>
-                <div id="Status" class="absolute flex items-center justify-center right-[10.5rem] w-[90px] h-[25px] rounded-2xl">
-                    <p class=" relative font-Montserrat font-semibold text-center text-xs truncate">${Item.Status}</p>
-                </div>
-                <div id="View" class="absolute cursor-pointer right-12 w-[100px] top-[0.75rem] h-[25px] rounded-2xl bg-[#032D7E80] outline outline-[3px] outline-[#032D7E]">
+                <div id="View" class="absolute cursor-pointer right-[7rem] w-[100px] top-[0.75rem] h-[25px] rounded-2xl bg-[#032D7E80] outline outline-[3px] outline-[#032D7E]">
                     <p class="font-Montserrat text-[#032D7E] font-semibold text-center text-sm" >View Details</p>
                 </div>
-                
             </div>
             `;
             ItemList.appendChild(ItemElement);
@@ -294,11 +285,10 @@ fetch('/Orders')
                 sessionStorage.setItem('transacValue', transacValue);
 
                 window.location.href = 'OrderDetails.html';
-                
             });
-
         });
     });
+
 
     // async function fetchUnreadCount() {
     //     try {

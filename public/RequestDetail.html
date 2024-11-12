@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
+</head>
+<style>
+    #Item-Con::-webkit-scrollbar{
+        display: none;
+    }
+</style>
+<body>
+    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50">
+        <nav class="md:flex md:items-center">   
+            <div >
+                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+            </div>
+            
+            <div class="flex fixed p-3 top-1 right-1 md:right-16">
+                <img id="Profile" class="cursor-pointer h-[3rem] w-[3rem]" src="img/PROFILE.png"  alt="">
+            </div>
+        </nav>
+    </div>
+    <div class="bg-Likha min-h-screen p-[5rem] pt-[9rem] space-y-12">
+        <div id="Container" class="relative space-y-12">
+               
+        </div>
+        
+    </div>
+    <div id="AdminMenu" class="bg-[#F8ECDC] outline hidden fixed outline-[3px] p-0 outline-outline w-[491px] h-[320px]  right-[0.15rem] top-[5.15rem] flex flex-col justify-evenly">
+        <a href="OrderList.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">Order</p>
+        </a>
+        
+        <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">Landing</p>
+        </a>
+        <a href="AdminHome.html" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">Home Page</p>
+        </a>
+        <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center">
+            <p class="font-Montserrat font-semibold">3D Customization</p>
+        </a>
+        <a href="" class="text-center outline outline-1 pt-[20px] outline-outline h-[5rem] items-center" onclick="LogOut()">
+            <p class="font-Montserrat font-semibold">Log Out</p>
+        </a>
+    </div>
+    <div id="userInfo" class="hidden"></div>
+</body>
+<script>
+    const transacValue = sessionStorage.getItem('transacValue');
+
+
+    if (transacValue) {
+    fetch(`/OrderDetails?transac=${(transacValue)}`)
+    .then(response => response.json())
+    .then(Items => {
+        console.log(Items);
+        Items.forEach(Item => {
+            const ItemList = document.getElementById('Container');
+            const ItemElement = document.createElement('div');
+            ItemElement.innerHTML = `
+            <div class = "flex space-x-12 relative">
+                <div class="flex flex-col relative">
+                    <div id="Item-Con" class="w-[882px] relative overflow-y-auto h-[270px] outline outline-1 outline-outline bg-sign rounded-2xl">
+                        <div class="w-[844px] pt-6 pl-[3.5rem] relative mx-auto mt-7 h-[101px] bg-outline rounded-2xl">
+                            <p class="font-Inter font-extrabold text-[20px] text-[#FFFFFF]">${Item.productOrder}</p>
+                            <p class="font-Montserrat font-semibold text-[14px] text-[#FFFFFF]">${Item.OrderedDate}</p>
+                        </div>
+                        <div class="flex items-center ml-[2rem] space-x-4 mt-[1.5rem]">
+                            <img src="img/Folder.png" class="w-[80px]">
+                            <a href="https://res.cloudinary.com/db5bsftqx/image/upload/v1729951061/img/e31c47854bc344b27bdf35d37d108495.jpg">https://res.cloudinary.com</a>
+                        </div>
+                    </div>
+                    <!-- Product dito then hr ulit -->
+                    <div class="w-[882px] h-[213px] outline outline-1 outline-outline bg-sign mt-[3rem] space-x-3 rounded-2xl pt-4 flex items-center p-4">
+                        <div class="w-[40rem] h-[10rem] space-y-3">
+                            <div class="relative font-Inter font-extrabold text-xl text-[#00000080] left-[2rem]">Customer Details</div>
+                            <h1 class="font-Inter font-bold text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerName}</h1>
+                            <h2 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerEmail}</h2>
+                            <h3 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerNum}</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4 bg-likha  ">
+                    <div class="w-[396px] h-[339px] outline outline-1 pl-10 pt-5 outline-outline bg-sign rounded-2xl ">
+                        <p class="font-Montserrat font-semibold text-[24px] text-[#00000080]">Request Status</p>
+                        
+                        <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
+                            <div id="Ordered" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="Req-Circle" class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Requested</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div class="flex space-x-[4rem]">
+                                <div id="Confirmed" class="flex items-center space-x-3 cursor-pointer">
+                                    <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                        <div id="Con-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                    </div>
+                                    <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
+                                </div>
+                                <div id="Cancel" class="flex items-center space-x-3 cursor-pointer">
+                                    <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                        <div id="Decline-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                    </div>
+                                    <p class="font-Montserrat text-[#F07C54CC]">Decline</p>
+                                </div>
+                            </div>    
+
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="OrderPacked" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="IP-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Initial Payment</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Ready" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="Paid-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Paid</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Completed" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="Com-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Ready for Pickup</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="outline outline-1 outline-outline bg-sign space-y-4 p-[1rem] pt-[1.5rem] rounded-2xl w-[396px] h-[212px]">
+                        <div class="flex space-x-[4.25rem]">
+                            <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">Total:</p>
+                            <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">${Item.ProductTotal}</p>
+                        </div>
+                        
+                        <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">Discount %:  </p>
+                        <hr class="w-[300px] border-[#F07C54] border">
+                        <p class="font-Montserrat ml-2 font-semibold text-xl text-[#00000080]">Order Total: ${Item.ProductTotal}</p>
+                    </div>
+                </div>
+            </div>
+            `;
+            ItemList.appendChild(ItemElement);
+            
+            document.getElementById('Confirmed').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Confirmed', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+            document.getElementById('OrderPacked').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Order Packed', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+            document.getElementById('Ready').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Ready to Pick Up', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+            document.getElementById('Completed').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Completed', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+            document.getElementById('Cancel').addEventListener('click', function () {
+                fetch('/UpdateStat', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Cancelled', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
+
+            async function checkStat(){
+                const Status = Item.Status;
+
+                if(Status === 'Confirmed'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.add('hidden');
+                    document.getElementById('Ready-Circle').classList.add('hidden');
+                    
+                }
+                else if(Status === 'Order Packed'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.remove('hidden');
+                    document.getElementById('Ready-Circle').classList.add('hidden');
+                }
+                else if(Status === 'Ready to Pick Up'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.remove('hidden');
+                    document.getElementById('Ready-Circle').classList.remove('hidden');
+                }
+                else if(Status === 'Completed'){
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('OP-Circle').classList.remove('hidden');
+                    document.getElementById('Ready-Circle').classList.remove('hidden');
+                    document.getElementById('Com-Circle').classList.remove('hidden');
+                }
+                else if(Status === 'Cancelled'){
+                    document.getElementById('Con-Circle').classList.add('hidden');
+                    document.getElementById('OP-Circle').classList.add('hidden');
+                    document.getElementById('Ready-Circle').classList.add('hidden');
+                    document.getElementById('Com-Circle').classList.add('hidden');
+                    document.getElementById('Order-Circle').classList.add('hidden');
+                    document.getElementById('Cancel-Circle').classList.remove('hidden');
+                }
+            }
+
+            checkStat();
+                        
+            fetch(`/Items/${Item.productOrder}`)
+                .then(response => response.json())
+                .then(orderItems => {
+                    const orderItemsContainer = document.getElementById(`Product-Container-${Item.productOrder}`);
+
+                    orderItems.forEach(orderItem => {
+                        const IElement = document.createElement('div');
+                        IElement.innerHTML = `
+                        <div id="Product" class="w-[800px] relative h-[6rem] flex items-center p-2 my-1  mx-auto">
+                            <div class="flex items-center">
+                                <img src="${orderItem.productImage}" alt="" class="w-[3.5rem]">
+                                <p class="font-Montagu font-semibold text-2xl ml-4 w-[20rem]">${orderItem.productName}</p>
+                            </div>
+                            <div class="flex item-center">
+                                <div class="absolute right-[11.25rem] text-center w-[7rem] top-[2rem]">
+                                    <h1 class="font-Montserrat font-medium text-xl">${orderItem.Quantity}</h1>
+                                </div>
+                                <div class="absolute top-[2rem] text-center w-[7rem] right-[0.25rem]">
+                                    <p class="font-Montserrat font-medium  text-xl">${orderItem.Price}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="w-[800px] border-outline mx-auto">
+                        `;
+                        orderItemsContainer.appendChild(IElement);
+                    });
+                })
+        });
+    });
+
+}else{
+    console.error('No transacValue found in sessionStorage');
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+        const Profile = document.getElementById('Profile');
+        const Menu = document.getElementById('AdminMenu');
+
+        Profile.addEventListener('click', () => {
+
+            if (!Menu.classList.contains('hidden')) {
+                Menu.classList.add('hidden');
+            } else {
+                Menu.classList.remove('hidden');
+            }
+        });
+    });
+   
+</script>
+<script src="AuthorizationBE.js"></script>
+<script src="AdminPage.js"></script>
+</html>
