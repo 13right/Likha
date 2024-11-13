@@ -23,22 +23,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleIntersect = (entries, observer) => {
         entries.forEach(entry => {
             console.log('Entry:', entry.target.id); // Log the ID of the intersecting element
+            const isNotPhone = window.innerWidth >= 768; // Checks if it's not a phone (i.e., tablet or larger)
             if (entry.isIntersecting) {
-                if (entry.target === Left) {
-                    console.log('Left is in view');
-                    Left.classList.add('animation-fadeInLeft');
-                } else if (entry.target === Right) {
-                    console.log('Right is in view');
-                    Right.classList.add('animation-fadeInRight');
-                } else if (entry.target === AboutUs) {
-                    console.log('About is in view');
-                    AboutUs.classList.add('animation-Pop');
-                } else if (entry.target === target) {
-                    console.log('Target is in view');
-                    target.classList.add('fade-in-blur');
-                } else if (entry.target === P) {
-                    console.log('P is in view');
-                    P.classList.add('animtaion-Down');
+                if (isNotPhone) {
+                    if (entry.target === Left) {
+                        console.log('Left is in view');
+                        Left.classList.add('animation-fadeInLeft');
+                    } else if (entry.target === Right) {
+                        console.log('Right is in view');
+                        Right.classList.add('animation-fadeInRight');
+                    } else if (entry.target === AboutUs) {
+                        console.log('About is in view');
+                        AboutUs.classList.add('animation-Pop');
+                    } else if (entry.target === target) {
+                        console.log('Target is in view');
+                        target.classList.add('fade-in-blur');
+                    } else if (entry.target === P) {
+                        console.log('P is in view');
+                        P.classList.add('animtaion-Down');
+                    }
                 }
 
                 // Optionally stop observing after it becomes visible
@@ -231,11 +234,32 @@ input[type="checkbox"] {
         opacity: 1;
         padding-left: 2.5rem; /* Space for the icon on the left */
     }
+    @media (max-width: 768px) {
+        .search-bar.expanded {
+            width: 8rem; 
+            padding-left: 1.5rem;
+        }
+    }
+    @media (max-width: 375px) {
+        .search-bar.expanded {
+            width: 7rem; 
+            padding-left: 1.5rem;
+        }
+    }
 
     #search-icon.expanded {
         transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
     }
-
+    @media (max-width: 768px) {
+        #search-icon.expanded {
+        transform: translateX(-5.5rem); /* Move the icon to the left inside the search bar */
+    }
+    }
+    @media (max-width: 375px) {
+        #search-icon.expanded {
+        transform: translateX(-4.5rem); /* Move the icon to the left inside the search bar */
+    }
+    }
     .rotating-text p {
     display: inline-flex;
     margin: 0;
@@ -340,12 +364,34 @@ input[type="checkbox"] {
     animation: Pop 1s ease-in-out;
     }
 
+    /* Media query for smaller screens (e.g., mobile devices) */
+    @media (max-width: 768px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for mobile */
+        height: 1.5rem; /* Smaller size for mobile */
+    }
+    }
+
+    /* Media query for very small screens (e.g., phones in portrait mode) */
+    @media (max-width: 480px) {
+        lord-icon {
+            width: 1.25rem;  /* Even smaller size for very small screens */
+            height: 1.25rem; /* Even smaller size for very small screens */
+        }
+    }
+    @media (max-width: 375px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for 375px screen width */
+        height: 1.5rem; /* Smaller size for 375px screen width */
+    }
+    }
+
 </style>
 <body>
-    <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50" >
+    <div class="bg-Likha h-[5rem] w-screen shadow-md p-2.5 fixed z-50" >
         <nav class="md:flex md:items-center">   
             <div >
-                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[1rem] cursor-pointer md:cursor-default md:ml-[2rem]" onclick="Menu(this)" name = "menu" id="menubutton">
             </div>
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
@@ -382,7 +428,7 @@ input[type="checkbox"] {
                                 });
                               </script>
                               
-                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 translate-x-44 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden md:translate-x-0" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                               <div class="py-1" role="none">
                                 <a href="AllCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">All</a>
                                 <a href="DressCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Dress</a>
@@ -421,7 +467,7 @@ input[type="checkbox"] {
                         src="https://cdn.lordicon.com/kkvxgpti.json"
                         trigger="hover"
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
-                        style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
+                        style="margin-right: 0.75rem;">
                     </lord-icon>
                     <div id="SearchCon" class="bg-Likha h-auto w-[15rem] absolute top-12 rounded-3xl hidden shadow-2xl">
                         
@@ -434,7 +480,7 @@ input[type="checkbox"] {
                         src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
                         colors="primary:#000000"
-                        style="width:1.75rem;height:1.75rem">
+                        style="">
                     </lord-icon>
                 </div>
 
@@ -443,7 +489,7 @@ input[type="checkbox"] {
                         id="NotifIcon"
                         src="https://cdn.lordicon.com/vspbqszr.json"
                         trigger="hover"
-                        style="width:1.75rem;height:1.75rem;">
+                        style="">
                     </lord-icon>
                     <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
                     <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
@@ -456,296 +502,298 @@ input[type="checkbox"] {
                         trigger="hover"
                         stroke="bold"
                         colors="primary:#121331,secondary:#121331"
-                        style="width:2rem;height:2rem;">
+                        style="">
                     </lord-icon>
                 </div>
             </div>
             
         </nav>
     </div>
-    <div class="bg-Likha min-h-screen" class="">
+    <div class="bg-Likha min-h-screen max-w-full" class="">
         <div id="main-container" class="">
             <div id="slide-container">    
-                <div id="slider-wrapper" class="relative max-w-[65-rem] pt-[5rem]"  >
-                    <p class="text-shadow-md absolute font-Sheppards top-[13rem] left-[50%] mr-[-50%] translate-x-[-50%] text-[96px] text-[#FFFFFF]">La mode est  sans limites</p>
-                    <div class="absolute top-[62%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="AllCategory.html">
-                            <button class="bg-outline w-[243px] h-[51px] font-bold py-2 px-4 rounded-full text-Likha">SHOP NOW</button>
-                        </a>
+                <div id="slider-wrapper" class="relative max-w-[65-rem] pt-[5rem]">
+                    <div class="absolute top-1/2 w-full flex flex-col items-center md:top-1/2 md:-translate-y-1/2 md:space-y-8 ">
+                        <p class="text-shadow-md font-Sheppards text-[26px] text-[#FFFFFF] md:text-[96px]">La mode est  sans limites</p>
+                        <div class="relative">
+                            <a href="AllCategory.html">
+                                <button class="bg-outline w-[95px] h-[15px] font-bold rounded-full text-Likha text-center text-[7px] md:text-[20px] md:w-[243px] md:h-[51px] md:py-2 md:px-4">CUSTOMIZE NOW</button>
+                            </a>
+                        </div>
                     </div>
                     <div id="slider" class="flex aspect-[25/9] scroll-smooth overflow-x-hidden ">
                         <img src="https://res.cloudinary.com/db5bsftqx/image/upload/v1728193943/1_nrex0s.png" class="flex flex-1  snap-align-start" id="Slider1" alt="">
                         <img src="https://res.cloudinary.com/db5bsftqx/image/upload/v1728193943/2_qpjqe4.png" class="flex flex-1 snap-align-start" id="Slider2"alt="">
                         <img src="https://res.cloudinary.com/db5bsftqx/image/upload/v1728193943/3_rw6qu3.png" class="flex flex-1 snap-align-start" id="Slider3" alt="">
                     </div>
-                    <div id="slider-nav" class="flex grid-cols-2 gap-x-4 absolute bottom-[1.25rem] left-[50%] translate-x-[-50%]">
-                        <a id="Nav1" href="#Slider1" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-[1]"></a>
-                        <a  id="Nav2" href="#Slider2" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
-                        <a id="Nav3" href="#Slider3" class="w-[0.5rem] h-[0.5rem] rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
+                    <div id="slider-nav" class="flex grid-cols-2 gap-x-1 md:gap-x-4 absolute bottom-[1.25rem] left-[50%] translate-x-[-50%]">
+                        <a id="Nav1" href="#Slider1" class="md:w-[0.5rem] md:h-[0.5rem] w-1 h-1 rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-[1]"></a>
+                        <a  id="Nav2" href="#Slider2" class="md:w-[0.5rem] md:h-[0.5rem] w-1 h-1 rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
+                        <a id="Nav3" href="#Slider3" class="md:w-[0.5rem] md:h-[0.5rem] w-1 h-1 rounded-[50%] bg-[#fff] transition-opacity ease duration-200 opacity-25"></a>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center flex-col justify-center mt-4">
-                <div class="font-Montagu text-[#96A378] font-bold text-[64px] rotating-text relative mr-[8rem]">
-                    <p>Shop to Impress, Create to </p>
-                    <p>
-                        <span class="word w-1">
-                            Wear
-                        </span>
-                        <span class="word w-2">
-                            Style
-                        </span>
-                        <span class="word w-3">
-                            Inspire
-                        </span>
-                    </p>
-                </div>
-                
-                <h2 class="font-Inter font-medium text-[40px]">customize in your own way.</h2>
-            </div>
-            <div class="flex h-[703px] relative justify-around items-center gap-2 p-5 hover:gap-2 mt-[4rem] ">
-                <a href="DressCategory.html" class="card relative flex-1 w-[370px] h-[703px] bg-sign flex justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603912/dresslanding_ugdhtc.png" class="h-full w-full object-cover" alt="">
-                    <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
-                    <u class="absolute left-8 bottom-[6rem] font-Inter font-bold text-[24px] text-[#FFFFFF] cursor-pointer ">Dress/Gowns >>></u>
-                </a>
-                <a href="JewelryCategory.html" class="card relative w-[370px] h-[703px] bg-sign flex-1 justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603938/set_vgscjl.png" class="h-full w-full object-cover" alt="">
-                    <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
-                    <u class="absolute left-8 bottom-[6rem] font-Inter font-bold text-[24px] text-[#FFFFFF] cursor-pointer ">Jewelry >>></u>
-                </a>
-                <a href="BagCategory.html" class="card relative flex-1 w-[370px] h-[703px] bg-sign flex justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603903/baglanding_k6edrw.png" class="h-full w-full object-cover" alt="">
-                    <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
-                    <u class="absolute left-8 bottom-[6rem] font-Inter font-bold text-[24px] text-[#FFFFFF] cursor-pointer ">Bags >>></u>
-                </a>
-            </div>
-            <div class="flex justify-center mt-4">
-                <h1 class="font-Montagu font-bold text-[64px] text-[#96A378]">Why Customize?</h1>
-            </div>
-            <div id="target" class="flex justify-between px-16 mt-4 ">
-                <div class=" h-[205px] w-[205px] flex flex-col items-center">
-                    <h1 class="font-Inter font-semibold text-[15px]">
-                        PREFERRED STYLE
-                    </h1>
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603931/preferred_lr3mzb.png" class="object-contain aspect-square h-32" alt="">
-                    <h1 class="font-Inter font-normal text-[15px]">Make the bag, jewelry, and dress that you like.</h1>
-                </div>
-                <div class=" h-[205px] w-[205px] flex flex-col items-center">
-                    <h1 class="font-Inter font-semibold text-[15px]">
-                        OWN MEASUREMENT
-                    </h1>
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603922/measurement_tixjku.png" class="object-contain aspect-square h-32" alt="">
-                    <h1 class="font-Inter font-normal text-[15px]">Fit or size that suits you.</h1>
-                </div>
-                <div class=" h-[205px] w-[205px] flex flex-col items-center">
-                    <h1 class="font-Inter font-semibold text-[15px]">
-                        PICK COLOR
-                    </h1>
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603907/Color_rmvmpu.png" class="object-contain aspect-square h-32" alt="">
-                    <h1 class="font-Inter font-normal text-[15px]">Choose the color you like.</h1>
-                </div>
-                <div class=" h-[205px] w-[205px] flex flex-col items-center">
-                    <h1 class="font-Inter font-semibold text-[15px]">
-                        CHOOSE MATERIALS
-                    </h1>
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603922/Materials_eqqzer.png" class="object-contain aspect-square h-32" alt="">
-                    <h1 class="font-Inter font-normal text-[15px]">Choose selected materials that are available.</h1>
-                </div>
-            </div>
-            <div class="min-w-min h-[1251px] bg-outline mt-16">
-                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603916/Gown_dkuure.png" class="w-[1496px] h-[1251px] object-cover" alt="">
-            </div>
-            <div id="h1" class="flex h-[12rem] items-center justify-evenly">
-                <div id="Left" class=" w-[355px] flex flex-col items-center space-y-6">
-                    <h1 class="font-Inter font-semibold text-[32px]">Support Local</h1>
-                    <h2 class="font-Inter font-normal text-[15px]">All products here are sourced and originated from the Philippines.</h2>
-                </div>
-                <div id="Right" class=" w-[355px] flex flex-col items-center space-y-6">
-                    <h1 class="font-Inter font-semibold text-[32px]">Unlock Creativity</h1>
-                    <h2 class="font-Inter font-normal text-[15px]">Tailoring unique solutions that reflect individual preferences and needs.</h2>
-                </div>
-            </div>
-            <div id="About" class="min-w-min h-[588px] bg-outline relative">
-                <h1 id="AboutUs" class="absolute font-Montagu top-[15rem] font-bold left-[35%] text-[96px] text-[#FFFFFF] z-20 ">ABOUT US</h1>
-                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603900/About_g0s4fw.png" class="object-cover h-full w-full" alt="">
-                <div class="absolute inset-0 opacity-40" style="background: #000000;" ></div>
-            </div>
-            <div class="flex items-center justify-center mt-8">
-                <div class="w-[984px] ">
-                    <p id="p-tag-about" class="font-Inter font-normal text-[15px] text-center text-[#000000] ">
-                        Zappnott is an online boutique, where the art of handcrafted elegance meets cutting-edge technology. It is dedicated to bringing you a personalized shopping experience like no other. Explore our collection of handcrafted bracelets, bags, necklaces, earrings, and dresses, all you can customizable in stunning 3D detail.<br> <br>Unleashing Your Creativity, One Click at a Time At our store, <br>we believe that true style is a reflection of your individuality. With our innovative 3D customization tool, you have the power to design your own one-of-a-kind pieces, tailored to your unique taste and preferences. From selecting materials and adding personal touches, the possibilities are endless. Let your creativity soar as you craft accessories and apparel that truly speak to you.
-                    </p>
-                </div>
-            </div>
-            <div class=" flex justify-between mt-[2rem]">
-                <div class="w-[365px] h-[419px] bg-outline">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603928/pic1_iy2fek.png" alt="" class="h-full w-full object-cover">
-                </div>
-                <div class="w-[365px] h-[419px] bg-outline">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603929/pic2_buqf6d.png" alt="" class="h-full w-full object-cover">
-                </div>
-                <div class="w-[365px] h-[419px] bg-outline">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603930/pic3_e3yoke.png" alt="" class="h-full w-full object-cover">
-                </div>
-                <div class="w-[365px] h-[419px] bg-outline">
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603931/pic4_lxzndc.png" alt="" class="h-full w-full object-cover">
-                </div>
-            </div>
-            <div id="footer" class="flex bg-[#c4ccbc] h-auto w-full p-[4rem]">
-                <div id="container" class="flex items-center flex-wrap space-y-4">
-                    <div class="md:mr-[12rem] ml-[4.5rem]">
-                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="md:h-[10rem] h-[10rem]">
+                <div class="flex items-center justify-center flex-col md:mt-4  w-full h-16 md:w-full md:h-[9rem]">
+                    <div class="font-Montagu text-[#96A378] font-bold text-[18px] md:text-[62px] rotating-text relative -left-6 md:-left-16">
+                        <p>Shop to Impress, Create to </p>
+                        <p>
+                            <span class="word w-1">
+                                Wear
+                            </span>
+                            <span class="word w-2">
+                                Style
+                            </span>
+                            <span class="word w-3">
+                                Inspire
+                            </span>
+                        </p>
                     </div>
-                    <div class="flex flex-1 flex-wrap md:space-y-0 space-y-7">
-                        
-                        <div class="mr-[5rem] items-center">
-                                <h1 class="font-bold text-2xl ml-3">Contact</h1>
+                    
+                    <h2 class="font-Inter font-medium text-[14px] md:text-[40px]">customize in your own way.</h2>
+                </div>
+                <div class="flex h-[203px] md:h-[703px] relative justify-around items-center gap-2 p-2 md:p-5 hover:gap-2 md:mt-[4rem] ">
+                    <a href="DressCategory.html" class="card relative flex-1 h-[203px] w-[170px]  md:w-[370px] md:h-[703px] bg-sign flex justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603912/dresslanding_ugdhtc.png" class="h-full w-full object-cover" alt="">
+                        <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
+                        <u class="absolute bottom-4 left-3 md:left-8 md:bottom-[6rem] font-Inter font-bold text-[6px] md:text-[24px] text-[#FFFFFF] cursor-pointer ">Dress/Gowns >>></u>
+                    </a>
+                    <a href="JewelryCategory.html" class="card relative h-[203px] w-[170px]  md:w-[370px] md:h-[703px] bg-sign flex-1 justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603938/set_vgscjl.png" class="h-full w-full object-cover" alt="">
+                        <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
+                        <u class="absolute bottom-4 left-3 md:left-8 md:bottom-[6rem] font-Inter font-bold text-[6px] md:text-[24px] text-[#FFFFFF] cursor-pointer ">Jewelry >>></u>
+                    </a>
+                    <a href="BagCategory.html" class="card relative flex-1 h-[203px] w-[170px]  md:w-[370px] md:h-[703px] bg-sign flex justify-center items-center transition-all duration-300 ease-in-out hover:flex-[1.5]">
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603903/baglanding_k6edrw.png" class="h-full w-full object-cover" alt="">
+                        <div class="absolute inset-0" style="background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0)50%);"></div>
+                        <u class="absolute bottom-4 left-3 md:left-8 md:bottom-[6rem] font-Inter font-bold text-[6px] md:text-[24px] text-[#FFFFFF] cursor-pointer ">Bags >>></u>
+                    </a>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <h1 class="font-Montagu font-bold text-[23px] md:text-[64px] text-[#96A378]">Why Customize?</h1>
+                </div>
+                <div id="target" class="flex justify-between mt-2 px-3 md:px-16 md:mt-4 ">
+                    <div class=" h-[75px] w-[75px] md:h-[205px] md:w-[205px] flex flex-col items-center">
+                        <h1 class="font-Inter font-semibold text-[7px] md:text-[15px]">
+                            PREFERRED STYLE
+                        </h1>
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603931/preferred_lr3mzb.png" class="object-contain aspect-square h-32" alt="">
+                        <h1 class="font-Inter font-normal text-[8px] md:text-[15px]">Make the bag, jewelry, and dress that you like.</h1>
+                    </div>
+                    <div class="  h-[75px] w-[75px] md:h-[205px] md:w-[205px] flex flex-col items-center">
+                        <h1 class="font-Inter font-semibold text-[7px] md:text-[15px]">
+                            OWN MEASUREMENT
+                        </h1>
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603922/measurement_tixjku.png" class="object-contain aspect-square h-32" alt="">
+                        <h1 class="font-Inter font-normal text-[8px] md:text-[15px]">Fit or size that suits you.</h1>
+                    </div>
+                    <div class="  h-[75px] w-[75px] md:h-[205px] md:w-[205px] flex flex-col items-center">
+                        <h1 class="font-Inter font-semibold text-[7px] md:text-[15px]">
+                            PICK COLOR
+                        </h1>
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603907/Color_rmvmpu.png" class="object-contain aspect-square h-32" alt="">
+                        <h1 class="font-Inter font-normal text-[8px] md:text-[15px]">Choose the color you like.</h1>
+                    </div>
+                    <div class="  h-[75px] w-[75px] md:h-[205px] md:w-[205px] flex flex-col items-center">
+                        <h1 class="font-Inter font-semibold text-[7px] md:text-[15px]">
+                            CHOOSE MATERIALS
+                        </h1>
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603922/Materials_eqqzer.png" class="object-contain aspect-square h-32" alt="">
+                        <h1 class="font-Inter font-normal text-[8px] md:text-[15px]">Choose selected materials that are available.</h1>
+                    </div>
+                </div>
+                <div class="min-w-min md:h-[1251px] mt-16">
+                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603916/Gown_dkuure.png" class="w-full md:h-[1251px] object-cover" alt="">
+                </div>
+                <div id="h1" class="flex h-[7rem] md:h-[12rem] items-center p-3 space-x-7 md:justify-evenly">
+                    <div id="Left" class="w-[235px] md:w-[355px] flex flex-col items-center space-y-2 md:space-y-6">
+                        <h1 class="font-Inter font-semibold text-[14px] md:text-[32px]">Support Local</h1>
+                        <h2 class="font-Inter font-normal text-[7px] md:text-[15px]">All products here are sourced and originated from the Philippines.</h2>
+                    </div>
+                    <div id="Right" class=" w-[235px] md:w-[355px] flex flex-col items-center space-y-2 md:space-y-6">
+                        <h1 class="font-Inter font-semibold text-[14px] md:text-[32px]">Unlock Creativity</h1>
+                        <h2 class="font-Inter font-normal text-[7px] md:text-[15px]">Tailoring unique solutions that reflect individual preferences and needs.</h2>
+                    </div>
+                </div>
+                <div id="About" class="min-w-min md:h-[588px] bg-outline relative">
+                    <h1 id="AboutUs" class="absolute font-Montagu md:top-[15rem] md:left-[35%] md:-translate-x-0 md:-translate-y-0 top-1/2 -translate-x-1/2 font-bold left-1/2 -translate-y-1/2 text-[29px] md:text-[96px] text-[#ffffff] z-20 ">ABOUT US</h1>
+                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603900/About_g0s4fw.png" class="object-cover h-full w-full" alt="">
+                    <div class="absolute inset-0 opacity-40" style="background: #000000;" ></div>
+                </div>
+                <div class="flex items-center justify-center mt-8">
+                    <div class="w-[300px] md:w-[984px]">
+                        <p id="p-tag-about" class="font-Inter font-normal text-[9px] md:text-[15px] text-center text-[#000000] ">
+                            Zappnott is an online boutique, where the art of handcrafted elegance meets cutting-edge technology. It is dedicated to bringing you a personalized shopping experience like no other. Explore our collection of handcrafted bracelets, bags, necklaces, earrings, and dresses, all you can customizable in stunning 3D detail.<br> <br>Unleashing Your Creativity, One Click at a Time At our store, <br>we believe that true style is a reflection of your individuality. With our innovative 3D customization tool, you have the power to design your own one-of-a-kind pieces, tailored to your unique taste and preferences. From selecting materials and adding personal touches, the possibilities are endless. Let your creativity soar as you craft accessories and apparel that truly speak to you.
+                        </p>
+                    </div>
+                </div>
+                <div class=" flex justify-between mt-[2rem]">
+                    <div class="md:w-[365px] md:h-[419px] w-full h-[109px] bg-outline">
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603928/pic1_iy2fek.png" alt="" class="h-full w-full object-cover">
+                    </div>
+                    <div class="md:w-[365px] md:h-[419px] w-full h-[109px] bg-outline">
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603929/pic2_buqf6d.png" alt="" class="h-full w-full object-cover">
+                    </div>
+                    <div class="md:w-[365px] md:h-[419px] w-full h-[109px] bg-outline">
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603930/pic3_e3yoke.png" alt="" class="h-full w-full object-cover">
+                    </div>
+                    <div class="md:w-[365px] md:h-[419px] w-full h-[109px] bg-outline">
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603931/pic4_lxzndc.png" alt="" class="h-full w-full object-cover">
+                    </div>
+                </div>
+                <div id="footer" class="flex bg-[#c4ccbc] h-auto w-full p-[4rem]">
+                    <div id="container" class="flex items-center flex-wrap space-y-4">
+                        <div class="md:mr-[12rem] md:ml-[2rem] md:left-0 md:-translate-x-0 relative left-1/2 -translate-x-1/2">
+                            <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="md:h-[10rem] h-[10rem]">
+                        </div>
+                        <div class="flex flex-1 flex-wrap md:space-y-0 space-y-7">
+                            
+                            <div class="mr-[5rem] items-center">
+                                    <h1 class="font-bold text-2xl ml-3">Contact</h1>
+                                    <ul>
+                                        <li>
+                                            <a href="https://www.instagram.com/zappnott?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+                                                <div class="flex items-center">
+                                                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603918/IGIcon_cklo9z.png" alt="" class="h-12 w-12 " >
+                                                    <span>Zappnott</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ml-1">
+                                            <a href="https://www.facebook.com/profile.php?id=100063855583369">
+                                                <div class="flex items-center">
+                                                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603915/FBLogo_oa3l7y.png" alt="" class="h-10">
+                                                    <span class="ml-1">Zappnott</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center">
+                                                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603928/PhoneLogo_pmu6pr.png" alt="" class="h-12">
+                                                <span>+639272886113<br/>+639604343935</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center">
+                                                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603915/EmailLogo_czqfdb.png" alt="" class="h-11">
+                                                <span>zappnott@gmail.com</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                            </div>
+                            <div class="">
+                                <h1 class="font-bold text-2xl ml-3" >Visit Us</h1>
                                 <ul>
                                     <li>
-                                        <a href="https://www.instagram.com/zappnott?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+                                        <a href="https://zappnott.shop">
                                             <div class="flex items-center">
-                                                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603918/IGIcon_cklo9z.png" alt="" class="h-12 w-12 " >
-                                                <span>Zappnott</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="ml-1">
-                                        <a href="https://www.facebook.com/profile.php?id=100063855583369">
-                                            <div class="flex items-center">
-                                                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603915/FBLogo_oa3l7y.png" alt="" class="h-10">
-                                                <span class="ml-1">Zappnott</span>
+                                                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603941/WebsiteLogo_sltryk.png" alt="" class="h-11">
+                                                <span>www.zappnott.shop</span>
                                             </div>
                                         </a>
                                     </li>
                                     <li>
-                                        <div class="flex items-center">
-                                            <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603928/PhoneLogo_pmu6pr.png" alt="" class="h-12">
-                                            <span>+639272886113<br/>+639604343935</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex items-center">
-                                            <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603915/EmailLogo_czqfdb.png" alt="" class="h-11">
-                                            <span>zappnott@gmail.com</span>
-                                        </div>
+                                        <a href="https://maps.app.goo.gl/an2F3pbprEk1Wusb8">
+                                            <div class="flex items-center">
+                                                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603920/LocationLogo_sojot8.png" alt="" class="h-11">
+                                                <span class="text-sm">3F MARKET MARKET Ayala Malls McKinley Parkway, BGC,<br/>
+                                                    Taguig City, Metro Manila Philippines 1630</span>
+                                            </div>
+                                        </a>
                                     </li>
                                 </ul>
-                        </div>
-                        <div class="">
-                            <h1 class="font-bold text-2xl ml-3" >Visit Us</h1>
-                            <ul>
-                                <li>
-                                    <a href="https://zappnott.shop">
-                                        <div class="flex items-center">
-                                            <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603941/WebsiteLogo_sltryk.png" alt="" class="h-11">
-                                            <span>www.zappnott.shop</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://maps.app.goo.gl/an2F3pbprEk1Wusb8">
-                                        <div class="flex items-center">
-                                            <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603920/LocationLogo_sojot8.png" alt="" class="h-11">
-                                            <span class="text-sm">3F MARKET MARKET Ayala Malls McKinley Parkway, BGC,<br/>
-                                                Taguig City, Metro Manila Philippines 1630</span>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="fixed hidden right-0 top-0 h-full w-[570px] bg-Likha z-[50] shadow-2xl p-6" id="Cartel">
-            <div>
-                <div class="flex items-center justify-between">
-                    <h1 class="font-Montagu font-semibold text-[24px] ml-3 mb-4">Cart Product</h1>
-                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603913/ekis_f7urxc.png" alt="" class="w-[20px] h-[20px] relative mb-5 mr-5 cursor-pointer" id="CloseCart">
-                </div>
-                <hr class="border-outline border-[1.5px] w-auto">
-    
-            </div>
-            <div id="Product-Cart" class="overflow-auto h-[70vh] Product-Cartt"></div>
-            <div class="my-3 flex relative">
-                <h2 class="relative left-6 font-Montserrat font-extrabold text-[16px]">Total: </h2>
-                <p class="absolute right-6 font-Montserrat font-semibold text-[16px]" id="totalPriceDisplay">₱ 0.00</p>
-            </div>
-            <hr class="border-1 border-outline w-auto ">
-            <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
-        </div>
-        <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
-            <div class="shadow-sm">
-                <p class="my-2 ml-2 font-Inter">Notification</p>
-                <hr class="border-1 border-[#D8BC8C80] w-[28.5rem] mb-1">
-            </div>
-            <div id="NotifContents" class="overflow-y-auto  h-[20rem]">
-                <div id="NotifContent" class="relative space-y-5 ">
-                
-                </div>
-            </div>
-        </div>
-        <div class="fixed bottom-16 right-20">
-            <div class="relative">
-              <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
-                   alt="Chat Logo" 
-                   class="h-[4rem] cursor-pointer z-40">
-              <span id="Chat-Badge" class="absolute top-3 right-3 w-3 h-3 bg-outline text-white text-xs font-bold rounded-full px-1 z-50 transform translate-x-1/2 -translate-y-1/2 hidden">
-              </span>
-            </div>
-        </div>
-        <div id="ChatContent" class="hidden fixed rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
-            <div class="shadow-sm">
-                <div class="flex">
-                    <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
-                    <p id="ChatClose" class="absolute right-5 my-2 cursor-pointer font-Inter font-extrabold">X</p>
-                </div>
-                <hr class="border-1 border-[#D8BC8C80] w-[35rem]">
-                <div class="m-4">
-                    <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
+            <div class="fixed hidden right-0 top-0 h-full w-[570px] bg-Likha z-[50] shadow-2xl p-6" id="Cartel">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <h1 class="font-Montagu font-semibold text-[24px] ml-3 mb-4">Cart Product</h1>
+                        <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603913/ekis_f7urxc.png" alt="" class="w-[20px] h-[20px] relative mb-5 mr-5 cursor-pointer" id="CloseCart">
                     </div>
-                    <button id="CB" class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="SendBot()">ChatBot</button>
-                    <button class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="Zapp()">Zappnott</button>
-                    <form autocomplete="off" id="message-form" class="flex">
-                        <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
-                        <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
-                    </form>
+                    <hr class="border-outline border-[1.5px] w-auto">
+        
                 </div>
+                <div id="Product-Cart" class="overflow-auto h-[70vh] Product-Cartt"></div>
+                <div class="my-3 flex relative">
+                    <h2 class="relative left-6 font-Montserrat font-extrabold text-[16px]">Total: </h2>
+                    <p class="absolute right-6 font-Montserrat font-semibold text-[16px]" id="totalPriceDisplay">₱ 0.00</p>
+                </div>
+                <hr class="border-1 border-outline w-auto ">
+                <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
             </div>
-        </div>
-        <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
-            <div class="flex flex-col items-center">
-                <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
-                    <img id="ProfilePicMenu" src="img/profileblank.png" alt="" class="w-[80px] h-[80px] rounded-full object-cover">
+            <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
+                <div class="shadow-sm">
+                    <p class="my-2 ml-2 font-Inter">Notification</p>
+                    <hr class="border-1 border-[#D8BC8C80] w-[28.5rem] mb-1">
                 </div>
-                <div id="UsernameMenu" class="font-Inter">
-                    jennierubyjane
-                </div>
-            </div>
-            <div class="py-1 flex" ></div>
-                <div class="flex-col flex relative">
-                    <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
-                    <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
-                    <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
-                    <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
-                    <div class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</div>
-                </div>
-            </div>
-            <div id="LogOutModal" class="fixed top-1/2 z-30 flex flex-col items-center justify-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg transform hidden transition-all duration-300">
-                <div class="flex flex-col items-center justify-center">
-                    <img src="img/LogOutModal.png" class="w-[80px]" alt="">
-                    <div class="flex flex-col space-y-1 items-center w-[19rem] text-center">
-                        <span>Are you sure you want to Log Out?</span>
+                <div id="NotifContents" class="overflow-y-auto  h-[20rem]">
+                    <div id="NotifContent" class="relative space-y-5 ">
+                    
                     </div>
                 </div>
-                
-                <div class="flex space-x-8 mt-5">
-                    <button id="LYes" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8">YES</button>
-                    <button id="LNo"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
+            </div>
+            <div class="fixed bottom-16 right-4 md:right-20">
+                <div class="relative">
+                  <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
+                       alt="Chat Logo" 
+                       class=" h-[3rem] md:h-[4rem] cursor-pointer z-40">
+                  <span id="Chat-Badge" class="absolute top-3 right-3 w-3 h-3 bg-outline text-white text-xs font-bold rounded-full px-1 z-50 transform translate-x-1/2 -translate-y-1/2 hidden">
+                  </span>
                 </div>
-    
-            </div> 
+            </div>
+            <div id="ChatContent" class="hidden fixed rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
+                <div class="shadow-sm">
+                    <div class="flex">
+                        <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
+                        <p id="ChatClose" class="absolute right-5 my-2 cursor-pointer font-Inter font-extrabold">X</p>
+                    </div>
+                    <hr class="border-1 border-[#D8BC8C80] w-[35rem]">
+                    <div class="m-4">
+                        <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
+                        </div>
+                        <button id="CB" class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="SendBot()">ChatBot</button>
+                        <button class="bg-[#96A378] h-7 w-auto px-4 rounded-2xl my-2 shadow-2xl" onclick="Zapp()">Zappnott</button>
+                        <form autocomplete="off" id="message-form" class="flex">
+                            <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+                            <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-[80px] h-[80px] bg-outline rounded-full outline outline-1 outline-outline">
+                        <img id="ProfilePicMenu" src="img/profileblank.png" alt="" class="w-[80px] h-[80px] rounded-full object-cover">
+                    </div>
+                    <div id="UsernameMenu" class="font-Inter">
+                        jennierubyjane
+                    </div>
+                </div>
+                <div class="py-1 flex" ></div>
+                    <div class="flex-col flex relative">
+                        <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                        <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
+                        <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                        <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
+                        <div class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</div>
+                    </div>
+                </div>
+                <div id="LogOutModal" class="fixed top-1/2 z-30 flex flex-col items-center justify-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg transform hidden transition-all duration-300">
+                    <div class="flex flex-col items-center justify-center">
+                        <img src="img/LogOutModal.png" class="w-[80px]" alt="">
+                        <div class="flex flex-col space-y-1 items-center w-[19rem] text-center">
+                            <span>Are you sure you want to Log Out?</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-8 mt-5">
+                        <button id="LYes" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8">YES</button>
+                        <button id="LNo"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
+                    </div>
+        
+                </div> 
         </div>
     </div>
     <script src="Rotatingtext.js"></script>
@@ -757,6 +805,12 @@ window.addEventListener("blur",()=>{
 window.addEventListener("focus",()=>{
     document.title = "Welcome to Zappnott";
 });
+function Menu(e){
+            let list = document.querySelector('ul');
+            if(window.innerWidth < 768){
+            e.name === 'menu' ? (e.name = "close",list.classList.add('top-[80px]'),list.classList.add('opacity-100')) : (e.name = "menu",list.classList.remove('top-[80px]'),list.classList.remove('opacity-100'))
+            }
+        }
 </script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <script src="SliderScript.js"></script>

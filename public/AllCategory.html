@@ -170,9 +170,31 @@
         opacity: 1;
         padding-left: 2.5rem; /* Space for the icon on the left */
     }
+    @media (max-width: 768px) {
+        .search-bar.expanded {
+            width: 8rem; 
+            padding-left: 1.5rem;
+        }
+    }
+    @media (max-width: 375px) {
+        .search-bar.expanded {
+            width: 7rem; 
+            padding-left: 1.5rem;
+        }
+    }
 
     #search-icon.expanded {
         transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
+    }
+    @media (max-width: 768px) {
+        #search-icon.expanded {
+        transform: translateX(-5.5rem); /* Move the icon to the left inside the search bar */
+    }
+    }
+    @media (max-width: 375px) {
+        #search-icon.expanded {
+        transform: translateX(-4.5rem); /* Move the icon to the left inside the search bar */
+    }
     }
     .line-clamp-2 {
     display: -webkit-box;
@@ -180,14 +202,33 @@
     -webkit-line-clamp: 2; /* Limit to 2 lines */
     overflow: hidden;
     }
+    @media (max-width: 768px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for mobile */
+        height: 1.5rem; /* Smaller size for mobile */
+    }
+    }
 
+    /* Media query for very small screens (e.g., phones in portrait mode) */
+    @media (max-width: 480px) {
+        lord-icon {
+            width: 1.25rem;  /* Even smaller size for very small screens */
+            height: 1.25rem; /* Even smaller size for very small screens */
+        }
+    }
+    @media (max-width: 375px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for 375px screen width */
+        height: 1.5rem; /* Smaller size for 375px screen width */
+    }
+    }
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <body>
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50" >
         <nav class="md:flex md:items-center">   
             <div >
-                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/q_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[1rem] cursor-pointer md:cursor-default md:ml-[2rem]" onclick="Menu(this)" name = "menu" id="menubutton">
             </div>
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
@@ -224,7 +265,7 @@
                                 });
                               </script>
                               
-                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 translate-x-44 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden md:translate-x-0" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                               <div class="py-1" role="none">
                                 <a href="AllCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">All</a>
                                 <a href="DressCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Dress</a>
@@ -242,16 +283,15 @@
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="Index.html#About" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#footer" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
-                    
                 </ul>
             </div>
             <div class="flex fixed p-3 top-1 right-1 md:right-16">
@@ -264,7 +304,7 @@
                         src="https://cdn.lordicon.com/kkvxgpti.json"
                         trigger="hover"
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
-                        style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
+                        style="margin-right: 0.75rem;">
                     </lord-icon>
                     <div id="SearchCon" class="bg-Likha h-auto w-[15rem] absolute top-12 rounded-3xl hidden shadow-2xl">
                         
@@ -272,21 +312,21 @@
                 </div>
             
 
-                <a class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
+                <div class="relative cursor-pointer inline-block p-[0.75rem]" id="ProfileIcon">
                     <lord-icon
                         src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
                         colors="primary:#000000"
-                        style="width:1.75rem;height:1.75rem">
+                        style="">
                     </lord-icon>
-                </a>
+                </div>
 
                 <div class="relative cursor-pointer inline-block p-[0.75rem]">
                     <lord-icon
                         id="NotifIcon"
                         src="https://cdn.lordicon.com/vspbqszr.json"
                         trigger="hover"
-                        style="width:1.75rem;height:1.75rem;">
+                        style="">
                     </lord-icon>
                     <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
                     <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
@@ -299,7 +339,7 @@
                         trigger="hover"
                         stroke="bold"
                         colors="primary:#121331,secondary:#121331"
-                        style="width:2rem;height:2rem;">
+                        style="">
                     </lord-icon>
                 </div>
             </div>
@@ -308,11 +348,20 @@
     </div>
     <div class="bg-Likha min-h-screen ">
         <div id="main-container">
-            <div class="bg-Likha max-w-auto h-auto flex flex-col items-center pt-[6rem] space-y-32">
+            <div class="bg-Likha max-w-auto h-auto flex flex-col items-center pt-[6rem] space-y-2">
                 <div>
-                    <H6 class="text-6xl font-Montagu font-extrabold text-[#96A378]">Shop</H6>
+                    <H6 class=" text-4xl md:text-6xl font-Montagu font-extrabold text-[#96A378]">Shop</H6>
+
                 </div>
-                <div class="flex-col mt-14">
+                <div class=" mt-4 md:mt-14 relative">
+                    <div class="flex items-center justify-end mt-6 md:mt-14 space-x-2 mb-10 mr-3 md:mr-16">
+                        <p class="font-Montserrat text-[#00000080] font-semibold text-[16px]">Sort by:</p>
+                        <select id="productOrder" class="border-2 border-[#F07C54] bg-[#F07C541A] w-[100px] h-[30px] md:w-[179.4px] md:h-[60px] text-[16px] text-[#00000080] font-semibold py-1 px-3 rounded-lg focus:outline-none focus:border-orange-400">
+                            <option value="default">Select</option>
+                            <option value="LH">Price: Low to High</option>
+                            <option value="HL">Price: High to Low</option>
+                        </select>
+                    </div>
                     <div id="loading" class="relative flex justify-center space-x-9">
                         <div class="w-[318px] shadow-lg relative rounded-xl h-[500px] bg-[#E2E2D0] animate-pulse">
                             <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
@@ -327,7 +376,7 @@
                             <div class="w-[289.19px] h-[124px] rounded-lg shadow-lg relative top-[22rem] mx-auto bg-[#CACACA]"></div>
                         </div>
                     </div>
-                    <div id="Product" class="flex flex-wrap justify-start mx-10 hidden"></div>
+                    <div id="Product" class="flex flex-wrap justify-center md:justify-start md:mx-10 hidden"></div>
                     <div id="Page" class="flex justify-center mb-14"></div>
                     
                 </div>
@@ -434,7 +483,7 @@
                 </div>
             </div>
         </div>
-        <div class="fixed bottom-16 right-20">
+        <div class="fixed bottom-16 right-3 md:right-20">
             <div class="relative">
               <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
                    alt="Chat Logo" 
@@ -535,11 +584,11 @@ fetch('/products')
                 const productElement = document.createElement('div');
                 productElement.innerHTML = `
                     <div id="main-container"> 
-                        <div class="relative w-[328px] h-[500px] bg-sign outline outline-1 outline-outline flex justify-center rounded-md overflow-hidden transform hover:scale-105 cursor-pointer transition ease-in-out duration-300 group mx-[0.65rem] mb-6">
+                        <div class="relative w-[150px] h-[220px] md:w-[328px] md:h-[500px] bg-sign outline outline-1 outline-outline flex justify-center rounded-md overflow-hidden transform hover:scale-105 cursor-pointer transition ease-in-out duration-300 group mx-3 md:mx-[0.65rem] mb-6">
                             <img src="${product.imagePath}" alt="" class="object-fill h-full w-full rounded-md">
-                            <div class="h-[124px] w-[289.19px] bg-[#FFFFFF80] absolute bottom-4 rounded-md z-10 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
+                            <div class="w-[120px] md:h-[124px] md:w-[289.19px] bg-[#FFFFFF80] absolute bottom-4 rounded-md z-10 px-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ">
                                 <div class="relative w-auto h-[5rem]">
-                                    <p class=" relative font-Montagu font-semibold text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
+                                    <p class=" relative font-Montagu font-semibold text-[15px] md:text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
                                 </div>
                                 
                                 <div class="flex absolute bottom-2  w-[17rem] items-center">
@@ -620,6 +669,115 @@ fetch('/products')
 function CartOk(){
         document.getElementById('CartPopup').classList.add('hidden');
     }
+    document.getElementById('productOrder').addEventListener('change', function() {
+        const order = this.value;
+        fetch(`/products?order=${order}`)
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('Product').classList.remove('hidden');
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(products => {
+            const totalPages = Math.ceil(products.length / itemsPerPage);
+
+            function renderProducts(page) {
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = page * itemsPerPage;
+                const paginatedProducts = products.slice(startIndex, endIndex);
+
+                const productList = document.getElementById('Product');
+                productList.innerHTML = '';
+
+                paginatedProducts.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.innerHTML = `
+                        <div id="main-container"> 
+                            <div class="relative w-[150px] h-[220px] md:w-[328px] md:h-[500px] bg-sign outline outline-1 outline-outline flex justify-center rounded-md overflow-hidden transform hover:scale-105 cursor-pointer transition ease-in-out duration-300 group mx-3 md:mx-[0.65rem] mb-6">
+                                <img src="${product.imagePath}" alt="" class="object-fill h-full w-full rounded-md">
+                                <div class="w-[120px] md:h-[124px] md:w-[289.19px] bg-[#FFFFFF80] absolute bottom-4 rounded-md z-10 px-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ">
+                                    <div class="relative w-auto h-[5rem]">
+                                        <p class=" relative font-Montagu font-semibold text-[15px] md:text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
+                                    </div>
+                                    
+                                    <div class="flex absolute bottom-2  w-[17rem] items-center">
+                                        <h1 class="font-Montserrat relative bottom-0 font-semibold">₱ ${product.productPrice}</h1>
+                                        <img id="Cart-Icon" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/q_auto/v1727603905/CART_apj7cn.png" alt="" class="absolute right-0 cursor-pointer w-[50px] h-[50px]">
+                                    </div> 
+                                </div>
+                            </div> 
+                        </div> 
+                    `;
+                    productList.appendChild(productElement);
+
+                        productElement.querySelector('#main-container').addEventListener('click', function() {
+                            const  productContainer = productElement.querySelector('#main-container');
+                            const productName = productContainer.querySelector('p').innerText;
+
+                            sessionStorage.setItem('product', productName);
+
+                            window.location.href = 'ProductDetails.html';
+                        });
+                        productElement.querySelector('#Cart-Icon').addEventListener('click', function() {
+                            event.stopPropagation();
+                            const productContainer = productElement.querySelector('#main-container');
+                            const ProductName = productContainer.querySelector('p').innerText;
+                            const Quantity = 1;
+                            const Data ={
+                                ProductName: ProductName,
+                                Quantity: Quantity
+                            };
+                            console.log('running to hehe', Data)
+
+                            fetch('/AddToCartIcon',{
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(Data)
+                            })
+                            .then(response => response.json().then(data => {
+                                if (response.ok) {
+                                    console.log('Success:', data);
+                                    document.getElementById('CartPopup').classList.remove('hidden');
+                                }
+                                else if(response.status === 401){
+                                    window.location.href = 'SignIn.html';
+                                }
+                            }))
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        });
+                });
+            }
+            
+            function renderPagination() {
+                const paginationContainer = document.getElementById('Page');
+                paginationContainer.innerHTML = '';
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.innerText = i;
+                    pageButton.className = `pagination-button mx-2 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-400 transition-colors duration-300 ${
+                        i === currentPage ? 'bg-gray-400 font-bold' : ''
+                    }`;
+                    
+                    pageButton.addEventListener('click', () => {
+                        currentPage = i;
+                        renderProducts(currentPage);
+                        renderPagination();
+                    });
+                    paginationContainer.appendChild(pageButton);
+                }
+            }
+            renderProducts(currentPage);
+            renderPagination();
+        })
+        .catch(error => console.error('Error fetching products:', error));
+    });
 </script>   
 <script src="Nav.js"></script>
 </html>
