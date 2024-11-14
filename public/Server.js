@@ -415,7 +415,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
 
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
-    const jsonData = JSON.parse(req.body.data.Ring);
+    const jsonData = JSON.parse(req.body.data);
     const user = req.session.user;
 
     if (!user || !user.UserID) {
@@ -444,11 +444,11 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
         const request = pool.request();
         await request.input('UserID',sql.Int,userID)
             .input('Image' ,sql.VarChar,fileUrl)
-            .input('RingType',sql.VarChar,jsonData.RingType)
-            .input('Stone',sql.Int,jsonData.Stone)
-            .input('RingColor',sql.Int,jsonData.RingColor)
-            .input('RingSize',sql.Int,jsonData.RingSize)
-            .input('TotalPrice',sql.Int,jsonData.TotalPrize)
+            .input('RingType',sql.VarChar,jsonData.Ring.RingType)
+            .input('Stone',sql.Int,jsonData.Ring.Stone)
+            .input('RingColor',sql.Int,jsonData.Ring.RingColor)
+            .input('RingSize',sql.Int,jsonData.Ring.RingSize)
+            .input('TotalPrice',sql.Int,jsonData.Ring.TotalPrize)
 
             .query(`INSERT INTO tbl_CustomRing (UserID,Image,RingType,Stone,RingColor,RingSize,TotalPrice,Date,Status)
                     VALUES 
