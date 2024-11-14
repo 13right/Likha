@@ -280,27 +280,38 @@ function getColorName(rgba) {
 }
 
 app.post('/Request/Dress',upload.single('image'), async (req, res) => {
-    console.log('Received data:', req.body);
+    const jsonData = JSON.parse(req.body.data);
+    // const user = req.session.user;
+
+    // if (!user || !user.UserID) {
+    //     return res.status(200).json({
+    //         success: false,
+    //         message: "Unauthorized. Please sign in.",
+    //         redirectTo: "/SignIn.html"
+    //     });
+    // }
+
+    // const userID = parseInt(user.UserID);
     let fileUrl = null;
-    try{
-        console.log('Received data:', req.body);
-        const jsonData = JSON.parse(req.body.data);
-        //console.log("JSON Data:", jsonData.necklace);
+
+    try {
         if (req.file && req.file.path) {
             const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "img",
-            use_filename: true,
-            unique_filename: false,
-            transformation: [{ format: "auto", quality: "auto" }],
-        });
+                folder: "img",
+                use_filename: true,
+                unique_filename: false,
+                transformation: [{ format: "auto", quality: "auto" }],
+            });
+
             fileUrl = result.secure_url;
-            fs.unlinkSync(req.file.path);
-            }
-            res.status(200).json({
-                message: "Dress data uploaded successfully",
-                fileUrl: fileUrl,
-                jsonData: jsonData
-                });
+            fs.unlinkSync(req.file.path); 
+        }
+        // const request = pool.request();
+        // await request.input('UserID',sql.Int,userID)
+        //     .input('Image' ,sql.VarChar,fileUrl)
+        //     .input('Name',sql.VarChar,)
+        //     .query('INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status) VALUES (@UserID)');
+             
     }
     catch (err) {
         console.error("Error:", err);
@@ -311,12 +322,10 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     }
 });
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
-    //const { data } = req.body;  // Assuming data comes from the request body
 
     const jsonData = JSON.parse(req.body.data);
-   const user = req.session.user;
-    
-    // Check if userID is null and redirect to sign-in if necessary
+    const user = req.session.user;
+
     if (!user || !user.UserID) {
         return res.status(200).json({
             success: false,
@@ -338,7 +347,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
             });
 
             fileUrl = result.secure_url;
-            fs.unlinkSync(req.file.path);  // Clean up the file after uploading
+            fs.unlinkSync(req.file.path); 
         }
 
         const request = pool.request();

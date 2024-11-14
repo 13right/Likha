@@ -1354,6 +1354,10 @@ video {
   margin-left: 5.75rem;
 }
 
+.ml-\[5rem\]{
+  margin-left: 5rem;
+}
+
 .ml-\[6\.5rem\]{
   margin-left: 6.5rem;
 }
@@ -1546,10 +1550,6 @@ video {
   margin-top: 7rem;
 }
 
-.ml-\[5rem\]{
-  margin-left: 5rem;
-}
-
 .line-clamp-2{
   overflow: hidden;
   display: -webkit-box;
@@ -1573,16 +1573,8 @@ video {
   display: inline-flex;
 }
 
-.table{
-  display: table;
-}
-
 .grid{
   display: grid;
-}
-
-.contents{
-  display: contents;
 }
 
 .hidden{
@@ -2706,10 +2698,6 @@ video {
   flex-grow: 1;
 }
 
-.grow{
-  flex-grow: 1;
-}
-
 .origin-top-right{
   transform-origin: top right;
 }
@@ -2794,10 +2782,6 @@ video {
 
 .cursor-pointer{
   cursor: pointer;
-}
-
-.resize{
-  resize: both;
 }
 
 .appearance-none{
