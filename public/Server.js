@@ -2293,6 +2293,46 @@ app.get('/OrderDetails', async (req, res) => {
     }
 });
 
+app.get('/RequestDetails', async (req, res) => {
+    const ReqID = req.query.req;
+    try {
+        const request = pool.request();
+        request.input('RequestID', sql.VarChar, ReqID);
+        //console.log(transactionId);
+        const query = `DECLARE @ReqID VARCHAR(MAX)
+                        SET @ReqID = @RequestID
+
+                        IF @ReqID LIKE 'RNLZPNT%'
+                            SELECT NecklaceID AS TransactionID, [Date], Image,tbl_CustomNecklace.Status, FORMAT(CAST(TotalPrice AS DECIMAL(10, 2)), 'N2')  as TotalPrice,PaymentLink, Name,Email,MobileNum FROM tbl_CustomNecklace INNER JOIN tbl_User ON tbl_User.UserID = tbl_CustomNecklace.UserID WHERE NecklaceID = @ReqID
+
+                        ELSE  IF @ReqID LIKE 'RRZPNT%'
+                            SELECT RingID AS TransactionID, [Date], Image,tbl_CustomRing.Status, FORMAT(CAST(TotalPrice AS DECIMAL(10, 2)), 'N2')  as TotalPrice,PaymentLink, Name,Email,MobileNum FROM tbl_CustomRing INNER JOIN tbl_User ON tbl_User.UserID = tbl_CustomRing.UserID WHERE RingID = @ReqID
+
+                        ELSE IF @ReqID LIKE 'RDZPNT%'
+                            SELECT DressID AS TransactionID, [Date], Image,tbl_CustomDress.Status, FORMAT(CAST(TotalPrice AS DECIMAL(10, 2)), 'N2')  as TotalPrice,PaymentLink, tbl_User.Name,Email,MobileNum FROM tbl_CustomDress INNER JOIN tbl_User ON tbl_User.UserID = tbl_CustomDress.UserID WHERE DressID = @ReqID`;
+        const result = await request.query(query);
+        const products = result.recordset.map(product => {
+
+            return {
+                PaymentLink: product.PaymentLink,
+                OrderedDate: product.Date,
+                productOrder: product.TransactionID,
+                CustomerName: product.Name,
+                ProductTotal: product.TotalPrice,
+                CustomerEmail: product.Email,
+                CustomerNum: product.MobileNum,
+                Status: product.Status,
+                Image: product.Image
+            };
+        });
+        //console.log(products);
+        res.json(products);
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
 app.put('/UpdateStat', async (req, res) => {
     const { status, TransID } = req.body;
 

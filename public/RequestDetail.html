@@ -51,11 +51,11 @@
     <div id="userInfo" class="hidden"></div>
 </body>
 <script>
-    const transacValue = sessionStorage.getItem('transacValue');
+    const ReqID = sessionStorage.getItem('RequestID');
 
 
-    if (transacValue) {
-    fetch(`/OrderDetails?transac=${(transacValue)}`)
+    if (ReqID) {
+    fetch(`/RequestDetails?req=${(ReqID)}`)
     .then(response => response.json())
     .then(Items => {
         console.log(Items);
@@ -70,9 +70,9 @@
                             <p class="font-Inter font-extrabold text-[20px] text-[#FFFFFF]">${Item.productOrder}</p>
                             <p class="font-Montserrat font-semibold text-[14px] text-[#FFFFFF]">${Item.OrderedDate}</p>
                         </div>
-                        <div class="flex items-center ml-[2rem] space-x-4 mt-[1.5rem]">
+                        <div class="flex items-center ml-[5rem] space-x-4 mt-[1.5rem]">
                             <img src="img/Folder.png" class="w-[80px]">
-                            <a href="https://res.cloudinary.com/db5bsftqx/image/upload/v1729951061/img/e31c47854bc344b27bdf35d37d108495.jpg">https://res.cloudinary.com</a>
+                            <a href="${Item.Image}">https://res.cloudinary.com</a>
                         </div>
                     </div>
                     <!-- Product dito then hr ulit -->

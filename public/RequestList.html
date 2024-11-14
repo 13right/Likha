@@ -281,10 +281,11 @@ fetch('/Request')
             viewButton.addEventListener('click', () => {
 
                 const transacValue = ItemElement.querySelector('#Transac').textContent;
+                console.log('RequestID: ',transacValue);
 
-                sessionStorage.setItem('transacValue', transacValue);
+                sessionStorage.setItem('RequestID', transacValue);
 
-                window.location.href = 'OrderDetails.html';
+                window.location.href = 'RequestDetail.html';
             });
         });
     });
