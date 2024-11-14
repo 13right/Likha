@@ -293,7 +293,7 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
 
     // const userID = parseInt(user.UserID);
     let fileUrl = null;
-
+    const userID = user.UserID;
     try {
         if (req.file && req.file.path) {
             const result = await cloudinary.uploader.upload(req.file.path, {
@@ -368,12 +368,13 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
         const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
             .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
+            .input('UserID',sql.Int,userID)
             .input('size', sql.Int, jsonData.necklace.length)
             .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
             // .input('UserID', sql.Int, userID)
             .query(`
                 INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID,Status)
-                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), 1,'Requested');
+                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(),@UserID,'Requested');
             `);
 
         // Insert data into tbl_NecklaceMaterials
@@ -428,7 +429,7 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
 
     // const userID = parseInt(user.UserID);
     let fileUrl = null;
-
+    const userID = user.UserID
     try {
         if (req.file && req.file.path) {
             const result = await cloudinary.uploader.upload(req.file.path, {
