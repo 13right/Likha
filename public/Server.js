@@ -281,15 +281,15 @@ function getColorName(rgba) {
 
 app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     const jsonData = JSON.parse(req.body.data);
-    // const user = req.session.user;
+    const user = req.session.user;
 
-    // if (!user || !user.UserID) {
-    //     return res.status(200).json({
-    //         success: false,
-    //         message: "Unauthorized. Please sign in.",
-    //         redirectTo: "/SignIn.html"
-    //     });
-    // }
+    if (!user || !user.UserID) {
+        return res.status(200).json({
+            success: false,
+            message: "Unauthorized. Please sign in.",
+            redirectTo: "/SignIn.html"
+        });
+    }
 
     // const userID = parseInt(user.UserID);
     let fileUrl = null;
@@ -306,11 +306,19 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
             fileUrl = result.secure_url;
             fs.unlinkSync(req.file.path); 
         }
-        // const request = pool.request();
-        // await request.input('UserID',sql.Int,userID)
-        //     .input('Image' ,sql.VarChar,fileUrl)
-        //     .input('Name',sql.VarChar,)
-        //     .query('INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status) VALUES (@UserID)');
+        const request = pool.request();
+        await request.input('UserID',sql.Int,userID)
+            .input('Image' ,sql.VarChar,fileUrl)
+            .input('Name',sql.VarChar,jsonData.dressName)
+            .input('Bust',sql.Int,jsonData.bust)
+            .input('Color',sql.Int,jsonData.color)
+            .input('TotalPrice',sql.Int,jsonData.price)
+            .input('Waist',sql.Int,jsonData.waist)
+            .input('Hips',sql.Int,jsonData.hip)
+            .input('Height',sql.Int,jsonData.height)
+            .query(`INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status)
+                    VALUES 
+                    (@UserID,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Request')`);
         res.status(200).json({
             success: true,
             message: "Dress data uploaded successfully",
@@ -407,27 +415,51 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
 
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
-    //console.log('Received data:', req.body);
+    const jsonData = JSON.parse(req.body.data.Ring);
+    const user = req.session.user;
+
+    if (!user || !user.UserID) {
+        return res.status(200).json({
+            success: false,
+            message: "Unauthorized. Please sign in.",
+            redirectTo: "/SignIn.html"
+        });
+    }
+
+    // const userID = parseInt(user.UserID);
     let fileUrl = null;
-    try{
-        console.log('Received data:', req.body);
-        const jsonData = JSON.parse(req.body.data);
-        console.log("JSON Data:", jsonData);
+
+    try {
         if (req.file && req.file.path) {
             const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "img",
-            use_filename: true,
-            unique_filename: false,
-            transformation: [{ format: "auto", quality: "auto" }],
-        });
+                folder: "img",
+                use_filename: true,
+                unique_filename: false,
+                transformation: [{ format: "auto", quality: "auto" }],
+            });
+
             fileUrl = result.secure_url;
-            fs.unlinkSync(req.file.path);
-            }
-            res.status(200).json({
-                message: "Ring data uploaded successfully",
-                fileUrl: fileUrl,
-                jsonData: jsonData
-                });
+            fs.unlinkSync(req.file.path); 
+        }
+        const request = pool.request();
+        await request.input('UserID',sql.Int,userID)
+            .input('Image' ,sql.VarChar,fileUrl)
+            .input('RingType',sql.VarChar,jsonData.RingType)
+            .input('Stone',sql.Int,jsonData.Stone)
+            .input('RingColor',sql.Int,jsonData.RingColor)
+            .input('RingSize',sql.Int,jsonData.RingSize)
+            .input('TotalPrice',sql.Int,jsonData.TotalPrize)
+
+            .query(`INSERT INTO tbl_CustomRing (UserID,Image,RingType,Stone,RingColor,RingSize,TotalPrice,Date,Status)
+                    VALUES 
+                    (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Request')`);
+        res.status(200).json({
+            success: true,
+            message: "Dress data uploaded successfully",
+            fileUrl: fileUrl,
+            jsonData: jsonData
+        });
+ 
     }
     catch (err) {
         console.error("Error:", err);
@@ -436,27 +468,6 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
             error: err.message
         });
     }
-
-   //const color = req.body.objectsUI[0].color;
-   //console.log(color);
-   //const ColorName = getColorName(color);
-   //res.send({ message: 'Ring Data received!', receivedData: req.body });
-    //     const { dressName, height, bust, hip, waist,price } = req.body.objectsUI[0];
-    //     const request = pool.request();
-    //     request.input('Name', sql.VarChar, dressName);
-    //     request.input('Bust', sql.Decimal, bust);
-    //     request.input('Price',sql.Int,price);
-    //     //Wrequest.input('Color',sql.VarChar,ColorName);
-    //     request.input('Waist',sql.Decimal,waist);
-    //     request.input('hips',sql.Decimal,hip);
-    //     request.input('Height',sql.Decimal,height);
-
-    //     const query = `
-    //         INSERT INTO tbl_CustomDress (Name,Bust,TotalPrice,Color,Waist,Hips,Height) VALUES (@Name,@Bust,@Price,@Color,@Waist,@hips,@Height)
-    //     `;
-
-    //     await request.query(query);
-       //res.status(200).send('Necklace data uploaded successfully');
 });
 
 app.get('/Request', async (req, res) => {
