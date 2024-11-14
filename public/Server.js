@@ -311,7 +311,13 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
         //     .input('Image' ,sql.VarChar,fileUrl)
         //     .input('Name',sql.VarChar,)
         //     .query('INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status) VALUES (@UserID)');
-             
+        res.status(200).json({
+            success: true,
+            message: "Dress data uploaded successfully",
+            fileUrl: fileUrl,
+            jsonData: jsonData
+        });
+ 
     }
     catch (err) {
         console.error("Error:", err);
