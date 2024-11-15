@@ -291,9 +291,8 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
         });
     }
 
-    // const userID = parseInt(user.UserID);
+    const userID = parseInt(user.UserID);
     let fileUrl = null;
-    const userID = user.UserID;
     try {
         if (req.file && req.file.path) {
             const result = await cloudinary.uploader.upload(req.file.path, {
@@ -427,9 +426,9 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
         });
     }
 
-    // const userID = parseInt(user.UserID);
+    const userID = parseInt(user.UserID);
     let fileUrl = null;
-    const userID = user.UserID
+
     try {
         if (req.file && req.file.path) {
             const result = await cloudinary.uploader.upload(req.file.path, {
@@ -456,9 +455,10 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
                     (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Request')`);
         res.status(200).json({
             success: true,
-            message: "Dress data uploaded successfully",
+            message: `RING NA ${userID} data uploaded successfully`,
             fileUrl: fileUrl,
-            jsonData: jsonData
+            jsonData: jsonData,
+            UserID : userID
         });
  
     }
