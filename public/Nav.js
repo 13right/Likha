@@ -142,8 +142,6 @@ document.getElementById('search-bar').addEventListener('keydown', function (even
     }
 });
 
-
-
 document.addEventListener('DOMContentLoaded', (event) => {
     const ProfileIcon = document.getElementById('ProfileIcon');
     const ProfileMenu = document.getElementById('ProfileMenu');
