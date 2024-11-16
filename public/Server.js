@@ -20,6 +20,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { Result } = require('tedious/lib/token/helpers');
+const { ReturnStatusToken } = require('tedious/lib/token/token');
 app.set('view engine', 'ejs');
 
 const port = process.env.PORT || 3000;
@@ -310,14 +311,14 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
             .input('Image' ,sql.VarChar,fileUrl)
             .input('Name',sql.VarChar,jsonData.dressName)
             .input('Bust',sql.Int,jsonData.bust)
-            .input('Color',sql.Int,jsonData.color)
+            .input('Color',sql.VarChar,jsonData.color)
             .input('TotalPrice',sql.Int,jsonData.price)
             .input('Waist',sql.Int,jsonData.waist)
             .input('Hips',sql.Int,jsonData.hip)
             .input('Height',sql.Int,jsonData.height)
             .query(`INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status)
                     VALUES 
-                    (@UserID,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Request')`);
+                    (@UserID,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Requested')`);
         res.status(200).json({
             success: true,
             message: "Dress data uploaded successfully",
@@ -452,7 +453,7 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
 
             .query(`INSERT INTO tbl_CustomRing (UserID,Image,RingType,Stone,RingColor,RingSize,TotalPrice,Date,Status)
                     VALUES 
-                    (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Request')`);
+                    (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Requested')`);
         res.status(200).json({
             success: true,
             message: `RING NA ${userID} data uploaded successfully`,
@@ -473,21 +474,18 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
 
 app.get('/Request', async (req, res) => {
     try {
-        const pool = await sql.connect(config); // Assuming config is set for your DB
+        const pool = await sql.connect(config);
 
-        // Execute all three queries
         const necklaceQuery = await pool.request().query('SELECT NecklaceID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, Name,tbl_CustomNecklace.Status FROM tbl_CustomNecklace INNER JOIN tbl_User ON tbl_CustomNecklace.UserID = tbl_User.UserID');
         const ringQuery = await pool.request().query('SELECT RingID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, Name,tbl_CustomRing.Status FROM tbl_CustomRing INNER JOIN tbl_User ON tbl_CustomRing.UserID = tbl_User.UserID');
         const dressQuery = await pool.request().query('SELECT DressID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, tbl_User.Name,tbl_CustomDress.Status FROM tbl_CustomDress INNER JOIN tbl_User ON tbl_CustomDress.UserID = tbl_User.UserID');
 
-        // Combine all results into one array
         const combinedResults = [
             ...necklaceQuery.recordset.map(item => ({ ...item, ProductType: 'Necklace' })),
             ...ringQuery.recordset.map(item => ({ ...item, ProductType: 'Ring' })),
             ...dressQuery.recordset.map(item => ({ ...item, ProductType: 'Dress' }))
         ];
 
-        // Send the combined results as a JSON response
         res.json(combinedResults);
 
     } catch (err) {
@@ -1930,6 +1928,84 @@ app.get('/Order', async (req, res) => {
     }
 });
 
+app.get('/Design', async (req, res) => {
+    const user = req.session.user;
+    const ID = parseInt(user.UserID);
+    const Status = req.query.Status;
+
+    try {
+        let necklaceQuery = `
+            SELECT NecklaceID AS ProductID,
+                   Image, 
+                   CONVERT(VARCHAR, Date, 0) AS Date, 
+                   TotalPrice, 
+                   Name, 
+                   tbl_CustomNecklace.Status 
+            FROM tbl_CustomNecklace 
+            INNER JOIN tbl_User ON tbl_CustomNecklace.UserID = tbl_User.UserID
+            WHERE tbl_CustomNecklace.UserID = @UserID
+        `;
+
+        let ringQuery = `
+            SELECT RingID AS ProductID,
+                   Image, 
+                   CONVERT(VARCHAR, Date, 0) AS Date, 
+                   TotalPrice, 
+                   Name, 
+                   tbl_CustomRing.Status 
+            FROM tbl_CustomRing 
+            INNER JOIN tbl_User ON tbl_CustomRing.UserID = tbl_User.UserID
+            WHERE tbl_CustomRing.UserID = @UserID
+        `;
+
+        let dressQuery = `
+            SELECT DressID AS ProductID, 
+                   Image,
+                   CONVERT(VARCHAR, Date, 0) AS Date, 
+                   TotalPrice, 
+                   tbl_User.Name, 
+                   tbl_CustomDress.Status 
+            FROM tbl_CustomDress 
+            INNER JOIN tbl_User ON tbl_CustomDress.UserID = tbl_User.UserID
+            WHERE tbl_CustomDress.UserID = @UserID
+        `;
+
+
+        if (Status) {
+            necklaceQuery += ` AND tbl_CustomNecklace.Status LIKE @Status`;
+            ringQuery += ` AND tbl_CustomRing.Status LIKE @Status`;
+            dressQuery += ` AND tbl_CustomDress.Status LIKE @Status`;
+        }
+
+        const request = pool.request();
+        request.input('UserID', sql.Int, ID);
+        if (Status) {
+            request.input('Status', sql.VarChar, Status); 
+        }
+        console.log(Status);
+ 
+        const necklaceResult = await request.query(necklaceQuery);
+        const ringResult = await request.query(ringQuery);
+        const dressResult = await request.query(dressQuery);
+
+        // Combine results
+        let combinedResults = [
+            ...necklaceResult.recordset.map(item => ({ ...item, ProductType: 'Necklace' })),
+            ...ringResult.recordset.map(item => ({ ...item, ProductType: 'Ring' })),
+            ...dressResult.recordset.map(item => ({ ...item, ProductType: 'Dress' }))
+        ];
+
+        // Sort by Date (descending)
+        combinedResults.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+
+        res.json(combinedResults);
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+
+
 
 app.post('/rate', async (req, res) => {
     const { rating, comment, productID} = req.body;
@@ -2067,6 +2143,37 @@ app.get('/Counts', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
+
+  app.put('/PaidReq', async (req, res) => {
+    const { ReqID, Status, Retrieve } = req.body; // Expecting RequestData object with ReqID, Stat, and Link
+
+    if (!ReqID || !Status || !Retrieve) {
+        return res.status(400).send('Missing required fields: ReqID, Stat, or Link');
+    }
+
+    const query = `
+        IF EXISTS (SELECT * FROM tbl_CustomDress WHERE DressID = @ReqID)
+            UPDATE tbl_CustomDress SET Status = @Stat, PaymentLink = @Link WHERE DressID = @ReqID;
+        IF EXISTS (SELECT * FROM tbl_CustomNecklace WHERE NecklaceID = @ReqID)
+            UPDATE tbl_CustomNecklace SET Status = @Stat, PaymentLink = @Link WHERE NecklaceID = @ReqID;
+        IF EXISTS (SELECT * FROM tbl_CustomRing WHERE RingID = @ReqID)
+            UPDATE tbl_CustomRing SET Status = @Stat, PaymentLink = @Link WHERE RingID = @ReqID;
+    `;
+
+    try {
+        const result = await pool.request()
+            .input('ReqID', sql.VarChar, ReqID)
+            .input('Stat', sql.VarChar, Status)
+            .input('Link', sql.VarChar, Retrieve)
+            .query(query);
+
+        res.status(200).send({ message: 'Status and PaymentLink updated successfully.' });
+
+    } catch (error) {
+        console.error('Database Error:', error);
+        res.status(500).send('An error occurred while updating the status.');
+    }
+});
 
 //   app.post('/forgot-password',async (req,res) =>{
 //         const {Email} = req.body;
@@ -2368,6 +2475,26 @@ app.put('/UpdateStat', async (req, res) => {
         .input('Stat', sql.VarChar, status)
         .input('TransID',sql.VarChar,TransID);
         await request.query("UPDATE tbl_Order SET Status = @Stat WHERE 'OZPNT' + RIGHT('0000' + CONVERT(varchar(4), OrderID), 4) = @TransID");
+            
+        console.log("Status successfully Updated!");
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).json({ error: 'Database error', details: err });
+    }
+});
+app.put('/UpdateStatReq', async (req, res) => {
+    const { status, TransID } = req.body;
+
+    try {
+        const request = pool.request()
+        .input('Stat', sql.VarChar, status)
+        .input('ReqID',sql.VarChar,TransID);
+        await request.query(`IF EXISTS (SELECT * FROM tbl_CustomDress WHERE DressID = @ReqID)
+	    UPDATE tbl_CustomDress SET Status = @Stat WHERE DressID = @ReqID
+        IF EXISTS (SELECT * FROM tbl_CustomNecklace WHERE NecklaceID = @ReqID)
+	    UPDATE tbl_CustomNecklace SET Status = @Stat WHERE NecklaceID = @ReqID
+        IF EXISTS (SELECT * FROM tbl_CustomRing WHERE RingID = @ReqID)
+    	UPDATE tbl_CustomRing SET Status = @Stat WHERE RingID = @ReqID`);
             
         console.log("Status successfully Updated!");
     } catch (err) {

@@ -83,15 +83,16 @@
                             <h2 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerEmail}</h2>
                             <h3 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerNum}</h3>
                         </div>
+                        <a href="https://dashboard.paymongo.com/payments/${Item.PaymentLink}" class="w-[325px] h-[70px] p-1 bg-outline rounded-[5px] absolute right-7 font-Inter text-[#FFFFFF] font-extrabold  flex items-center justify-center text-[20px]" target="_blank">View Payment</a>
                     </div>
                 </div>
                 
                 <div class="space-y-4 bg-likha  ">
-                    <div class="w-[396px] h-[339px] outline outline-1 pl-10 pt-5 outline-outline bg-sign rounded-2xl ">
+                    <div class="w-[396px] h-[359px] outline outline-1 pl-10 pt-5 outline-outline bg-sign rounded-2xl ">
                         <p class="font-Montserrat font-semibold text-[24px] text-[#00000080]">Request Status</p>
                         
-                        <div class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
-                            <div id="Ordered" class="flex items-center space-x-3 cursor-pointer">
+                        <div class="w-[14rem] h-[14.5rem] flex flex-col mt-[2rem]">
+                            <div id="Requested" class="flex items-center space-x-3 cursor-pointer">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
                                     <div id="Req-Circle" class="w-[10px] h-[10px] bg-outline rounded-full"></div>
                                 </div>
@@ -105,7 +106,7 @@
                                     </div>
                                     <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
                                 </div>
-                                <div id="Cancel" class="flex items-center space-x-3 cursor-pointer">
+                                <div id="Decline" class="flex items-center space-x-3 cursor-pointer">
                                     <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
                                         <div id="Decline-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
                                     </div>
@@ -114,27 +115,33 @@
                             </div>    
 
                             <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div id="OrderPacked" class="flex items-center space-x-3 cursor-pointer">
-                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div id="IP-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
-                                </div>
-                                <p class="font-Montserrat text-[#F07C54CC]">Initial Payment</p>
-                            </div>
-                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div id="Ready" class="flex items-center space-x-3 cursor-pointer">
+                            <div id="Paid" class="flex items-center space-x-3 cursor-pointer">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
                                     <div id="Paid-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
                                 </div>
                                 <p class="font-Montserrat text-[#F07C54CC]">Paid</p>
                             </div>
                             <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="OP" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="OP-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">On Process</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="RFP" class="flex items-center space-x-3 cursor-pointer">
+                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
+                                    <div id="RFP-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                                </div>
+                                <p class="font-Montserrat text-[#F07C54CC]">Ready for Pickup</p>
+                            </div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
                             <div id="Completed" class="flex items-center space-x-3 cursor-pointer">
                                 <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
                                     <div id="Com-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
                                 </div>
-                                <p class="font-Montserrat text-[#F07C54CC]">Ready for Pickup</p>
+                                <p class="font-Montserrat text-[#F07C54CC]">Completed</p>
                             </div>
-                            
                         </div>
                     </div>
                     
@@ -152,9 +159,27 @@
             </div>
             `;
             ItemList.appendChild(ItemElement);
+
+            document.getElementById('Requested').addEventListener('click', function () {
+                fetch('/UpdateStatReq', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'Requested', TransID: Item.productOrder })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Order Packed: ' + data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+            });
             
             document.getElementById('Confirmed').addEventListener('click', function () {
-                fetch('/UpdateStat', {
+                fetch('/UpdateStatReq', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -170,13 +195,13 @@
                     });
                     location.reload();
             });
-            document.getElementById('OrderPacked').addEventListener('click', function () {
-                fetch('/UpdateStat', {
+            document.getElementById('OP').addEventListener('click', function () {
+                fetch('/UpdateStatReq', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ status: 'Order Packed', TransID: Item.productOrder })
+                        body: JSON.stringify({ status: 'On Process', TransID: Item.productOrder })
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -187,8 +212,8 @@
                     });
                     location.reload();
             });
-            document.getElementById('Ready').addEventListener('click', function () {
-                fetch('/UpdateStat', {
+            document.getElementById('RFP').addEventListener('click', function () {
+                fetch('/UpdateStatReq', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -205,7 +230,7 @@
                     location.reload();
             });
             document.getElementById('Completed').addEventListener('click', function () {
-                fetch('/UpdateStat', {
+                fetch('/UpdateStatReq', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -221,13 +246,13 @@
                     });
                     location.reload();
             });
-            document.getElementById('Cancel').addEventListener('click', function () {
-                fetch('/UpdateStat', {
+            document.getElementById('Decline').addEventListener('click', function () {
+                fetch('/UpdateStatReq', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ status: 'Cancelled', TransID: Item.productOrder })
+                        body: JSON.stringify({ status: 'Declined', TransID: Item.productOrder })
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -242,67 +267,51 @@
             async function checkStat(){
                 const Status = Item.Status;
 
-                if(Status === 'Confirmed'){
-                    document.getElementById('Con-Circle').classList.remove('hidden');
-                    document.getElementById('OP-Circle').classList.add('hidden');
-                    document.getElementById('Ready-Circle').classList.add('hidden');
-                    
+                if(Status === 'Requested'){
+                    document.getElementById('Req-Circle').classList.remove('hidden');
                 }
-                else if(Status === 'Order Packed'){
+                else if(Status === 'Confirmed'){
+                    document.getElementById('Req-Circle').classList.remove('hidden');
                     document.getElementById('Con-Circle').classList.remove('hidden');
+                }
+                else if(Status === 'Paid'){
+                    document.getElementById('Req-Circle').classList.remove('hidden');
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('Paid-Circle').classList.remove('hidden');
+                }
+                else if(Status === 'On Process'){
+                    document.getElementById('Req-Circle').classList.remove('hidden');
+                    document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('Paid-Circle').classList.remove('hidden');
                     document.getElementById('OP-Circle').classList.remove('hidden');
-                    document.getElementById('Ready-Circle').classList.add('hidden');
                 }
                 else if(Status === 'Ready to Pick Up'){
+                    document.getElementById('Req-Circle').classList.remove('hidden');
                     document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('Paid-Circle').classList.remove('hidden');
                     document.getElementById('OP-Circle').classList.remove('hidden');
-                    document.getElementById('Ready-Circle').classList.remove('hidden');
+                    document.getElementById('RFP-Circle').classList.remove('hidden');
                 }
                 else if(Status === 'Completed'){
+                    document.getElementById('Req-Circle').classList.remove('hidden');
                     document.getElementById('Con-Circle').classList.remove('hidden');
+                    document.getElementById('Paid-Circle').classList.remove('hidden');
                     document.getElementById('OP-Circle').classList.remove('hidden');
-                    document.getElementById('Ready-Circle').classList.remove('hidden');
+                    document.getElementById('RFP-Circle').classList.remove('hidden');
                     document.getElementById('Com-Circle').classList.remove('hidden');
                 }
-                else if(Status === 'Cancelled'){
+                else if(Status === 'Declined'){
+                    document.getElementById('Req-Circle').classList.add('hidden');
                     document.getElementById('Con-Circle').classList.add('hidden');
+                    document.getElementById('Paid-Circle').classList.add('hidden');
                     document.getElementById('OP-Circle').classList.add('hidden');
-                    document.getElementById('Ready-Circle').classList.add('hidden');
+                    document.getElementById('RFP-Circle').classList.add('hidden');
                     document.getElementById('Com-Circle').classList.add('hidden');
-                    document.getElementById('Order-Circle').classList.add('hidden');
-                    document.getElementById('Cancel-Circle').classList.remove('hidden');
+                    document.getElementById('Decline-Circle').classList.remove('hidden');
                 }
             }
 
             checkStat();
-                        
-            fetch(`/Items/${Item.productOrder}`)
-                .then(response => response.json())
-                .then(orderItems => {
-                    const orderItemsContainer = document.getElementById(`Product-Container-${Item.productOrder}`);
-
-                    orderItems.forEach(orderItem => {
-                        const IElement = document.createElement('div');
-                        IElement.innerHTML = `
-                        <div id="Product" class="w-[800px] relative h-[6rem] flex items-center p-2 my-1  mx-auto">
-                            <div class="flex items-center">
-                                <img src="${orderItem.productImage}" alt="" class="w-[3.5rem]">
-                                <p class="font-Montagu font-semibold text-2xl ml-4 w-[20rem]">${orderItem.productName}</p>
-                            </div>
-                            <div class="flex item-center">
-                                <div class="absolute right-[11.25rem] text-center w-[7rem] top-[2rem]">
-                                    <h1 class="font-Montserrat font-medium text-xl">${orderItem.Quantity}</h1>
-                                </div>
-                                <div class="absolute top-[2rem] text-center w-[7rem] right-[0.25rem]">
-                                    <p class="font-Montserrat font-medium  text-xl">${orderItem.Price}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="w-[800px] border-outline mx-auto">
-                        `;
-                        orderItemsContainer.appendChild(IElement);
-                    });
-                })
         });
     });
 
