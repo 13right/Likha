@@ -83,7 +83,7 @@
                             <h2 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerEmail}</h2>
                             <h3 class="font-Inter font-normal text-xl text-[#000000] relative left-[2.5rem]">${Item.CustomerNum}</h3>
                         </div>
-                        <a href="https://dashboard.paymongo.com/payments/${Item.PaymentLink}" class="w-[325px] h-[70px] p-1 bg-outline rounded-[5px] absolute right-7 font-Inter text-[#FFFFFF] font-extrabold  flex items-center justify-center text-[20px]" target="_blank">View Payment</a>
+                        <a id="ViewPayment" href="https://dashboard.paymongo.com/payments/${Item.PaymentLink}" class="w-[325px] h-[70px] p-1 bg-outline rounded-[5px] absolute right-7 font-Inter text-[#FFFFFF] font-extrabold  flex items-center justify-center text-[20px]" target="_blank">View Payment</a>
                     </div>
                 </div>
                 
@@ -159,6 +159,9 @@
             </div>
             `;
             ItemList.appendChild(ItemElement);
+            if(Item.PaymentLink == null){
+                ItemElement.querySelector('#ViewPayment').classList.add('hidden');
+            }
 
             document.getElementById('Requested').addEventListener('click', function () {
                 fetch('/UpdateStatReq', {

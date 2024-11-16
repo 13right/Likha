@@ -2461,6 +2461,7 @@ app.get('/RequestDetails', async (req, res) => {
         });
         //console.log(products);
         res.json(products);
+        //console.log(PaymentLink);
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).json({ error: 'Database error', details: err });
