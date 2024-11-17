@@ -614,8 +614,8 @@ function renderNotifications(products) {
         `;
         productElement.addEventListener('click', async () => {
             try {
-                await updateNotificationStatus(product.OrderID,product.NotificationID);
-                window.location.href = `Orders.html#Order-${product.OrderID}`;
+                await updateNotificationStatus(product.TransactionID,product.NotificationID);
+                window.location.href = `Orders.html#Order-${product.TransactionID}`;
             } catch (error) {
                 console.error('Error updating notification status:', error);
             }
@@ -631,7 +631,7 @@ function renderNotifications(products) {
     });
 }
 
-async function updateNotificationStatus(orderId,NotifID) {
+async function updateNotificationStatus(TransactionID,NotifID) {
     const response = await fetch('/UpdateNotif', {
         method: 'PUT',
         headers: {
@@ -639,7 +639,7 @@ async function updateNotificationStatus(orderId,NotifID) {
         },
         body: JSON.stringify({
             UpdatedNotif: 'read',
-            OrderId: orderId,
+            OrderId: TransactionID,
             NotifID: NotifID
         })
     });

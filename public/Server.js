@@ -174,11 +174,39 @@ const checkNotifications = async (userID) => {
                 
         request.input('UserID', sql.Int, userID);
         const query = `
-            SELECT COUNT(NotificationID) AS NotificationID 
+        SELECT COUNT(*) AS NotificationID
+        FROM (
+            SELECT tbl_notification.NotificationID
             FROM tbl_notification
-            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
-            WHERE tbl_Notification.Status = 'unread' 
+            INNER JOIN tbl_Order ON tbl_Order.TransactionID = tbl_notification.OrderID
+            WHERE tbl_notification.Status = 'unread' 
             AND tbl_Order.UserID = @UserID
+
+            UNION ALL
+
+
+            SELECT tbl_notification.NotificationID
+            FROM tbl_notification
+            INNER JOIN tbl_CustomNecklace ON tbl_CustomNecklace.NecklaceID = tbl_notification.OrderID
+            WHERE tbl_notification.Status = 'unread' 
+            AND tbl_CustomNecklace.UserID = @UserID
+
+            UNION ALL
+
+            SELECT tbl_notification.NotificationID
+            FROM tbl_notification
+            INNER JOIN tbl_CustomRing ON tbl_CustomRing.RingID = tbl_notification.OrderID
+            WHERE tbl_notification.Status = 'unread' 
+            AND tbl_CustomRing.UserID = @UserID
+
+            UNION ALL
+
+            SELECT tbl_notification.NotificationID
+            FROM tbl_notification
+            INNER JOIN tbl_CustomDress ON tbl_CustomDress.DressID = tbl_notification.OrderID
+            WHERE tbl_notification.Status = 'unread' 
+            AND tbl_CustomDress.UserID = @UserID
+        ) AS Notifications;
         `;
         const result = await request.query(query);
         const notifCount = result.recordset[0].NotificationID;
@@ -218,30 +246,77 @@ const getNotifications = async (userID, ws) => {
             .input('UserID', sql.Int, userID);
 
         const query = `
-            SELECT DISTINCT CONCAT('Your Order ' , tbl_Order.TransactionID , ' is ' , NewStatus) AS Content, tbl_Order.OrderID, 
-            CONVERT(varchar, NotificationDate, 0) AS NotificationDate, tbl_Product.ProductImage, NotificationID, tbl_notification.Status 
-            FROM tbl_notification 
-            INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID 
-            INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
+        SELECT DISTINCT 
+        CONCAT('Your Order ', tbl_Order.TransactionID, ' is ', NewStatus) AS Content, 
+        tbl_Order.TransactionID, 
+        CONVERT(varchar, NotificationDate, 0) AS NotificationDate, 
+        tbl_Product.ProductImage AS Image, 
+        NotificationID, 
+        tbl_notification.Status 
+        FROM tbl_notification 
+        INNER JOIN tbl_Order ON tbl_Order.TransactionID = tbl_notification.OrderID 
+        INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
+        INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+        WHERE tbl_Order.UserID = @UserID
+        AND tbl_Product.ProductID = (
+            SELECT MIN(tbl_Product.ProductID)
+            FROM tbl_OrderItem 
             INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
-            WHERE tbl_Order.UserID = @UserID 
-            AND tbl_Product.ProductID = (
-                SELECT MIN(tbl_Product.ProductID)
-                FROM tbl_OrderItem 
-                INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
-                WHERE tbl_OrderItem.OrderID = tbl_Order.OrderID
-            ) 
+            WHERE tbl_OrderItem.OrderID = tbl_Order.OrderID
+        ) 
+
+        UNION ALL
+
+        SELECT DISTINCT 
+            CONCAT('Your Custom Dress Order ', tbl_customdress.DressID, ' is ', NewStatus) AS Content, 
+            tbl_customdress.DressID AS TransactionID, 
+            CONVERT(varchar, NotificationDate, 0) AS NotificationDate, 
+            tbl_customdress.Image AS Image, 
+            NotificationID, 
+            tbl_notification.Status 
+            FROM tbl_notification 
+            INNER JOIN tbl_customdress ON tbl_customdress.DressID = tbl_notification.OrderID
+            WHERE tbl_customdress.UserID = @UserID
+
+        UNION ALL
+
+        SELECT DISTINCT 
+            CONCAT('Your Custom Ring Order ', tbl_CustomRing.RingID, ' is ', NewStatus) AS Content, 
+            tbl_CustomRing.RingID AS TransactionID, 
+            CONVERT(varchar, NotificationDate, 0) AS NotificationDate, 
+            tbl_CustomRing.Image AS Image, 
+            NotificationID, 
+            tbl_notification.Status 
+            FROM tbl_notification 
+            INNER JOIN tbl_CustomRing ON tbl_CustomRing.RingID = tbl_notification.OrderID
+            WHERE tbl_CustomRing.UserID = @UserID
+        
+        UNION ALL
+
+        SELECT DISTINCT 
+            CONCAT('Your Custom Necklace Order ', tbl_CustomNecklace.NecklaceID, ' is ', NewStatus) AS Content, 
+            tbl_CustomNecklace.NecklaceID AS TransactionID, 
+            CONVERT(varchar, NotificationDate, 0) AS NotificationDate, 
+            tbl_CustomNecklace.Image AS Image, 
+            NotificationID, 
+            tbl_notification.Status 
+            FROM tbl_notification 
+            INNER JOIN tbl_CustomNecklace ON tbl_CustomNecklace.NecklaceID = tbl_notification.OrderID
+            WHERE tbl_CustomNecklace.UserID = @UserID
+        
             ORDER BY NotificationID DESC;
+
+
         `;
 
         const result = await request.query(query);
 
         const orderItems = result.recordset.map(item => {
             return {
-                OrderID: item.OrderID,
+                TransactionID: item.TransactionID,
                 Content: item.Content,
                 Date: item.NotificationDate,
-                productImage: item.ProductImage,
+                productImage: item.Image,
                 Status: item.Status,
                 NotificationID: item.NotificationID
             };
@@ -2837,9 +2912,9 @@ app.put('/UpdateNotif', async (req, res) => {
         const request = pool.request()
         .input('UserID', sql.Int, ID)
         .input('Status',sql.VarChar,UpdatedNotif)
-        .input('OrderID',sql.Int,OrderId)
+        .input('OrderID',sql.VarChar,OrderId)
         .input('NotifID',sql.Int,NotifID)
-        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID WHERE (tbl_notification.Status = 'unread' OR tbl_notification.Status = 'Seen') AND tbl_Order.UserID = @UserID AND tbl_notification.OrderID = @OrderID AND tbl_notification.NotificationID = @NotifID");
+        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.TransactionID = tbl_notification.OrderID WHERE (tbl_notification.Status = 'unread' OR tbl_notification.Status = 'Seen') AND tbl_Order.UserID = @UserID AND tbl_notification.OrderID = @OrderID AND tbl_notification.NotificationID = @NotifID");
 
         res.status(200).json();
     } catch (err) {
@@ -2863,7 +2938,7 @@ app.put('/UpdateNotif/Seen', async (req, res) => {
         const request = pool.request()
         .input('UserID', sql.Int, ID)
         .input('Status',sql.VarChar,UpdatedNotif)
-        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.OrderID = tbl_notification.OrderID WHERE tbl_notification.Status = 'unread' AND tbl_Order.UserID = @UserID");
+        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.TransactionID = tbl_notification.OrderID WHERE tbl_notification.Status = 'unread' AND tbl_Order.UserID = @UserID");
 
         res.status(200).json();
     } catch (err) {
