@@ -546,60 +546,53 @@ async function fetchUser() {
         console.error('Error fetching user:', err);
     }
 }
-// Initialize a WebSocket connection
-//const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws');  // Replace with your servers WebSocket URL
+//const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws'); 
 const socket = new WebSocket('ws://localhost:3000');
-//const socket = new WebSocket('ws://192.168.0.250:3000'); // Replace with actual WebSocket URL
+//const socket = new WebSocket('ws://192.168.0.250:3000');
 //const socket = new WebSocket('wss://zappnott.shop/ws');
-// Handle the connection open event
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
 
-    // Request notifications and messages once the connection is open
     socket.send(JSON.stringify({ type: 'getNotifications' }));
     socket.send(JSON.stringify({ type: 'getMessages' }));
 });
 
-// Handle incoming WebSocket messages from the server
 socket.addEventListener('message', (event) => {
     const data = JSON.parse(event.data);
     
-    // Handle notifications
+
     if (data.notifications) {
         renderNotifications(data.notifications);
     }
 
-    // Handle unread notifications count
     if (data.NotificationID !== undefined) {
         //console.log(`Unread notifications: ${data.NotificationID}`);
         updateNotificationBadge(data.NotificationID);
     }
 
-    // Handle messages
     if (data.messages) {
         renderMessages(data.messages);
     }
 
-    // Handle errors
+
     if (data.error) {
         console.error(`Error: ${data.error}`);
     }
 });
 
-// Handle connection close event
 socket.addEventListener('close', () => {
     console.log('Disconnected from WebSocket server');
 });
 
-// Handle WebSocket errors
+
 socket.addEventListener('error', (error) => {
     console.error('WebSocket error:', error);
 });
 
-// Function to render notifications
+
 function renderNotifications(products) {
     const productList = document.getElementById('NotifContent');
-    productList.innerHTML = ''; // Clear previous notifications
+    productList.innerHTML = ''; 
 
     products.forEach(product => {
         const productElement = document.createElement('div');

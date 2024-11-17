@@ -221,7 +221,7 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ status: 'Ready to Pick Up', TransID: Item.productOrder })
+                        body: JSON.stringify({ status: 'Ready for Pick Up', TransID: Item.productOrder })
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -288,7 +288,7 @@
                     document.getElementById('Paid-Circle').classList.remove('hidden');
                     document.getElementById('OP-Circle').classList.remove('hidden');
                 }
-                else if(Status === 'Ready to Pick Up'){
+                else if(Status === 'Ready for Pick Up'){
                     document.getElementById('Req-Circle').classList.remove('hidden');
                     document.getElementById('Con-Circle').classList.remove('hidden');
                     document.getElementById('Paid-Circle').classList.remove('hidden');

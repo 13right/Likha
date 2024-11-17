@@ -432,19 +432,19 @@
             </div> 
         </div>
             <div id="Loader" class="fixed hidden top-[20rem] z-[51]  right-[37%] bg-[#F8ECDC] outline outline-4 outline-outline w-[350px] h-[220px] text-white  rounded shadow-lg  transform translate-y-4 transition-all duration-300">
-            <div class="">
-                <div class="flex flex-col space-y-5 justify-center items-center mx-[3rem] my-4">
-                    <p class="font-libre font-bold text-center">Payment process ongoing Please wait</p>
-                    <svg class="animate-spin h-16 w-16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#f17d55" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="#f17d55"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                        </path>
-                    </svg>
-                    <button id="cancellation" class="mt-3 bg-outline  text-[#FFF] rounded-3xl w-20">Cancel</button>
+                <div class="">
+                    <div class="flex flex-col space-y-5 justify-center items-center mx-[3rem] my-4">
+                        <p class="font-libre font-bold text-center">Payment process ongoing Please wait</p>
+                        <svg class="animate-spin h-16 w-16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#f17d55" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="#f17d55"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <button id="cancellation" class="mt-3 bg-outline  text-[#FFF] rounded-3xl w-20">Cancel</button>
+                    </div>
                 </div>
             </div>
-        </div>
         <div id="Overlay" class="z-[50] bg-[#333333] hidden fixed h-[100%] w-[100%] pointer-events-none top-0 left-0 opacity-35">
     
         </div>
@@ -470,7 +470,7 @@
             //scrollToShop(); 
         });
         document.getElementById('TPU').addEventListener('click', () => {
-            fetchOrders('Ready to Pick Up');
+            fetchOrders('Ready for Pick Up');
             //scrollToShop(); 
         });
         document.getElementById('COMPLETED').addEventListener('click', () => {
@@ -521,16 +521,24 @@ function fetchOrders(Status = ''){
             `;
             
             ItemList.appendChild(ItemElement);
-            if(Item.Status === 'Requested'){
-                ItemElement.querySelector('#Status').classList.add('text-[#FFB100]')
-            }
-            else if(Item.Status === 'Confirmed'){
-                ItemElement.querySelector('#Status').classList.add('text-[#2F9B5E]');
+            if (Item.Status === 'Requested') {
+                ItemElement.querySelector('#Status').classList.add('text-[#FFC107]');
+            } else if (Item.Status === 'Confirmed') {
+                ItemElement.querySelector('#Status').classList.add('text-[#228B22]'); 
                 ItemElement.querySelector('#PlaceOrder').classList.remove('hidden');
+            } else if (Item.Status === 'Ready for Pick Up') {
+                ItemElement.querySelector('#Status').classList.add('text-[#032D7E]'); 
+            } else if (Item.Status === 'Declined') {
+                ItemElement.querySelector('#Status').classList.add('text-[#FF0000]'); 
+            } else if (Item.Status === 'Paid') {
+                ItemElement.querySelector('#Status').classList.add('text-[#6A0DAD]');
+            } else if (Item.Status === 'On Process') {
+                ItemElement.querySelector('#Status').classList.add('text-[#00BFFF]'); 
+            } else if (Item.Status === 'Completed') {
+                ItemElement.querySelector('#Status').classList.add('text-[#008080]'); 
             }
-            else if(Item.Status === 'Ready for Pick Up'){
-                ItemElement.querySelector('#Status').classList.add('text-[#032D7E]')
-            }
+
+
             setTimeout(() => {
                 const hash = window.location.hash;
                 if (hash) {
