@@ -2231,8 +2231,16 @@ app.get('/Counts', async (req, res) => {
             UPDATE tbl_CustomDress SET Status = @Stat, PaymentLink = @Link WHERE DressID = @ReqID;
         IF EXISTS (SELECT * FROM tbl_CustomNecklace WHERE NecklaceID = @ReqID)
             UPDATE tbl_CustomNecklace SET Status = @Stat, PaymentLink = @Link WHERE NecklaceID = @ReqID;
+            UPDATE tbl_Materials
+            SET tbl_Materials.Stock = tbl_Materials.Stock - tbl_NecklaceMaterials.Quantity
+            FROM tbl_Materials
+            INNER JOIN tbl_NecklaceMaterials ON tbl_Materials.MaterialID = tbl_NecklaceMaterials.MaterialID
+            INNER JOIN tbl_CustomNecklace ON tbl_NecklaceMaterials.NecklaceID =  tbl_CustomNecklace.ID
+            WHERE tbl_CustomNecklace.NecklaceID = @ReqID;
         IF EXISTS (SELECT * FROM tbl_CustomRing WHERE RingID = @ReqID)
             UPDATE tbl_CustomRing SET Status = @Stat, PaymentLink = @Link WHERE RingID = @ReqID;
+        
+
     `;
 
     try {
