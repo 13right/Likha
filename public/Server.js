@@ -2914,7 +2914,7 @@ app.put('/UpdateNotif', async (req, res) => {
         .input('Status',sql.VarChar,UpdatedNotif)
         .input('OrderID',sql.VarChar,OrderId)
         .input('NotifID',sql.Int,NotifID)
-        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.TransactionID = tbl_notification.OrderID WHERE (tbl_notification.Status = 'unread' OR tbl_notification.Status = 'Seen') AND tbl_Order.UserID = @UserID AND tbl_notification.OrderID = @OrderID AND tbl_notification.NotificationID = @NotifID");
+        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification WHERE (tbl_notification.Status = 'unread' OR tbl_notification.Status = 'Seen') AND tbl_notification.OrderID = @OrderID AND tbl_notification.NotificationID = @NotifID");
 
         res.status(200).json();
     } catch (err) {
@@ -2938,7 +2938,7 @@ app.put('/UpdateNotif/Seen', async (req, res) => {
         const request = pool.request()
         .input('UserID', sql.Int, ID)
         .input('Status',sql.VarChar,UpdatedNotif)
-        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification INNER JOIN tbl_Order ON tbl_Order.TransactionID = tbl_notification.OrderID WHERE tbl_notification.Status = 'unread' AND tbl_Order.UserID = @UserID");
+        await request.query("UPDATE tbl_notification SET tbl_notification.Status = @Status FROM tbl_notification WHERE tbl_notification.Status = 'unread'");
 
         res.status(200).json();
     } catch (err) {

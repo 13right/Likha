@@ -598,7 +598,7 @@ function renderNotifications(products) {
         const productElement = document.createElement('div');
         productElement.innerHTML = `
             <div class="flex relative w-auto py-auto justify-between mr-6 cursor-pointer">
-                <div class="justify-center flex pl-2">
+                <div class="justify-center flex pl-2 w-[19rem]">
                     <div class="items-center flex">
                         <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
                     </div>
@@ -607,15 +607,23 @@ function renderNotifications(products) {
                         <h1 class="font-Inter text-sm">${product.Date}</h1>
                     </div>
                 </div>
-                <div>
-                    <img src="${product.productImage}" alt="${product.productName}" class="w-[7rem] h-[7rem]">
+                <div class=" h-[7rem] w-[8rem] flex flex-col justify-center">
+                    <img src="${product.productImage}" alt="${product.productName}" class="w-auto h-auto relative">
                 </div>
             </div>
         `;
         productElement.addEventListener('click', async () => {
             try {
-                await updateNotificationStatus(product.TransactionID,product.NotificationID);
-                window.location.href = `Orders.html#Order-${product.TransactionID}`;
+                if(product.TransactionID.includes('OZPNT')){
+                    await updateNotificationStatus(product.TransactionID,product.NotificationID);
+                    window.location.href = `Orders.html#Order-${product.TransactionID}`;
+                }
+                else{
+                    await updateNotificationStatus(product.TransactionID,product.NotificationID);
+                    window.location.href = `Designs.html#Design-${product.TransactionID}`;
+                }
+
+
             } catch (error) {
                 console.error('Error updating notification status:', error);
             }
