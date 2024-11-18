@@ -546,8 +546,8 @@ async function fetchUser() {
         console.error('Error fetching user:', err);
     }
 }
-//const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws'); 
-const socket = new WebSocket('ws://localhost:3000');
+const socket = new WebSocket('wss://likhaforzappnott.onrender.com/ws'); 
+//const socket = new WebSocket('ws://localhost:3000');
 //const socket = new WebSocket('ws://192.168.0.250:3000');
 //const socket = new WebSocket('wss://zappnott.shop/ws');
 socket.addEventListener('open', (event) => {
