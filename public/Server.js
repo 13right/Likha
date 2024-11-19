@@ -415,17 +415,17 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
     const jsonData = JSON.parse(req.body.data);
-    // const user = req.session.user;
+    const user = req.session.user;
 
-    // if (!user || !user.UserID) {
-    //     return res.status(200).json({
-    //         success: false,
-    //         message: "Unauthorized. Please sign in.",
-    //         redirectTo: "/SignIn.html"
-    //     });
-    // }
+    if (!user || !user.UserID) {
+        return res.status(200).json({
+            success: false,
+            message: "Unauthorized. Please sign in.",
+            redirectTo: "/SignIn.html"
+        });
+    }
 
-    // const userID = parseInt(user.UserID);
+    const userID = parseInt(user.UserID);
     let fileUrl = null;
 
     try {
@@ -442,40 +442,40 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
         }
 
         const request = pool.request();
-        const stockDetails = [];
-        let insufficientStockFound = false;
+        // const stockDetails = [];
+        // let insufficientStockFound = false;
 
-        for (const material of jsonData.necklace.materials) {
-            const materialNameParam = `MName_${material.name}`;
-            const quantityParam = `quantity_${material.name}`;
+        // for (const material of jsonData.necklace.materials) {
+        //     const materialNameParam = `MName_${material.name}`;
+        //     const quantityParam = `quantity_${material.name}`;
 
-            request.input(materialNameParam, sql.VarChar, material.name);
-            request.input(quantityParam, sql.Int, material.quantity);
+        //     request.input(materialNameParam, sql.VarChar, material.name);
+        //     request.input(quantityParam, sql.Int, material.quantity);
 
-            const stockCheck = await request.query(`
-                SELECT MaterialName, Stock 
-                FROM tbl_Materials 
-                WHERE MaterialName = @${materialNameParam}
-            `);
+        //     const stockCheck = await request.query(`
+        //         SELECT MaterialName, Stock 
+        //         FROM tbl_Materials 
+        //         WHERE MaterialName = @${materialNameParam}
+        //     `);
 
-            const stockRecord = stockCheck.recordset[0];
+        //     const stockRecord = stockCheck.recordset[0];
 
-            stockDetails.push({
-                material: material.name,
-                available: stockRecord?.Stock || 0
-            });
+        //     stockDetails.push({
+        //         material: material.name,
+        //         available: stockRecord?.Stock || 0
+        //     });
 
-            if (!stockRecord || material.quantity > stockRecord.Stock) {
-                insufficientStockFound = true;
-            }
-        }
+        //     if (!stockRecord || material.quantity > stockRecord.Stock) {
+        //         insufficientStockFound = true;
+        //     }
+        // }
 
-        if (insufficientStockFound) {
-            return res.status(400).json({
-                errorCode: "INSUFFICIENT_STOCK",
-                stockDetails: stockDetails
-            });
-        }
+        // if (insufficientStockFound) {
+        //     return res.status(400).json({
+        //         errorCode: "INSUFFICIENT_STOCK",
+        //         stockDetails: stockDetails
+        //     });
+        // }
 
         const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
             .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
