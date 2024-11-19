@@ -484,7 +484,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
             .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
             .query(`
                 INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID, Status)
-                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), 1, 'Requested');
+                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), @UserID, 'Requested');
             `);
 
         const newNecklaceId = (await request.query(`
