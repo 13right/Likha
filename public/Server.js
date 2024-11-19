@@ -21,6 +21,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { Result } = require('tedious/lib/token/helpers');
 const { ReturnStatusToken } = require('tedious/lib/token/token');
+const { EventEmitterAsyncResource } = require('events');
 app.set('view engine', 'ejs');
 
 const port = process.env.PORT || 3000;
@@ -410,20 +411,21 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
         });
     }
 });
+
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
     const jsonData = JSON.parse(req.body.data);
-    const user = req.session.user;
+    // const user = req.session.user;
 
-    if (!user || !user.UserID) {
-        return res.status(200).json({
-            success: false,
-            message: "Unauthorized. Please sign in.",
-            redirectTo: "/SignIn.html"
-        });
-    }
+    // if (!user || !user.UserID) {
+    //     return res.status(200).json({
+    //         success: false,
+    //         message: "Unauthorized. Please sign in.",
+    //         redirectTo: "/SignIn.html"
+    //     });
+    // }
 
-    const userID = parseInt(user.UserID);
+    // const userID = parseInt(user.UserID);
     let fileUrl = null;
 
     try {
@@ -432,43 +434,84 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
                 folder: "img",
                 use_filename: true,
                 unique_filename: false,
-                transformation: [{ format: "auto", quality: "auto" }],
+                transformation: [{ format: "auto", quality: "auto" }]
             });
 
             fileUrl = result.secure_url;
-            fs.unlinkSync(req.file.path); 
+            fs.unlinkSync(req.file.path);
         }
 
         const request = pool.request();
+        const stockDetails = [];
+        let insufficientStockFound = false;
 
-        const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
-            .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
-            .input('UserID',sql.Int,userID)
-            .input('size', sql.Int, jsonData.necklace.length)
-            .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
-            // .input('UserID', sql.Int, userID)
-            .query(`
-                INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID,Status)
-                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(),@UserID,'Requested');
-            `);
-
-        // Insert data into tbl_NecklaceMaterials
         for (const material of jsonData.necklace.materials) {
-            // Dynamically create unique parameter names for each iteration
             const materialNameParam = `MName_${material.name}`;
             const quantityParam = `quantity_${material.name}`;
 
-            await request.input(materialNameParam, sql.VarChar, material.name)
-                .input(quantityParam, sql.Int, material.quantity)
-                .query(`
-                    DECLARE @NewRNL INT;
-                    SET @NewRNL = (SELECT TOP 1 ID FROM tbl_CustomNecklace ORDER BY ID DESC);
+            request.input(materialNameParam, sql.VarChar, material.name);
+            request.input(quantityParam, sql.Int, material.quantity);
 
+            const stockCheck = await request.query(`
+                SELECT MaterialName, Stock 
+                FROM tbl_Materials 
+                WHERE MaterialName = @${materialNameParam}
+            `);
+
+            const stockRecord = stockCheck.recordset[0];
+
+            stockDetails.push({
+                material: material.name,
+                available: stockRecord?.Stock || 0
+            });
+
+            if (!stockRecord || material.quantity > stockRecord.Stock) {
+                insufficientStockFound = true;
+            }
+        }
+
+        if (insufficientStockFound) {
+            return res.status(400).json({
+                errorCode: "INSUFFICIENT_STOCK",
+                stockDetails: stockDetails
+            });
+        }
+
+        const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
+            .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
+            .input('UserID', sql.Int, userID)
+            .input('size', sql.Int, jsonData.necklace.length)
+            .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
+            .query(`
+                INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID, Status)
+                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), 1, 'Requested');
+            `);
+
+        const newNecklaceId = (await request.query(`
+            SELECT TOP 1 ID 
+            FROM tbl_CustomNecklace 
+            ORDER BY ID DESC
+        `)).recordset[0].ID;
+
+        for (const material of jsonData.necklace.materials) {
+            const materialNameParam = `MName_${material.name}`;
+            const quantityParam = `quantity_${material.name}`;
+
+            request.input(materialNameParam, sql.VarChar, material.name);
+            request.input(quantityParam, sql.Int, material.quantity);
+
+            await request.input('necklaceId', sql.Int, newNecklaceId)
+                .query(`
                     INSERT INTO tbl_NecklaceMaterials (MaterialID, NecklaceID, Quantity)
                     VALUES (
-                        (SELECT MaterialID FROM tbl_Materials WHERE MaterialName LIKE @${materialNameParam}),
-                        @NewRNL, @${quantityParam}
+                        (SELECT MaterialID FROM tbl_Materials WHERE MaterialName = @${materialNameParam}),
+                        @necklaceId,
+                        @${quantityParam}
                     );
+
+                    UPDATE tbl_Materials
+                    SET Stock = Stock - @${quantityParam}
+                    WHERE MaterialName = @${materialNameParam};
                 `);
         }
 
@@ -487,7 +530,6 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
         });
     }
 });
-
 
 
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
@@ -2220,7 +2262,7 @@ app.get('/Counts', async (req, res) => {
   });
 
   app.put('/PaidReq', async (req, res) => {
-    const { ReqID, Status, Retrieve } = req.body; // Expecting RequestData object with ReqID, Stat, and Link
+    const { ReqID, Status, Retrieve } = req.body;
 
     if (!ReqID || !Status || !Retrieve) {
         return res.status(400).send('Missing required fields: ReqID, Stat, or Link');

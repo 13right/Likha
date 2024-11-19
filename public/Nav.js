@@ -698,8 +698,10 @@ function renderMessages(messages) {
     messages.forEach(msg => {
         const messageElement = document.createElement('div');
         
-        const materials = msg.message.split(';'); 
-        
+        const materials = msg.message.split(';').map(material => material.trim()).filter(material => material !== '');
+        const material = msg.message;
+        const check = ";";
+
         if (materials.length > 1) {
             const buttonContainer = document.createElement('div');
             buttonContainer.classList.add('flex','flex-col', 'items-start', 'gap-2');
