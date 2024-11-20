@@ -636,7 +636,7 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
         await request//.input('UserID',sql.Int,userID)
             .input('Image' ,sql.VarChar,fileUrl)
             .input('RingType',sql.VarChar,jsonData.Ring.RingType)
-            .input('Stone',sql.Int,jsonData.Ring.Stone)
+            .input('Stone',sql.VarChar,jsonData.Ring.Stone)
             .input('RingColor',sql.Int,jsonData.Ring.RingColor)
             .input('RingSize',sql.Int,jsonData.Ring.RingSize)
             .input('TotalPrice',sql.Int,jsonData.Ring.TotalPrize)
