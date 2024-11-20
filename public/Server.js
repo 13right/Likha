@@ -383,7 +383,7 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
             fs.unlinkSync(req.file.path); 
         }
         const request = pool.request();
-        await request.input('UserID',sql.Int,userID)
+        await request//.input('UserID',sql.Int,userID)
             .input('Image' ,sql.VarChar,fileUrl)
             .input('Name',sql.VarChar,jsonData.dressName)
             .input('Bust',sql.Int,jsonData.bust)
@@ -394,7 +394,7 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
             .input('Height',sql.Int,jsonData.height)
             .query(`INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status)
                     VALUES 
-                    (@UserID,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Requested')`);
+                    (1,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Requested')`);
         res.status(200).json({
             success: true,
             message: "Dress data uploaded successfully",
@@ -633,7 +633,7 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
             fs.unlinkSync(req.file.path); 
         }
         const request = pool.request();
-        await request.input('UserID',sql.Int,userID)
+        await request//.input('UserID',sql.Int,userID)
             .input('Image' ,sql.VarChar,fileUrl)
             .input('RingType',sql.VarChar,jsonData.Ring.RingType)
             .input('Stone',sql.Int,jsonData.Ring.Stone)
@@ -643,10 +643,10 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
 
             .query(`INSERT INTO tbl_CustomRing (UserID,Image,RingType,Stone,RingColor,RingSize,TotalPrice,Date,Status)
                     VALUES 
-                    (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Requested')`);
+                    (1,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Requested')`);
         res.status(200).json({
             success: true,
-            message: `RING NA ${userID} data uploaded successfully`,
+            message: `RING uploaded successfully`,
             fileUrl: fileUrl,
             jsonData: jsonData,
             UserID : userID
