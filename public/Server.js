@@ -358,17 +358,17 @@ function getColorName(rgba) {
 
 app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     const jsonData = JSON.parse(req.body.data);
-    const user = req.session.user;
+    // const user = req.session.user;
 
-    if (!user || !user.UserID) {
-        return res.status(200).json({
-            success: false,
-            message: "Unauthorized. Please sign in.",
-            redirectTo: "/SignIn.html"
-        });
-    }
+    // if (!user || !user.UserID) {
+    //     return res.status(200).json({
+    //         success: false,
+    //         message: "Unauthorized. Please sign in.",
+    //         redirectTo: "/SignIn.html"
+    //     });
+    // }
 
-    const userID = parseInt(user.UserID);
+    // const userID = parseInt(user.UserID);
     let fileUrl = null;
     try {
         if (req.file && req.file.path) {
@@ -607,17 +607,17 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
     const jsonData = JSON.parse(req.body.data);
-    const user = req.session.user;
+    // const user = req.session.user;
 
-    if (!user || !user.UserID) {
-        return res.status(200).json({
-            success: false,
-            message: "Unauthorized. Please sign in.",
-            redirectTo: "/SignIn.html"
-        });
-    }
+    // if (!user || !user.UserID) {
+    //     return res.status(200).json({
+    //         success: false,
+    //         message: "Unauthorized. Please sign in.",
+    //         redirectTo: "/SignIn.html"
+    //     });
+    // }
 
-    const userID = parseInt(user.UserID);
+    // const userID = parseInt(user.UserID);
     let fileUrl = null;
 
     try {
