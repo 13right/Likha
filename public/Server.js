@@ -649,7 +649,6 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
             message: `RING uploaded successfully`,
             fileUrl: fileUrl,
             jsonData: jsonData,
-            UserID : userID
         });
  
     }
