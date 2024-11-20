@@ -412,86 +412,6 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     }
 });
 
-app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
-
-    const jsonData = JSON.parse(req.body.data);
-    const user = req.session.user;
-
-    if (!user || !user.UserID) {
-        return res.status(200).json({
-            success: false,
-            message: "Unauthorized. Please sign in.",
-            redirectTo: "/SignIn.html"
-        });
-    }
-
-    const userID = parseInt(user.UserID);
-    let fileUrl = null;
-
-    try {
-        if (req.file && req.file.path) {
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: "img",
-                use_filename: true,
-                unique_filename: false,
-                transformation: [{ format: "auto", quality: "auto" }],
-            });
-
-            fileUrl = result.secure_url;
-            fs.unlinkSync(req.file.path); 
-        }
-
-        const request = pool.request();
-
-        const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
-            .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
-            .input('UserID',sql.Int,userID)
-            .input('size', sql.Int, jsonData.necklace.length)
-            .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
-            // .input('UserID', sql.Int, userID)
-            .query(
-                `INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID,Status)
-                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(),@UserID,'Requested');`
-            );
-
-        // Insert data into tbl_NecklaceMaterials
-        for (const material of jsonData.necklace.materials) {
-            // Dynamically create unique parameter names for each iteration
-            const materialNameParam = `MName_${material.name}`;
-            const quantityParam = `quantity_${material.name}`;
-
-            await request.input(materialNameParam, sql.VarChar, material.name)
-                .input(quantityParam, sql.Int, material.quantity)
-                .query(
-                    `
-                    DECLARE @NewRNL INT;
-                    SET @NewRNL = (SELECT TOP 1 ID FROM tbl_CustomNecklace ORDER BY ID DESC);
-
-                    INSERT INTO tbl_NecklaceMaterials (MaterialID, NecklaceID, Quantity)
-                    VALUES (
-                        (SELECT MaterialID FROM tbl_Materials WHERE MaterialName LIKE @${materialNameParam}),
-                        @NewRNL, @${quantityParam}
-                    );`
-                );
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "Necklace data uploaded successfully",
-            fileUrl: fileUrl,
-            jsonData: jsonData
-        });
-        
-    } catch (err) {
-        console.error("Error inserting data into database:", err);
-        res.status(500).json({
-            message: "Error inserting data into database",
-            error: err.message
-        });
-    }
-});
-
-
 // app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
 //     const jsonData = JSON.parse(req.body.data);
@@ -514,85 +434,45 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 //                 folder: "img",
 //                 use_filename: true,
 //                 unique_filename: false,
-//                 transformation: [{ format: "auto", quality: "auto" }]
+//                 transformation: [{ format: "auto", quality: "auto" }],
 //             });
 
 //             fileUrl = result.secure_url;
-//             fs.unlinkSync(req.file.path);
+//             fs.unlinkSync(req.file.path); 
 //         }
 
 //         const request = pool.request();
-//         // const stockDetails = [];
-//         // let insufficientStockFound = false;
-
-//         // for (const material of jsonData.necklace.materials) {
-//         //     const materialNameParam = `MName_${material.name}`;
-//         //     const quantityParam = `quantity_${material.name}`;
-
-//         //     request.input(materialNameParam, sql.VarChar, material.name);
-//         //     request.input(quantityParam, sql.Int, material.quantity);
-
-//         //     const stockCheck = await request.query(`
-//         //         SELECT MaterialName, Stock 
-//         //         FROM tbl_Materials 
-//         //         WHERE MaterialName = @${materialNameParam}
-//         //     `);
-
-//         //     const stockRecord = stockCheck.recordset[0];
-
-//         //     stockDetails.push({
-//         //         material: material.name,
-//         //         available: stockRecord?.Stock || 0
-//         //     });
-
-//         //     if (!stockRecord || material.quantity > stockRecord.Stock) {
-//         //         insufficientStockFound = true;
-//         //     }
-//         // }
-
-//         // if (insufficientStockFound) {
-//         //     return res.status(400).json({
-//         //         errorCode: "INSUFFICIENT_STOCK",
-//         //         stockDetails: stockDetails
-//         //     });
-//         // }
 
 //         const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
 //             .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
-//             .input('UserID', sql.Int, userID)
+//             //.input('UserID',sql.Int,userID)
 //             .input('size', sql.Int, jsonData.necklace.length)
 //             .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
-//             .query(`
-//                 INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID, Status)
-//                 VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), 1, 'Requested');
-//             `);
+//             // .input('UserID', sql.Int, userID)
+//             .query(
+//                 `INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID,Status)
+//                 VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(),3,'Requested');`
+//             );
 
-//         const newNecklaceId = (await request.query(`
-//             SELECT TOP 1 ID 
-//             FROM tbl_CustomNecklace 
-//             ORDER BY ID DESC
-//         `)).recordset[0].ID;
-
+//         // Insert data into tbl_NecklaceMaterials
 //         for (const material of jsonData.necklace.materials) {
+//             // Dynamically create unique parameter names for each iteration
 //             const materialNameParam = `MName_${material.name}`;
 //             const quantityParam = `quantity_${material.name}`;
 
-//             request.input(materialNameParam, sql.VarChar, material.name);
-//             request.input(quantityParam, sql.Int, material.quantity);
+//             await request.input(materialNameParam, sql.VarChar, material.name)
+//                 .input(quantityParam, sql.Int, material.quantity)
+//                 .query(
+//                     `
+//                     DECLARE @NewRNL INT;
+//                     SET @NewRNL = (SELECT TOP 1 ID FROM tbl_CustomNecklace ORDER BY ID DESC);
 
-//             await request.input('necklaceId', sql.Int, newNecklaceId)
-//                 .query(`
 //                     INSERT INTO tbl_NecklaceMaterials (MaterialID, NecklaceID, Quantity)
 //                     VALUES (
-//                         (SELECT MaterialID FROM tbl_Materials WHERE MaterialName = @${materialNameParam}),
-//                         @necklaceId,
-//                         @${quantityParam}
-//                     );
-
-//                     UPDATE tbl_Materials
-//                     SET Stock = Stock - @${quantityParam}
-//                     WHERE MaterialName = @${materialNameParam};
-//                 `);
+//                         (SELECT MaterialID FROM tbl_Materials WHERE MaterialName LIKE @${materialNameParam}),
+//                         @NewRNL, @${quantityParam}
+//                     );`
+//                 );
 //         }
 
 //         res.status(200).json({
@@ -601,7 +481,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 //             fileUrl: fileUrl,
 //             jsonData: jsonData
 //         });
-
+        
 //     } catch (err) {
 //         console.error("Error inserting data into database:", err);
 //         res.status(500).json({
@@ -610,6 +490,119 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 //         });
 //     }
 // });
+
+
+app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
+
+    const jsonData = JSON.parse(req.body.data);
+    // const user = req.session.user;
+
+    // if (!user || !user.UserID) {
+    //     return res.status(200).json({
+    //         success: false,
+    //         message: "Unauthorized. Please sign in.",
+    //         redirectTo: "/SignIn.html"
+    //     });
+    // }
+
+    // const userID = parseInt(user.UserID);
+    let fileUrl = null;
+
+    try {
+        if (req.file && req.file.path) {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: "img",
+                use_filename: true,
+                unique_filename: false,
+                transformation: [{ format: "auto", quality: "auto" }]
+            });
+
+            fileUrl = result.secure_url;
+            fs.unlinkSync(req.file.path);
+        }
+
+        const request = pool.request();
+        const stockDetails = [];
+        let insufficientStockFound = false;
+
+        for (const material of jsonData.necklace.materials) {
+            const materialNameParam = `MName_${material.name}`;
+            const quantityParam = `quantity_${material.name}`;
+
+            request.input(materialNameParam, sql.VarChar, material.name);
+            request.input(quantityParam, sql.Int, material.quantity);
+
+            const stockCheck = await request.query(`
+                SELECT MaterialName, Stock, Price 
+                FROM tbl_Materials 
+                WHERE MaterialName = @${materialNameParam}
+            `);
+
+            const stockRecord = stockCheck.recordset[0];
+
+            stockDetails.push({
+                material: material.name,
+                available: stockRecord?.Stock || 0,
+                price: stockRecord.Price
+            });
+
+            if (!stockRecord || material.quantity > stockRecord.Stock) {
+                insufficientStockFound = true;
+            }
+        }
+
+        if (insufficientStockFound) {
+            return res.status(400).json({
+                errorCode: "INSUFFICIENT_STOCK",
+                stockDetails: stockDetails
+            });
+        }
+
+        const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
+            .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
+            //.input('UserID', sql.Int, userID)
+            .input('size', sql.Int, jsonData.necklace.length)
+            .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
+            .query(`
+                INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID, Status)
+                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), 1, 'Requested');
+            `);
+
+
+        for (const material of jsonData.necklace.materials) {
+            const materialNameParam = `MaterialName_${material.name}`;
+            const quantityParam = `Mquantity_${material.name}`;
+
+            await request.input(materialNameParam, sql.VarChar, material.name)
+                .input(quantityParam, sql.Int, material.quantity)
+                .query(
+                    `
+                    DECLARE @NewRNL INT;
+                    SET @NewRNL = (SELECT TOP 1 ID FROM tbl_CustomNecklace ORDER BY ID DESC);
+
+                    INSERT INTO tbl_NecklaceMaterials (MaterialID, NecklaceID, Quantity)
+                    VALUES (
+                        (SELECT MaterialID FROM tbl_Materials WHERE MaterialName LIKE @${materialNameParam}),
+                        @NewRNL, @${quantityParam}
+                    );`
+                );
+        }       
+
+        res.status(200).json({
+            success: true,
+            message: "Necklace data uploaded successfully",
+            fileUrl: fileUrl,
+            jsonData: jsonData
+        });
+
+    } catch (err) {
+        console.error("Error inserting data into database:", err);
+        res.status(500).json({
+            message: "Error inserting data into database",
+            error: err.message
+        });
+    }
+});
 
 
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {

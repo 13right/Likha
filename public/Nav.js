@@ -1,11 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if there's a hash in the URL (e.g., #About or #footer)
     if (window.location.hash) {
         const targetId = window.location.hash.substring(1);
         const targetElement = document.getElementById(targetId);
-
         if (targetElement) {
-            // Scroll to the element with a smooth effect
             targetElement.scrollIntoView({ behavior: 'smooth' });
         }
     }
@@ -32,7 +29,6 @@ document.getElementById('LogOut').addEventListener('click', () => {
         })
         .catch(error => {
             console.error('Error:', error);
-            //alert('Error logging outt'+ error);
         });
     });
     document.getElementById('LNo').addEventListener('click', async() => {
