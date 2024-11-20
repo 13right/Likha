@@ -552,7 +552,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
         }
 
         if (insufficientStockFound) {
-            return res.status(409).json({
+            return res.status(200).json({
                 errorCode: "INSUFFICIENT_STOCK",
                 stockDetails: stockDetails
             });
