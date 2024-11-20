@@ -2689,6 +2689,10 @@ video {
   width: 100vw;
 }
 
+.w-\[1rem\]{
+  width: 1rem;
+}
+
 .min-w-min{
   min-width: -moz-min-content;
   min-width: min-content;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="img/ZappnottLogo.png" type="image/icon">
-    <title>Shop</title>
+    <title>Jewelry - Zappnott</title>
 </head>
 <style>
     input[type="checkbox"] {
@@ -283,7 +283,7 @@
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
+                        <a href="/Index.html#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
@@ -526,7 +526,7 @@
             <div class="flex-col flex relative">
                 <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
                 <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
-                <a href="BagCategory.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
+                <a href="Designs.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
                 <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
                 <div class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="LogOut">Log Out</div>
             </div>
@@ -670,7 +670,115 @@ fetch('/productsJewelry')
     .catch(error => console.error('Error fetching products:', error)); 
     function CartOk(){
         document.getElementById('CartPopup').classList.add('hidden');
-    }  
+    }      document.getElementById('productOrder').addEventListener('change', function() {
+        const order = this.value;
+        fetch(`/productsJewelry?order=${order}`)
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('Product').classList.remove('hidden');
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(products => {
+            const totalPages = Math.ceil(products.length / itemsPerPage);
+
+            function renderProducts(page) {
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = page * itemsPerPage;
+                const paginatedProducts = products.slice(startIndex, endIndex);
+
+                const productList = document.getElementById('Product');
+                productList.innerHTML = '';
+
+                paginatedProducts.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.innerHTML = `
+                        <div id="main-container"> 
+                            <div class="relative w-[150px] h-[220px] md:w-[328px] md:h-[500px] bg-sign outline outline-1 outline-outline flex justify-center rounded-md overflow-hidden transform hover:scale-105 cursor-pointer transition ease-in-out duration-300 group mx-3 md:mx-[0.65rem] mb-6">
+                                <img src="${product.imagePath}" alt="" class="object-fill h-full w-full rounded-md">
+                                <div class="w-[120px] md:h-[124px] md:w-[289.19px] bg-[#FFFFFF80] absolute bottom-4 rounded-md z-10 px-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ">
+                                    <div class="relative w-auto h-[5rem]">
+                                        <p class=" relative font-Montagu font-semibold text-[15px] md:text-[20px] mt-3 overflow-hidden line-clamp-2">${product.productName}</p>
+                                    </div>
+                                    
+                                    <div class="flex absolute bottom-2  w-[17rem] items-center">
+                                        <h1 class="font-Montserrat relative bottom-0 font-semibold">₱ ${product.productPrice}</h1>
+                                        <img id="Cart-Icon" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/q_auto/v1727603905/CART_apj7cn.png" alt="" class="absolute right-0 cursor-pointer w-[50px] h-[50px]">
+                                    </div> 
+                                </div>
+                            </div> 
+                        </div> 
+                    `;
+                    productList.appendChild(productElement);
+
+                        productElement.querySelector('#main-container').addEventListener('click', function() {
+                            const  productContainer = productElement.querySelector('#main-container');
+                            const productName = productContainer.querySelector('p').innerText;
+
+                            sessionStorage.setItem('product', productName);
+
+                            window.location.href = 'ProductDetails.html';
+                        });
+                        productElement.querySelector('#Cart-Icon').addEventListener('click', function() {
+                            event.stopPropagation();
+                            const productContainer = productElement.querySelector('#main-container');
+                            const ProductName = productContainer.querySelector('p').innerText;
+                            const Quantity = 1;
+                            const Data ={
+                                ProductName: ProductName,
+                                Quantity: Quantity
+                            };
+                            console.log('running to hehe', Data)
+
+                            fetch('/AddToCartIcon',{
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(Data)
+                            })
+                            .then(response => response.json().then(data => {
+                                if (response.ok) {
+                                    console.log('Success:', data);
+                                    document.getElementById('CartPopup').classList.remove('hidden');
+                                }
+                                else if(response.status === 401){
+                                    window.location.href = 'SignIn.html';
+                                }
+                            }))
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        });
+                });
+            }
+            
+            function renderPagination() {
+                const paginationContainer = document.getElementById('Page');
+                paginationContainer.innerHTML = '';
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.innerText = i;
+                    pageButton.className = `pagination-button mx-2 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-400 transition-colors duration-300 ${
+                        i === currentPage ? 'bg-gray-400 font-bold' : ''
+                    }`;
+                    
+                    pageButton.addEventListener('click', () => {
+                        currentPage = i;
+                        renderProducts(currentPage);
+                        renderPagination();
+                    });
+                    paginationContainer.appendChild(pageButton);
+                }
+            }
+            renderProducts(currentPage);
+            renderPagination();
+        })
+        .catch(error => console.error('Error fetching products:', error));
+    });
 </script>
 <script src="Nav.js"></script>
 </html>
