@@ -495,15 +495,14 @@ function generateStars(rating) {
 
                 <div class="flex  w-[42rem] h-[547px] relative justify-center ">
                     <div class="w-[400px] h-[113px] relative">
-                        <div class="w-[32rem] h-[15rem]">
-                            <h1 id="prodName" class="font-Montagu font-semibold text-[48px] relative">${product.productName}</h1>
+                        <div class="w-[32rem] h-[auto] relative overflow-hidden">
+                            <h1 id="prodName" class="font-Montagu font-semibold relative" style="font-size: clamp(26px, 3vw, 40px);">${product.productName}</h1>
                         </div>
                         
-                        <p class="font-Montserrat font-semibold text-[32px] ml-[2rem]"><span>₱ <span>${product.productPrice}</p>
-                        <div class=" w-[290px] h-auto p-2 ml-[2rem]">
+                        <p class="font-Montserrat font-semibold text-[18px] ml-[2rem] mt-[1rem] mb-[1rem]"><span>₱ <span>${product.productPrice}</p>
+                        <div class=" w-[450px] h-auto p-2 ml-[2rem]">
                             <div class="flex-col space-y-4">
-                                <h2 class="font-Montserrat font-normal text-[14px]">Description:<span class="ml-3">${product.description}</h2>
-                                <h3 class="font-Montserrat font-normal text-[14px]">Size: </h3>
+                                <h2 class="font-Montserrat font-normal text-[14px]">Description:<span class="ml-1">${product.description}</h2>
                             </div>
                         </div>
                         <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg ml-[5.5rem] mt-[2rem] mb-5 px-5">

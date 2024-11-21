@@ -542,8 +542,8 @@ async function fetchUser() {
         console.error('Error fetching user:', err);
     }
 }
-const socket = new WebSocket('ws://localhost:3000');
-//const socket = new WebSocket('wss://zappnott.shop/ws');
+//const socket = new WebSocket('ws://localhost:3000');
+const socket = new WebSocket('wss://zappnott.shop/ws');
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
 

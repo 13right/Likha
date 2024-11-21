@@ -2045,6 +2045,10 @@ video {
   height: 95px;
 }
 
+.h-\[auto\]{
+  height: auto;
+}
+
 .h-\[rem\]{
   height: rem;
 }
@@ -2687,10 +2691,6 @@ video {
 
 .w-screen{
   width: 100vw;
-}
-
-.w-\[1rem\]{
-  width: 1rem;
 }
 
 .min-w-min{
@@ -3967,10 +3967,6 @@ video {
 
 .text-\[40px\]{
   font-size: 40px;
-}
-
-.text-\[48px\]{
-  font-size: 48px;
 }
 
 .text-\[6px\]{
