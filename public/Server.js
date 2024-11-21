@@ -58,26 +58,24 @@ cloudinary.config({
 
 const REDIS_URL = process.env.REDIS_URL;
 
-// Create Redis client
 const redisClient = redis.createClient({
   url: REDIS_URL
 });
 
-// Connect to Redis
-redisClient.connect()
-  .then(() => console.log('Connected to Redis'))
-  .catch(err => console.error('Redis connection error', err));
+// redisClient.connect()
+//   .then(() => console.log('Connected to Redis'))
+//   .catch(err => console.error('Redis connection error', err));
 
-  app.use(session({
-    store: new RedisStore({ client: redisClient }),
-    secret: 'Hatdog',  // Change this to your own secret
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
-      maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
-    }
-  }));
+//   app.use(session({
+//     store: new RedisStore({ client: redisClient }),
+//     secret: 'Hatdog',  // Change this to your own secret
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
+//       maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
+//     }
+//   }));
   
 
 app.use((req, res, next) => {
@@ -87,12 +85,12 @@ app.use((req, res, next) => {
     next();
   });
 
-// app.use(session({
-//     secret: 'Hatdog',
-//     resave: true,
-//     saveUninitialized: true
+app.use(session({
+    secret: 'Hatdog',
+    resave: true,
+    saveUninitialized: true
 
-//   }));
+  }));
 
 
 //Local Machine sa baba
