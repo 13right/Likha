@@ -3852,6 +3852,30 @@ video {
   padding-top: 9rem;
 }
 
+.pt-\[3rem\]{
+  padding-top: 3rem;
+}
+
+.pt-\[rem\]{
+  padding-top: rem;
+}
+
+.pt-\[2rem\]{
+  padding-top: 2rem;
+}
+
+.pt-\[7\.5rem\]{
+  padding-top: 7.5rem;
+}
+
+.pt-\[5\.5rem\]{
+  padding-top: 5.5rem;
+}
+
+.pt-\[6\.5rem\]{
+  padding-top: 6.5rem;
+}
+
 .text-left{
   text-align: left;
 }
