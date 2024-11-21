@@ -358,17 +358,17 @@ function getColorName(rgba) {
 
 app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     const jsonData = JSON.parse(req.body.data);
-    // const user = req.session.user;
+    const user = req.session.user;
 
-    // if (!user || !user.UserID) {
-    //     return res.status(200).json({
-    //         success: false,
-    //         message: "Unauthorized. Please sign in.",
-    //         redirectTo: "/SignIn.html"
-    //     });
-    // }
+    if (!user || !user.UserID) {
+        return res.status(200).json({
+            success: false,
+            message: "Unauthorized. Please sign in.",
+            redirectTo: "/SignIn.html"
+        });
+    }
 
-    // const userID = parseInt(user.UserID);
+    const userID = parseInt(user.UserID);
     let fileUrl = null;
     try {
         if (req.file && req.file.path) {
@@ -383,7 +383,7 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
             fs.unlinkSync(req.file.path); 
         }
         const request = pool.request();
-        await request//.input('UserID',sql.Int,userID)
+        await request.input('UserID',sql.Int,userID)
             .input('Image' ,sql.VarChar,fileUrl)
             .input('Name',sql.VarChar,jsonData.dressName)
             .input('Bust',sql.Int,jsonData.bust)
@@ -394,7 +394,7 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
             .input('Height',sql.Int,jsonData.height)
             .query(`INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status)
                     VALUES 
-                    (1,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Requested')`);
+                    (@UserID,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Requested')`);
         res.status(200).json({
             success: true,
             message: "Dress data uploaded successfully",
@@ -495,17 +495,17 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
 app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
     const jsonData = JSON.parse(req.body.data);
-    // const user = req.session.user;
+    const user = req.session.user;
 
-    // if (!user || !user.UserID) {
-    //     return res.status(200).json({
-    //         success: false,
-    //         message: "Unauthorized. Please sign in.",
-    //         redirectTo: "/SignIn.html"
-    //     });
-    // }
+    if (!user || !user.UserID) {
+        return res.status(200).json({
+            success: false,
+            message: "Unauthorized. Please sign in.",
+            redirectTo: "/SignIn.html"
+        });
+    }
 
-    // const userID = parseInt(user.UserID);
+    const userID = parseInt(user.UserID);
     let fileUrl = null;
 
     try {
@@ -560,12 +560,12 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
         const NecklaceRequest = await request.input('imageUrl', sql.VarChar, fileUrl)
             .input('lockType', sql.NVarChar, jsonData.necklace.locktype)
-            //.input('UserID', sql.Int, userID)
+            .input('UserID', sql.Int, userID)
             .input('size', sql.Int, jsonData.necklace.length)
             .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
             .query(`
                 INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID, Status)
-                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), 1, 'Requested');
+                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), @UserID, 'Requested');
             `);
 
 
@@ -607,17 +607,17 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
     const jsonData = JSON.parse(req.body.data);
-    // const user = req.session.user;
+    const user = req.session.user;
 
-    // if (!user || !user.UserID) {
-    //     return res.status(200).json({
-    //         success: false,
-    //         message: "Unauthorized. Please sign in.",
-    //         redirectTo: "/SignIn.html"
-    //     });
-    // }
+    if (!user || !user.UserID) {
+        return res.status(200).json({
+            success: false,
+            message: "Unauthorized. Please sign in.",
+            redirectTo: "/SignIn.html"
+        });
+    }
 
-    // const userID = parseInt(user.UserID);
+    const userID = parseInt(user.UserID);
     let fileUrl = null;
 
     try {
@@ -633,7 +633,7 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
             fs.unlinkSync(req.file.path); 
         }
         const request = pool.request();
-        await request//.input('UserID',sql.Int,userID)
+        await request.input('UserID',sql.Int,userID)
             .input('Image' ,sql.VarChar,fileUrl)
             .input('RingType',sql.VarChar,jsonData.Ring.RingType)
             .input('Stone',sql.VarChar,jsonData.Ring.Stone)
@@ -643,7 +643,7 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
 
             .query(`INSERT INTO tbl_CustomRing (UserID,Image,RingType,Stone,RingColor,RingSize,TotalPrice,Date,Status)
                     VALUES 
-                    (1,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Requested')`);
+                    (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Requested')`);
         res.status(200).json({
             success: true,
             message: `RING uploaded successfully`,
@@ -2126,7 +2126,8 @@ app.get('/Design', async (req, res) => {
         let necklaceQuery = `
             SELECT NecklaceID AS ProductID,
                    Image, 
-                   CONVERT(VARCHAR, Date, 0) AS Date, 
+                   CONVERT(VARCHAR, Date, 0) AS Dates, 
+                   Date,
                    TotalPrice, 
                    Name, 
                    tbl_CustomNecklace.Status 
@@ -2138,7 +2139,8 @@ app.get('/Design', async (req, res) => {
         let ringQuery = `
             SELECT RingID AS ProductID,
                    Image, 
-                   CONVERT(VARCHAR, Date, 0) AS Date, 
+                   CONVERT(VARCHAR, Date, 0) AS Dates,
+                   Date, 
                    TotalPrice, 
                    Name, 
                    tbl_CustomRing.Status 
@@ -2150,7 +2152,8 @@ app.get('/Design', async (req, res) => {
         let dressQuery = `
             SELECT DressID AS ProductID, 
                    Image,
-                   CONVERT(VARCHAR, Date, 0) AS Date, 
+                   CONVERT(VARCHAR, Date, 0) AS Dates, 
+                   Date,
                    TotalPrice, 
                    tbl_User.Name, 
                    tbl_CustomDress.Status 

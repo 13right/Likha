@@ -497,6 +497,7 @@ function fetchOrders(Status = ''){
             document.getElementById('Order-container').classList.remove('hidden');
             document.getElementById('Empty').classList.add('hidden');
         console.log(Items);
+        
         Items.forEach(Item => {
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
@@ -504,7 +505,7 @@ function fetchOrders(Status = ''){
                 <div class="ml-[4rem] w-[68rem] relative flex items-center justify-between">
                     <div>
                         <h1 class="font-extrabold font-Inter text-[#6B707B]">Request ID: ${Item.ProductID}</h1>
-                        <h2 class="font-Inter font-medium">Req Date: <span>${Item.Date}</span></h2>
+                        <h2 class="font-Inter font-medium">Req Date: <span>${Item.Dates}</span></h2>
                     </div>
                     <div>
                         <h1 class="flex space-x-2">Status: <span class="ml-2" id="Status">${Item.Status}</span></h1>
