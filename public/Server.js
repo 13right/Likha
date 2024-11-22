@@ -2178,14 +2178,12 @@ app.get('/Design', async (req, res) => {
         const ringResult = await request.query(ringQuery);
         const dressResult = await request.query(dressQuery);
 
-        // Combine results
         let combinedResults = [
             ...necklaceResult.recordset.map(item => ({ ...item, ProductType: 'Necklace' })),
             ...ringResult.recordset.map(item => ({ ...item, ProductType: 'Ring' })),
             ...dressResult.recordset.map(item => ({ ...item, ProductType: 'Dress' }))
         ];
 
-        // Sort by Date (descending)
         combinedResults.sort((a, b) => new Date(b.Date) - new Date(a.Date));
 
         res.json(combinedResults);
