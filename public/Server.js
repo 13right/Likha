@@ -2469,6 +2469,7 @@ app.get('/Counts', async (req, res) => {
 //         res.status(500).send('Internal Server Error');
 //     }
 // });
+
   app.post('/verify-otp', async (req, res) => {
     const { Email, otp } = req.body;
     console.log(Email,otp);
@@ -2512,8 +2513,9 @@ app.put('/NewPassword', async (req, res) => {
     const { NewPass, UserID } = req.body; // Use NewPass to match the frontend
 
     try {
+        const hashedPassword = await bcrypt.hash(NewPass, saltRounds);
         await pool.request()
-            .input('NewPass', sql.VarChar, NewPass) // Ensure the parameter is NewPass
+            .input('NewPass', sql.VarChar, hashedPassword)
             .input('UserID', sql.Int, UserID)
             .query('UPDATE tbl_User SET Password = @NewPass WHERE UserID = @UserID');
 

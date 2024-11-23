@@ -240,8 +240,8 @@ fetch('/Request')
                 <div class="w-[10rem] text-center item-center h-[2rem] absolute right-[30.75rem]">
                     <h2 class="relative font-Montserrat mx-auto font-semibold text-[14px]">${Item.TotalPrice}</h2>
                 </div>
-                <div id="Status" class="absolute flex items-center justify-center right-[18.5rem] w-[90px] h-[25px] rounded-2xl">
-                    <p class="relative font-Montserrat font-semibold text-center text-xs truncate">${Item.Status}</p>
+                <div class="absolute flex items-center justify-center right-[18.5rem] w-[90px] h-[25px] rounded-2xl">
+                    <p id="Status" class="relative font-Montserrat font-semibold text-center text-xs truncate ">${Item.Status}</p>
                 </div>
                 <div id="View" class="absolute cursor-pointer right-[7rem] w-[100px] top-[0.75rem] h-[25px] rounded-2xl bg-[#032D7E80] outline outline-[3px] outline-[#032D7E]">
                     <p class="font-Montserrat text-[#032D7E] font-semibold text-center text-sm" >View Details</p>
@@ -255,23 +255,26 @@ fetch('/Request')
             async function checkStat(){
                 const Status = Item.Status;
 
-                if(Status === 'Ordered'){
-                    statusDiv.classList.add('bg-[#4C8BF5]'); 
+                if(Status === 'Requested'){
+                    statusDiv.classList.add('text-[#FFC107]'); 
                 }
                 else if(Status === 'Confirmed'){
-                    statusDiv.classList.add('bg-[#5CB85C]'); 
+                    statusDiv.classList.add('text-[#228B22]'); 
                 }
-                else if(Status === 'Order Packed'){
-                    statusDiv.classList.add('bg-[#F0AD4E]'); 
+                else if(Status === 'On Process'){
+                    statusDiv.classList.add('text-[#00BFFF]'); 
                 }
-                else if(Status === 'Ready to Pick Up'){
-                    statusDiv.classList.add('bg-[#6F42C1]');
+                else if(Status === 'Ready for Pick Up'){
+                    statusDiv.classList.add('text-[#032D7E]');
                 }
-                else if(Status === 'Cancelled'){
-                    statusDiv.classList.add('bg-[#D9534F]'); 
+                else if(Status === 'Declined '){
+                    statusDiv.classList.add('text-[#FF0000]'); 
                 }
                 else if(Status === 'Completed'){
-                    statusDiv.classList.add('bg-[#5BC0DE]'); 
+                    statusDiv.classList.add('text-[#008080]'); 
+                }
+                else if(Status === 'Paid '){
+                    statusDiv.classList.add('text-[#6A0DAD]'); 
                 }
             }
 
