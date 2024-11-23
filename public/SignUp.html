@@ -154,15 +154,17 @@
                         </span>
                     </div> -->
                     <form action="" class="ml-2 mr-2" onsubmit="event.preventDefault(); submitForm();" action="/SignUp" method="post">
+                        <label for="Nametxt" class="text-[#6e7075] font-bold">Full Name</label><br>
+                        <input type="text" name="" id="Nametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" oninput="restrictInput(this)" required><br>
                         <label for="Usernametxt" class="text-[#6e7075] font-bold">Username</label><br>
-                        <input type="text" name="" id="Usernametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]" required><br>
+                        <input type="text" name="" id="Usernametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" required><br>
                         <label for="Emailtxt" class="text-[#6e7075] font-bold">Email</label><br>
-                        <input type="email" name="" id="Emailtxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]" required><br>
+                        <input type="email" name="" id="Emailtxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" required><br>
                         <label for="Numbertxt" class="text-[#6e7075] font-bold">Number</label><br>
-                        <input type="number" maxlength="11" name="" id="Numbertxt" value="09" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[1rem] md:mb-[1.5rem]" required oninput="validatePhoneNumber(this)"><br>
+                        <input type="number" maxlength="11" name="" id="Numbertxt" value="09" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" required oninput="validatePhoneNumber(this)"><br>
                         <label for="Passwordtxt" class="text-[#6e7075] font-bold">Password</label><br>
                         <input type="password" name="" id="Passwordtxt" class="p-2 h-[2rem] w-full outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] " required><br>
-                        <br><br>
+                        <br>
                         <button class="bg-outline w-[18rem] font-bold py-2 px-4 rounded-full text-Likha" type="submit">
                             SIGN UP
                         </button>
@@ -273,6 +275,9 @@
             if (!input.value.startsWith("09") && input.value.length > 0) {
                 input.value = "09" + input.value.slice(2);
             }
+        }
+        function restrictInput(input) {
+        input.value = input.value.replace(/[^a-zA-Z\s'.]/g, '');
         }
     </script>
     <script src="https://cdn.lordicon.com/lordicon.js"></script>

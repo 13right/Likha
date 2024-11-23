@@ -1193,20 +1193,21 @@ app.put('/DeleteAcc', async (req, res) => {
 const saltRounds = 10;
 
 app.post('/SignUp', async (req, res) => {
-    const { name, num, Password, Email } = req.body;
+    const { Username, num, Password, Email, Name } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash(Password, saltRounds);
 
         const request = pool.request()
-            .input('name', sql.NVarChar, name)
+            .input('Username', sql.NVarChar, Username)
             .input('number', sql.NVarChar, num)
             .input('Password', sql.NVarChar, hashedPassword)
+            .input('Name',sql.VarChar, Name)
             .input('Email', sql.VarChar, Email);
             
         const query = `
-        INSERT INTO tbl_User (UserName, MobileNum, Email, Password, Type, Status)
-        VALUES (@name, @number, @Email, @Password, 'Customer', 'Active');`;
+        INSERT INTO tbl_User (UserName,Name, MobileNum, Email, Password, Type, Status)
+        VALUES (@Username, @Name, @number, @Email, @Password, 'Customer', 'Active');`;
         
         await request.query(query);
 

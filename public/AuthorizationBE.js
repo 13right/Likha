@@ -31,16 +31,18 @@ function submitForm() {
     var numValue = document.getElementById("Numbertxt").value;
     var Password = document.getElementById("Passwordtxt").value;
     var Email = document.getElementById("Emailtxt").value;
+    var Name = document.getElementById("Nametxt").value;
 
     if(numValue.length !== 11){
         alert("Phone number must be exactly 11 digits.");
         return;
     }
    var formData = {
-        name: nameValue,
+        Username: nameValue,
         num: numValue,
         Password: Password,
-        Email: Email
+        Email: Email,
+        Name: Name
    };
    console.log(formData);
 
