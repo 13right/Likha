@@ -1958,10 +1958,17 @@ app.get('/Edit-Material/:Material', async (req, res) => {
 });
 
 app.get('/productsJewelry', async (req, res) => {
+    const order = req.query.order || 'default';
+    let orderByClause = '';
+    if (order === 'LH') {
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+    } else if (order === 'HL') {
+        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+    }
     try {
 
         const result = await pool.request()
-            .query("SELECT ProductName, FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3 AND Stock > 0 AND isArchive = 'No'");
+            .query(`SELECT ProductName, FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 3 AND Stock > 0 AND isArchive = 'No' GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage ${orderByClause}`);
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -2014,9 +2021,16 @@ app.get('/SearchProd/:inputValue', async (req, res) => {
 });
 
 app.get('/productsBag', async (req, res) => {
+    const order = req.query.order || 'default';
+    let orderByClause = '';
+    if (order === 'LH') {
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+    } else if (order === 'HL') {
+        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+    }
     try {
         const result = await pool.request()
-            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1 AND Stock > 0 AND isArchive = 'No'");
+            .query(`SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 1 AND Stock > 0 AND isArchive = 'No' GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage ${orderByClause}`);
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
@@ -2040,9 +2054,16 @@ app.get('/productsBag', async (req, res) => {
 });
 
 app.get('/productsDress', async (req, res) => {
+    const order = req.query.order || 'default';
+    let orderByClause = '';
+    if (order === 'LH') {
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+    } else if (order === 'HL') {
+        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+    }
     try {
         const result = await pool.request()
-            .query("SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2 AND Stock > 0 AND isArchive = 'No'");
+            .query(`SELECT ProductName,FORMAT(CAST(Price AS DECIMAL(10, 2)), 'N2')  as Price, Description, Stock, CategoryID, ProductImage FROM tbl_Product WHERE CategoryID = 2 AND Stock > 0 AND isArchive = 'No' GROUP BY ProductName, Price, Description, Stock, CategoryID, ProductImage ${orderByClause}`);
 
         if (result.recordset.length === 0) {
             return res.status(404).send('Product not found');
