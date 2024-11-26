@@ -704,7 +704,7 @@ PlaceOrder.addEventListener('click',async function () {
                 cancelRequested = true; 
                 loader.classList.add('hidden');
                 overlay.classList.add('hidden');
-                alert('Payment process canceled.');
+                //alert('Payment process canceled.');
 
                 const PaymentID = paymentIntentData.data.id;
                 console.log(PaymentID);

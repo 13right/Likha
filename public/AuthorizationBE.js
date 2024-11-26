@@ -89,7 +89,7 @@ function LogIn() {
                 document.getElementById('Invalid').classList.add('fade-in');
                 document.getElementById('Passwordtxt').value = '';
             }  else if (xhr.status === 250) {
-                alert("Admin");
+                //alert("Admin");
                 localStorage.setItem("userRole", "admin");
                 window.location.href = "DashboardAd.html"
             }
@@ -113,7 +113,7 @@ function LogOut() {
     })
     .then(response => {
         if (response.ok) {
-            alert('Logout successful');
+            //alert('Logout successful');
             window.location.href = '/SignIn.html';
         } else {
             alert('Error logging out');
