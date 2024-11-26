@@ -369,7 +369,8 @@ Open.addEventListener('click', function(event){
                 RecentOrder.appendChild(RecentOrderElements);
             });
         }).catch(error => console.error('Error fetching data:', error));
-    
+    const d = new Date();
+    console.log('Date is: ',d)
 </script>
 <script src="AuthorizationBE.js"></script>
 </html> 
