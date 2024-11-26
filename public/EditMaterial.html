@@ -228,7 +228,7 @@ Open.addEventListener('click', function(event){
     }
 });
     const Material = sessionStorage.getItem('MaterialID');
-    //const productsOutOfStock = sessionStorage.getItem('OoS');
+    const productsOutOfStock = sessionStorage.getItem('MoS');
     if(Material !== null){
         fetch(`/Edit-Material/${encodeURIComponent(Material)}`)
         .then(response => response.json())
@@ -242,27 +242,24 @@ Open.addEventListener('click', function(event){
         .catch(error => console.error('Error fetching product:', error));
         
     }
-    // else if(productsOutOfStock !==null){
-    //     fetch(`/Edit/${encodeURIComponent(productsOutOfStock)}`)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         document.getElementById('newProductName').value = data[0].productName;
-    //         document.getElementById('productDes').value = data[0].description;
-    //         document.getElementById('Cat').value = data[0].categoryID;
-    //         document.getElementById('productPrice').value = data[0].productPrice;
-    //         document.getElementById('productDiscount').value = data[0].discount;
-    //         document.getElementById('Stock').value = data[0].stock;
-    //         document.getElementById('previewImage').src = data[0].imagePath;
-    //     })
-    //     .catch(error => console.error('Error fetching product:', error));
+    else if(productsOutOfStock !== null){
+        fetch(`/Edit-Material/${encodeURIComponent(productsOutOfStock)}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('newMaterialName').value = data[0].Name;
+            document.getElementById('productDes').value = data[0].Description;
+            document.getElementById('productPrice').value = data[0].Price;
+            document.getElementById('Stock').value = data[0].Stock;
+        })
+        .catch(error => console.error('Error fetching product:', error));
 
-    //     const stockInput = document.getElementById('Stock');
-    //     if (stockInput) {
-    //         stockInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    //         stockInput.classList.add('highlight');
-    //     }
-    //     sessionStorage.removeItem('OoS');
-    // }
+        const stockInput = document.getElementById('Stock');
+        if (stockInput) {
+            stockInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            stockInput.classList.add('highlight');
+        }
+        sessionStorage.removeItem('MoS');
+    }
 
     const Form = document.querySelector('#uploadForm')
     Form.addEventListener('submit', async function(event) {

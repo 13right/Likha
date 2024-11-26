@@ -663,15 +663,17 @@ app.get('/Request', async (req, res) => {
     try {
         const pool = await sql.connect(config);
 
-        const necklaceQuery = await pool.request().query('SELECT NecklaceID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, Name,tbl_CustomNecklace.Status FROM tbl_CustomNecklace INNER JOIN tbl_User ON tbl_CustomNecklace.UserID = tbl_User.UserID');
-        const ringQuery = await pool.request().query('SELECT RingID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, Name,tbl_CustomRing.Status FROM tbl_CustomRing INNER JOIN tbl_User ON tbl_CustomRing.UserID = tbl_User.UserID');
-        const dressQuery = await pool.request().query('SELECT DressID AS ProductID, convert(varchar, Date, 0) AS Date, TotalPrice, tbl_User.Name,tbl_CustomDress.Status FROM tbl_CustomDress INNER JOIN tbl_User ON tbl_CustomDress.UserID = tbl_User.UserID');
+        const necklaceQuery = await pool.request().query('SELECT NecklaceID AS ProductID,Date,convert(varchar, Date, 0) AS Dates, TotalPrice, Name,tbl_CustomNecklace.Status FROM tbl_CustomNecklace INNER JOIN tbl_User ON tbl_CustomNecklace.UserID = tbl_User.UserID');
+        const ringQuery = await pool.request().query('SELECT RingID AS ProductID,Date,convert(varchar, Date, 0) AS Dates, TotalPrice, Name,tbl_CustomRing.Status FROM tbl_CustomRing INNER JOIN tbl_User ON tbl_CustomRing.UserID = tbl_User.UserID');
+        const dressQuery = await pool.request().query('SELECT DressID AS ProductID,Date,convert(varchar, Date, 0) AS Dates, TotalPrice, tbl_User.Name,tbl_CustomDress.Status FROM tbl_CustomDress INNER JOIN tbl_User ON tbl_CustomDress.UserID = tbl_User.UserID');
 
         const combinedResults = [
             ...necklaceQuery.recordset.map(item => ({ ...item, ProductType: 'Necklace' })),
             ...ringQuery.recordset.map(item => ({ ...item, ProductType: 'Ring' })),
             ...dressQuery.recordset.map(item => ({ ...item, ProductType: 'Dress' }))
         ];
+
+        combinedResults.sort((a, b) => new Date(b.Date) - new Date(a.Date));
 
         res.json(combinedResults);
 
@@ -2299,7 +2301,8 @@ app.get('/FeedbackAvg/:product', async (req, res) => {
 
 app.get('/Counts', async (req, res) => {
     try {
-      const result = await pool.request().query(`
+      // Query 1: Get counts for specific statuses in tbl_Order
+      const orderResult = await pool.request().query(`
         SELECT 
           COUNT(Status) AS [All],
           SUM(CASE WHEN Status = 'Confirmed' THEN 1 ELSE 0 END) AS Confirmed,
@@ -2308,12 +2311,53 @@ app.get('/Counts', async (req, res) => {
         FROM tbl_Order
       `);
   
-      res.json(result.recordset[0]);
+      // Query 2: Get count per status for combined tables
+      const customStatusResult = await pool.request().query(`
+        SELECT 
+          Status,
+          COUNT(*) AS count_per_status
+        FROM (
+          SELECT Status FROM tbl_CustomNecklace
+          UNION ALL
+          SELECT Status FROM tbl_CustomRing
+          UNION ALL
+          SELECT Status FROM tbl_CustomDress
+        ) AS CombinedTables
+        WHERE Status IN ('Confirm', 'Ready for pick up')
+        GROUP BY Status;
+      `);
+  
+      // Query 3: Get total count for specific statuses across combined tables
+      const totalStatusCountResult = await pool.request().query(`
+        SELECT 
+          SUM(count_per_status) AS total_count
+        FROM (
+          SELECT 
+            Status,
+            COUNT(*) AS count_per_status
+          FROM (
+            SELECT Status FROM tbl_CustomNecklace
+            UNION ALL
+            SELECT Status FROM tbl_CustomRing
+            UNION ALL
+            SELECT Status FROM tbl_CustomDress
+          ) AS CombinedTables
+          GROUP BY Status
+        ) AS StatusCounts;
+      `);
+  
+      // Combine all results into a single response
+      res.json({
+        orderCounts: orderResult.recordset[0], // Result from Query 1
+        customStatusCounts: customStatusResult.recordset, // Array from Query 2
+        totalStatusCount: totalStatusCountResult.recordset[0]?.total_count || 0 // Single value from Query 3
+      });
     } catch (error) {
-      console.error('Error fetching order statistics:', error);
+      console.error('Error fetching counts:', error);
       res.status(500).send('Internal Server Error');
     }
   });
+  
 
   app.get('/SoldOut', async (req, res) => {
     try {
@@ -2322,7 +2366,7 @@ app.get('/Counts', async (req, res) => {
       const result = await pool.request()
       .query(`
         SELECT ProductName FROM tbl_Product WHERE Stock = 0;
-        SELECT MaterialName FROM tbl_Materials WHERE Stock = 0;
+        SELECT MaterialName,MaterialID FROM tbl_Materials WHERE Stock = 0;
       `);
   
       const productsOutOfStock = result.recordsets[0]; 

@@ -222,7 +222,7 @@ Open.addEventListener('click', function(event){
 fetch('/Request')
     .then(response => response.json())
     .then(Items => {
-        console.log(Items); // Log Items to see the response structure
+        console.log(Items);
         Items.forEach(Item => {
             const ItemList = document.getElementById('RequestList');
             const ItemElement = document.createElement('div');
@@ -232,7 +232,7 @@ fetch('/Request')
                     <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.ProductID}</h2>
                 </div>
                 <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[12.5rem]">
-                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Date}</h2>
+                    <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Dates}</h2>
                 </div>
                 <div class="w-[15rem] text-center item-center h-[2rem] absolute left-[22.5rem]">
                     <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Name || 'N/A'}</h2>
@@ -267,7 +267,7 @@ fetch('/Request')
                 else if(Status === 'Ready for Pick Up'){
                     statusDiv.classList.add('text-[#032D7E]');
                 }
-                else if(Status === 'Declined '){
+                else if(Status === 'Declined'){
                     statusDiv.classList.add('text-[#FF0000]'); 
                 }
                 else if(Status === 'Completed'){

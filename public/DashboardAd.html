@@ -151,15 +151,15 @@
                     <div class="flex mt-3">
                         <div class="bg-[#D9D9D9] h-[100px] aspect-square rounded-full flex flex-col items-center pt-5 space-y-2">
                             <h5 class="font-Montserrat font-semibold text-[12px]">All</h5>
-                            <p class="font-Montserrat font-semibold text-[16px]">12345</p>
+                            <p id="RALL" class="font-Montserrat font-semibold text-[16px]">12345</p>
                         </div>
                         <div class="bg-[#D9D9D9] h-[100px] aspect-square rounded-full flex flex-col items-center pt-5 space-y-2">
                             <h5 class="font-Montserrat font-semibold text-[12px]">Confirmed</h5>
-                            <p class="font-Montserrat font-semibold text-[16px]">12345</p>
+                            <p id="RCON" class="font-Montserrat font-semibold text-[16px]">12345</p>
                         </div>
                         <div class="bg-[#D9D9D9] h-[100px] aspect-square rounded-full flex flex-col items-center pt-5 space-y-2">
                             <h5 class="font-Montserrat font-semibold text-[12px]">To Pick Up</h5>
-                            <p class="font-Montserrat font-semibold text-[16px]">12345</p>
+                            <p id="RTPU" class="font-Montserrat font-semibold text-[16px]">12345</p>
                         </div>
                     </div>
                 </div>
@@ -182,8 +182,8 @@
         </div>
         <div class="bg-[#F07C541A] w-auto h-auto pb-4 ml-[7rem] mr-8 mt-14 rounded-2xl pt-5">
             <div class="w-auto h-[45px] flex space-x-10 pl-20">
-                <div class="font-Inter font-semibold ">Recent Order</div>
-                <div class="font-Inter text-[#6B707B80] font-semibold">Recent Request</div>
+                <div id="RO" class="font-Inter font-semibold cursor-pointer">Recent Order</div>
+                <div id="RR" class="font-Inter text-[#6B707B80] font-semibold cursor-pointer">Recent Request</div>
             </div>
             <div class="w-auto h-[51px] ml-10 mr-12 bg-[#F7F8EA] border-y-[1px] border-outline flex justify-around items-center">
                 <h1 class="font-Inter font-extrabold text-[#6B707B80]">OrderID</h1>
@@ -202,6 +202,18 @@
     </div>
 </body>
 <script>
+
+document.getElementById('RR').addEventListener('click', () => {
+    document.getElementById('RR').classList.remove('text-[#6B707B80]');
+    document.getElementById('RO').classList.add('text-[#6B707B80]');
+    document.getElementById()
+});
+
+document.getElementById('RO').addEventListener('click', () => {
+    document.getElementById('RO').classList.remove('text-[#6B707B80]');
+    document.getElementById('RR').classList.add('text-[#6B707B80]');
+});
+
 async function fetchUnreadCount() {
         try {
             const response = await fetch('/ChatNotif'); 
@@ -254,10 +266,18 @@ Open.addEventListener('click', function(event){
     fetch('/Counts')
     .then(response => response.json())
     .then(data => {
-        document.getElementById('All').innerText = data.All;
-        document.getElementById('Confirmed').innerText = data.Confirmed;
-        document.getElementById('OP').innerText = data.OrderPacked;
-        document.getElementById('PU').innerText = data.ReadyToPickUp;
+        document.getElementById('All').innerText = data.orderCounts.All;
+        document.getElementById('Confirmed').innerText = data.orderCounts.Confirmed;
+        document.getElementById('OP').innerText = data.orderCounts.OrderPacked;
+        document.getElementById('PU').innerText = data.orderCounts.ReadyToPickUp;
+        document.getElementById('RALL').innerText = data.totalStatusCount;
+        const RCON = data.customStatusCounts.find(item => item.Status === "Confirmed");
+        document.getElementById('RCON').innerText = RCON ? RCON.count_per_status : 0;
+        const RTPU = data.customStatusCounts.find(item => item.Status === "Ready for Pick Up");
+        document.getElementById('RTPU').innerText = RTPU ? RTPU.count_per_status : 0;
+
+        console.log(RTPU);
+
     })
     .catch(error => console.error('Error:', error));
     fetch('/SoldOut')
@@ -284,12 +304,16 @@ Open.addEventListener('click', function(event){
         data.materialsOutOfStock.forEach(item => {
         const materialElement = document.createElement('div');
         materialElement.innerHTML = `
-            <div class="w-[280px] h-auto min-h-[72px] rounded-lg bg-Likha border-b-[5px] border-[#2596BE] p-2">
+            <div class="w-[280px] h-auto min-h-[72px] rounded-lg bg-Likha border-b-[5px] border-[#2596BE] p-2 cursor-pointer">
                 <h6 class="font-Inter">${item.MaterialName}
                 </h6>
             </div>
         `;
         List.appendChild(materialElement);
+        materialElement.addEventListener('click', function(event){
+                sessionStorage.setItem('MoS', item.MaterialID);
+                window.location.href = 'EditMaterial.html';
+            })
     });
     })
     .catch(error => console.error('Error fetching data:', error));
@@ -311,39 +335,41 @@ Open.addEventListener('click', function(event){
             BestSeller.appendChild(BestSellerElements);
         });
     }).catch(error => console.error('Error fetching data:', error));
-    fetch('/RecentOrder')
-    .then(response => response.json())
-    .then(data => {
-        const RecentOrder = document.getElementById('RecentOrder');
-        RecentOrder.innerHTML = '';
 
-        data.RecentOrder.forEach(element => {
-            const RecentOrderElements = document.createElement('div');
-            RecentOrderElements.innerHTML = `
-                <div class="w-auto h-[50px] bg-Likha rounded-2xl flex justify-between relative items-center">
-                    <div class="absolute left-[3rem]">
-                        <h1>${element.TransactionID}</h1>
+        fetch('/RecentOrder')
+        .then(response => response.json())
+        .then(data => {
+            const RecentOrder = document.getElementById('RecentOrder');
+            RecentOrder.innerHTML = '';
+
+            data.RecentOrder.forEach(element => {
+                const RecentOrderElements = document.createElement('div');
+                RecentOrderElements.innerHTML = `
+                    <div class="w-auto h-[50px] bg-Likha rounded-2xl flex justify-between relative items-center">
+                        <div class="absolute left-[3rem]">
+                            <h1>${element.TransactionID}</h1>
+                        </div>
+                        <div class="absolute left-[10rem] w-[22rem]">
+                            <h1 class="text-center">${element.ProductName}</h1>
+                        </div>
+                        <div class=" absolute left-[28.75rem] w-[17.5rem]">
+                            <h1 class="text-center">${element.CategoryName}</h1>
+                        </div>
+                        <div class=" absolute left-[41.5rem] w-[17rem]">
+                            <h1 class="text-center">${element.Quantity}</h1>
+                        </div>
+                        <div class=" absolute left-[53rem] w-[17rem]">
+                            <h1 class="text-center">${element.Price}</h1>
+                        </div>
+                        <div class=" absolute left-[63.75rem] w-[17rem]">
+                            <h1 class="text-center">${element.Status}</h1>
+                        </div>
                     </div>
-                    <div class="absolute left-[10rem] w-[22rem]">
-                        <h1 class="text-center">${element.ProductName}</h1>
-                    </div>
-                    <div class=" absolute left-[28.75rem] w-[17.5rem]">
-                        <h1 class="text-center">${element.CategoryName}</h1>
-                    </div>
-                    <div class=" absolute left-[41.5rem] w-[17rem]">
-                        <h1 class="text-center">${element.Quantity}</h1>
-                    </div>
-                    <div class=" absolute left-[53rem] w-[17rem]">
-                        <h1 class="text-center">${element.Price}</h1>
-                    </div>
-                    <div class=" absolute left-[63.75rem] w-[17rem]">
-                        <h1 class="text-center">${element.Status}</h1>
-                    </div>
-                </div>
-            `;
-            RecentOrder.appendChild(RecentOrderElements);
-        });
-    }).catch(error => console.error('Error fetching data:', error));
+                `;
+                RecentOrder.appendChild(RecentOrderElements);
+            });
+        }).catch(error => console.error('Error fetching data:', error));
+    
 </script>
 <script src="AuthorizationBE.js"></script>
 </html> 
