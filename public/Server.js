@@ -2692,11 +2692,22 @@ app.get('/RecentOrder', async (req, res) => {
 
 //OrderList AdminView
 app.get('/Orders', async (req, res) => {
-        
+    const search = req.query.search || '';
+    const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC';
+
     try {
         const request = pool.request();
-        const query = `SELECT TransactionID,tbl_Order.Status, convert(varchar, Date, 0) AS Date,convert(varchar, PickUp, 0) AS PickUp, Name, TotalPrice
-                       FROM tbl_Order INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID ORDER BY OrderID DESC;`;
+        const query = `SELECT TransactionID, tbl_Order.Status, CONVERT(varchar, Date, 0) AS Date, 
+                       CONVERT(varchar, PickUp, 0) AS PickUp, Name, TotalPrice
+                       FROM tbl_Order 
+                       INNER JOIN tbl_User ON tbl_Order.UserID = tbl_User.UserID
+                       WHERE TransactionID LIKE '%${search}%' 
+                       OR tbl_Order.Status LIKE '%${search}%' 
+                       OR Date LIKE '%${search}%' 
+                       OR CONVERT(varchar, PickUp, 0) LIKE '%${search}%' 
+                       OR Name LIKE '%${search}%' 
+                       OR TotalPrice LIKE '%${search}%' 
+                       ORDER BY CONVERT(varchar, Date, 1) ${sortOrder};`;
         const result = await request.query(query);
         const products = result.recordset.map(product => {
             return {
@@ -2714,6 +2725,7 @@ app.get('/Orders', async (req, res) => {
         res.status(500).json({ error: 'Database error', details: err });
     }
 });
+
 
 app.get('/Materials', async (req, res) => {
         
