@@ -91,7 +91,7 @@ function LogIn() {
             }  else if (xhr.status === 250) {
                 alert("Admin");
                 localStorage.setItem("userRole", "admin");
-                window.location.href = "OrderList.html"
+                window.location.href = "DashboardAd.html"
             }
             else {
                 alert("Error: " + xhr.status);

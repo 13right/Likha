@@ -30,7 +30,7 @@ const upload = multer({ dest: 'uploads/' });
 
 //app.use('/images', express.static(path.join(__dirname, 'UploadedImage')));
 
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -41,7 +41,7 @@ app.get('/3D', (req, res) => {
 
 app.use('/Build', express.static(path.join(__dirname, 'Build')));
 
-app.use(express.static(path.join(__dirname)));
+
 
 const wss = new WebSocket.Server({ server });
 
@@ -92,7 +92,10 @@ app.use(session({
 
   }));
 
-
+//   app.use((req, res, next) => {
+//     console.log('Session Data:', req.session);
+//     next();
+// });
 //Local Machine sa baba
 // const config = {
 //     user: 'Jennie',
@@ -357,7 +360,7 @@ function getColorName(rgba) {
 app.post('/Request/Dress',upload.single('image'), async (req, res) => {
     const jsonData = JSON.parse(req.body.data);
     const user = req.session.user;
-
+    const d = new Date();
     if (!user || !user.UserID) {
         return res.status(200).json({
             success: false,
@@ -390,9 +393,10 @@ app.post('/Request/Dress',upload.single('image'), async (req, res) => {
             .input('Waist',sql.Int,jsonData.waist)
             .input('Hips',sql.Int,jsonData.hip)
             .input('Height',sql.Int,jsonData.height)
+            .input('Date',sql.DateTime,d)
             .query(`INSERT INTO tbl_CustomDress (UserID,Image,Name,Bust,Color,TotalPrice,Waist,Hips,Height,Date,Status)
                     VALUES 
-                    (@UserID,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,GETDATE(),'Requested')`);
+                    (@UserID,@Image,@Name,@Bust,@Color,@TotalPrice,@Waist,@Hips,@Height,@Date,'Requested')`);
         res.status(200).json({
             success: true,
             message: "Dress data uploaded successfully",
@@ -494,7 +498,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 
     const jsonData = JSON.parse(req.body.data);
     const user = req.session.user;
-
+    const d = new Date();
     if (!user || !user.UserID) {
         return res.status(200).json({
             success: false,
@@ -561,9 +565,10 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
             .input('UserID', sql.Int, userID)
             .input('size', sql.Int, jsonData.necklace.length)
             .input('totalPrice', sql.Int, jsonData.necklace.totalprice)
+            .input('Date',sql.DateTime,d)
             .query(`
                 INSERT INTO tbl_CustomNecklace (Image, LockType, Size, TotalPrice, Date, UserID, Status)
-                VALUES (@imageUrl, @lockType, @size, @totalPrice, GETDATE(), @UserID, 'Requested');
+                VALUES (@imageUrl, @lockType, @size, @totalPrice, @Date, @UserID, 'Requested');
             `);
 
 
@@ -606,7 +611,7 @@ app.post('/Request/Necklace', upload.single('image'), async (req, res) => {
 app.post('/Request/Ring', upload.single('image'),async (req, res) => {
     const jsonData = JSON.parse(req.body.data);
     const user = req.session.user;
-
+    const d = Date();
     if (!user || !user.UserID) {
         return res.status(200).json({
             success: false,
@@ -638,10 +643,10 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
             .input('RingColor',sql.VarChar,jsonData.Ring.RingColor)
             .input('RingSize',sql.Int,jsonData.Ring.RingSize)
             .input('TotalPrice',sql.Int,jsonData.Ring.TotalPrize)
-
+            .input('Date',sql.DateTime,d)
             .query(`INSERT INTO tbl_CustomRing (UserID,Image,RingType,Stone,RingColor,RingSize,TotalPrice,Date,Status)
                     VALUES 
-                    (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,GETDATE(),'Requested')`);
+                    (@UserID,@Image,@RingType,@Stone,@RingColor,@RingSize,@TotalPrice,@Date,'Requested')`);
         res.status(200).json({
             success: true,
             message: `RING uploaded successfully`,
@@ -1477,10 +1482,40 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 //     }
 // });
 
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'Index.html'));
+// });
+
 app.get('/', (req, res) => {
+    console.log('Session Data:', req.session);
+
+    if (req.session && req.session.user) {
+        console.log('User exists in session.');
+        console.log('User Type:', req.session.user.Type);
+        if (req.session.user.Type === 'Admin') {
+            console.log('Redirecting to DashboardAd.html');
+            return res.redirect('/DashboardAd.html'); 
+        } else {
+            console.log('User is not admin, loading Index.html');
+        }
+    } else {
+        console.log('No user in session, loading Index.html'); 
+    }
+
     res.sendFile(path.join(__dirname, 'Index.html'));
 });
 
+app.get('/DashboardAd.html', (req, res) => {
+    console.log('DashboardAd route hit.');
+    if (req.session && req.session.user && req.session.user.Type === 'Admin') {
+        console.log('User is admin, serving DashboardAd.html');
+        res.sendFile(path.join(__dirname, 'DashboardAd.html'));
+    } else {
+        console.log('User is not admin or no session, redirecting to Index.html'); 
+        res.redirect('/'); 
+    }
+});
+app.use(express.static(path.join(__dirname)));
 app.get('/Admin', async (req, res) => {
     const Type = "Admin";
     const query = `SELECT UserID FROM tbl_User WHERE Type = @Type`;
@@ -2594,14 +2629,16 @@ app.put('/NewPassword', async (req, res) => {
 
 
   app.get('/RecentOrder', async (req, res) => {
+    const d = Date();
     try {
       const result = await pool.request()
+      .input('Date',sql.DateTime,d)
       .query(`
             SELECT TransactionID, ProductName, CategoryName, Quantity, tbl_OrderItem.Price, [Status] FROM tbl_Order
             INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
             INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
             INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
-            WHERE CONVERT(VARCHAR,Date,1) = CONVERT(VARCHAR,GETDATE(),1)
+            WHERE CONVERT(VARCHAR,Date,1) = CONVERT(VARCHAR,@Date,1)
       `);
   
       const RecentOrder = result.recordsets[0]; 
@@ -2928,6 +2965,7 @@ app.get('/Cart', async (req, res) => {
 //PlaceOrder
 app.post('/PlaceOrder', async (req, res) => {
     const {OrderData, retrieve,PickUp}  = req.body;
+    const d = new Date();
     try {
 
         const user = req.session.user;
@@ -2937,7 +2975,8 @@ app.post('/PlaceOrder', async (req, res) => {
                 .input('ID',sql.Int,ID)
                 .input('Link',sql.VarChar,retrieve)
                 .input('PickUp',sql.VarChar,PickUp)
-                .query('INSERT INTO tbl_Order ([Date], UserID, Status,PaymentLink,PickUp) VALUES (convert(varchar,getdate(), 0), @ID,DEFAULT,@Link,@PickUp)');
+                .input('Date',sql.DateTime,d)
+                .query('INSERT INTO tbl_Order ([Date], UserID, Status,PaymentLink,PickUp) VALUES (convert(varchar,@Date, 0), @ID,DEFAULT,@Link,@PickUp)');
         for (const order of OrderData) {
             
             const request = await pool.request()
