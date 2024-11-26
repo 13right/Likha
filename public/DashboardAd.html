@@ -186,12 +186,12 @@
                 <div id="RR" class="font-Inter text-[#6B707B80] font-semibold cursor-pointer">Recent Request</div>
             </div>
             <div class="w-auto h-[51px] ml-10 mr-12 bg-[#F7F8EA] border-y-[1px] border-outline flex justify-around items-center">
-                <h1 class="font-Inter font-extrabold text-[#6B707B80]">OrderID</h1>
-                <h1 class="font-Inter font-extrabold text-[#6B707B80] mx-[64px]">Product</h1>
-                <h1 class="font-Inter font-extrabold text-[#6B707B80]">Category</h1>
-                <h1 class="font-Inter font-extrabold text-[#6B707B80]">Quantity</h1>
-                <h1 class="font-Inter font-extrabold text-[#6B707B80]">Price</h1>
-                <h1 class="font-Inter font-extrabold text-[#6B707B80]">Status</h1>
+                <h1 id="OI" class="font-Inter font-extrabold text-[#6B707B80]">OrderID</h1>
+                <h1 id="ProdName" class="font-Inter font-extrabold text-[#6B707B80] mx-[64px]">Product</h1>
+                <h1 id="Cat" class="font-Inter font-extrabold text-[#6B707B80]">Category</h1>
+                <h1 id="Quantity" class="font-Inter font-extrabold text-[#6B707B80]">Quantity</h1>
+                <h1 id="Price" class="font-Inter font-extrabold text-[#6B707B80]">Price</h1>
+                <h1 id="Stat" class="font-Inter font-extrabold text-[#6B707B80]">Status</h1>
             </div>
 
             <div id="RecentOrder" class= "h-auto w-auto m-6 px-5 space-y-9">
@@ -206,13 +206,90 @@
 document.getElementById('RR').addEventListener('click', () => {
     document.getElementById('RR').classList.remove('text-[#6B707B80]');
     document.getElementById('RO').classList.add('text-[#6B707B80]');
-    document.getElementById()
+    document.getElementById('OI').innerText = 'RequestID';
+    document.getElementById('ProdName').classList.add('hidden');
+    document.getElementById('Cat').classList.add('hidden');
+    document.getElementById('Quantity').classList.add('hidden');
+    Recent('Request');
 });
 
 document.getElementById('RO').addEventListener('click', () => {
     document.getElementById('RO').classList.remove('text-[#6B707B80]');
     document.getElementById('RR').classList.add('text-[#6B707B80]');
+    document.getElementById('OI').innerText = 'OrderID';
+    document.getElementById('ProdName').classList.remove('hidden');
+    document.getElementById('Cat').classList.remove('hidden');
+    document.getElementById('Quantity').classList.remove('hidden');
+    Recent('Order');
 });
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    Recent('Order');
+    window.location.reload;
+});
+
+function Recent(Type = '') {
+    console.log(Type);
+    fetch(`/RecentOrder?Type=${Type}`)
+        .then(response => response.json())
+        .then(data => {
+            const RecentOrder = document.getElementById('RecentOrder');
+            RecentOrder.innerHTML = ''; // Clear existing content
+
+            // If Type is 'Request', use CustomItems, otherwise use Orders
+            const dataToDisplay = Type === 'Request' ? data : data; // Simplified for clarity
+            
+            console.log('Fetched Data:', data);  // Check the full structure of data
+
+            dataToDisplay.forEach(element => {
+                const RecentOrderElements = document.createElement('div');
+                if (Type === 'Request') {
+                    // Show only TransactionID, Price, and Status for Request
+                    RecentOrderElements.innerHTML = `
+                        <div class="w-auto h-[50px] bg-Likha rounded-2xl flex justify-between relative items-center">
+                            <div class="absolute left-[3rem]">
+                                <h1>${element.TransactionID}</h1>
+                            </div>
+                            <div class=" absolute left-[53rem] w-[17rem]">
+                                <h1 class="text-center">${element.Price}</h1>
+                            </div>
+                            <div class=" absolute left-[63.75rem] w-[17rem]">
+                                <h1 class="text-center">${element.Status}</h1>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Show full order details for Orders
+                    RecentOrderElements.innerHTML = `
+                        <div class="w-auto h-[50px] bg-Likha rounded-2xl flex justify-between relative items-center">
+                            <div class="absolute left-[3rem]">
+                                <h1>${element.TransactionID}</h1>
+                            </div>
+                            <div class="absolute left-[10rem] w-[22rem]">
+                                <h1 class="text-center">${element.ProductName}</h1>
+                            </div>
+                            <div class=" absolute left-[28.75rem] w-[17.5rem]">
+                                <h1 class="text-center">${element.CategoryName}</h1>
+                            </div>
+                            <div class=" absolute left-[41.5rem] w-[17rem]">
+                                <h1 class="text-center">${element.Quantity}</h1>
+                            </div>
+                            <div class=" absolute left-[53rem] w-[17rem]">
+                                <h1 class="text-center">${element.Price}</h1>
+                            </div>
+                            <div class=" absolute left-[63.75rem] w-[17rem]">
+                                <h1 class="text-center">${element.Status}</h1>
+                            </div>
+                        </div>
+                    `;
+                }
+                RecentOrder.appendChild(RecentOrderElements);
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+
 
 async function fetchUnreadCount() {
         try {
@@ -336,41 +413,7 @@ Open.addEventListener('click', function(event){
         });
     }).catch(error => console.error('Error fetching data:', error));
 
-        fetch('/RecentOrder')
-        .then(response => response.json())
-        .then(data => {
-            const RecentOrder = document.getElementById('RecentOrder');
-            RecentOrder.innerHTML = '';
 
-            data.RecentOrder.forEach(element => {
-                const RecentOrderElements = document.createElement('div');
-                RecentOrderElements.innerHTML = `
-                    <div class="w-auto h-[50px] bg-Likha rounded-2xl flex justify-between relative items-center">
-                        <div class="absolute left-[3rem]">
-                            <h1>${element.TransactionID}</h1>
-                        </div>
-                        <div class="absolute left-[10rem] w-[22rem]">
-                            <h1 class="text-center">${element.ProductName}</h1>
-                        </div>
-                        <div class=" absolute left-[28.75rem] w-[17.5rem]">
-                            <h1 class="text-center">${element.CategoryName}</h1>
-                        </div>
-                        <div class=" absolute left-[41.5rem] w-[17rem]">
-                            <h1 class="text-center">${element.Quantity}</h1>
-                        </div>
-                        <div class=" absolute left-[53rem] w-[17rem]">
-                            <h1 class="text-center">${element.Price}</h1>
-                        </div>
-                        <div class=" absolute left-[63.75rem] w-[17rem]">
-                            <h1 class="text-center">${element.Status}</h1>
-                        </div>
-                    </div>
-                `;
-                RecentOrder.appendChild(RecentOrderElements);
-            });
-        }).catch(error => console.error('Error fetching data:', error));
-    const d = new Date();
-    console.log('Date is: ',d)
 </script>
 <script src="AuthorizationBE.js"></script>
 </html> 

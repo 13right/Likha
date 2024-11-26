@@ -2628,27 +2628,67 @@ app.put('/NewPassword', async (req, res) => {
 });
 
 
-  app.get('/RecentOrder', async (req, res) => {
-    const d = Date();
+app.get('/RecentOrder', async (req, res) => {
+    const d = new Date(); // Use new Date() instead of Date()
+    const Type = req.query.Type;
+
     try {
-      const result = await pool.request()
-      .input('Date',sql.DateTime,d)
-      .query(`
-            SELECT TransactionID, ProductName, CategoryName, Quantity, tbl_OrderItem.Price, [Status] FROM tbl_Order
-            INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
-            INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
-            INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
-            WHERE CONVERT(VARCHAR,Date,1) = CONVERT(VARCHAR,@Date,1)
-      `);
-  
-      const RecentOrder = result.recordsets[0]; 
-  
-      res.json({ RecentOrder });
+        // Query for tbl_Order
+        const orderResult = await pool.request()
+            .input('Date', sql.DateTime, d)
+            .query(`
+                SELECT TransactionID, ProductName, CategoryName, Quantity, tbl_OrderItem.Price, [Status], 'Order' AS Source 
+                FROM tbl_Order
+                INNER JOIN tbl_OrderItem ON tbl_OrderItem.OrderID = tbl_Order.OrderID
+                INNER JOIN tbl_Product ON tbl_Product.ProductID = tbl_OrderItem.ProductID
+                INNER JOIN tbl_Category ON tbl_Category.CategoryID = tbl_Product.CategoryID
+                WHERE CONVERT(VARCHAR, Date, 1) = CONVERT(VARCHAR, @Date, 1)
+            `);
+
+        // Query for custom necklaces, rings, and dresses
+        const customResult = await pool.request()
+            .input('Date', sql.DateTime, d)
+            .query(`
+                SELECT NecklaceID AS TransactionID,
+                       TotalPrice AS Price, Status, 'CustomNecklace' AS Source 
+                FROM tbl_CustomNecklace
+                WHERE CONVERT(VARCHAR, Date, 1) = CONVERT(VARCHAR, @Date, 1)
+
+                UNION ALL
+
+                SELECT RingID AS TransactionID, 
+                       TotalPrice AS Price, Status, 'CustomRing' AS Source 
+                FROM tbl_CustomRing
+                WHERE CONVERT(VARCHAR, Date, 1) = CONVERT(VARCHAR, @Date, 1)
+
+                UNION ALL
+
+                SELECT DressID AS TransactionID,
+                       TotalPrice AS Price, Status, 'CustomDress' AS Source 
+                FROM tbl_CustomDress
+                WHERE CONVERT(VARCHAR, Date, 1) = CONVERT(VARCHAR, @Date, 1)
+            `);
+
+        // Combine results into an object
+        const response = {
+            Orders: orderResult.recordset,  // Orders from tbl_Order
+            CustomItems: customResult.recordset  // Custom items from tbl_CustomNecklace, tbl_CustomRing, tbl_CustomDress
+        };
+        if(Type === 'Request'){
+            console.log(response.CustomItems);
+            res.json(response.CustomItems);
+        }
+        else if(Type ==='Order'){
+            console.log(response.Orders);
+            res.json(response.Orders);
+        }
+        
     } catch (error) {
-      console.error('Error fetching out-of-stock items:', error);
-      res.status(500).send('Internal Server Error');
+        console.error('Error fetching recent orders:', error);
+        res.status(500).send('Internal Server Error');
     }
-  });
+});
+
 
 //OrderList AdminView
 app.get('/Orders', async (req, res) => {

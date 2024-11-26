@@ -1585,8 +1585,16 @@ video {
   display: inline-flex;
 }
 
+.table{
+  display: table;
+}
+
 .grid{
   display: grid;
+}
+
+.contents{
+  display: contents;
 }
 
 .hidden{
@@ -2738,6 +2746,10 @@ video {
   flex-grow: 1;
 }
 
+.grow{
+  flex-grow: 1;
+}
+
 .origin-top-right{
   transform-origin: top right;
 }
@@ -2822,6 +2834,10 @@ video {
 
 .cursor-pointer{
   cursor: pointer;
+}
+
+.resize{
+  resize: both;
 }
 
 .appearance-none{
@@ -3482,11 +3498,6 @@ video {
 .bg-\[\#fff\]{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-hehe{
-  --tw-bg-opacity: 1;
-  background-color: rgb(146 254 194 / var(--tw-bg-opacity));
 }
 
 .bg-outline{
