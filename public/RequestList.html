@@ -122,11 +122,9 @@
                 <input type="text" id="SearchBar" class="p-2 w-[822px] h-[50px] rounded-lg bg-Likha focus:outline-none focus:ring-1 focus:ring-outline">
                 <img src="img/SEARCH BAR.png" class="w-[50px] absolute right-4 top-[1.35rem] " alt="">
             </div>
-            <div class="cursor-pointer relative flex px-6 space-x-9 items-center w-[174.4px] h-[60px] bg-sign outline outline-2 outline-outline rounded-lg">
+            <div id="Filter" class="cursor-pointer relative flex px-6 space-x-9 items-center w-[174.4px] h-[60px] bg-sign outline outline-2 outline-outline rounded-lg">
                 <div class="space-y-2 relative ">
-                    <hr class="w-[38.23px] border-[3px] border-[#00000080] relative">
-                    <hr class="w-[27.31px] border-[3px] border-[#00000080] relative left-[5px]">
-                    <hr class="w-[10.92px] border-[3px] border-[#00000080] relative left-[13px]">
+                    <img id="FilterImage" src="img/58.png" alt="">
                 </div>
                 <div>
                     <p class="font-Montserrat font-semibold text-[#00000080]">Filter</p>
@@ -218,16 +216,29 @@ Open.addEventListener('click', function(event){
     }
 });
 
+let isDescending = true;
 
-fetch('/Request')
-    .then(response => response.json())
-    .then(Items => {
-        console.log(Items);
-        Items.forEach(Item => {
-            const ItemList = document.getElementById('RequestList');
-            const ItemElement = document.createElement('div');
-            ItemElement.innerHTML = `
-            <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg">
+document.getElementById('Filter').addEventListener('click', () => {
+    isDescending = !isDescending;
+    
+    const filterImage = document.getElementById('FilterImage');
+    filterImage.src = isDescending ? 'img/58.png' : 'img/57.png';
+    
+    fetchRequest();
+});
+
+async function fetchRequest(query = '') {
+    const sortOrder = isDescending ? 'desc' : 'asc';
+    const response = await fetch(`/Request?search=${query}&sortOrder=${sortOrder}`);
+    const items = await response.json();
+
+    const itemList = document.getElementById('RequestList');
+    itemList.innerHTML = '';
+
+    items.forEach(Item => {
+        const itemElement = document.createElement('div');
+        itemElement.innerHTML = `
+                <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg">
                 <div id="ProdCon" class="w-[10rem] text-center item-center h-[2rem] absolute left-[1.25rem]">
                     <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.ProductID}</h2>
                 </div>
@@ -247,52 +258,99 @@ fetch('/Request')
                     <p class="font-Montserrat text-[#032D7E] font-semibold text-center text-sm" >View Details</p>
                 </div>
             </div>
-            `;
-            ItemList.appendChild(ItemElement);
+        `;
+        itemList.appendChild(itemElement);
+        
+        const statusDiv = itemElement.querySelector('#Status');
 
-            const statusDiv = ItemElement.querySelector('#Status');
+        async function checkStat(){
+            const Status = Item.Status;
 
-            async function checkStat(){
-                const Status = Item.Status;
-
-                if(Status === 'Requested'){
-                    statusDiv.classList.add('text-[#FFC107]'); 
-                }
-                else if(Status === 'Confirmed'){
-                    statusDiv.classList.add('text-[#228B22]'); 
-                }
-                else if(Status === 'On Process'){
-                    statusDiv.classList.add('text-[#00BFFF]'); 
-                }
-                else if(Status === 'Ready for Pick Up'){
-                    statusDiv.classList.add('text-[#032D7E]');
-                }
-                else if(Status === 'Declined'){
-                    statusDiv.classList.add('text-[#FF0000]'); 
-                }
-                else if(Status === 'Completed'){
-                    statusDiv.classList.add('text-[#008080]'); 
-                }
-                else if(Status === 'Paid '){
-                    statusDiv.classList.add('text-[#6A0DAD]'); 
-                }
+            if(Status === 'Requested'){
+                statusDiv.classList.add('text-[#FFC107]'); 
             }
+            else if(Status === 'Confirmed'){
+                statusDiv.classList.add('text-[#228B22]'); 
+            }
+            else if(Status === 'On Process'){
+                statusDiv.classList.add('text-[#00BFFF]'); 
+            }
+            else if(Status === 'Ready for Pick Up'){
+                statusDiv.classList.add('text-[#032D7E]');
+            }
+            else if(Status === 'Declined'){
+                statusDiv.classList.add('text-[#FF0000]'); 
+            }
+            else if(Status === 'Completed'){
+                statusDiv.classList.add('text-[#008080]'); 
+            }
+            else if(Status === 'Paid '){
+                statusDiv.classList.add('text-[#6A0DAD]'); 
+            }
+        }
 
-            checkStat();
+        checkStat();
 
-            const viewButton = ItemElement.querySelector('#View');
-            viewButton.addEventListener('click', () => {
+        const viewButton = itemElement.querySelector('#View');
+        viewButton.addEventListener('click', () => {
 
-                const transacValue = ItemElement.querySelector('#Transac').textContent;
-                console.log('RequestID: ',transacValue);
+            const transacValue = itemElement.querySelector('#Transac').textContent;
+            console.log('RequestID: ',transacValue);
 
-                sessionStorage.setItem('RequestID', transacValue);
+            sessionStorage.setItem('RequestID', transacValue);
 
-                window.location.href = 'RequestDetail.html';
-            });
+            window.location.href = 'RequestDetail.html';
         });
-    });
 
+    });
+}
+
+// async function fetchRequest(query = '') {
+//     console.log(`/Request?search=${query}`);
+//     fetch(`/Request?search=${query}`)
+//     .then(response => response.json())
+//     .then(Items => {
+//         console.log(Items);
+//         Items.forEach(Item => {
+//             const ItemList = document.getElementById('RequestList');
+//             const ItemElement = document.createElement('div');
+//             ItemElement.innerHTML = `
+//             <div class="mt-5 relative items-center flex w-auto h-[50px] bg-Likha rounded-lg">
+//                 <div id="ProdCon" class="w-[10rem] text-center item-center h-[2rem] absolute left-[1.25rem]">
+//                     <h2 id="Transac" class="relative text-[#6B707B] font-Inter font-extrabold text-[14px]">${Item.ProductID}</h2>
+//                 </div>
+//                 <div class="w-[10rem] text-center item-center h-[2rem] absolute left-[12.5rem]">
+//                     <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Dates}</h2>
+//                 </div>
+//                 <div class="w-[15rem] text-center item-center h-[2rem] absolute left-[22.5rem]">
+//                     <h2 class="relative font-Montserrat font-semibold text-[14px]">${Item.Name || 'N/A'}</h2>
+//                 </div>
+//                 <div class="w-[10rem] text-center item-center h-[2rem] absolute right-[30.75rem]">
+//                     <h2 class="relative font-Montserrat mx-auto font-semibold text-[14px]">${Item.TotalPrice}</h2>
+//                 </div>
+//                 <div class="absolute flex items-center justify-center right-[18.5rem] w-[90px] h-[25px] rounded-2xl">
+//                     <p id="Status" class="relative font-Montserrat font-semibold text-center text-xs truncate ">${Item.Status}</p>
+//                 </div>
+//                 <div id="View" class="absolute cursor-pointer right-[7rem] w-[100px] top-[0.75rem] h-[25px] rounded-2xl bg-[#032D7E80] outline outline-[3px] outline-[#032D7E]">
+//                     <p class="font-Montserrat text-[#032D7E] font-semibold text-center text-sm" >View Details</p>
+//                 </div>
+//             </div>
+//             `;
+//             ItemList.appendChild(ItemElement);
+
+           
+//         });
+//     });
+// }
+
+const searchBar = document.getElementById('SearchBar');
+
+searchBar.addEventListener('input', (event) => {
+const query = event.target.value;
+fetchRequest(query);
+});
+
+fetchRequest();
 
     // async function fetchUnreadCount() {
     //     try {

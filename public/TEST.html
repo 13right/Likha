@@ -365,7 +365,7 @@
         </div>
     </div>
   </div>
-  <div class="fixed bottom-16 right-20 hidden">
+  <div class="fixed bottom-16 right-20">
     <div class="relative">
       <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
            alt="Chat Logo" 
@@ -426,6 +426,14 @@
         </div>
   
     </div> 
+    <div class="absolute bottom-8 right-8 w-80 h-44 bg-black rounded-lg shadow-lg overflow-hidden border-2 border-gray-300">
+      <video id="videoPlayer" class="w-full h-full" src="img/Zappnott.mp4" controls autoplay muted></video>
+
+      <button id="closeBtn" class="absolute top-2 right-2">
+          <img src="img/ekis.png" alt="Close" class="w-3 h-3 cursor-pointer hover:opacity-80">
+      </button>
+
+  </div>
   </div>
 
     <script>
@@ -522,6 +530,14 @@
 
       document.body.appendChild(script);
 
+      const closeBtn = document.getElementById('closeBtn');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const miniPlayer = document.querySelector('.relative');
+
+        let isPlaying = false;
+        closeBtn.addEventListener('click', () => {
+            miniPlayer.style.display = 'none';
+        });
     </script>
     <script src="Nav.js"></script>
   </body>

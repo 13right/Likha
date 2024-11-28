@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Player</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="bg-gray-200 flex items-center justify-center h-screen">
+    <div class="relative w-80 h-44 bg-black rounded-lg shadow-lg overflow-hidden border-2 border-gray-300">
+        <!-- Video Player -->
+        <video autoplay="true" id="videoPlayer" class="w-full h-full" src="img/zappnott.mp4" controls autoplay muted></video>
+
+        <!-- Close Button -->
+        <button id="closeBtn" class="absolute top-2 right-2">
+            <img src="img/ekis.png" alt="Close" class="w-3 h-3 cursor-pointer hover:opacity-80">
+        </button>
+
+    </div>
+
+    <script>
+        const closeBtn = document.getElementById('closeBtn');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const miniPlayer = document.querySelector('.relative');
+
+        let isPlaying = false;
+        // Close Button
+        closeBtn.addEventListener('click', () => {
+            miniPlayer.style.display = 'none';
+        });
+
+        
+
+    </script>
+</body>
+</html>

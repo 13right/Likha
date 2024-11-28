@@ -701,6 +701,10 @@ video {
   left: 1.25rem;
 }
 
+.left-\[10\.25rem\]{
+  left: 10.25rem;
+}
+
 .left-\[10rem\]{
   left: 10rem;
 }
@@ -737,6 +741,10 @@ video {
   left: 2rem;
 }
 
+.left-\[31\.15rem\]{
+  left: 31.15rem;
+}
+
 .left-\[3rem\]{
   left: 3rem;
 }
@@ -751,6 +759,10 @@ video {
 
 .left-\[53rem\]{
   left: 53rem;
+}
+
+.left-\[56\.5rem\]{
+  left: 56.5rem;
 }
 
 .left-\[5px\]{
@@ -1021,76 +1033,8 @@ video {
   top: 8rem;
 }
 
-.left-\[8rem\]{
-  left: 8rem;
-}
-
-.left-\[10\.5rem\]{
-  left: 10.5rem;
-}
-
-.left-\[10\.25rem\]{
-  left: 10.25rem;
-}
-
-.left-\[33rem\]{
-  left: 33rem;
-}
-
-.left-\[30rem\]{
-  left: 30rem;
-}
-
-.left-\[31rem\]{
-  left: 31rem;
-}
-
-.left-\[31\.25rem\]{
-  left: 31.25rem;
-}
-
-.left-\[31\.15rem\]{
-  left: 31.15rem;
-}
-
-.left-\[58rem\]{
-  left: 58rem;
-}
-
-.left-\[56rem\]{
-  left: 56rem;
-}
-
-.left-\[57rem\]{
-  left: 57rem;
-}
-
-.left-\[56\.rem\]{
-  left: 56.rem;
-}
-
-.left-\[56\.15rem\]{
-  left: 56.15rem;
-}
-
-.left-\[56\.20rem\]{
-  left: 56.20rem;
-}
-
-.left-\[56\.25rem\]{
-  left: 56.25rem;
-}
-
-.left-\[56\.30rem\]{
-  left: 56.30rem;
-}
-
-.left-\[56\.35rem\]{
-  left: 56.35rem;
-}
-
-.left-\[56\.5rem\]{
-  left: 56.5rem;
+.bottom-8{
+  bottom: 2rem;
 }
 
 .-z-50{
@@ -1657,16 +1601,8 @@ video {
   display: inline-flex;
 }
 
-.table{
-  display: table;
-}
-
 .grid{
   display: grid;
-}
-
-.contents{
-  display: contents;
 }
 
 .hidden{
@@ -1715,6 +1651,10 @@ video {
 
 .h-4{
   height: 1rem;
+}
+
+.h-44{
+  height: 11rem;
 }
 
 .h-5{
@@ -2219,6 +2159,10 @@ video {
 
 .w-6{
   width: 1.5rem;
+}
+
+.w-80{
+  width: 20rem;
 }
 
 .w-\[0\.5rem\]{
@@ -2818,10 +2762,6 @@ video {
   flex-grow: 1;
 }
 
-.grow{
-  flex-grow: 1;
-}
-
 .origin-top-right{
   transform-origin: top right;
 }
@@ -2906,10 +2846,6 @@ video {
 
 .cursor-pointer{
   cursor: pointer;
-}
-
-.resize{
-  resize: both;
 }
 
 .appearance-none{
@@ -4516,6 +4452,10 @@ video {
 .hover\:text-outline:hover{
   --tw-text-opacity: 1;
   color: rgb(241 125 85 / var(--tw-text-opacity));
+}
+
+.hover\:opacity-80:hover{
+  opacity: 0.8;
 }
 
 .focus\:w-48:focus{

@@ -664,13 +664,33 @@ app.post('/Request/Ring', upload.single('image'),async (req, res) => {
     }
 });
 
-app.get('/Request', async (req, res) => {
+app.get('/Request', async   (req, res) => {
     try {
+        const search = req.query.search || '';
+        const sort = req.query.sortOrder  === 'desc' ? 'DESC' : 'ASC';
+        console.log(search, sort);
         const pool = await sql.connect(config);
 
-        const necklaceQuery = await pool.request().query('SELECT NecklaceID AS ProductID,Date,convert(varchar, Date, 0) AS Dates, TotalPrice, Name,tbl_CustomNecklace.Status FROM tbl_CustomNecklace INNER JOIN tbl_User ON tbl_CustomNecklace.UserID = tbl_User.UserID');
-        const ringQuery = await pool.request().query('SELECT RingID AS ProductID,Date,convert(varchar, Date, 0) AS Dates, TotalPrice, Name,tbl_CustomRing.Status FROM tbl_CustomRing INNER JOIN tbl_User ON tbl_CustomRing.UserID = tbl_User.UserID');
-        const dressQuery = await pool.request().query('SELECT DressID AS ProductID,Date,convert(varchar, Date, 0) AS Dates, TotalPrice, tbl_User.Name,tbl_CustomDress.Status FROM tbl_CustomDress INNER JOIN tbl_User ON tbl_CustomDress.UserID = tbl_User.UserID');
+        const necklaceQuery = await pool.request().query(`
+            SELECT NecklaceID AS ProductID, Date, convert(varchar, Date, 0) AS Dates, TotalPrice, Name, tbl_CustomNecklace.Status 
+            FROM tbl_CustomNecklace 
+            INNER JOIN tbl_User ON tbl_CustomNecklace.UserID = tbl_User.UserID
+            WHERE NecklaceID LIKE '%${search}%' OR tbl_User.Name LIKE '%${search}%' OR TotalPrice LIKE '%${search}%' OR tbl_CustomNecklace.Status LIKE '%${search}%'
+        `);
+
+        const ringQuery = await pool.request().query(`
+            SELECT RingID AS ProductID, Date, convert(varchar, Date, 0) AS Dates, TotalPrice, Name, tbl_CustomRing.Status 
+            FROM tbl_CustomRing 
+            INNER JOIN tbl_User ON tbl_CustomRing.UserID = tbl_User.UserID
+            WHERE RingID LIKE '%${search}%' OR tbl_User.Name LIKE '%${search}%' OR TotalPrice LIKE '%${search}%' OR tbl_CustomRing.Status LIKE '%${search}%'
+        `);
+
+        const dressQuery = await pool.request().query(`
+            SELECT DressID AS ProductID, Date, convert(varchar, Date, 0) AS Dates, TotalPrice, tbl_User.Name, tbl_CustomDress.Status 
+            FROM tbl_CustomDress 
+            INNER JOIN tbl_User ON tbl_CustomDress.UserID = tbl_User.UserID
+            WHERE DressID LIKE '%${search}%' OR tbl_User.Name LIKE '%${search}%' OR TotalPrice LIKE '%${search}%' OR tbl_CustomDress.Status LIKE '%${search}%'
+        `);
 
         const combinedResults = [
             ...necklaceQuery.recordset.map(item => ({ ...item, ProductType: 'Necklace' })),
@@ -678,7 +698,10 @@ app.get('/Request', async (req, res) => {
             ...dressQuery.recordset.map(item => ({ ...item, ProductType: 'Dress' }))
         ];
 
-        combinedResults.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+        combinedResults.sort((a, b) => sort === 'DESC' 
+            ? new Date(b.Date) - new Date(a.Date)
+            : new Date(a.Date) - new Date(b.Date));
+        
 
         res.json(combinedResults);
 
@@ -687,6 +710,7 @@ app.get('/Request', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
 
 //DITO
 app.get('/NeckLaceMaterials', async (req, res) => {
