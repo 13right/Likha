@@ -550,7 +550,32 @@
 
     closeBtn.addEventListener('click', () => {
         miniPlayer.style.display = 'none';
+        videoPlayer.remove();
     });
+
+
+    miniPlayer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            offsetX = e.clientX - miniPlayer.getBoundingClientRect().left;
+            offsetY = e.clientY - miniPlayer.getBoundingClientRect().top;
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                miniPlayer.style.left = `${x}px`;
+                miniPlayer.style.top = `${y}px`;
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
 
   </script>
 </html>
