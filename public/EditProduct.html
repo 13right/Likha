@@ -261,7 +261,7 @@ Open.addEventListener('click', function(event){
             document.getElementById('previewImage').src = data[0].imagePath;
         })
         .catch(error => console.error('Error fetching product:', error));
-        
+        sessionStorage.removeItem('editProduct');
     }
     else if(productsOutOfStock !==null){
         fetch(`/Edit/${encodeURIComponent(productsOutOfStock)}`)
@@ -282,7 +282,7 @@ Open.addEventListener('click', function(event){
             stockInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
             stockInput.classList.add('highlight');
         }
-        
+        sessionStorage.removeItem('OoS');
     }
 
     const Form = document.querySelector('#uploadForm')
@@ -332,8 +332,7 @@ Open.addEventListener('click', function(event){
     function AddOk(){
     document.getElementById('successfully').classList.add('hidden');
     window.location.href = document.referrer;
-    sessionStorage.removeItem('editProduct');
-    sessionStorage.removeItem('OoS');
+
 }
 </script>
 <style>

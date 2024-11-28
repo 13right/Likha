@@ -240,7 +240,7 @@ Open.addEventListener('click', function(event){
             //document.getElementById('previewImage').src = data[0].imagePath;
         })
         .catch(error => console.error('Error fetching product:', error));
-        
+        sessionStorage.removeItem('MaterialID');
     }
     else if(productsOutOfStock !== null){
         fetch(`/Edit-Material/${encodeURIComponent(productsOutOfStock)}`)
@@ -320,7 +320,7 @@ Open.addEventListener('click', function(event){
     function AddOk(){
     document.getElementById('successfully').classList.add('hidden');
     window.location.href = document.referrer;
-    sessionStorage.removeItem('MaterialID');
+
     }
 </script>
 <script src="AuthorizationBE.js"></script>
