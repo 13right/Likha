@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST VIEW</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <script>
+        // Set up scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Add lights
+        const light = new THREE.AmbientLight(0xffffff, 0.2); // Soft light
+        scene.add(light);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 10, 7.5); // Positioning the light
+        scene.add(directionalLight);
+
+        // Load FBX model
+        const loader = new THREE.FBXLoader();
+        loader.load(
+            'img/NeckRest.fbx', // Replace with your exported FBX file path
+            (object) => {
+                // Add the loaded model to the scene
+                scene.add(object);
+
+                // Adjust model's position to ensure it's on the ground (y=0)
+                object.scale.set(0.1, 0.1, 0.1); // Adjust scale as needed
+                object.position.set(0, 0, 0); // Place object on the ground
+                console.log('FBX loaded successfully:', object);
+            },
+            (xhr) => {
+                // Progress callback
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+            },
+            (error) => {
+                // Error callback
+                console.error('Error loading FBX:', error);
+            }
+        );
+
+        // Create room (walls, floor, and ceiling)
+        const roomSize = 400; // Size of the room
+
+        // Floor
+        const floorGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+        const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.5 });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2; // Rotate to make it horizontal
+        floor.position.y = -0.1; // Ensure it's just below the object
+        scene.add(floor);
+
+        // Ceiling
+        const ceilingGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+        const ceilingMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.5 });
+        const ceiling = new THREE.Mesh(ceilingGeometry, ceilingMaterial);
+        ceiling.rotation.x = Math.PI / 2; // Rotate to make it horizontal
+        ceiling.position.y = roomSize / 2; // Place it at the top of the room
+        scene.add(ceiling);
+
+        // Walls (front, back, left, and right)
+        const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.7 });
+        const wallHeight = roomSize;
+
+        // Front wall
+        const frontWallGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+        const frontWall = new THREE.Mesh(frontWallGeometry, wallMaterial);
+        frontWall.position.z = roomSize / 2;
+        frontWall.rotation.y = Math.PI; // Rotate to face the camera
+        scene.add(frontWall);
+
+        // Back wall
+        const backWallGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+        const backWall = new THREE.Mesh(backWallGeometry, wallMaterial);
+        backWall.position.z = -roomSize / 2;
+        scene.add(backWall);
+
+        // Left wall
+        const leftWallGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+        const leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial);
+        leftWall.position.x = -roomSize / 2;
+        leftWall.rotation.y = Math.PI / 2; // Rotate to face the camera
+        scene.add(leftWall);
+
+        // Right wall
+        const rightWallGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+        const rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial);
+        rightWall.position.x = roomSize / 2;
+        rightWall.rotation.y = -Math.PI / 2; // Rotate to face the camera
+        scene.add(rightWall);
+
+        // Set up the camera position
+        camera.position.set(1, 60, 105); // Positioned to look down at the object
+        camera.lookAt(0, 0, 0); // Camera looks at the center of the scene (the object)
+
+        // Add OrbitControls to enable 360° rotation
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; // Smooth camera movement
+        controls.dampingFactor = 0.25; // Adjust smoothness
+        controls.screenSpacePanning = false; // Prevents vertical panning
+        controls.maxPolarAngle = Math.PI / 2; // Limit vertical rotation to prevent flipping
+        controls.target.set(0, 0, 0); // The camera will always look at the center (the object)
+
+        // Render loop
+        const animate = function () {
+            requestAnimationFrame(animate);
+            controls.update(); // Update controls on every frame
+            renderer.render(scene, camera);
+        };
+
+        animate();
+    </script>
+</body>
+</html>

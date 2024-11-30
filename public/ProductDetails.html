@@ -115,6 +115,7 @@
     background: #f7f8ea;
     border-radius: 60px; 
     }
+
     @keyframes spinFade {
             0% {
                 transform: rotate(0deg);
@@ -174,9 +175,52 @@
         opacity: 1;
         padding-left: 2.5rem; /* Space for the icon on the left */
     }
+    @media (max-width: 768px) {
+        .search-bar.expanded {
+            width: 8rem; 
+            padding-left: 1.5rem;
+        }
+    }
+    @media (max-width: 375px) {
+        .search-bar.expanded {
+            width: 7rem; 
+            padding-left: 1.5rem;
+        }
+    }
 
     #search-icon.expanded {
         transform: translateX(-9rem); /* Move the icon to the left inside the search bar */
+    }
+    @media (max-width: 768px) {
+        #search-icon.expanded {
+        transform: translateX(-5.5rem); /* Move the icon to the left inside the search bar */
+    }
+    }
+    @media (max-width: 375px) {
+        #search-icon.expanded {
+        transform: translateX(-4.5rem); /* Move the icon to the left inside the search bar */
+    }
+    }
+
+    @media (max-width: 768px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for mobile */
+        height: 1.5rem; /* Smaller size for mobile */
+    }
+    }
+
+    /* Media query for very small screens (e.g., phones in portrait mode) */
+    @media (max-width: 480px) {
+        lord-icon {
+            width: 1.25rem;  /* Even smaller size for very small screens */
+            height: 1.25rem; /* Even smaller size for very small screens */
+        }
+    }
+    @media (max-width: 375px) {
+    lord-icon {
+        width: 1.5rem;  /* Smaller size for 375px screen width */
+        height: 1.5rem; /* Smaller size for 375px screen width */
+    }
     }
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
@@ -184,7 +228,7 @@
     <div class="bg-Likha h-[5rem] w-full shadow-md p-2.5 fixed z-50" >
         <nav class="md:flex md:items-center">   
             <div >
-                <img src="img/ZappnottLogo.png" alt="" class="h-[4rem] ml-[2rem] cursor-pointer md:cursor-default" onclick="Menu(this)" name = "menu" id="menubutton">
+                <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogo_nprgsk.png" alt="" class="h-[4rem] ml-[1rem] cursor-pointer md:cursor-default md:ml-[2rem]" onclick="Menu(this)" name = "menu" id="menubutton">
             </div>
             <div class="">
                 <ul class="md:flex md:space-x-14 md:items-center md:z-auto md:static absolute bg-Likha w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in md:ml-24">
@@ -221,7 +265,7 @@
                                 });
                               </script>
                               
-                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="absolute drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1] py-2 right-0 translate-x-44 z-10 mt-2 w-56 origin-top-right rounded-md bg-Likha hidden md:translate-x-0" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                               <div class="py-1" role="none">
                                 <a href="AllCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">All</a>
                                 <a href="DressCategory.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Dress</a>
@@ -239,12 +283,12 @@
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="Index.html#About" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="#About" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             ABOUT
                         </a>
                     </li>
                     <li class="my-6 md:my-0">
-                        <a href="Index.html#footer" class="smooth-scroll font-Montserrat text-[12px] font-semibold hover:text-outline duration-300">
+                        <a href="#footer" class="font-Montserrat text-[12px]  font-semibold hover:text-outline duration-300">
                             CONTACT
                         </a>
                     </li>
@@ -260,7 +304,7 @@
                         src="https://cdn.lordicon.com/kkvxgpti.json"
                         trigger="hover"
                         class="absolute right-0 transition-all duration-500 ease-in-out cursor-pointer"
-                        style="width:1.75rem;height:1.75rem;margin-right: 0.75rem;">
+                        style="margin-right: 0.75rem;">
                     </lord-icon>
                     <div id="SearchCon" class="bg-Likha h-auto w-[15rem] absolute top-12 rounded-3xl hidden shadow-2xl">
                         
@@ -273,7 +317,7 @@
                         src="https://cdn.lordicon.com/kthelypq.json"
                         trigger="hover"
                         colors="primary:#000000"
-                        style="width:1.75rem;height:1.75rem">
+                        style="">
                     </lord-icon>
                 </div>
 
@@ -282,7 +326,7 @@
                         id="NotifIcon"
                         src="https://cdn.lordicon.com/vspbqszr.json"
                         trigger="hover"
-                        style="width:1.75rem;height:1.75rem;">
+                        style="">
                     </lord-icon>
                     <span id="notif-badge" class="animate-ping absolute top-[0.70rem] right-[12px] hidden items-center justify-center h-[8px] w-[8px] leading-none bg-outline rounded-full "></span>
                     <span id="notifBadge" class="absolute top-3 right-[13px] items-center hidden justify-center h-[6px] w-[6px] leading-none bg-outline rounded-full"></span>
@@ -295,72 +339,92 @@
                         trigger="hover"
                         stroke="bold"
                         colors="primary:#121331,secondary:#121331"
-                        style="width:2rem;height:2rem;">
+                        style="">
                     </lord-icon>
                 </div>
             </div>
+            
         </nav>
     </div>
 
     <div class="bg-Likha min-h-screen pb-8">
-        <div id="main-container" class="pt-[6.5rem] px-[8rem] space-y-16">
-            <img src="img/back.png" alt="" class="w-[2rem] aspect-square absolute cursor-pointer" onclick="history.back()">
+        <div id="main-container" class="pt-[6.5rem] md:px-[8rem] space-y-16">
+            <img src="img/back.png" alt="" class="w-[2rem] aspect-square absolute cursor-pointer left-[18px] md:left-0 md:relative" onclick="history.back()">
             <div id="product"></div>
-
-            <div class="bg-[#D8E2C7] w-full h-auto rounded-md pb-8">
-                <h1 class="font-Montserrat font-semibold text-[24px] relative left-[6rem] top-[1rem]">Customers Reviews</h1>
+            
+            <div class="bg-[#D8E2C7] bottom-3 w-full h-auto rounded-md pb-8 mx-auto">
+                <h1 class="font-Montserrat font-semibold text-[24px] relative left-4 md:left-[6rem] top-[1rem]">Customers Reviews</h1>
                 <div class="ml-[8rem] mt-[1rem] flex items-center space-x-5">
                     <p id="Ratings" class="font-Montserrat font-semibold text-[32px]">5.0</p>
                     <div id="star-rating" class="flex items-center"></div>
                     <div id="NumRev">(0 Review(s))</div>
                 </div>
-                <div class="w-[30rem] h-auto ml-[8rem] mt-[1rem] space-y-4">
+                <!-- <div class="w-[30rem] h-auto ml-[8rem] mt-[1rem] space-y-4">
                     <div id="Feedback-content">
                         
                     </div>
+                </div>  -->
+            </div>
+            
+        </div>
+    </div> 
+     <div class="fixed hidden right-0 top-0 h-full w-[570px] bg-Likha z-[50] shadow-2xl p-6" id="Cartel">
+            <div>
+                <div class="flex items-center justify-between">
+                    <h1 class="font-Montagu font-semibold text-[24px] ml-3 mb-4">Cart Product</h1>
+                    <img src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/q_auto/v1727603913/ekis_f7urxc.png" alt="" class="w-[20px] h-[20px] relative mb-5 mr-5 cursor-pointer" id="CloseCart">
+                </div>
+                <hr class="border-outline border-[1.5px] w-auto">
+    
+            </div>
+            <div id="Product-Cart" class="overflow-auto h-[70vh] Product-Cartt"></div>
+            <div class="my-3 flex relative">
+                <h2 class="relative left-6 font-Montserrat font-extrabold text-[16px]">Total: </h2>
+                <p class="absolute right-6 font-Montserrat font-semibold text-[16px]" id="totalPriceDisplay">₱ 0.00</p>
+            </div>
+            <hr class="border-1 border-outline w-auto ">
+            <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
+        </div>
+        <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
+            <div class="shadow-sm">
+                <p class="my-2 ml-2 font-Inter">Notification</p>
+                <hr class="border-1 border-[#D8BC8C80] w-[28.5rem] mb-1">
+            </div>
+            <div id="NotifContents" class="overflow-y-auto  h-[20rem]">
+                <div id="NotifContent" class="relative space-y-5 ">
+                
                 </div>
             </div>
-        </div>  
-    </div> 
-    <div id="CartPopup" class="fixed top-[20rem] z-30 items-center right-[37%] bg-[#F8ECDC] outline outline-4 outline-outline w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform translate-y-4 transition-all duration-300">
-        <div class="">
-            <img src="img/Carts.png" class="w-[100px] ml-[34%]" alt="">
-            <div class="flex flex-col space-y-1 items-center">
-                <span>Added to Cart</span>
-                <span>Sucessfully!</span>
+        </div>
+        <div class="fixed bottom-16 right-3 md:right-20 hidden">
+            <div class="relative">
+              <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
+                   alt="Chat Logo" 
+                   class="h-[4rem] cursor-pointer z-40">
+              <span id="Chat-Badge" class="absolute top-3 right-3 w-3 h-3 bg-outline text-white text-xs font-bold rounded-full px-1 z-50 transform translate-x-1/2 -translate-y-1/2 hidden">
+              </span>
             </div>
         </div>
+        <div id="ChatContent" class="hidden fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
+            <div class="shadow-sm">
+                <div class="flex">
+                    <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
+                    <p id="ChatClose" class="absolute right-5 my-2 cursor-pointer font-Inter font-extrabold">X</p>
+                </div>
+                <hr class="border-1 border-[#D8BC8C80] w-[35rem]">
+                <div class="m-4">
+                    <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
+                    </div>
+                    <form autocomplete="off" id="message-form" class="mt-4 flex">
+                        <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
+                        <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+       
         
-        
-        <button id="ok" onclick="CartOk()" class="ml-[38%] mt-3 bg-outline  text-[#FFF] rounded-3xl w-20">OK</button>
-    </div> 
-    <div class="fixed hidden right-0 top-0 h-full w-[570px] bg-Likha z-[50] shadow-2xl p-6" id="Cartel">
-        <div>
-            <div class="flex items-center justify-between">
-                <h1 class="font-Montagu font-semibold text-[24px] ml-3 mb-4">Cart Product</h1>
-                <img src="img/ekis.png" alt="" class="w-[20px] h-[20px] relative mb-5 mr-5 cursor-pointer" id="CloseCart">
-            </div>
-            <hr class="border-outline border-[1.5px] w-auto">
-
-        </div>
-        <div id="Product-Cart" class="overflow-auto h-[70vh] Product-Cartt"></div>
-        <div class="my-3 flex relative">
-            <h2 class="relative left-6 font-Montserrat font-extrabold text-[16px]">Total: </h2>
-            <p class="absolute right-6 font-Montserrat font-semibold text-[16px]" id="totalPriceDisplay">₱ 0.00</p>
-        </div>
-        <hr class="border-1 border-outline w-auto ">
-        <button id="PlaceOrder" class="bg-outline  font-Montserrat font-semibold w-[500px] h-[61.84px] rounded-xl mx-4 mt-[2rem]">CHECKOUT</button>
-    </div>
-    <div id="Notif" class="fixed pl-3 py-3 h-[24rem] w-[30rem] hidden right-[8rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha ">
-        <div class="shadow-sm">
-            <p class="my-2 ml-2 font-Inter">Notification</p>
-            <hr class="border-1 border-[#D8BC8C80] w-[28.5rem] mb-1">
-        </div>
-        <div id="NotifContents" class="overflow-y-auto  h-[20rem]">
-            <div id="NotifContent" class="relative space-y-5 ">
-            
-            </div>
-        </div>
     </div>
     <div id="ProfileMenu" class="fixed hidden flex-col h-[300px] w-[300px] right-[11rem] top-[3.5rem] z-50 drop-shadow-lg shadow-2xl shadow-[#2b2a2aa1]  rounded-lg bg-Likha flex justify-center">
         <div class="flex flex-col items-center">
@@ -373,7 +437,7 @@
         </div>
         <div class="py-1 flex" ></div>
             <div class="flex-col flex relative">
-                <a href="Profile.html" class=" pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
+                <a href="Profile.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-0">Account</a>
                 <a href="Orders.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-1">Orders</a>
                 <a href="Designs.html" class="pl-8 font-Montserrat font-semibold text-[14px] px-4 py-2 text-sm text-gray-700 hover:bg-sign rounded-2xl cursor-pointer transition ease-in-out duration-200 mx-2" role="menuitem" tabindex="-1" id="menu-item-2">Design</a>
                 <hr class="border-outline border-[1.5px] w-[250px] mx-auto relative my-2">
@@ -395,33 +459,16 @@
 
         </div> 
     </div>
-    <div class="fixed bottom-16 right-20">
-        <div class="relative">
-          <img id="ChatLogo" src="https://res.cloudinary.com/db5bsftqx/image/upload/f_auto/v1727603943/ZappnottLogoOnly_yqte5u.png" 
-               alt="Chat Logo" 
-               class="h-[4rem] cursor-pointer z-40">
-          <span id="Chat-Badge" class="absolute top-3 right-3 w-3 h-3 bg-outline text-white text-xs font-bold rounded-full px-1 z-50 transform translate-x-1/2 -translate-y-1/2 hidden">
-          </span>
-        </div>
-    </div>
-    <div id="ChatContent" class="hidden  fixed h-[35rem] w-[25rem] rounded-xl bottom-16 right-20 bg-Likha z-40 shadow-2xl">
-        <div class="shadow-sm">
-            <div class="flex">
-                <p class="my-2 font-Inter font-semibold ml-6">Zappnott</p>
-                <p id="ChatClose" class="absolute right-5 my-2 cursor-pointer font-Inter font-extrabold">X</p>
+    <div id="CartPopup" class="fixed top-[20rem] z-30 items-center right-[37%] bg-[#F8ECDC] outline outline-4 outline-outline w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform translate-y-4 transition-all duration-300">
+        <div class="">
+            <img src="img/Carts.png" class="w-[100px] ml-[34%]" alt="">
+            <div class="flex flex-col space-y-1 items-center">
+                <span>Added to Cart</span>
+                <span>Sucessfully!</span>
             </div>
-            <hr class="border-1 border-[#D8BC8C80] w-[35rem]">
-            <div class="m-4">
-                <div id="chat-box" class="border p-4 h-[17rem] overflow-y-scroll bg-gray-50 rounded-lg">
-                </div>
-                <form autocomplete="off" id="message-form" class="mt-4 flex">
-                    <input autocomplete="off" type="text" id="message-input" class="border p-2 flex-grow rounded-l-lg" placeholder="Type a message...">
-                    <button type="submit" class="shadow-inner text-white p-2 rounded-r-lg">Send</button>
-                </form>
-            </div>
-            
         </div>
-    </div>
+        <button id="ok" onclick="CartOk()" class="ml-[38%] mt-3 bg-outline  text-[#FFF] rounded-3xl w-20">OK</button>
+    </div> 
 </body>
 <script>
 
@@ -436,7 +483,7 @@ function generateStars(rating) {
 
     for (let i = 0; i < fullStars; i++) {
         starContainer.innerHTML += `
-            <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
+            <svg class=" w-[1.5rem] h-[1.5rem] md:w-[4rem] md:h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
             </svg>
         `;
@@ -444,7 +491,7 @@ function generateStars(rating) {
 
     if (halfStars) {
         starContainer.innerHTML += `
-            <div class="relative w-[4rem] h-[4rem] ms-1">
+            <div class="relative w-[1.5rem] h-[1.5rem] md:w-[4rem] md:h-[4rem] ms-1">
                 <svg class="absolute top-0 left-0" xmlns="http://www.w3.org/2000/svg" fill="#FFD700" viewBox="0 0 22 20">
                     <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                 </svg>
@@ -457,7 +504,7 @@ function generateStars(rating) {
 
     for (let i = 0; i < emptyStars; i++) {
         starContainer.innerHTML += `
-            <svg class="w-[4rem] h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20">
+            <svg class="w-[1.5rem] h-[1.5rem] md:w-[4rem] md:h-[4rem] ms-1" xmlns="http://www.w3.org/2000/svg" fill="#6B707B80" viewBox="0 0 22 20">
                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
             </svg>
         `;
@@ -485,39 +532,44 @@ function generateStars(rating) {
                 const productElement = document.createElement('div');
                 document.title = `${product.productName} - Zappnott`;
                 productElement.innerHTML = `
-                    <div class=" w-full h-[35rem] flex">
-                    <div class="w-[551px] h-[547px] relative rounded-lg flex">
-                        <img id="ProdImage" src="${product.imagePath}" alt="" class="relative rounded-[25px] w-[551px] h-[547px] object-fill">
+                <div class=" w-full h-[35rem] flex-wrap flex justify-center relative">
+                    <div class="w-[301px] h-[297px] md:w-[551px] md:h-[547px] relative rounded-lg flex">
+                        <img id="ProdImage" src="${product.imagePath}" alt="" class="relative rounded-[25px] w-[301px] h-[297px] md:w-[551px] md:h-[547px] object-fill">
                         <div class="hidden w-[551px] h-[547px] bg-[#333333] bg-opacity-50 absolute rounded-lg" id="OutofStock">
                             <div class="w-[100px] h-[100px] bg-[#000000] bg-opacity-70 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-100 rounded-full flex items-center justify-center text-[#FFFFFF]">Out of Stock</div>
                         </div> 
                     </div>
 
-                <div class="flex  w-[42rem] h-[547px] relative justify-center ">
-                    <div class="w-[400px] h-[113px] relative">
-                        <div class="w-[32rem] h-[auto] relative overflow-hidden">
-                            <h1 id="prodName" class="font-Montagu font-semibold relative" style="font-size: clamp(26px, 3vw, 40px);">${product.productName}</h1>
-                        </div>
-                        
-                        <p class="font-Montserrat font-semibold text-[18px] ml-[2rem] mt-[1rem] mb-[1rem]"><span>₱ <span>${product.productPrice}</p>
-                        <div class=" w-[450px] h-auto p-2 ml-[2rem]">
-                            <div class="flex-col space-y-4">
-                                <h2 class="font-Montserrat font-normal text-[14px]">Description:<span class="ml-1">${product.description}</h2>
+                    <div class="flex w-[42rem] h-full relative justify-center">
+                        <div class=" w-full md:w-[400px] h-[113px] relative">
+                            <div class="w-full md:w-[32rem] h-[auto] relative overflow-hidden">
+                                <h1 id="prodName" class="ml-[2rem] md:ml-0 mt-3 md:mt-0 font-Montagu font-semibold relative" style="font-size: clamp(26px, 3vw, 40px);">${product.productName}</h1>
                             </div>
-                        </div>
-                        <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg ml-[5.5rem] mt-[2rem] mb-5 px-5">
-                            <button id="mo" class="font-bold">-</button>
-                            <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" onKeyDown="return false" type="number" value="1" min="1" max="1">
-                            <button id="ao" class="font-bold">+</button>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <button class="bg-[#F07C54] w-[245.42px] h-[61px] rounded-lg px-4 py-2 bg-green-500 text-[#fff] font-Montserrat ml-8" id="AddToCart">Add to cart</button>
+                            
+                            <p class="font-Montserrat font-semibold text-[18px] ml-[2rem] mt-[1rem] mb-[1rem]"><span>₱ <span>${product.productPrice}</p>
+                            <div class="w-[310px] md:w-[450px] h-auto p-2 ml-[2rem]">
+                                <div class="flex-col space-y-4">
+                                    <h2 class="font-Montserrat font-normal text-[14px]">Description:<span class="ml-1">${product.description}</span></h2>
+                                </div>
+                            </div>
+                            <div class="bg-hehe h-[5rem] w-full bottom-0 fixed md:relative">
+                                <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg ml-6 md:ml-[5.5rem] mt-[2rem] mb-3 md:mb-5 px-0 md:px-5 fixed bottom-0 left-0 md:relative z-5">
+                                    <button id="mo" class="font-bold">-</button>
+                                    <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" onKeyDown="return false" type="number" value="1" min="1" max="1">
+                                    <button id="ao" class="font-bold">+</button>
+                                </div>
+                                <div class="items-center space-x-4 fixed bottom-0 right-0 md:relative z-5">
+                                    <button class="bg-[#F07C54] w-[170px] md:w-[245.42px] h-[61px] rounded-tl-lg rounded-bl-lg rounded-tr-lg md:rounded-lg px-4 py-2 bg-green-500 text-[#fff] font-Montserrat ml-8" id="AddToCart">Add to cart</button>
+                                </div>
+                            </div>
+  
+                            
                         </div>
                         
                     </div>
-                    
+
                 </div>
-            </div>
+
                 `;
                 productList.appendChild(productElement);
 

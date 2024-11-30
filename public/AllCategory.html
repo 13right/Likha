@@ -196,12 +196,7 @@
         transform: translateX(-4.5rem); /* Move the icon to the left inside the search bar */
     }
     }
-    .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2; /* Limit to 2 lines */
-    overflow: hidden;
-    }
+
     @media (max-width: 768px) {
     lord-icon {
         width: 1.5rem;  /* Smaller size for mobile */
@@ -221,6 +216,12 @@
         width: 1.5rem;  /* Smaller size for 375px screen width */
         height: 1.5rem; /* Smaller size for 375px screen width */
     }
+    }
+    .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    overflow: hidden;
     }
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
