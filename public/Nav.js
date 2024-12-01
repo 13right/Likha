@@ -240,32 +240,32 @@ async function fetchCart() {
             CartElement.dataset.index = index;  
             CartElement.innerHTML = `
             <div class="mt-6">
-                <div class="flex items-center space-x-10 mb-6 ml-5 relative ">
-                    <input type="checkbox" class="appearance-none w-[39.36px] h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value=${productCart.productPrice}></input>
-                    <div id="CartPhoto" class="w-[120px] h-[120px] relative flex cursor-pointer">
-                        <img src="${productCart.productImage}" alt="Product Image" class="w-[120px] h-[120px] object-fill rounded-lg">
-                        <div class="hidden w-[106px] h-[120px] bg-[#333333] bg-opacity-50 absolute rounded-lg" id="OutofStockCart">
-                            <div class="w-[50px] h-[50px] bg-[#000000] bg-opacity-70 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-100 rounded-full flex items-center justify-center">
+                <div class="flex items-center space-x-4 md:space-x-10 mb-6 ml-5 relative ">
+                    <input type="checkbox" class="appearance-none w-[21px] h-[21px] md:w-[39.36px] md:h-[31.33px] bg-[#F7F8EA] outline outline-2 outline-outline rounded-md" value=${productCart.productPrice}></input>
+                    <div id="CartPhoto" class="w-[60px] h-[60px] md:w-[120px] md:h-[120px] relative flex cursor-pointer">
+                        <img src="${productCart.productImage}" alt="Product Image" class="w-[60px] h-[60px] md:w-[120px] md:h-[120px] object-fill rounded-lg">
+                        <div class="hidden w-[60px] h-[60px] md:w-[106px] md:h-[120px] bg-[#333333] bg-opacity-50 absolute rounded-lg" id="OutofStockCart">
+                            <div class="h-[25px] w-[25px] md:w-[50px] md:h-[50px] bg-[#000000] bg-opacity-70 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-100 rounded-full flex items-center justify-center">
                                 <p class="font-Inter text-[8px] text-[#ffff]">
                                 Out of Stock
                                 </p>
                             </div>
                         </div> 
                     </div>
-                    <div class="h-auto w-[20rem]">
+                    <div class="h-auto w-[8rem] md:w-[20rem]">
                         <div id="NameAndPrice" class="cursor-pointer">
-                            <h1 class="font-Montagu font-semibold text-[24px]">${productCart.productName}</h1>
-                            <h2 class="font-Montserrat font-semibold text-[14px] mt-2">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                            <h1 class="font-Montagu font-semibold text-[15px] md:text-[24px]">${productCart.productName}</h1>
+                            <h2 class="font-Montserrat font-semibold text-[10px] md:text-[14px] mt-2">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
                         </div>                    
 
-                        <div class="flex w-[120px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3 px-5">
+                        <div class="flex w-[90px] md:w-[120px] h-[30px] md:h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3 px-5">
                             <button class="MOcart">-</button>
-                            <input style="background-color: transparent;" id="Quantity" class="text-center w-[138px] h-[40px] p-1 font-bold" type="number" onKeyDown="return false" value=${productCart.productQuantity} min="1" max=${productCart.Stock}>
+                            <input style="background-color: transparent;" id="Quantity" class="text-center w-[70px] h-[30px] p-1 font-bold" type="number" onKeyDown="return false" value=${productCart.productQuantity} min="1" max=${productCart.Stock}>
                             <button class="AOcart">+</button>
                         </div>
                         
                     </div>
-                    <img id="RemoveCart" src="img/ekis.png" alt="" class="absolute w-4 h-4 right-8 top-[-5px] cursor-pointer">
+                    <img id="RemoveCart" src="img/ekis.png" alt="" class="absolute w-4 h-4 right-4 md:right-8 top-[-12px] cursor-pointer">
                 </div>
                 <hr class="border-1 border-outline w-auto ">
                         <div id="DeleteModal" class="fixed top-1/2 z-30 items-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform transition-all duration-300">
@@ -597,12 +597,12 @@ function renderNotifications(products) {
                         <div class="notifdot bg-outline hidden w-2 h-2 rounded-full"></div>
                     </div>
                     <div class="justify-center flex flex-col pl-5">
-                        <h1 class="font-Inter text-sm">${product.Content}</h1>
-                        <h1 class="font-Inter text-sm">${product.Date}</h1>
+                        <h1 class="font-Inter text-[10px] md:text-sm">${product.Content}</h1>
+                        <h1 class="font-Inter text-[10px] md:text-sm">${product.Date}</h1>
                     </div>
                 </div>
                 <div class=" h-[7rem] w-[8rem] flex flex-col justify-center">
-                    <img src="${product.productImage}" alt="${product.productName}" class="w-auto h-auto relative">
+                    <img src="${product.productImage}" alt="${product.productName}" class="w-auto h-auto relative rounded-md">
                 </div>
             </div>
         `;

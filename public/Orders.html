@@ -322,7 +322,7 @@
     <div class="bg-Likha min-h-screen pt-[7rem]">
         <div id="main-container" class="flex flex-col space-y-12">
             <p class="font-Montagu font-extrabold text-4xl text-center">Orders</p>
-            <div class="flex justify-evenly mx-24 space-x-[1rem]">
+            <div class="md:flex justify-evenly mx-24 space-x-[1rem] hidden">
                 <button id="ALL" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">ALL</button>
                 <button id="ORDERED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">ORDERED</button>
                 <button id="CONFIRMED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CONFIRMED</button>
@@ -331,12 +331,24 @@
                 <button id="COMPLETED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">COMPLETED</button>
                 <button id="CANCELLED" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">CANCELLED</button>
             </div>
-            <hr class="w-[1300px] border-1 border-outline mx-auto">
+            <div class="w-full flex justify-end">
+                <select id="Order" class="md:hidden relative mr-6 border-2 left-0 border-[#F07C54] bg-[#F07C541A] w-[100px] h-[30px] md:w-[179.4px] md:h-[60px] text-[16px] text-[#00000080] font-semibold py-1 px-3 rounded-lg focus:outline-none focus:border-orange-400">
+                    <option value="">All</option>
+                    <option value="Ordered">Ordered</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Order Packed">Order Packed</option>
+                    <option value="Ready to Pick Up">To Pick Up</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <hr class="w-[350px] md:w-[1300px] border-1 border-outline mx-auto">
             <div id="Order-container" class="flex flex-col space-y-11 mx-auto">
                 
             </div>
             <div id="Empty" class="relative left-1/2 -translate-x-1/2 flex flex-col items-center hidden">
-                <img src="img/empty.png" alt="" class="h-[22rem] w-[22rem]">
+                <img src="img/empty.png" alt="" class="w-[11rem] h-[11rem] md:h-[22rem] md:w-[22rem]">
                 <h1 class="font-Inter font-bold mt-4 text-[32px] text-[#6B707B]">EMPTY</h1>
             </div>
         </div>
@@ -519,6 +531,276 @@
             fetchOrders('Cancelled');
             //scrollToShop(); 
         });
+
+        document.getElementById('Order').addEventListener('change',function(){
+            const order = this.value;
+            fetch(`/Order?Status=${order}`)
+                .then(response => response.json())
+                .then(Items => {
+                    const ItemList = document.getElementById('Order-container');
+                    ItemList.innerHTML = '';
+                    if(Items.length === 0){
+                        document.getElementById('Order-container').classList.add('hidden');
+                        document.getElementById('Empty').classList.remove('hidden');
+                    }
+                    else{
+                        document.getElementById('Order-container').classList.remove('hidden');
+                        document.getElementById('Empty').classList.add('hidden');
+                    console.log(Items);
+                    Items.forEach(Item => {
+                        const ItemElement = document.createElement('div');
+                        ItemElement.innerHTML = `
+                        <div id="Order-${Item.TransactionID}"class="ml-[1rem] pb-6 md:pb-0 pt-9 px-[2rem] bg-[#F07C541A] w-[20rem] md:w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
+                            <div class="ml-[0.21rem] md:ml-[4rem] w-[16rem] md:w-[68rem] relative flex items-center justify-between">
+                                <div>
+                                    <h1 class="font-extrabold font-Inter text-[#6B707B] text-[14px] md:text-[19px]">Order ID: ${Item.TransactionID}</h1>
+                                    <h2 class="font-Inter font-medium text-[12px] md:text-[17px]">Order Date: <span>${Item.Date}</span></h2>
+                                </div>
+                                <div>
+                                    <button id="Cancel" class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
+                                </div>
+                                <div id="Cancelled" class="font-Montserrat font-semibold text-xl absolute text-[#DD0707] right-[1rem] hidden">Cancelled</div>
+                                <div id="Com" class="flex absolute hidden right-[1rem]">
+                                    <div id="Rate-${Item.OrderID}" class="cursor-pointer text-[#EFD02C] font-Montserrat mr-[4px] relative font-semibold text-xl relative">Rate</div>
+                                    <div class="border-l-[3px] border-[#000000] w-[7px] h-[25px] mx-[9.25px] relative"></div>
+                                <div id="Completed" class="font-Montserrat relative font-semibold text-xl absolute text-[#037E26]">Completed</div> 
+                                </div>
+                                
+                            </div>
+                            <hr class="w-auto md:w-[1180.16px] mt-[2rem] ml-1 md:ml-3 text-[#F07C54]">
+                            <div class="w-[18rem] md:w-[75rem] h-auto my-4 flex">
+                                <div id="OrderItems-container-${Item.OrderID}" class="w-[20rem] md:w-[75rem] h-auto "></div>
+                                <div id="StatusDiv" class="w-[10rem] h-[7rem] md:w-[14rem] md:h-[13rem] flex flex-col mt-[1px] md:mt-[2rem]">
+                                        <div id="Ordered" class="flex items-center space-x-1 md:space-x-3">
+                                            <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                                <div class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full"></div>
+                                            </div>
+                                            <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Ordered</p>
+                                        </div>
+                                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[7px] md:ml-[9.25px] relative mt-0 mb-0"></div>
+                                        <div id="Confirmed" class="flex items-center space-x-1 md:space-x-3">
+                                            <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                                <div id="Con-Circle" class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full hidden"></div>
+                                            </div>
+                                            <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Confirmed</p>
+                                        </div>
+                                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[7px] md:ml-[9.25px] relative mt-0 mb-0"></div>
+                                        <div id="OrderPacked" class="flex items-center space-x-1 md:space-x-3">
+                                            <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                                <div id="OP-Circle" class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full hidden"></div>
+                                            </div>
+                                            <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Order Packed</p>
+                                        </div>
+                                        <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[7px] md:ml-[9.25px] relative mt-0 mb-0"></div>
+                                        <div id="Ready" class="flex items-center space-x-1 md:space-x-3">
+                                            <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                                <div id="Ready-Circle" class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full hidden"></div>
+                                            </div>
+                                            <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Ready to Pick Up</p>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div id="CancelModal" class="fixed top-1/2 z-30 flex flex-col justify-center items-center left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#F8ECDC] w-[350px] h-[220px] text-white  rounded shadow-lg hidden transform transition-all duration-300">
+                                <div class="flex flex-col items-center justify-center">
+                                    <img src="img/Cancel.png" class="w-[50px]" alt="">
+                                    <div class="flex flex-col space-y-1 items-center w-[19rem] text-center">
+                                        <span>Are you sure you want to cancel your order ?</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-10 space-x-10">
+                                    <button id="Yes" class="bg-outline  text-[#FFF] rounded-3xl w-20 h-8">YES</button>
+                                    <button id="No"  class=" bg-outline  text-[#FFF] rounded-3xl w-20 h-8">NO</button>
+                                </div>
+
+                            </div> 
+                        </div>
+                        `;
+                        
+                        ItemList.appendChild(ItemElement);
+
+                        setTimeout(() => {
+                            const hash = window.location.hash;
+                            if (hash) {
+                                const targetElement = document.getElementById(hash.substring(1)); 
+                                if (targetElement) {
+                                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    setTimeout(function() {
+                                        targetElement.classList.add('highlight');
+                                    }, 500); 
+                                }
+                            }
+                        }, 100);
+                        const Confirmed = ItemElement.querySelector('#Con-Circle');
+                        const OP = ItemElement.querySelector('#OP-Circle');
+                        const Ready = ItemElement.querySelector('#Ready-Circle');
+                        const Cancel = ItemElement.querySelector('#Cancel');
+                        const StatDiv = ItemElement.querySelector('#StatusDiv');
+                        const Cancelled = ItemElement.querySelector('#Cancelled');
+                        const Completed = ItemElement.querySelector('#Com');
+                        async function checkStat(){
+                            const Status = Item.Status;
+
+                            if(Status === 'Confirmed'){
+                                Confirmed.classList.remove('hidden');
+                                OP.classList.add('hidden');
+                                Ready.classList.add('hidden');
+                                Cancel.classList.add('opacity-50');
+                                Cancel.classList.add('cursor-not-allowed');
+                            }
+                            else if(Status === 'Order Packed'){
+                                Confirmed.classList.remove('hidden');
+                                OP.classList.remove('hidden');
+                                Ready.classList.add('hidden');
+                                Cancel.classList.add('opacity-50');
+                                Cancel.classList.add('cursor-not-allowed');
+                            }
+                            else if(Status === 'Ready to Pick Up'){
+                                Confirmed.classList.remove('hidden');
+                                OP.classList.remove('hidden');
+                                Ready.classList.remove('hidden');
+                                Cancel.classList.add('opacity-50');
+                                Cancel.classList.add('cursor-not-allowed');
+                            }
+                            else if(Status === 'Cancelled'){
+                                StatDiv.classList.add('opacity-0');
+                                Cancelled.classList.remove('hidden');
+                                Cancel.classList.add('hidden');
+                            }
+                            else if(Status === 'Completed'){
+                                StatDiv.classList.add('opacity-0');
+                                Completed.classList.remove('hidden');
+                                Cancel.classList.add('hidden');
+                            }
+                        }
+
+                        checkStat();
+
+                        const CancelBtn = ItemElement.querySelector('#Cancel');
+                        
+                        CancelBtn.addEventListener('click',function(){
+                            const Status = Item.Status;
+                            //console.log(Status);
+                        if(!CancelBtn.classList.contains('cursor-not-allowed'))
+                            ItemElement.querySelector('#CancelModal').classList.remove('hidden');
+                            ItemElement.querySelector('#Yes').addEventListener('click', async () => {
+                                const Cancel = { status: 'Cancelled', OrderID: Item.TransactionID};
+                                if(Status === 'Ordered'){
+                                    fetch('/Cancel', {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(Cancel)
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            console.log('Success:', data);
+                                            
+                                        })
+                                        .catch((error) => {
+                                            console.error('Error:', error);
+                                        });
+                                        location.reload();
+                                    
+                                }
+                            });
+                            ItemElement.querySelector('#No').addEventListener('click', async () => {
+                                ItemElement.querySelector('#CancelModal').classList.add('hidden');
+                            });
+                        });
+                    
+
+                        fetch(`/OrderItem/${Item.OrderID}`)
+                            .then(response => response.json())
+                            .then(orderItems => {
+                                const orderItemsContainer = document.getElementById(`OrderItems-container-${Item.OrderID}`);
+
+                                orderItems.forEach(orderItem => {
+                                    const IElement = document.createElement('div');
+                                    IElement.innerHTML = `
+                                    <div class="flex space-x-4 h-[7rem] md:h-[13rem] w-[12rem] md:w-[55rem] ml-[0px] md:ml-[3rem]">
+                                        <img src="${orderItem.productImage}" class="w-[65px] h-[65px] md:w-[175px] md:h-[175px]">
+                                        <div class="w-[10rem] h-[2.5px] md:w-[30rem] md:h-[5rem] mt-[1px] mr-[6rem]">
+                                            <p class="font-Montagu font-extrabold text-[12px] md:text-[24px]">${orderItem.productName}</p>
+                                            <p class="text-[10px] md:text-[16px]">Quantity: ${orderItem.Quantity}</p>
+                                            <p class="font-Montserrat font-semibold text-[11px] md:text-[22px] mt-[6px]"><span>₱ <span>${orderItem.Price}</p>
+                                        </div>
+                                    </div>
+                                    `;
+                                    orderItemsContainer.appendChild(IElement);
+                                    
+
+                                    const Rate = ItemElement.querySelector(`#Rate-${Item.OrderID}`);
+                                    const svgElements = {
+                                        S1: document.getElementById('S1S'),
+                                        S2: document.getElementById('S2S'),
+                                        S3: document.getElementById('S3S'),
+                                        S4: document.getElementById('S4S'),
+                                        S5: document.getElementById('S5S')
+                                    };
+
+                                    if (Rate) {
+                                        Rate.addEventListener('click', (event) => {
+                                            document.getElementById('Rating').classList.remove('hidden');
+                                            document.getElementById('product-id-input').value = orderItem.ProductID;
+                                            // Remove all existing listeners from radio buttons
+                                            document.querySelectorAll('input[name="rating"]').forEach(radio => {
+                                                radio.removeEventListener('change', handleRatingChange);
+                                            });
+
+                                            // Add event listener for rating input change
+                                            document.querySelectorAll('input[name="rating"]').forEach((radio) => {
+                                                radio.addEventListener('change', handleRatingChange);
+                                            });
+                                        });
+                                    }
+
+                                    // Function to handle the rating change
+                                    function handleRatingChange() {
+                                        //document.getElementById('rating-input').value = parseInt(this.value);
+                                        // Reset all stars to grey
+                                        Object.keys(svgElements).forEach((key) => {
+                                            svgElements[key].classList.remove('text-[#FFD700]');
+                                            svgElements[key].classList.add('text-[#6B707B80]');
+                                        });
+
+                                        // Add yellow color to the selected star and all preceding stars
+                                        for (let i = 1; i <= this.value; i++) {
+                                            svgElements['S' + i].classList.remove('text-[#6B707B80]');
+                                            svgElements['S' + i].classList.add('text-[#FFD700]');
+                                        }
+
+                                        //console.log("Selected rating:",this.value, Item.OrderID);
+                                    }
+
+                                    // Event listener to close the rating modal and reset values
+                                    document.getElementById('CloseFeed').addEventListener('click', () => {
+                                        document.getElementById('Rating').classList.add('hidden');
+
+                                        // Reset the rating to default (no stars selected)
+                                        document.querySelectorAll('input[name="rating"]').forEach((radio) => {
+                                            radio.checked = false;  // Uncheck all radio buttons
+                                        });
+
+                                        // Reset star colors to grey
+                                        Object.keys(svgElements).forEach((key) => {
+                                            svgElements[key].classList.remove('text-[#FFD700]');
+                                            svgElements[key].classList.add('text-[#6B707B80]');
+                                        });
+                                        document.getElementById('comment').value = '';
+                                        console.log("Rating modal closed, reset values.");
+                                    });
+
+
+
+
+                                });
+                            })
+                    });
+                }
+                });
+        })
     
 function fetchOrders(Status = ''){
     console.log(Status);
@@ -538,11 +820,11 @@ function fetchOrders(Status = ''){
         Items.forEach(Item => {
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
-            <div id="Order-${Item.TransactionID}"class="ml-[1rem] pt-9 px-[2rem] bg-[#F07C541A] w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
-                <div class="ml-[4rem] w-[68rem] relative flex items-center justify-between">
+            <div id="Order-${Item.TransactionID}"class="ml-[1rem] pb-6 md:pb-0 pt-9 px-[2rem] bg-[#F07C541A] w-[20rem] md:w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
+                <div class="ml-[0.21rem] md:ml-[4rem] w-[16rem] md:w-[68rem] relative flex items-center justify-between">
                     <div>
-                        <h1 class="font-extrabold font-Inter text-[#6B707B]">Order ID: ${Item.TransactionID}</h1>
-                        <h2 class="font-Inter font-medium">Order Date: <span>${Item.Date}</span></h2>
+                        <h1 class="font-extrabold font-Inter text-[#6B707B] text-[14px] md:text-[19px]">Order ID: ${Item.TransactionID}</h1>
+                        <h2 class="font-Inter font-medium text-[12px] md:text-[17px]">Order Date: <span>${Item.Date}</span></h2>
                     </div>
                     <div>
                         <button id="Cancel" class="flex space-x-2"><img src="img/Cancel.png" class="w-[1.5rem]" alt=""><span class="text-[#F07C54CC]">Cancel</span></button>
@@ -555,36 +837,36 @@ function fetchOrders(Status = ''){
                     </div>
                     
                 </div>
-                <hr class="w-[1180.16px] mt-[2rem] ml-3 text-[#F07C54]">
-                <div class="w-[75rem] h-auto my-4 flex">
-                    <div id="OrderItems-container-${Item.OrderID}" class="w-[75rem] h-auto "></div>
-                    <div id="StatusDiv" class="w-[14rem] h-[13rem] flex flex-col mt-[2rem]">
-                            <div id="Ordered" class="flex items-center space-x-3">
-                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div class="w-[10px] h-[10px] bg-outline rounded-full"></div>
+                <hr class="w-auto md:w-[1180.16px] mt-[2rem] ml-1 md:ml-3 text-[#F07C54]">
+                <div class="w-[18rem] md:w-[75rem] h-auto my-4 flex">
+                    <div id="OrderItems-container-${Item.OrderID}" class="w-[20rem] md:w-[75rem] h-auto "></div>
+                    <div id="StatusDiv" class="w-[10rem] h-[7rem] md:w-[14rem] md:h-[13rem] flex flex-col mt-[1px] md:mt-[2rem]">
+                            <div id="Ordered" class="flex items-center space-x-1 md:space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                    <div class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full"></div>
                                 </div>
-                                <p class="font-Montserrat text-[#F07C54CC]">Ordered</p>
+                                <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Ordered</p>
                             </div>
-                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div id="Confirmed" class="flex items-center space-x-3">
-                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div id="Con-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[7px] md:ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Confirmed" class="flex items-center space-x-1 md:space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                    <div id="Con-Circle" class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full hidden"></div>
                                 </div>
-                                <p class="font-Montserrat text-[#F07C54CC]">Confirmed</p>
+                                <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Confirmed</p>
                             </div>
-                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div id="OrderPacked" class="flex items-center space-x-3">
-                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div id="OP-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[7px] md:ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="OrderPacked" class="flex items-center space-x-1 md:space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                    <div id="OP-Circle" class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full hidden"></div>
                                 </div>
-                                <p class="font-Montserrat text-[#F07C54CC]">Order Packed</p>
+                                <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Order Packed</p>
                             </div>
-                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[9.25px] relative mt-0 mb-0"></div>
-                            <div id="Ready" class="flex items-center space-x-3">
-                                <div class="bg-[#FFFFFF] rounded-full h-[20px] w-[20px] border-outline border-[3px] flex justify-center items-center">
-                                    <div id="Ready-Circle" class="w-[10px] h-[10px] bg-outline rounded-full hidden"></div>
+                            <div class="border-l-[1px] border-[#F07C54] h-[25px] ml-[7px] md:ml-[9.25px] relative mt-0 mb-0"></div>
+                            <div id="Ready" class="flex items-center space-x-1 md:space-x-3">
+                                <div class="bg-[#FFFFFF] rounded-full h-[15px] w-[15px] md:h-[20px] md:w-[20px] border-outline border-[2px] md:border-[3px] flex justify-center items-center">
+                                    <div id="Ready-Circle" class="w-[7px] h-[7px] md:w-[10px] md:h-[10px] bg-outline rounded-full hidden"></div>
                                 </div>
-                                <p class="font-Montserrat text-[#F07C54CC]">Ready to Pick Up</p>
+                                <p class="font-Montserrat text-[10px] md:text-[17px] text-[#F07C54CC]">Ready to Pick Up</p>
                             </div>
                         </div>
                 </div>
@@ -707,12 +989,12 @@ function fetchOrders(Status = ''){
                     orderItems.forEach(orderItem => {
                         const IElement = document.createElement('div');
                         IElement.innerHTML = `
-                        <div class="flex space-x-4 h-[13rem] w-[55rem] ml-[3rem]">
-                            <img src="${orderItem.productImage}" class="w-[175px] h-[175px]">
-                            <div class="w-[30rem] h-[5rem] mt-[1rem] mr-[6rem]">
-                                <p class="font-Montagu font-extrabold text-[24px]">${orderItem.productName}</p>
-                                <p>Quantity: ${orderItem.Quantity}</p>
-                                <p class="font-Montserrat font-semibold text-[22px] mt-[1rem]"><span>₱ <span>${orderItem.Price}</p>
+                        <div class="flex space-x-4 h-[7rem] md:h-[13rem] w-[12rem] md:w-[55rem] ml-[0px] md:ml-[3rem]">
+                            <img src="${orderItem.productImage}" class="w-[65px] h-[65px] md:w-[175px] md:h-[175px]">
+                            <div class="w-[10rem] h-[2.5px] md:w-[30rem] md:h-[5rem] mt-[1px] mr-[6rem]">
+                                <p class="font-Montagu font-extrabold text-[12px] md:text-[24px]">${orderItem.productName}</p>
+                                <p class="text-[10px] md:text-[16px]">Quantity: ${orderItem.Quantity}</p>
+                                <p class="font-Montserrat font-semibold text-[11px] md:text-[22px] mt-[6px]"><span>₱ <span>${orderItem.Price}</p>
                             </div>
                         </div>
                         `;
