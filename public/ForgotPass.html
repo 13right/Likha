@@ -269,18 +269,15 @@ sendCodeBtn.addEventListener('click', function() {
             
             countdown--;
 
-            // When countdown reaches 0, re-enable the button and send the OTP
             if (countdown < 0) {
                 clearInterval(interval);
                 sendCodeBtn.disabled = false;
                 sendCodeBtn.classList.add('cursor-pointer');
                 sendCodeBtn.classList.remove('cursor-not-allowed');
                 sendCodeBtn.innerText = 'Send Code';
-
-                // Make an API call to send the OTP
                 
             }
-        }, 1000); // Update every second
+        }, 1000); 
     }
     else{
         alert('Please Enter Correct Email!');
@@ -301,7 +298,6 @@ async function sendOTP(Email) {
             throw new Error('Failed to send OTP');
         }
 
-        // Handle success (you can add success feedback here)
         console.log('OTP sent successfully');
     } catch (error) {
         console.error('Error:', error);
@@ -325,7 +321,6 @@ async function sendOTP(Email) {
 
                 const data = await response.json();
                 if (response.ok) {
-                    // Store userId in sessionStorage
                     sessionStorage.setItem('userID', data.userId);
                     window.location.href = 'NewPassword.html';
                 } else {

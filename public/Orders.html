@@ -550,7 +550,7 @@
                     Items.forEach(Item => {
                         const ItemElement = document.createElement('div');
                         ItemElement.innerHTML = `
-                        <div id="Order-${Item.TransactionID}"class="ml-[1rem] pb-6 md:pb-0 pt-9 px-[2rem] bg-[#F07C541A] w-[20rem] md:w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
+                        <div id="Order-${Item.TransactionID}" class="mx-auto pb-6 md:pb-0 pt-9 px-[2rem] bg-[#F07C541A] w-[20rem] md:w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
                             <div class="ml-[0.21rem] md:ml-[4rem] w-[16rem] md:w-[68rem] relative flex items-center justify-between">
                                 <div>
                                     <h1 class="font-extrabold font-Inter text-[#6B707B] text-[14px] md:text-[19px]">Order ID: ${Item.TransactionID}</h1>
@@ -744,28 +744,22 @@
                                         Rate.addEventListener('click', (event) => {
                                             document.getElementById('Rating').classList.remove('hidden');
                                             document.getElementById('product-id-input').value = orderItem.ProductID;
-                                            // Remove all existing listeners from radio buttons
                                             document.querySelectorAll('input[name="rating"]').forEach(radio => {
                                                 radio.removeEventListener('change', handleRatingChange);
                                             });
-
-                                            // Add event listener for rating input change
                                             document.querySelectorAll('input[name="rating"]').forEach((radio) => {
                                                 radio.addEventListener('change', handleRatingChange);
                                             });
                                         });
                                     }
 
-                                    // Function to handle the rating change
                                     function handleRatingChange() {
                                         //document.getElementById('rating-input').value = parseInt(this.value);
-                                        // Reset all stars to grey
                                         Object.keys(svgElements).forEach((key) => {
                                             svgElements[key].classList.remove('text-[#FFD700]');
                                             svgElements[key].classList.add('text-[#6B707B80]');
                                         });
 
-                                        // Add yellow color to the selected star and all preceding stars
                                         for (let i = 1; i <= this.value; i++) {
                                             svgElements['S' + i].classList.remove('text-[#6B707B80]');
                                             svgElements['S' + i].classList.add('text-[#FFD700]');
@@ -774,16 +768,14 @@
                                         //console.log("Selected rating:",this.value, Item.OrderID);
                                     }
 
-                                    // Event listener to close the rating modal and reset values
+
                                     document.getElementById('CloseFeed').addEventListener('click', () => {
                                         document.getElementById('Rating').classList.add('hidden');
 
-                                        // Reset the rating to default (no stars selected)
                                         document.querySelectorAll('input[name="rating"]').forEach((radio) => {
-                                            radio.checked = false;  // Uncheck all radio buttons
+                                            radio.checked = false;  
                                         });
 
-                                        // Reset star colors to grey
                                         Object.keys(svgElements).forEach((key) => {
                                             svgElements[key].classList.remove('text-[#FFD700]');
                                             svgElements[key].classList.add('text-[#6B707B80]');
@@ -820,7 +812,7 @@ function fetchOrders(Status = ''){
         Items.forEach(Item => {
             const ItemElement = document.createElement('div');
             ItemElement.innerHTML = `
-            <div id="Order-${Item.TransactionID}"class="ml-[1rem] pb-6 md:pb-0 pt-9 px-[2rem] bg-[#F07C541A] w-[20rem] md:w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
+            <div id="Order-${Item.TransactionID}"class="mx-auto pb-6 md:pb-0 pt-9 px-[2rem] bg-[#F07C541A] w-[20rem] md:w-[1269px] h-auto outline-dashed outline-[3px] rounded-[15px] outline-outline">
                 <div class="ml-[0.21rem] md:ml-[4rem] w-[16rem] md:w-[68rem] relative flex items-center justify-between">
                     <div>
                         <h1 class="font-extrabold font-Inter text-[#6B707B] text-[14px] md:text-[19px]">Order ID: ${Item.TransactionID}</h1>

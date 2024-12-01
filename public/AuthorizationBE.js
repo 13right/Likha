@@ -4,7 +4,7 @@ async function fetchCurrentUser() {
         if (response.ok) {
             
             const user = await response.json();
-            if (user && user.UserID) {  // Ensure user and UserID are defined
+            if (user && user.UserID) {
                 const userID = parseInt(user.UserID);
                 document.getElementById('userInfo').innerText = `Logged in as: ${userID}`;
                 console.log(userID);

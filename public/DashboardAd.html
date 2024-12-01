@@ -234,17 +234,16 @@ function Recent(Type = '') {
         .then(response => response.json())
         .then(data => {
             const RecentOrder = document.getElementById('RecentOrder');
-            RecentOrder.innerHTML = ''; // Clear existing content
+            RecentOrder.innerHTML = '';
 
-            // If Type is 'Request', use CustomItems, otherwise use Orders
-            const dataToDisplay = Type === 'Request' ? data : data; // Simplified for clarity
+
+            const dataToDisplay = Type === 'Request' ? data : data; 
             
-            console.log('Fetched Data:', data);  // Check the full structure of data
+            console.log('Fetched Data:', data);  
 
             dataToDisplay.forEach(element => {
                 const RecentOrderElements = document.createElement('div');
                 if (Type === 'Request') {
-                    // Show only TransactionID, Price, and Status for Request
                     RecentOrderElements.innerHTML = `
                         <div class="w-auto h-[50px] bg-Likha rounded-2xl flex justify-between relative items-center">
                             <div class="absolute left-[10.25rem]">
@@ -259,7 +258,6 @@ function Recent(Type = '') {
                         </div>
                     `;
                 } else {
-                    // Show full order details for Orders
                     RecentOrderElements.innerHTML = `
                         <div class="w-auto h-[50px] bg-Likha rounded-2xl flex justify-between relative items-center">
                             <div class="absolute left-[3rem]">

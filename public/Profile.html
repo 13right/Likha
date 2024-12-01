@@ -299,9 +299,9 @@
     </div>
     <div class="bg-Likha min-h-screen">
         <div id="main-container" class="relative min-w-min min-h-min top-[8rem]">
-            <div class=" w-[1250px] h-[37rem] mx-auto relative">
-                <img src="img/back.png" alt="" class="w-[2rem] aspect-square relative cursor-pointer" onclick="history.back()">
-                <div class="w-[25rem] h-auto space-x-10 flex mb-13 ml-[3rem]">
+            <div class=" w-auto md:w-[1250px] h-[37rem] mx-auto relative">
+                <img src="img/back.png" alt="" class="ml-4 md:ml-0 w-[1.5rem] md:w-[2rem] aspect-square relative cursor-pointer" onclick="history.back()">
+                <div class="w-auto h-auto space-x-10 flex mb-13 ml-[3rem]">
                     <div id="ProfileContain" class="w-[120px] h-[120px] bg-outline rounded-full outline outline-1 outline-outline relative group">
                         <img id="ProfilePic" src="img/profileblank.png" class="w-[120px] h-[120px] rounded-full absolute object-cover" alt="">
                         <div id="EditProf" class="absolute flex items-center justify-center w-[120px] h-[120px] rounded-full bg-gradient-to-t from-[#333333] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
@@ -321,23 +321,23 @@
                         </u>
                     </div>
                 </div>
-                <div class="w-auto h-[3rem]  flex justify-center space-x-8 mb-6">
-                    <button id="Edit" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">EDIT PROFILE</button>
-                    <button id="Password" class="font-Inter font-semibold w-[200px] h-[45px] rounded-[25px] text-[#000000]">PASSWORD</button>
+                <div class="w-auto h-[3rem] flex justify-center space-x-6 mt-4 md:space-x-8 mb-6">
+                    <button id="Edit" class="font-Inter font-semibold w-[150px] md:w-[200px] h-[35.5px] md:h-[45px] rounded-[25px] text-[#000000] bg-[#F07C5480]">EDIT PROFILE</button>
+                    <button id="Password" class="font-Inter font-semibold w-[150px] md:w-[200px] h-[35.5px] rounded-[25px] text-[#000000]">PASSWORD</button>
                 </div>
                     <hr class="w-auto border-1 border-outline">
-                    <div id="PasswordEdit" class=" w-[65rem] h-[20rem] mx-auto mt-7 flex justify-evenly items-center hidden">
+                    <div id="PasswordEdit" class="flex-wrap w-[20rem]  md:w-[65rem] h-[28rem] md:h-[20rem] mx-auto mt-7 flex justify-evenly items-center hidden ">
                         <div class="h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
                             <div class="relative">
                                 <h1 class="ml-4">Old Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="OldPass" value="">
+                                    <input class="w-[300px] md:w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="OldPass" value="">
                                 </div>
                             </div>
                             <div >
                                 <h1 class="ml-4">New Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="NewPass" value="">
+                                    <input class="w-[300px] md:w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="NewPass" value="">
                                 </div>
                                 
                             </div>
@@ -346,48 +346,48 @@
                             <div>
                                 <h1 class="ml-4">Confirm Password</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="ConPass" value="">
+                                    <input class="w-[300px] md:w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="password" name="" id="ConPass" value="">
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div id="ProfileEdit" class=" w-[65rem] h-[20rem] relative mx-auto mt-7 flex justify-evenly items-center">
-                        <div class="h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
+                    <div id="ProfileEdit" class="flex-wrap w-[20rem] md:w-[65rem] h-[28rem] md:h-[20rem] relative mx-auto m-1 mb-0 md:mt-7 flex justify-evenly items-start">
+                        <div class="h-[11rem] md:h-[15rem] w-[15rem] md:w-[30rem] flex flex-col items-center justify-evenly">
                             <div class="relative">
                                 <h1 class="ml-4">Name</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" oninput="restrictInput(this)" type="text" id="NameInput" value="JENNIE KIM" disabled>
+                                    <input class="w-[300px] md:w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" oninput="restrictInput(this)" type="text" id="NameInput" value="JENNIE KIM" disabled>
                                     <span id="EditName" class="absolute right-2 cursor-pointer focus:bg-hehe">edit</span>
                                 </div>
                             </div>
                             <div >
                                 <h1 class="ml-4">Username</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" oninput="restrictInput(this)" type="text" id="Username" value="jennierubyjane" disabled>
+                                    <input class="w-[300px] md:w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" oninput="restrictInput(this)" type="text" id="Username" value="jennierubyjane" disabled>
                                 <span id="EditUsername" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                                 
                             </div>
                         </div>
-                        <div class=" h-[15rem] w-[30rem] flex flex-col items-center justify-evenly">
+                        <div class="h-[11rem] md:h-[15rem] w-[15rem] md:w-[30rem] flex flex-col items-center justify-evenly">
                             <div>
                                 <h1 class="ml-4">Mobile No.</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="number"  id="Mobile" value="+63 9033526492" disabled>
+                                    <input class="w-[300px] md:w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="number"  id="Mobile" value="+63 9033526492" disabled>
                                     <span id="EditMobile" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                             </div>
                             <div>
                                 <h1 class="ml-4">Email</h1>
                                 <div class="relative flex items-center">
-                                    <input class="w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="email" id="Email" value="jennierubyjane.kim@email.com" disabled>
+                                    <input class="w-[300px] md:w-[400px] h-[40px] rounded bg-[#F8ECDC80] border-[2px] border-[#F07C54] px-3" type="email" id="Email" value="jennierubyjane.kim@email.com" disabled>
                                     <span id="EditEmail" class="absolute right-2 cursor-pointer">edit</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div  class=" flex justify-center relative">
+                    <div class=" flex justify-center relative md:mt-0">
                         <button id="Save" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#fff]">Save</button>
                         <button id="Change" class="bg-outline font-Montserrat font-semibold w-[150px] h-[40px] rounded-xl absolute bottom-0  text-[#FFFF] hidden">Change</button>
                     </div>
@@ -535,7 +535,6 @@
 </body>
 <script>
 function restrictInput(input) {
-    // Remove non-alphabet characters except space
     input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
 }
 
@@ -640,28 +639,26 @@ document.getElementById('CONOK').addEventListener('click', async() =>{
                 return;
             }
 
-            // Create FormData object
             const formData = new FormData();
             formData.append('image', file);
-            formData.append('userId', userId); // Append user ID to form data
+            formData.append('userId', userId);
 
-            // Make a PUT request to update the image URL in the database
             try {
                 const response = await fetch('/updateProfileImage', {
                     method: 'PUT',
-                    body: formData, // Send FormData directly
+                    body: formData,
                 });
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
 
-                const result = await response.text(); // Use text() if expecting a simple response
+                const result = await response.text(); 
                 console.log('Profile image updated successfully:', result);
 
-                // Update the profile image in the UI
+
                 const updatedImageUrl = URL.createObjectURL(file);
-                document.getElementById('ProfilePic').src = updatedImageUrl; // Show the uploaded image
+                document.getElementById('ProfilePic').src = updatedImageUrl;
             } catch (error) {
                 console.error('Error updating profile image in database:', error);
             }
@@ -679,13 +676,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         saveButton.addEventListener('click', async function() {
 
-            // Collect the values from the form inputs
             const name = nameInput.value;
             const username = usernameInput.value;
             const mobile = mobileInput.value;
             const email = emailInput.value;
 
-            // Create the payload for the POST request
             const data = {
                 name: name,
                 username: username,

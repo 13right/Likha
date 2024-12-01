@@ -68,12 +68,12 @@ const redisClient = redis.createClient({
 
 //   app.use(session({
 //     store: new RedisStore({ client: redisClient }),
-//     secret: 'Hatdog',  // Change this to your own secret
+//     secret: 'Hatdog',  
 //     resave: false,
 //     saveUninitialized: false,
 //     cookie: {
-//       secure: process.env.NODE_ENV === 'production',  // Secure cookie in production (Render)
-//       maxAge: 24 * 60 * 60 * 1000  // Optional: set cookie expiration time (e.g., 24 hours)
+//       secure: process.env.NODE_ENV === 'production', 
+//       maxAge: 24 * 60 * 60 * 1000  
 //     }
 //   }));
   
@@ -114,13 +114,13 @@ const config = {
     server: process.env.DB_SERVER,
     database: process.env.DB_DATABASE,
     pool: {
-        max: 10, // Maximum number of connections in the pool
-        min: 0,  // Minimum number of connections in the pool
-        idleTimeoutMillis: 30000 // Close idle connections after 30 seconds
+        max: 10, 
+        min: 0,  
+        idleTimeoutMillis: 30000 
     },
     options: {
-        encrypt: process.env.DB_ENCRYPT === 'true', // For Azure SQL
-        trustServerCertificate: false // Change to false if needed for production
+        encrypt: process.env.DB_ENCRYPT === 'true', 
+        trustServerCertificate: false 
     }
 };
 
@@ -171,7 +171,6 @@ const checkNotifications = async (userID) => {
             
         }
 
-        // Proceed with the database query
         const request = await pool.request();
                 
         request.input('UserID', sql.Int, userID);
@@ -324,7 +323,6 @@ const getNotifications = async (userID, ws) => {
             };
         });
 
-        // Send notifications to the client via WebSocket
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ notifications: orderItems }));
         }
@@ -1262,24 +1260,23 @@ app.post('/LogIn', async (req, res) => {
         const user = request.recordset[0];
 
         if (user) {
-            // Compare the entered password with the stored hashed password
             const match = await bcrypt.compare(password, user.Password);
             if (match) {
-                req.session.user = user; // Store user session data
+                req.session.user = user; 
                 if (user.Type === "Admin") {
-                    res.status(250).send('Admin'); // Send response for admin
+                    res.status(250).send('Admin'); 
                 } else {
-                    res.status(200).send('Login successful'); // Send response for regular user
+                    res.status(200).send('Login successful'); 
                 }
             } else {
-                res.status(401).send('Invalid username or password'); // Incorrect password
+                res.status(401).send('Invalid username or password'); 
             }
         } else {
-            res.status(401).send('Invalid username or password'); // Username not found
+            res.status(401).send('Invalid username or password'); 
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error logging in'); // General error
+        res.status(500).send('Error logging in'); 
     }
 });
 
@@ -1352,11 +1349,11 @@ app.get('/UserInfo', async (req, res) => {
         const request = pool.request();
         request.input('ID', sql.Int, ID);
         
-        const result = await request.query(query); // Await the result
+        const result = await request.query(query);
         
         if (result.recordset.length > 0) {
-            const User = result.recordset[0]; // Assuming you're fetching a single user
-            res.json(User); // Send the user data as JSON
+            const User = result.recordset[0];
+            res.json(User);
         } else {
             res.status(404).send('User not found');
         }
@@ -1389,7 +1386,6 @@ app.get('/SearchBar/:inputValue', async (req, res) => {
         const request = pool.request();
         request.input('Input', sql.VarChar, Input);
 
-        // Execute the product query
         const productResult = await request.query(productQuery);
         const products = productResult.recordset.map(product => {
             return {
@@ -1397,7 +1393,6 @@ app.get('/SearchBar/:inputValue', async (req, res) => {
             };
         });
 
-        // Execute the category query
         const categoryResult = await request.query(categoryQuery);
         const categories = categoryResult.recordset.map(category => {
             return {
@@ -1405,7 +1400,6 @@ app.get('/SearchBar/:inputValue', async (req, res) => {
             };
         });
 
-        // Combine results into a single response
         res.json({ products, categories });
     } catch (error) {
         console.error('Error executing query:', error);
@@ -1754,13 +1748,11 @@ app.get('/Inbox', async (req, res) => {
 app.get('/get-materials', async (req, res) => {
     const query = "SELECT MaterialName FROM tbl_Materials WHERE Stock = 2";
     const db = await pool.request();
-    // Run the SQL query
     db.query(query, (err, result) => {
         if (err) {
             console.error('Error running query:', err);
             res.status(500).send({ error: 'Failed to retrieve materials' });
         } else {
-            // Send the materials back as a JSON response
             const materials = result.recordset;
             res.json({ materials });
         }
@@ -1912,9 +1904,9 @@ app.get('/products', async (req, res) => {
     const order = req.query.order || 'default';
     let orderByClause = '';
     if (order === 'LH') {
-        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; 
     } else if (order === 'HL') {
-        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+        orderByClause = 'ORDER BY tbl_Product.Price DESC'; 
     }
     try {
         const result = await pool.request()
@@ -2022,9 +2014,9 @@ app.get('/productsJewelry', async (req, res) => {
     const order = req.query.order || 'default';
     let orderByClause = '';
     if (order === 'LH') {
-        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; 
     } else if (order === 'HL') {
-        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+        orderByClause = 'ORDER BY tbl_Product.Price DESC'; 
     }
     try {
 
@@ -2085,9 +2077,9 @@ app.get('/productsBag', async (req, res) => {
     const order = req.query.order || 'default';
     let orderByClause = '';
     if (order === 'LH') {
-        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; 
     } else if (order === 'HL') {
-        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+        orderByClause = 'ORDER BY tbl_Product.Price DESC';
     }
     try {
         const result = await pool.request()
@@ -2118,9 +2110,9 @@ app.get('/productsDress', async (req, res) => {
     const order = req.query.order || 'default';
     let orderByClause = '';
     if (order === 'LH') {
-        orderByClause = 'ORDER BY tbl_Product.Price ASC'; // Low to High
+        orderByClause = 'ORDER BY tbl_Product.Price ASC'; 
     } else if (order === 'HL') {
-        orderByClause = 'ORDER BY tbl_Product.Price DESC'; // High to Low
+        orderByClause = 'ORDER BY tbl_Product.Price DESC'; 
     }
     try {
         const result = await pool.request()
@@ -2343,7 +2335,7 @@ app.get('/FeedbackAvg/:product', async (req, res) => {
         const result = await pool.request()
             .input('Product', sql.VarChar, product)
             .query(`SELECT CAST(AVG(CAST(Rate AS FLOAT)) AS DECIMAL(10, 2))as Avg FROM tbl_Feedback
-                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`); // Use parameterized query
+                     WHERE ProductID = (SELECT ProductID FROM tbl_Product WHERE ProductName = @Product)`);
 
         const products = result.recordset.map(feedback => {
             return {
@@ -2360,7 +2352,6 @@ app.get('/FeedbackAvg/:product', async (req, res) => {
 
 app.get('/Counts', async (req, res) => {
     try {
-      // Query 1: Get counts for specific statuses in tbl_Order
       const orderResult = await pool.request().query(`
         SELECT 
           COUNT(Status) AS [All],
@@ -2370,7 +2361,6 @@ app.get('/Counts', async (req, res) => {
         FROM tbl_Order
       `);
   
-      // Query 2: Get count per status for combined tables
       const customStatusResult = await pool.request().query(`
         SELECT 
           Status,
@@ -2385,8 +2375,7 @@ app.get('/Counts', async (req, res) => {
         WHERE Status IN ('Confirm', 'Ready for pick up')
         GROUP BY Status;
       `);
-  
-      // Query 3: Get total count for specific statuses across combined tables
+
       const totalStatusCountResult = await pool.request().query(`
         SELECT 
           SUM(count_per_status) AS total_count
@@ -2405,11 +2394,11 @@ app.get('/Counts', async (req, res) => {
         ) AS StatusCounts;
       `);
   
-      // Combine all results into a single response
+
       res.json({
-        orderCounts: orderResult.recordset[0], // Result from Query 1
-        customStatusCounts: customStatusResult.recordset, // Array from Query 2
-        totalStatusCount: totalStatusCountResult.recordset[0]?.total_count || 0 // Single value from Query 3
+        orderCounts: orderResult.recordset[0], 
+        customStatusCounts: customStatusResult.recordset, 
+        totalStatusCount: totalStatusCountResult.recordset[0]?.total_count || 0 
       });
     } catch (error) {
       console.error('Error fetching counts:', error);
@@ -2533,8 +2522,7 @@ app.get('/Counts', async (req, res) => {
         }
         const userId = result.recordset[0].UserID;
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
-        // Store OTP and its expiration time in the database
+        const expirationTime = new Date(Date.now() + 10 * 60 * 1000); 
         await pool.request()
             .input('UserID', sql.Int, userId)
             .input('OTP', sql.VarChar, otp)
@@ -2549,8 +2537,8 @@ app.get('/Counts', async (req, res) => {
             });
 
             const mailOptions = {
-                from: 'likhaproto@gmail.com', // Your email
-                to: Email, // Recipient's email from the request
+                from: 'likhaproto@gmail.com', 
+                to: Email, 
                 subject: 'Your OTP Code',
                 text: `Your OTP code is: ${otp}`,
                 html: `<h2>Your OTP code is: ${otp}</h2>`
@@ -2562,7 +2550,6 @@ app.get('/Counts', async (req, res) => {
                     return res.status(500).json({ message: 'Failed to send OTP' });
                 }
                 //console.log('Email sent:', info.response);
-                // Optionally, store the OTP in your database for verification
                 res.status(200).json({ message: 'OTP sent successfully' });
             });
     } catch (error) {
@@ -2599,7 +2586,6 @@ app.get('/Counts', async (req, res) => {
     const { Email, otp } = req.body;
     console.log(Email,otp);
     try {
-        // Retrieve the OTP and expiration time associated with the user's email
         const result = await pool.request()
             .input('Email', sql.VarChar, Email)
             .query('SELECT OTP, OtpExpiration,UserID FROM tbl_User WHERE Email = @Email');
@@ -2611,20 +2597,16 @@ app.get('/Counts', async (req, res) => {
         const expirationTime = result.recordset[0].OtpExpiration;
         const currentTime = new Date();
         console.log('Compare:',storedOtp, otp,userId)
-        // Check if OTP is expired
         if (currentTime > expirationTime) {
             return res.status(400).json({ message: 'OTP has expired' });
         }
-        // Compare stored OTP with user input
         if (parseInt(storedOtp) == parseInt(otp)) {
-            // OTP is correct, clear the OTP and proceed
             await pool.request()
                 .input('Email', sql.VarChar, Email)
                 .query('UPDATE tbl_User SET OTP = NULL, otpExpiration = NULL WHERE Email = @Email');
 
             return res.status(200).json({ message: 'OTP verified successfully' , userId});
         } else {
-            // OTP does not match
             return res.status(400).json({ message: 'Invalid OTP' });
         }
     } catch (error) {
@@ -2635,7 +2617,7 @@ app.get('/Counts', async (req, res) => {
 
 
 app.put('/NewPassword', async (req, res) => {
-    const { NewPass, UserID } = req.body; // Use NewPass to match the frontend
+    const { NewPass, UserID } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash(NewPass, saltRounds);
@@ -2653,7 +2635,7 @@ app.put('/NewPassword', async (req, res) => {
 
 
 app.get('/RecentOrder', async (req, res) => {
-    const d = new Date(); // Use new Date() instead of Date()
+    const d = new Date(); 
     const Type = req.query.Type;
 
     try {
@@ -2669,7 +2651,6 @@ app.get('/RecentOrder', async (req, res) => {
                 WHERE CONVERT(VARCHAR, Date, 1) = CONVERT(VARCHAR, @Date, 1)
             `);
 
-        // Query for custom necklaces, rings, and dresses
         const customResult = await pool.request()
             .input('Date', sql.DateTime, d)
             .query(`
@@ -2693,10 +2674,10 @@ app.get('/RecentOrder', async (req, res) => {
                 WHERE CONVERT(VARCHAR, Date, 1) = CONVERT(VARCHAR, @Date, 1)
             `);
 
-        // Combine results into an object
+
         const response = {
-            Orders: orderResult.recordset,  // Orders from tbl_Order
-            CustomItems: customResult.recordset  // Custom items from tbl_CustomNecklace, tbl_CustomRing, tbl_CustomDress
+            Orders: orderResult.recordset, 
+            CustomItems: customResult.recordset 
         };
         if(Type === 'Request'){
             console.log(response.CustomItems);
@@ -3109,7 +3090,6 @@ app.get('/CheckOut', async (req, res) => {
 
         const ID = parseInt(user.UserID);
 
-        // Parse the orders from the query string
         const orders = JSON.parse(decodeURIComponent(req.query.orders));
 
         const results = [];
@@ -3126,7 +3106,6 @@ app.get('/CheckOut', async (req, res) => {
                     WHERE tbl_Product.ProductName LIKE @productName AND tbl_Cart.UserID = @ID
                 `);
 
-            // Map the results and push them into the results array
             results.push(...result.recordset.map(item => {
 
                 return {
@@ -3138,7 +3117,6 @@ app.get('/CheckOut', async (req, res) => {
             }));
         }
 
-        // Send the mapped results as JSON
         res.json(results);
     } catch (error) {
         console.error('Error:', error);

@@ -20,13 +20,11 @@ let rotateText = () => {
   let currentWord = words[currentWordIndex];
   let nextWord =
     currentWordIndex === maxWordIndex ? words[0] : words[currentWordIndex + 1];
-  // rotate out letters of current word
   Array.from(currentWord.children).forEach((letter, i) => {
     setTimeout(() => {
       letter.className = "letter out";
     }, i * 80);
   });
-  // reveal and rotate in letters of next word
   nextWord.style.opacity = "1";
   Array.from(nextWord.children).forEach((letter, i) => {
     letter.className = "letter behind";
