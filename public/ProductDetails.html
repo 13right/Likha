@@ -693,7 +693,7 @@ function generateStars(rating) {
                 productElement.innerHTML = `
                     <div class="flex">
                         <div class="w-[50px] h-[50px] rounded-full outline outline-2 outline-outline">
-                            <img src="${feedbackItem.Profile}" alt="" class="object-cover h-[50px] w-[50px] rounded-full">
+                            <img src="${feedbackItem.Profile ? feedbackItem.Profile : 'img/profilepic.jpeg'}" alt="" class="object-cover h-[50px] w-[50px] rounded-full">
                         </div>
                         <div class="ml-[1rem] flex items-center space-x-5">
                             <h1 class="font-Inter font-bold text-[14px] text-[#F07C54]">${feedbackItem.Username}</h1>
