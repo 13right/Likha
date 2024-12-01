@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const closeAllMenus = () => {
         ProfileMenu.classList.add('hidden');
         Notif.classList.add('hidden');
-        container.classList.remove('pointer-events-none');
+        //container.classList.remove('pointer-events-none');
         enableScroll();
     };
 
@@ -253,12 +253,12 @@ async function fetchCart() {
                         </div> 
                     </div>
                     <div class="h-auto w-[8rem] md:w-[20rem]">
-                        <div id="NameAndPrice" class="cursor-pointer">
+                        <div id="NameAndPrice" class="cursor-pointer md:w-[16rem]">
                             <h1 class="font-Montagu font-semibold text-[15px] md:text-[24px]">${productCart.productName}</h1>
                             <h2 class="font-Montserrat font-semibold text-[10px] md:text-[14px] mt-2">₱${productCart.productPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
                         </div>                    
 
-                        <div class="flex w-[90px] md:w-[120px] h-[30px] md:h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3 px-5">
+                        <div class="flex w-[90px] md:w-[120px] h-[30px] md:h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-1 outline-outline rounded-lg mt-3 px-5 items-center">
                             <button class="MOcart">-</button>
                             <input style="background-color: transparent;" id="Quantity" class="text-center w-[70px] h-[30px] p-1 font-bold" type="number" onKeyDown="return false" value=${productCart.productQuantity} min="1" max=${productCart.Stock}>
                             <button class="AOcart">+</button>
@@ -314,15 +314,14 @@ async function fetchCart() {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                id: cartID, // Include the cart ID in the request body
-                                // Add any additional data you need to send
+                                id: cartID, 
                             }),
                         });
         
                         if (response.ok) {
                             console.log(`Item with ID ${cartID} removed from the cart.`);
                             CartElement.querySelector('#DeleteModal').classList.add('hidden');
-                            CartElement.remove(); // Remove the item from the UI
+                            CartElement.remove(); 
                         } else {
                             console.error('Failed to delete item:', response.statusText);
                         }
