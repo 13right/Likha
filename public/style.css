@@ -2165,6 +2165,14 @@ video {
   height: ;
 }
 
+.h-\[39rem\]{
+  height: 39rem;
+}
+
+.h-\[38rem\]{
+  height: 38rem;
+}
+
 .max-h-14{
   max-height: 3.5rem;
 }
