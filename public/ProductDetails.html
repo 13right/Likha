@@ -222,6 +222,16 @@
         height: 1.5rem; /* Smaller size for 375px screen width */
     }
     }
+    .top-shadow {
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (min-width: 768px) {
+    .top-shadow {
+        box-shadow: none;
+    }
+    }
+
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <body>
@@ -349,22 +359,22 @@
 
     <div class="bg-Likha min-h-screen pb-8">
         <div id="main-container" class="pt-[6.5rem] md:px-[8rem] space-y-16">
-            <img src="img/back.png" alt="" class="w-[2rem] aspect-square absolute cursor-pointer left-[18px] md:left-0 md:relative" onclick="history.back()">
-            <div id="product"></div>
+            <img src="img/back.png" alt="" class="w-[2rem] aspect-square absolute object-cover cursor-pointer left-[18px] md:left-0 md:relative" onclick="history.back()">
+                <div id="product" class=" relative h-[46rem] w-full md:h-auto md:w-auto"></div>
             
-            <div class="bg-[#D8E2C7] bottom-3 w-full h-auto rounded-md pb-8 mx-auto">
-                <h1 class="font-Montserrat font-semibold text-[24px] relative left-4 md:left-[6rem] top-[1rem]">Customers Reviews</h1>
-                <div class="ml-[8rem] mt-[1rem] flex items-center space-x-5">
-                    <p id="Ratings" class="font-Montserrat font-semibold text-[32px]">5.0</p>
-                    <div id="star-rating" class="flex items-center"></div>
-                    <div id="NumRev">(0 Review(s))</div>
-                </div>
-                <!-- <div class="w-[30rem] h-auto ml-[8rem] mt-[1rem] space-y-4">
-                    <div id="Feedback-content">
-                        
+                <div class="bg-[#D8E2C7] bottom-16 md:bottom-3 w-full h-auto rounded-md pb-8 mx-auto relative">
+                    <h1 class="font-Montserrat w-[15rem] md:w-[40rem] font-semibold  md:text-[24px] relative left-4 md:left-[6rem] top-[1rem]">Customers Reviews</h1>
+                    <div class="ml-6 md:ml-[8rem] mt-[1rem] flex items-center space-x-5">
+                        <p id="Ratings" class="font-Montserrat font-semibold text-[22px] md:text-[32px]">5.0</p>
+                        <div id="star-rating" class="flex items-center"></div>
+                        <div id="NumRev" class="text-[12px]">(0 Review(s))</div>
                     </div>
-                </div>  -->
-            </div>
+                    <div class="w-[20rem] md:w-[30rem] h-auto ml-6 md:ml-[8rem] mt-[1rem] space-y-4">
+                        <div id="Feedback-content">
+                            
+                        </div>
+                    </div> 
+                </div>
             
         </div>
     </div> 
@@ -532,7 +542,7 @@ function generateStars(rating) {
                 const productElement = document.createElement('div');
                 document.title = `${product.productName} - Zappnott`;
                 productElement.innerHTML = `
-                <div class=" w-full h-[35rem] flex-wrap flex justify-center relative">
+                <div class=" w-full h-full flex-wrap flex justify-center relative">
                     <div class="w-[301px] h-[297px] md:w-[551px] md:h-[547px] relative rounded-lg flex">
                         <img id="ProdImage" src="${product.imagePath}" alt="" class="relative rounded-[25px] w-[301px] h-[297px] md:w-[551px] md:h-[547px] object-fill">
                         <div class="hidden w-[551px] h-[547px] bg-[#333333] bg-opacity-50 absolute rounded-lg" id="OutofStock">
@@ -540,26 +550,26 @@ function generateStars(rating) {
                         </div> 
                     </div>
 
-                    <div class="flex w-[42rem] h-full relative justify-center">
+                    <div class="flex w-[42rem] h-auto relative justify-center">
                         <div class=" w-full md:w-[400px] h-[113px] relative">
                             <div class="w-full md:w-[32rem] h-[auto] relative overflow-hidden">
                                 <h1 id="prodName" class="ml-[2rem] md:ml-0 mt-3 md:mt-0 font-Montagu font-semibold relative" style="font-size: clamp(26px, 3vw, 40px);">${product.productName}</h1>
                             </div>
                             
                             <p class="font-Montserrat font-semibold text-[18px] ml-[2rem] mt-[1rem] mb-[1rem]"><span>₱ <span>${product.productPrice}</p>
-                            <div class="w-[310px] md:w-[450px] h-auto p-2 ml-[2rem]">
+                            <div class="w-[310px] md:w-[450px] h-auto p-2 ml-[2rem] relative">
                                 <div class="flex-col space-y-4">
-                                    <h2 class="font-Montserrat font-normal text-[14px]">Description:<span class="ml-1">${product.description}</span></h2>
+                                    <h2 class="font-Montserrat font-normal text-[14px]">Description:<p class="ml-1">${product.description}</p></h2>
                                 </div>
                             </div>
-                            <div class="bg-hehe h-[5rem] w-full bottom-0 fixed md:relative">
-                                <div id="stock" class=" flex w-[138px] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg ml-6 md:ml-[5.5rem] mt-[2rem] mb-3 md:mb-5 px-0 md:px-5 fixed bottom-0 left-0 md:relative z-5">
+                            <div class="bg-Likha h-[5rem] w-full bottom-0 fixed md:relative md:shadow-none z-50 top-shadow md:mt-10 md:flex-col flex md:items-start items-center justify-center">
+                                <div id="stock" class="flex w-[138px] md:ml-[5.25rem] h-[40px] bg-[#F7F8EA] justify-center space-x-2 outline outline-3 outline-outline rounded-lg md:ml-[2.5rem] md:mb-5 md:px-5 relative z-5">
                                     <button id="mo" class="font-bold">-</button>
                                     <input style="background-color: transparent;" id="number" class=" text-center w-[138px] h-[40px] p-1 font-bold" onKeyDown="return false" type="number" value="1" min="1" max="1">
                                     <button id="ao" class="font-bold">+</button>
                                 </div>
-                                <div class="items-center space-x-4 fixed bottom-0 right-0 md:relative z-5">
-                                    <button class="bg-[#F07C54] w-[170px] md:w-[245.42px] h-[61px] rounded-tl-lg rounded-bl-lg rounded-tr-lg md:rounded-lg px-4 py-2 bg-green-500 text-[#fff] font-Montserrat ml-8" id="AddToCart">Add to cart</button>
+                                <div class="items-center relative z-5">
+                                    <button class="bg-[#F07C54] relative w-[170px] md:w-[245.42px] h-[61px] rounded-tl-lg rounded-lg md:rounded-lg px-4 py-2 bg-green-500 text-[#fff] font-Montserrat ml-8" id="AddToCart">Add to cart</button>
                                 </div>
                             </div>
   
@@ -567,6 +577,8 @@ function generateStars(rating) {
                         </div>
                         
                     </div>
+
+                    
 
                 </div>
 
