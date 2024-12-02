@@ -154,17 +154,22 @@
                         </span>
                     </div> -->
                     <form action="" class="ml-2 mr-2" onsubmit="event.preventDefault(); submitForm();" action="/SignUp" method="post">
-                        <label for="Nametxt" class="text-[#6e7075] font-bold">Full Name</label><br>
+                        <label for="Nametxt" class="text-[#6e7075] font-bold">Full Name*</label><br>
                         <input type="text" name="" id="Nametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" oninput="restrictInput(this)" required><br>
-                        <label for="Usernametxt" class="text-[#6e7075] font-bold">Username</label><br>
+                        <label for="Usernametxt" class="text-[#6e7075] font-bold">Username*</label><br>
                         <input type="text" name="" id="Usernametxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" required><br>
-                        <label for="Emailtxt" class="text-[#6e7075] font-bold">Email</label><br>
+                        <label for="Emailtxt" class="text-[#6e7075] font-bold">Email*</label><br>
                         <input type="email" name="" id="Emailtxt" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" required><br>
-                        <label for="Numbertxt" class="text-[#6e7075] font-bold">Number</label><br>
+                        <label for="Numbertxt" class="text-[#6e7075] font-bold">Number*</label><br>
                         <input type="number" maxlength="11" name="" id="Numbertxt" value="09" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" required oninput="validatePhoneNumber(this)"><br>
-                        <label for="Passwordtxt" class="text-[#6e7075] font-bold">Password</label><br>
-                        <input type="password" name="" id="Passwordtxt" class="p-2 h-[2rem] w-full outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] " required><br>
+                        <label for="Passwordtxt" class="text-[#6e7075] font-bold">Password*</label><br>
+                        <input type="password" name="" id="Passwordtxt" class="p-2 h-[2rem] w-full outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] " pattern=".{8,12}" required title="At least 8 characters">
+                        <div class="flex items-center space-x-2">
+                            <div id="length-circle" class="bg-[#D3D3D3] w-[10px] h-[10px] rounded-full"></div>
+                            <h1 id="length" class="text-[#D3D3D3]">8 characters minimum</h1>
+                        </div>
                         <br>
+
                         <button class="bg-outline w-[18rem] font-bold py-2 px-4 rounded-full text-Likha" type="submit">
                             SIGN UP
                         </button>
@@ -255,6 +260,22 @@
 
     </div>
     <script>
+        const Passwordtxt = document.getElementById('Passwordtxt');
+        Passwordtxt.addEventListener('input',() => {
+            if(Passwordtxt.value.length > 8){
+                document.getElementById('length').classList.remove('text-[#D3D3D3]');
+                document.getElementById('length').classList.add('text-outline');
+                document.getElementById('length-circle').classList.remove('bg-[#D3D3D3]');
+                document.getElementById('length-circle').classList.add('bg-outline');
+            }
+            else{
+                document.getElementById('length').classList.remove('text-outline');
+                document.getElementById('length').classList.add('text-[#D3D3D3]');
+                document.getElementById('length-circle').classList.remove('bg-outline');
+                document.getElementById('length-circle').classList.add('bg-[#D3D3D3]');
+            }
+
+        });
         function Menu(e){
             let list = document.querySelector('ul');
             if(window.innerWidth < 768){
