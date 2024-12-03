@@ -164,11 +164,12 @@
                         <input type="number" maxlength="11" name="" id="Numbertxt" value="09" class="p-2 w-full h-[2rem] outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] mb-[0.25rem] md:mb-[0.5rem]" required oninput="validatePhoneNumber(this)"><br>
                         <label for="Passwordtxt" class="text-[#6e7075] font-bold">Password*</label><br>
                         <input type="password" name="" id="Passwordtxt" class="p-2 h-[2rem] w-full outline outline-2 rounded-lg outline-outline focus:outline-none focus:ring focus:border-[#6bbde3] " pattern=".{8,12}" required title="At least 8 characters">
-                        <div class="flex items-center space-x-2">
+                        <div id="Phantom" class="flex items-center space-x-2 hidden">
                             <div id="length-circle" class="bg-[#D3D3D3] w-[10px] h-[10px] rounded-full"></div>
                             <h1 id="length" class="text-[#D3D3D3]">8 characters minimum</h1>
                         </div>
                         <br>
+                        <br id="br">
 
                         <button class="bg-outline w-[18rem] font-bold py-2 px-4 rounded-full text-Likha" type="submit">
                             SIGN UP
@@ -275,6 +276,14 @@
                 document.getElementById('length-circle').classList.add('bg-[#D3D3D3]');
             }
 
+        });
+        Passwordtxt.addEventListener('focus',() => {
+                document.getElementById('Phantom').classList.remove('hidden');
+                document.getElementById('br').classList.add('hidden');
+        });
+        Passwordtxt.addEventListener('blur',() => {
+                document.getElementById('Phantom').classList.add('hidden');
+                document.getElementById('br').classList.remove('hidden');
         });
         function Menu(e){
             let list = document.querySelector('ul');
